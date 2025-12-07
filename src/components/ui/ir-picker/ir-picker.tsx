@@ -464,7 +464,7 @@ export class IrPicker {
 
     return (
       <Host>
-        <wa-popup flip-fallback-strategy="best-fit" shift shift-padding={10} auto-size="vertical" auto-size-padding={10} flip active={this.isOpen}>
+        <wa-popup flip shift sync="width" auto-size="vertical" auto-size-padding={10} active={this.isOpen}>
           <wa-input
             slot="anchor"
             class="search-bar"

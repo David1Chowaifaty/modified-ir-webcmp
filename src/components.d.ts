@@ -2912,6 +2912,9 @@ export namespace Components {
     }
     interface IrTest2Cmp {
     }
+    interface IrTest3Cmp {
+        "size": 'small' | 'medium' | 'large';
+    }
     interface IrTextEditor {
         "error": boolean;
         "maxLength": number;
@@ -6350,6 +6353,12 @@ declare global {
         prototype: HTMLIrTest2CmpElement;
         new (): HTMLIrTest2CmpElement;
     };
+    interface HTMLIrTest3CmpElement extends Components.IrTest3Cmp, HTMLStencilElement {
+    }
+    var HTMLIrTest3CmpElement: {
+        prototype: HTMLIrTest3CmpElement;
+        new (): HTMLIrTest3CmpElement;
+    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -6719,6 +6728,7 @@ declare global {
         "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-test2-cmp": HTMLIrTest2CmpElement;
+        "ir-test3-cmp": HTMLIrTest3CmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -9932,6 +9942,9 @@ declare namespace LocalJSX {
     }
     interface IrTest2Cmp {
     }
+    interface IrTest3Cmp {
+        "size"?: 'small' | 'medium' | 'large';
+    }
     interface IrTextEditor {
         "error"?: boolean;
         "maxLength"?: number;
@@ -10370,6 +10383,7 @@ declare namespace LocalJSX {
         "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
         "ir-test2-cmp": IrTest2Cmp;
+        "ir-test3-cmp": IrTest3Cmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -10578,6 +10592,7 @@ declare module "@stencil/core" {
             "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-test2-cmp": LocalJSX.IrTest2Cmp & JSXBase.HTMLAttributes<HTMLIrTest2CmpElement>;
+            "ir-test3-cmp": LocalJSX.IrTest3Cmp & JSXBase.HTMLAttributes<HTMLIrTest3CmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
