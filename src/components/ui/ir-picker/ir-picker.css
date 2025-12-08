@@ -5,7 +5,8 @@
 .menu {
   display: flex;
   flex-direction: column;
-  width: min(32rem, 90vw);
+  /* width: min(32rem, 90vw); */
+  min-width: max-content;
   margin: 0px;
   padding: 0.5rem 0;
   border: var(--wa-border-style) var(--wa-border-width-s) var(--wa-color-surface-border);
