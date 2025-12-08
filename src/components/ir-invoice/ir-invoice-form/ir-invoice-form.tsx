@@ -181,20 +181,34 @@ export class IrInvoiceForm {
    */
   private async handleConfirmInvoice(isProforma: boolean = false) {
     try {
-      console.log(this.invoiceTarget);
-      // await this.bookingService.issueInvoice({
-      //   is_proforma: isProforma,
-      //   invoice: {
-      //     booking_nbr: this.booking.booking_nbr,
-      //     currency: { id: this.booking.currency.id },
-      //     Date: this.invoiceDate.format('YYYY-MM-DD'),
-      //     items: this.toBeInvoicedItems,
-      //     target: {
-      //       code: '001',
-      //       description: 'Guest',
-      //     },
-      //   },
-      // });
+      const billed_to_name = this.selectedRecipient?.startsWith('room__') ? this.selectedRecipient.replace('room__', '').trim() : '';
+      let target: {};
+      const setTarget = (code: string) => {
+        let f = this.invoiceTarget.find(t => t.CODE_NAME === '001');
+        if (!f) {
+          throw new Error(`Invalid code ${code}`);
+        }
+        return {
+          code: f.CODE_NAME,
+          description: f.CODE_VALUE_EN,
+        };
+      };
+      if (this.selectedRecipient === 'guest') {
+        target = setTarget('002');
+      } else {
+        target = setTarget('001');
+      }
+      await this.bookingService.issueInvoice({
+        is_proforma: isProforma,
+        invoice: {
+          booking_nbr: this.booking.booking_nbr,
+          currency: { id: this.booking.currency.id },
+          Date: this.invoiceDate.format('YYYY-MM-DD'),
+          items: this.toBeInvoicedItems,
+          target,
+          billed_to_name,
+        },
+      });
       if (!isProforma)
         this.invoiceCreated.emit({
           booking: this.booking,
@@ -211,6 +225,7 @@ export class IrInvoiceForm {
           console.error('Auto print failed:', error);
         }
       }
+      this.invoiceClose.emit();
     } catch (error) {
       console.error(error);
     }

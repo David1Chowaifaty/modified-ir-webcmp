@@ -26,7 +26,7 @@ export class IrBookingBillingRecipient {
   }
 
   private initializeDefaultValue() {
-    this.initialValue = this.booking?.guest?.id?.toString();
+    this.initialValue = 'guest';
     this.selectedRecipient = this.initialValue;
     this.filterRoomGuests();
   }
@@ -79,11 +79,11 @@ export class IrBookingBillingRecipient {
           value={this.selectedRecipient}
           size="small"
         >
-          <wa-radio appearance="button" value={this.booking?.guest?.id?.toString()}>
+          <wa-radio appearance="button" value={'guest'}>
             {this.booking?.guest.first_name} {this.booking.guest.last_name}
           </wa-radio>
           {this.rooms.map((r, idx) => (
-            <wa-radio appearance="button" class="billing-recipient__room" value={r.guest.id?.toString() ?? `guest_${idx}`} key={r.guest?.id ?? `guest_${idx}`}>
+            <wa-radio appearance="button" class="billing-recipient__room" value={`room__${r.guest.first_name} ${r.guest.last_name}`} key={r.guest?.id ?? `guest_${idx}`}>
               <span class="billing-recipient__guest-name">
                 {r.guest.first_name} {r.guest.last_name}
               </span>

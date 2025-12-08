@@ -2,6 +2,7 @@ import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Method, Prop, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingInvoiceInfo } from './types';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-invoice',
@@ -155,7 +156,7 @@ export class IrInvoice {
             <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="brand" form={this._id}>
               Pro-forma invoice
             </ir-custom-button>
-            <ir-custom-button value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
+            <ir-custom-button loading={isRequestPending('/Issue_Invoice')} value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
               Confirm invoice
             </ir-custom-button>
           </div>
