@@ -2,7 +2,7 @@ import * as z from 'zod';
 import { ExtraService, IBookingPickupInfo, RoomInOut } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 
-const NumberOrStringSchema = z.union([z.number(), z.string()]);
+const NumberOrStringSchema = z.union([z.number(), z.string().optional()]);
 
 export const CurrencySchema = z.object({
   id: z.number(),
@@ -10,77 +10,77 @@ export const CurrencySchema = z.object({
 export type Currency = z.infer<typeof CurrencySchema>;
 
 export const CurrencyWithCodeSchema = CurrencySchema.extend({
-  code: z.string(),
+  code: z.string().optional(),
 });
 export type CurrencyWithCode = z.infer<typeof CurrencyWithCodeSchema>;
 
 export const ItemSchema = z.object({
   amount: z.number(),
-  type: z.string(),
-  key: z.union([z.number(), z.string()]),
-  description: z.string().optional().default(''),
+  type: z.string().optional(),
+  key: z.union([z.number(), z.string().optional()]),
+  description: z.string().optional().optional().default(''),
 });
 export type Item = z.infer<typeof ItemSchema>;
 
 export const TargetSchema = z.object({
-  code: z.string(),
-  description: z.string(),
+  code: z.string().optional(),
+  description: z.string().optional(),
 });
 export type Target = z.infer<typeof TargetSchema>;
 
 export const UnblockUnitByPeriodPropsSchema = z.object({
   unit_id: z.number(),
-  from_date: z.string(),
-  to_date: z.string(),
+  from_date: z.string().optional(),
+  to_date: z.string().optional(),
 });
 export type UnblockUnitByPeriodProps = z.infer<typeof UnblockUnitByPeriodPropsSchema>;
 
 export const GetNextValuePropsSchema = z.object({
-  starter: z.string(),
+  starter: z.string().optional(),
 });
 export type GetNextValueProps = z.infer<typeof GetNextValuePropsSchema>;
 
 export const GetExposedApplicablePoliciesPropsSchema = z.object({
-  booking_nbr: z.string(),
+  booking_nbr: z.string().optional(),
   currency_id: z.number(),
-  language: z.string().optional(),
+  language: z.string().optional().optional(),
   rate_plan_id: z.number(),
   room_type_id: z.number(),
   property_id: z.number(),
   is_preserve_history: z.boolean().optional(),
-  room_identifier: z.string().optional(),
+  room_identifier: z.string().optional().optional(),
 });
 export type GetExposedApplicablePoliciesProps = z.infer<typeof GetExposedApplicablePoliciesPropsSchema>;
 
 export const HandleExposedRoomInOutPropsSchema = z.object({
-  booking_nbr: z.string(),
-  room_identifier: z.string(),
-  status: z.string(),
+  booking_nbr: z.string().optional(),
+  room_identifier: z.string().optional(),
+  status: z.string().optional(),
 });
 export type HandleExposedRoomInOutProps = z.infer<typeof HandleExposedRoomInOutPropsSchema> & { status: RoomInOut['code'] };
 
 export const GetPenaltyStatementPropsSchema = z.object({
-  booking_nbr: z.string(),
+  booking_nbr: z.string().optional(),
   currency_id: z.number(),
-  language: z.string(),
+  language: z.string().optional(),
 });
 export type GetPenaltyStatementProps = z.infer<typeof GetPenaltyStatementPropsSchema>;
 
 const RestrictionSchema = z.object({
   room_type_id: NumberOrStringSchema,
-  night: z.string(),
+  night: z.string().optional(),
 });
 
 export const SetExposedRestrictionPerRoomTypePropsSchema = z.object({
   is_closed: z.boolean(),
   restrictions: z.array(RestrictionSchema),
-  operation_type: z.string().optional(),
+  operation_type: z.string().optional().optional(),
 });
 export type SetExposedRestrictionPerRoomTypeProps = z.infer<typeof SetExposedRestrictionPerRoomTypePropsSchema>;
 
 export const ChangeExposedBookingStatusPropsSchema = z.object({
-  book_nbr: z.string(),
-  status: z.string(),
+  book_nbr: z.string().optional(),
+  status: z.string().optional(),
 });
 export type ChangeExposedBookingStatusProps = z.infer<typeof ChangeExposedBookingStatusPropsSchema>;
 
@@ -90,11 +90,11 @@ const AdultChildCountSchema = z.object({
 });
 
 export const GetBookingAvailabilityPropsSchema = z.object({
-  from_date: z.string(),
-  to_date: z.string(),
+  from_date: z.string().optional(),
+  to_date: z.string().optional(),
   propertyid: z.number(),
   adultChildCount: AdultChildCountSchema,
-  language: z.string(),
+  language: z.string().optional(),
   room_type_ids: z.array(z.number()),
   room_type_ids_to_update: z.array(z.number()).optional(),
   rate_plan_ids: z.array(z.number()).optional(),
@@ -105,14 +105,14 @@ export const GetBookingAvailabilityPropsSchema = z.object({
 export type GetBookingAvailabilityProps = z.infer<typeof GetBookingAvailabilityPropsSchema>;
 
 const AvailabilityBracketSchema = z.object({
-  from_date: z.string(),
-  to_date: z.string(),
+  from_date: z.string().optional(),
+  to_date: z.string().optional(),
 });
 
 export const BlockAvailabilityForBracketsPropsSchema = z.object({
   unit_id: z.number(),
   block_status_code: z.enum(['003', '004', '002']).optional(),
-  description: z.string().optional(),
+  description: z.string().optional().optional(),
   property_id: z.number(),
   brackets: z.array(AvailabilityBracketSchema),
 });
@@ -120,8 +120,8 @@ export type BlockAvailabilityForBracketsProps = z.infer<typeof BlockAvailability
 
 export const SetDepartureTimePropsSchema = z.object({
   property_id: z.number(),
-  room_identifier: z.string(),
-  code: z.string(),
+  room_identifier: z.string().optional(),
+  code: z.string().optional(),
 });
 export type SetDepartureTimeProps = z.infer<typeof SetDepartureTimePropsSchema>;
 
@@ -171,20 +171,20 @@ export type GroupedTableEntries = {
 /* INVOICE TYPES */
 
 export const GetBookingInvoiceInfoPropsSchema = z.object({
-  booking_nbr: z.string(),
+  booking_nbr: z.string().optional(),
 });
 export type GetBookingInvoiceInfoProps = z.infer<typeof GetBookingInvoiceInfoPropsSchema>;
 
 export const VoidInvoicePropsSchema = z.object({
-  invoice_nbr: z.string(),
-  reason: z.string(),
+  invoice_nbr: z.string().optional(),
+  reason: z.string().optional(),
 });
 
 export const InvoiceSchema = z.object({
-  booking_nbr: z.string(),
+  booking_nbr: z.string().optional(),
   currency: CurrencySchema,
   target: TargetSchema,
-  Date: z.string(),
+  Date: z.string().optional(),
   nbr: z.string().optional(),
   remark: z.string().optional(),
   billed_to_name: z.string().optional(),
@@ -201,6 +201,6 @@ export type IssueInvoiceProps = z.infer<typeof IssueInvoicePropsSchema>;
 export type VoidInvoiceProps = z.infer<typeof VoidInvoicePropsSchema>;
 
 export const PrintInvoicePropsSchema = z.object({
-  invoice_nbr: z.string(),
+  invoice_nbr: z.string().optional(),
 });
 export type PrintInvoiceProps = z.infer<typeof PrintInvoicePropsSchema>;
