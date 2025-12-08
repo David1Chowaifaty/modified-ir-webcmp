@@ -1,7 +1,7 @@
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Method, Prop, State, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { getPrivateNote } from '@/utils/booking';
 @Component({
   tag: 'ir-booking-extra-note',

@@ -5,7 +5,7 @@ import { _formatTime } from '../ir-booking-details/functions';
 import { IProperty } from '@/models/property';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import BeLogoFooter from '@/assets/be_logo_footer';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';

@@ -26,16 +26,18 @@
 
 .applicable-policies__statements {
   box-sizing: border-box;
+  padding: 0;
   /* background: rgb(30, 159, 242, 5%); */
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
   /* border: 1px solid rgba(30, 159, 242, 40%); */
   /* border-radius: 0.25rem; */
-  max-height: 245px;
-  overflow-y: auto;
 }
 .applicable-policies__statements::part(message) {
+  max-height: 245px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  padding: 1em;
   gap: 0.5rem;
 }
 .applicable-policies__highlighted-bracket {

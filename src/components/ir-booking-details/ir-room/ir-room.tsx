@@ -7,7 +7,7 @@ import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { OpenSidebarEvent, RoomGuestsPayload } from '../types';
 import { IToast } from '@/components/ui/ir-toast/toast';
 export type RoomModalReason = 'delete' | 'checkin' | 'checkout' | null;
@@ -305,7 +305,7 @@ export class IrRoom {
     const bed = this.getBedName();
     return (
       <Host>
-        <div class="d-flex m-0" style={{ gap: 'var(--spacing)' }}>
+        <div class="booking-room__header-row">
           <button data-state={this.collapsed ? 'closed' : 'opened'} class="booking-room__collapse-btn" onClick={() => (this.collapsed = !this.collapsed)}>
             <wa-icon name="chevron-right"></wa-icon>
           </button>
@@ -315,12 +315,10 @@ export class IrRoom {
               class="booking-room_summary"
               style={{ width: '100%', cursor: 'default' }}
             >
-              <div class="d-flex align-items-center justify-content-between">
-                <p class="m-0 p-0">
-                  <span class="m-0 p-0" style={{ fontWeight: '600' }}>
-                    {this.myRoomTypeFoodCat || ''}{' '}
-                  </span>{' '}
-                  {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
+              <div class="booking-room__summary-row">
+                <p class="booking-room__summary-text">
+                  <span class="booking-room__summary-highlight">{this.myRoomTypeFoodCat || ''} </span> {this.mealCodeName}{' '}
+                  {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
                 </p>
 
                 {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
@@ -364,14 +362,8 @@ export class IrRoom {
                   </div>
                 </div>
               </div>
-              <div class="d-flex align-items-center">
-                <ir-date-view
-                  class="mr-1  flex-grow-1"
-                  style={{ width: 'fit-content' }}
-                  from_date={this.room.from_date}
-                  to_date={this.room.to_date}
-                  showDateDifference={false}
-                ></ir-date-view>
+              <div class="booking-room__dates-row">
+                <ir-date-view class="booking-room__date-view" from_date={this.room.from_date} to_date={this.room.to_date} showDateDifference={false}></ir-date-view>
                 {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
                   // <div class={'d-flex justify-content-center align-items-center'}>
                   //   <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
@@ -393,8 +385,8 @@ export class IrRoom {
                   </ir-custom-button>
                 )}
               </div>
-              <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                <p class="m-0 p-0">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
+              <div class="booking-room__guest-row">
+                <p class="booking-room__text-reset booking-room__guest-name">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
                 {this.room.rateplan.selected_variation.adult_nbr > 0 &&
                   (this.room.unit ? (
                     // <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
@@ -418,11 +410,11 @@ export class IrRoom {
                   ) : (
                     <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
                   ))}
-                {bed && <p class="m-0 p-0">({bed})</p>}
+                {bed && <p class="booking-room__text-reset booking-room__bed-info">({bed})</p>}
               </div>
               {this.includeDepartureTime && (
-                <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
-                  <p class="m-0 p-0">Expected departure time:</p>
+                <div class="booking-room__departure-row">
+                  <p class="booking-room__text-reset booking-room__departure-label">Expected departure time:</p>
                   {/* <ir-select
                   selectedValue={this.room.departure_time?.code}
                   showFirstOption={false}
@@ -456,26 +448,30 @@ export class IrRoom {
 
             {!this.collapsed && (
               <div class="booking-room__details-container">
-                <div class="d-flex sm-mb-1 sm-mt-1">
-                  <div class=" sm-padding-top">
-                    <p class="sm-padding-right" style={{ fontWeight: '600' }}>{`${locales.entries.Lcz_Breakdown}:`}</p>
+                <div class="booking-room__breakdown-row">
+                  <div class="booking-room__breakdown-label-wrapper">
+                    <p class="booking-room__breakdown-label">{`${locales.entries.Lcz_Breakdown}:`}</p>
                   </div>
-                  <div class={'flex-fill'}>
+                  <div class="booking-room__breakdown-table">
                     <table>
                       {this.room.days.length > 0 &&
                         this.room.days.map(room => {
                           return (
                             <tr>
-                              <td class={'pr-2 text-right'}>{_getDay(room.date)}</td>
-                              <td class="text-right">{formatAmount(this.currency, room.amount)}</td>
-                              {room.cost > 0 && room.cost !== null && <td class="pl-2 text-left night-cost">{formatAmount(this.currency, room.cost)}</td>}
+                              <td class="booking-room__cell booking-room__cell--right booking-room__cell--pad-right">{_getDay(room.date)}</td>
+                              <td class="booking-room__cell booking-room__cell--right">{formatAmount(this.currency, room.amount)}</td>
+                              {room.cost > 0 && room.cost !== null && (
+                                <td class="booking-room__cell booking-room__cell--left booking-room__cell--pad-left night-cost">{formatAmount(this.currency, room.cost)}</td>
+                              )}
                             </tr>
                           );
                         })}
                       <tr class={''}>
-                        <th class="text-right pr-2 subtotal_row">{locales.entries.Lcz_SubTotal}</th>
-                        <th class="text-right subtotal_row">{formatAmount(this.currency, this.room.total)}</th>
-                        {this.room.gross_cost > 0 && this.room.gross_cost !== null && <th class="pl-2 text-right night-cost">{formatAmount(this.currency, this.room.cost)}</th>}
+                        <th class="booking-room__cell booking-room__cell--right booking-room__cell--pad-right subtotal_row">{locales.entries.Lcz_SubTotal}</th>
+                        <th class="booking-room__cell booking-room__cell--right subtotal_row">{formatAmount(this.currency, this.room.total)}</th>
+                        {this.room.gross_cost > 0 && this.room.gross_cost !== null && (
+                          <th class="booking-room__cell booking-room__cell--right booking-room__cell--pad-left night-cost">{formatAmount(this.currency, this.room.cost)}</th>
+                        )}
                       </tr>
                       {this.booking.is_direct ? (
                         <Fragment>
@@ -484,12 +480,14 @@ export class IrRoom {
                             return filtered_data.map(d => {
                               return (
                                 <tr>
-                                  <td class="text-right pr-2">
+                                  <td class="booking-room__cell booking-room__cell--right booking-room__cell--pad-right">
                                     {d.is_exlusive ? locales.entries.Lcz_Excluding : locales.entries.Lcz_Including} {d.name} ({d.pct}%)
                                   </td>
-                                  <td class="text-right">{formatAmount(this.currency, (this.room.total * d.pct) / 100)}</td>
+                                  <td class="booking-room__cell booking-room__cell--right">{formatAmount(this.currency, (this.room.total * d.pct) / 100)}</td>
                                   {this.room.gross_cost > 0 && this.room.gross_cost !== null && (
-                                    <td class="pl-2 text-right night-cost">{formatAmount(this.currency, (this.room.cost * d.pct) / 100)}</td>
+                                    <td class="booking-room__cell booking-room__cell--right booking-room__cell--pad-left night-cost">
+                                      {formatAmount(this.currency, (this.room.cost * d.pct) / 100)}
+                                    </td>
                                   )}
                                 </tr>
                               );
@@ -503,10 +501,10 @@ export class IrRoom {
                             return filtered_data.map(d => {
                               return (
                                 <tr>
-                                  <td class="text-right pr-2">
+                                  <td class="booking-room__cell booking-room__cell--right booking-room__cell--pad-right">
                                     {d.is_exlusive ? locales.entries.Lcz_Excluding : locales.entries.Lcz_Including} {d.name}
                                   </td>
-                                  <td class="text-right">
+                                  <td class="booking-room__cell booking-room__cell--right">
                                     {d.currency.symbol}
                                     {d.amount}
                                   </td>

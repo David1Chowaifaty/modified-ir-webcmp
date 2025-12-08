@@ -1,6 +1,6 @@
 import { Guest } from '@/models/booking.dto';
 import { Component, Element, Event, EventEmitter, h, Prop, State, Watch } from '@stencil/core';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import Token from '@/models/Token';

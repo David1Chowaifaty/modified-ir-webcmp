@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import { Booking, ExposedApplicablePolicy, Room } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 export type ApplicablePoliciesByType = Partial<Record<ExposedApplicablePolicy['type'], ExposedApplicablePolicy[]>>;
 

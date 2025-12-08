@@ -1,6 +1,6 @@
 import { Component, h, Prop, State, Event, EventEmitter, Listen } from '@stencil/core';
 import { Booking, IPayment } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';

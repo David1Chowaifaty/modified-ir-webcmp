@@ -1,6 +1,6 @@
 import { Component, h, Prop, State } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { toFloat } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';

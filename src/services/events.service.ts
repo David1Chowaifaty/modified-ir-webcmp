@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BookingService } from './booking.service';
+import { BookingService } from './booking-service/booking.service';
 import { extras, getReleaseHoursString } from '../utils/utils';
 
 export class EventsService {

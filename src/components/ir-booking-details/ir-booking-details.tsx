@@ -1,7 +1,7 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import { Booking, ExtraService, Guest, IPmsLog, Room, SharedPerson } from '@/models/booking.dto';
 import axios from 'axios';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
@@ -661,15 +661,15 @@ export class IrBookingDetails {
           this.sidebarState = null;
         }}
       ></ir-pickup>,
-      <ir-invoice
+      <ir-billing-drawer
         open={this.sidebarState === 'invoice'}
-        onInvoiceClose={e => {
+        onBillingClose={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.sidebarState = null;
         }}
         booking={this.booking}
-      ></ir-invoice>,
+      ></ir-billing-drawer>,
       <ir-guest-info-drawer
         onGuestInfoDrawerClosed={() => {
           this.sidebarState = null;

@@ -1,6 +1,7 @@
 import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Method, Prop, h } from '@stencil/core';
 import { v4 } from 'uuid';
+import { BookingInvoiceInfo } from './types';
 
 @Component({
   tag: 'ir-invoice',
@@ -48,6 +49,16 @@ export class IrInvoice {
    * Useful for setups where the invoice should immediately be sent to a printer.
    */
   @Prop() autoPrint: boolean = false;
+  /**
+   * Additional invoice-related metadata used when creating
+   * or rendering the invoice.
+   *
+   * This object can include payment details, discounts,
+   * tax information, or any context needed by the invoice form.
+   *
+   * @type {BookingInvoiceInfo}
+   */
+  @Prop() invoiceInfo: BookingInvoiceInfo;
 
   /**
    * Emitted when the invoice drawer is opened.
@@ -102,6 +113,14 @@ export class IrInvoice {
     return (
       <Host>
         <ir-drawer
+          style={{
+            '--ir-drawer-width': '40rem',
+            '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+            '--ir-drawer-padding-left': 'var(--spacing)',
+            '--ir-drawer-padding-right': 'var(--spacing)',
+            '--ir-drawer-padding-top': 'var(--spacing)',
+            '--ir-drawer-padding-bottom': 'var(--spacing)',
+          }}
           label="Invoice"
           open={this.open}
           onDrawerHide={e => {
@@ -118,6 +137,7 @@ export class IrInvoice {
               autoPrint={this.autoPrint}
               mode={this.mode}
               formId={this._id}
+              invoiceInfo={this.invoiceInfo}
             ></ir-invoice-form>
           )}
           <div slot="footer" class="ir__drawer-footer">
@@ -135,7 +155,7 @@ export class IrInvoice {
             <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="brand" form={this._id}>
               Pro-forma invoice
             </ir-custom-button>
-            <ir-custom-button type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
+            <ir-custom-button value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
               Confirm invoice
             </ir-custom-button>
           </div>

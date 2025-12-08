@@ -1,6 +1,6 @@
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';

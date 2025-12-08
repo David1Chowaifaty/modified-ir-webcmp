@@ -859,6 +859,7 @@ export interface Room {
   gross_total: number;
   guarantee: number;
   gross_guarantee: number;
+  system_id: number;
 }
 interface OtaMeta {
   bed_preferences: string | null;

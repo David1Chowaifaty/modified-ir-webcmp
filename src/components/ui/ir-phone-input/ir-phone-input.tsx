@@ -1,5 +1,5 @@
 import { ICountry } from '@/components';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 

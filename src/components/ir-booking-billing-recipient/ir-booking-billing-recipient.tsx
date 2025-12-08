@@ -77,6 +77,7 @@ export class IrBookingBillingRecipient {
           orientation="vertical"
           name={`${this.booking?.booking_nbr}-bill-to`}
           value={this.selectedRecipient}
+          size="small"
         >
           <wa-radio appearance="button" value={this.booking?.guest?.id?.toString()}>
             {this.booking?.guest.first_name} {this.booking.guest.last_name}

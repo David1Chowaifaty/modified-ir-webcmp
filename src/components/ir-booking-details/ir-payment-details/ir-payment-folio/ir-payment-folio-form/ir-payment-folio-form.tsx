@@ -5,7 +5,7 @@ import { z, ZodError } from 'zod';
 import { IEntries } from '@/models/IBooking';
 import { PaymentService } from '@/services/payment.service';
 import { FolioEntryMode, Payment, PaymentEntries } from '../../../types';
-import { buildPaymentTypes } from '@/services/booking.service';
+import { buildPaymentTypes } from '@/services/booking-service/utils';
 import { PAYMENT_TYPES_WITH_METHOD } from '../../global.variables';
 
 const DATE_FORMAT = 'YYYY-MM-DD';

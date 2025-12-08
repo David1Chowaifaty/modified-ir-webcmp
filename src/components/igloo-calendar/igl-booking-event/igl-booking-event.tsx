@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { buildSplitIndex, calculateDaysBetweenDates, getSplitRole, transformNewBooking } from '@/utils/booking';
 import { checkMealPlan, formatAmount, isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';

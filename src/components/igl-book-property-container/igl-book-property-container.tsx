@@ -1,6 +1,6 @@
 import { IglBookPropertyPayloadPlusBooking } from '@/models/igl-book-property';
 import Token from '@/models/Token';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, State, h, Prop, Watch, Event, EventEmitter, Fragment } from '@stencil/core';

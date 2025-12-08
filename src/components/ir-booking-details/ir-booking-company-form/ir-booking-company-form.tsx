@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, h, Method, Prop, State } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 @Component({
   tag: 'ir-booking-company-form',
   styleUrl: 'ir-booking-company-form.css',

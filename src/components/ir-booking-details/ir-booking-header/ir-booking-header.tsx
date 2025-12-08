@@ -4,7 +4,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State } from '@stencil/core';
 import { BookingDetailsDialogEvents, OpenDialogEvent, OpenSidebarEvent } from '../types';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 @Component({
   tag: 'ir-booking-header',
@@ -190,9 +190,8 @@ export class IrBookingHeader {
 
             {this.hasReceipt && (
               <Fragment>
-                <wa-tooltip for="invoice">Print invoice</wa-tooltip>
-                <ir-custom-button id="invoice" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="file-invoice" label="invoice" style={{ fontSize: '1.65rem' }}></wa-icon>
+                <ir-custom-button id="invoice" variant="brand" size="small" appearance="outlined">
+                  Billing
                 </ir-custom-button>
               </Fragment>
             )}

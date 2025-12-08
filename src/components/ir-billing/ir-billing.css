@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+.billing__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-l);
+}
+.billing__section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.billing__section-title {
+  margin: 0;
+  padding: 0;
+  font-family: var(--wa-font-family-heading);
+  font-weight: var(--wa-font-weight-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  font-size: var(--wa-font-size-m);
+}

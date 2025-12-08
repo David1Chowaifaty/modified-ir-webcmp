@@ -1,6 +1,6 @@
 import { Booking, Room } from '@/models/booking.dto';
 import { PropertyRoomType } from '@/models/IBooking';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { resetBookingStore } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import { isRequestPending } from '@/stores/ir-interceptor.store';

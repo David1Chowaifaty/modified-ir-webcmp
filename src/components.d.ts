@@ -23,7 +23,7 @@ import { IrActionButton } from "./components/table-cells/booking/ir-actions-cell
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Payment, PaymentEntries } from "./components/ir-booking-details/types";
-import { BookingService } from "./services/booking.service";
+import { BookingService } from "./services/booking-service/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -43,6 +43,7 @@ import { Element } from "@stencil/core";
 import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
+import { BookingInvoiceInfo } from "./components/ir-invoice/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -78,7 +79,7 @@ export { IrActionButton } from "./components/table-cells/booking/ir-actions-cell
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Payment, PaymentEntries } from "./components/ir-booking-details/types";
-export { BookingService } from "./services/booking.service";
+export { BookingService } from "./services/booking-service/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -98,6 +99,7 @@ export { Element } from "@stencil/core";
 export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
+export { BookingInvoiceInfo } from "./components/ir-invoice/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -412,6 +414,21 @@ export namespace Components {
         "isDirect": boolean;
         "label": string;
         "statusCode": string;
+    }
+    interface IrBilling {
+        "booking": Booking;
+    }
+    interface IrBillingDrawer {
+        /**
+          * The booking object containing reservation and guest details that will be used to populate the billing view.
+          * @type {Booking}
+         */
+        "booking": Booking;
+        /**
+          * Controls whether the billing drawer is open or closed.  When `true`, the drawer becomes visible. When `false`, it is hidden.  This prop is reflected to the host element.
+          * @type {boolean}
+         */
+        "open": boolean;
     }
     interface IrBookedByCell {
         "cellId": string;
@@ -1766,6 +1783,11 @@ export namespace Components {
          */
         "for": 'room' | 'booking';
         /**
+          * Additional invoice-related metadata used when creating or rendering the invoice.  This object can include payment details, discounts, tax information, or any context needed by the invoice form.
+          * @type {BookingInvoiceInfo}
+         */
+        "invoiceInfo": BookingInvoiceInfo;
+        /**
           * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
          */
         "mode": 'create' | 'check_in-create';
@@ -1797,6 +1819,7 @@ export namespace Components {
          */
         "for": 'room' | 'booking';
         "formId": string;
+        "invoiceInfo": BookingInvoiceInfo;
         /**
           * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
          */
@@ -2912,9 +2935,6 @@ export namespace Components {
     }
     interface IrTest2Cmp {
     }
-    interface IrTest3Cmp {
-        "size": 'small' | 'medium' | 'large';
-    }
     interface IrTextEditor {
         "error": boolean;
         "maxLength": number;
@@ -3267,6 +3287,14 @@ export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
 export interface IrBalanceCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBalanceCellElement;
+}
+export interface IrBillingCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBillingElement;
+}
+export interface IrBillingDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBillingDrawerElement;
 }
 export interface IrBookedByCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4303,6 +4331,40 @@ declare global {
     var HTMLIrBalanceCellElement: {
         prototype: HTMLIrBalanceCellElement;
         new (): HTMLIrBalanceCellElement;
+    };
+    interface HTMLIrBillingElementEventMap {
+        "billingClose": void;
+    }
+    interface HTMLIrBillingElement extends Components.IrBilling, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBillingElementEventMap>(type: K, listener: (this: HTMLIrBillingElement, ev: IrBillingCustomEvent<HTMLIrBillingElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBillingElementEventMap>(type: K, listener: (this: HTMLIrBillingElement, ev: IrBillingCustomEvent<HTMLIrBillingElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBillingElement: {
+        prototype: HTMLIrBillingElement;
+        new (): HTMLIrBillingElement;
+    };
+    interface HTMLIrBillingDrawerElementEventMap {
+        "billingClose": void;
+    }
+    interface HTMLIrBillingDrawerElement extends Components.IrBillingDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBillingDrawerElementEventMap>(type: K, listener: (this: HTMLIrBillingDrawerElement, ev: IrBillingDrawerCustomEvent<HTMLIrBillingDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBillingDrawerElementEventMap>(type: K, listener: (this: HTMLIrBillingDrawerElement, ev: IrBillingDrawerCustomEvent<HTMLIrBillingDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBillingDrawerElement: {
+        prototype: HTMLIrBillingDrawerElement;
+        new (): HTMLIrBillingDrawerElement;
     };
     interface HTMLIrBookedByCellElementEventMap {
         "guestSelected": string;
@@ -6353,12 +6415,6 @@ declare global {
         prototype: HTMLIrTest2CmpElement;
         new (): HTMLIrTest2CmpElement;
     };
-    interface HTMLIrTest3CmpElement extends Components.IrTest3Cmp, HTMLStencilElement {
-    }
-    var HTMLIrTest3CmpElement: {
-        prototype: HTMLIrTest3CmpElement;
-        new (): HTMLIrTest3CmpElement;
-    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -6577,6 +6633,8 @@ declare global {
         "ir-arrivals-table": HTMLIrArrivalsTableElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-balance-cell": HTMLIrBalanceCellElement;
+        "ir-billing": HTMLIrBillingElement;
+        "ir-billing-drawer": HTMLIrBillingDrawerElement;
         "ir-booked-by-cell": HTMLIrBookedByCellElement;
         "ir-booked-on-cell": HTMLIrBookedOnCellElement;
         "ir-booking": HTMLIrBookingElement;
@@ -6728,7 +6786,6 @@ declare global {
         "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-test2-cmp": HTMLIrTest2CmpElement;
-        "ir-test3-cmp": HTMLIrTest3CmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -7135,6 +7192,27 @@ declare namespace LocalJSX {
         "label"?: string;
         "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<{ booking_nbr: string; payment: Payment }>) => void;
         "statusCode": string;
+    }
+    interface IrBilling {
+        "booking"?: Booking;
+        "onBillingClose"?: (event: IrBillingCustomEvent<void>) => void;
+    }
+    interface IrBillingDrawer {
+        /**
+          * The booking object containing reservation and guest details that will be used to populate the billing view.
+          * @type {Booking}
+         */
+        "booking"?: Booking;
+        /**
+          * Emitted when the billing drawer has been closed.  Listen to this event to respond to drawer close actions.
+          * @event billingClose
+         */
+        "onBillingClose"?: (event: IrBillingDrawerCustomEvent<void>) => void;
+        /**
+          * Controls whether the billing drawer is open or closed.  When `true`, the drawer becomes visible. When `false`, it is hidden.  This prop is reflected to the host element.
+          * @type {boolean}
+         */
+        "open"?: boolean;
     }
     interface IrBookedByCell {
         "cellId"?: string;
@@ -8628,6 +8706,11 @@ declare namespace LocalJSX {
          */
         "for"?: 'room' | 'booking';
         /**
+          * Additional invoice-related metadata used when creating or rendering the invoice.  This object can include payment details, discounts, tax information, or any context needed by the invoice form.
+          * @type {BookingInvoiceInfo}
+         */
+        "invoiceInfo"?: BookingInvoiceInfo;
+        /**
           * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
          */
         "mode"?: 'create' | 'check_in-create';
@@ -8662,6 +8745,7 @@ declare namespace LocalJSX {
          */
         "for"?: 'room' | 'booking';
         "formId"?: string;
+        "invoiceInfo"?: BookingInvoiceInfo;
         /**
           * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
          */
@@ -9942,9 +10026,6 @@ declare namespace LocalJSX {
     }
     interface IrTest2Cmp {
     }
-    interface IrTest3Cmp {
-        "size"?: 'small' | 'medium' | 'large';
-    }
     interface IrTextEditor {
         "error"?: boolean;
         "maxLength"?: number;
@@ -10232,6 +10313,8 @@ declare namespace LocalJSX {
         "ir-arrivals-table": IrArrivalsTable;
         "ir-autocomplete": IrAutocomplete;
         "ir-balance-cell": IrBalanceCell;
+        "ir-billing": IrBilling;
+        "ir-billing-drawer": IrBillingDrawer;
         "ir-booked-by-cell": IrBookedByCell;
         "ir-booked-on-cell": IrBookedOnCell;
         "ir-booking": IrBooking;
@@ -10383,7 +10466,6 @@ declare namespace LocalJSX {
         "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
         "ir-test2-cmp": IrTest2Cmp;
-        "ir-test3-cmp": IrTest3Cmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -10441,6 +10523,8 @@ declare module "@stencil/core" {
             "ir-arrivals-table": LocalJSX.IrArrivalsTable & JSXBase.HTMLAttributes<HTMLIrArrivalsTableElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-balance-cell": LocalJSX.IrBalanceCell & JSXBase.HTMLAttributes<HTMLIrBalanceCellElement>;
+            "ir-billing": LocalJSX.IrBilling & JSXBase.HTMLAttributes<HTMLIrBillingElement>;
+            "ir-billing-drawer": LocalJSX.IrBillingDrawer & JSXBase.HTMLAttributes<HTMLIrBillingDrawerElement>;
             "ir-booked-by-cell": LocalJSX.IrBookedByCell & JSXBase.HTMLAttributes<HTMLIrBookedByCellElement>;
             "ir-booked-on-cell": LocalJSX.IrBookedOnCell & JSXBase.HTMLAttributes<HTMLIrBookedOnCellElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
@@ -10592,7 +10676,6 @@ declare module "@stencil/core" {
             "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-test2-cmp": LocalJSX.IrTest2Cmp & JSXBase.HTMLAttributes<HTMLIrTest2CmpElement>;
-            "ir-test3-cmp": LocalJSX.IrTest3Cmp & JSXBase.HTMLAttributes<HTMLIrTest3CmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;

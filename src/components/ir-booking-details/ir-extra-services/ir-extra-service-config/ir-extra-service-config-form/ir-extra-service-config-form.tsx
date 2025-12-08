@@ -1,5 +1,5 @@
 import { Booking, ExtraService, ExtraServiceSchema } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/core';
 import { ZodError } from 'zod';

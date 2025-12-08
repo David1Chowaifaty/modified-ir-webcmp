@@ -4,7 +4,7 @@ import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 import { dateMask, defaultGuest } from '../data';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { ICountry, IEntries } from '@/models/IBooking';
 import { ZodError } from 'zod';
 @Component({

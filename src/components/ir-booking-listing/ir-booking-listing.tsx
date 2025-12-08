@@ -14,7 +14,7 @@ import { isPrivilegedUser } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
 import Token from '@/models/Token';
 import { getAllParams } from '@/utils/browserHistory';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';
 import { AllowedProperties, PropertyService } from '@/services/property.service';
 import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';

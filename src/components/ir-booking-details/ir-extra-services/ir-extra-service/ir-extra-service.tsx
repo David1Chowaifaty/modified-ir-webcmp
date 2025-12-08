@@ -3,7 +3,7 @@ import { ExtraService } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import moment from 'moment';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({

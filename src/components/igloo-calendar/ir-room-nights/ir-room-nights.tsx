@@ -1,5 +1,5 @@
 import { Component, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { convertDatePrice, formatDate, getDaysArray } from '@/utils/utils';
 import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
 import { IRoomNightsDataEventPayload } from '@/models/property-types';

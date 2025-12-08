@@ -4,7 +4,7 @@ import { departuresStore } from '@/stores/departures.store';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';
 import { RoomService } from '@/services/room.service';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 @Component({
   tag: 'ir-departures',

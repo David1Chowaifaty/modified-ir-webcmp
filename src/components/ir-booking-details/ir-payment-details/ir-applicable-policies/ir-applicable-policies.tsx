@@ -8,7 +8,7 @@ import { IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { HelpDocButton } from '@/components/HelpButton';
 import { ApplicablePoliciesService } from '@/services/applicable-policies.service';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 @Component({
   tag: 'ir-applicable-policies',
