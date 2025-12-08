@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 .billing__section-title {
   margin: 0;
@@ -19,4 +20,13 @@
   line-height: var(--wa-line-height-condensed);
   text-wrap: balance;
   font-size: var(--wa-font-size-m);
+}
+.billing__actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+}
+.billing__price-col {
+  text-align: end !important;
 }

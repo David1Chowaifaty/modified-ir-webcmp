@@ -50,10 +50,16 @@
   padding-block: var(--wa-form-control-padding-inline);
   align-items: flex-start;
 }
+.ir-invoice__checkbox::part(label) {
+  display: flex;
+  width: 100%;
+}
 .ir-invoice__room-checkbox-container {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
+  width: 100%;
+  justify-content: space-between;
+  text-align: start;
 }
 .ir-invoice__room-checkbox-container.group {
   flex-direction: column;

@@ -40,7 +40,7 @@ export class IrBillingDrawer {
     return (
       <ir-drawer
         style={{
-          '--ir-drawer-width': '40rem',
+          '--ir-drawer-width': '50rem',
           '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
           '--ir-drawer-padding-left': 'var(--spacing)',
           '--ir-drawer-padding-right': 'var(--spacing)',

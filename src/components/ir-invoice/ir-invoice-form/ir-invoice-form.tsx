@@ -459,7 +459,11 @@ export class IrInvoiceForm {
     return false;
   }
   private renderPickup() {
-    const isSelected = this.isSelected([this.booking.pickup_info?.['system_id']]);
+    const sysId = this.booking.pickup_info?.['system_id'];
+    if (!this.invoicableKey?.has(sysId)) {
+      return null;
+    }
+    const isSelected = this.isSelected([sysId]);
 
     return (
       <div class="ir-invoice__service">
@@ -467,14 +471,14 @@ export class IrInvoiceForm {
           size="small"
           onchange={e => {
             const value = (e.target as any).checked;
-            this.handleCheckChange({ checked: value, system_id: this.booking.pickup_info?.['system_id'] });
+            this.handleCheckChange({ checked: value, system_id: sysId });
           }}
           defaultChecked={isSelected}
           checked={isSelected}
           class="ir-invoice__checkbox"
         >
-          <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-            <b>Pickup</b>
+          <div class="ir-invoice__room-checkbox-container">
+            <span>Pickup</span>
             <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, this.booking.pickup_info.selected_option.amount)}</span>
           </div>
         </wa-checkbox>
@@ -535,8 +539,8 @@ export class IrInvoiceForm {
                       class="ir-invoice__checkbox"
                       checked={isSelected}
                     >
-                      <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-                        <b>{extra_service.description}</b>
+                      <div class="ir-invoice__room-checkbox-container">
+                        <span>{extra_service.description}</span>
                         <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, extra_service.price)}</span>
                       </div>
                     </wa-checkbox>

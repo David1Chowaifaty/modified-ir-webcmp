@@ -544,6 +544,21 @@ export interface Property {
   taxation_strategy: Paymentmode;
   taxes: Tax[];
   time_constraints: Timeconstraints;
+  company: Company | null;
+}
+export interface Company {
+  address: string;
+  city: string;
+  country: Country;
+  credit_note_prefix: string;
+  credit_note_start_nbr: number;
+  invoice_footer_notes: string;
+  invoice_prefix: string;
+  invoice_start_nbr: number;
+  name: string;
+  phone: string;
+  postal: string;
+  tax_nbr: string;
 }
 
 interface Timeconstraints {
