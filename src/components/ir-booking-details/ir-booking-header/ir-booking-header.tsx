@@ -191,7 +191,7 @@ export class IrBookingHeader {
             {this.hasReceipt && (
               <Fragment>
                 <ir-custom-button id="invoice" variant="brand" size="small" appearance="outlined">
-                  Billing
+                  Billings
                 </ir-custom-button>
               </Fragment>
             )}

@@ -89,7 +89,7 @@ export class IrInvoiceForm {
    * - `roomIdentifier`: the room identifier when invoicing a specific room
    * - `mode`: the current invoice mode
    */
-  @Event() invoiceCreated: EventEmitter<{
+  @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<{
     booking: Booking;
     recipientId: string;
     for: 'room' | 'booking';

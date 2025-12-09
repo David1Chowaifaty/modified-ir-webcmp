@@ -1,5 +1,5 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Listen, Prop, State, h } from '@stencil/core';
 import { BookingInvoiceInfo } from '../ir-invoice/types';
 import { BookingService } from '@/services/booking-service/booking.service';
 import calendar_data from '@/stores/calendar-data';
@@ -26,7 +26,12 @@ export class IrBilling {
   componentWillLoad() {
     this.init();
   }
-
+  @Listen('invoiceCreated')
+  async handleInvoiceCreation(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.invoiceInfo = await this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr });
+  }
   private async init() {
     try {
       this.isLoading = 'page';
