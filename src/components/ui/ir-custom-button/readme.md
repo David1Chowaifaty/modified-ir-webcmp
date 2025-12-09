@@ -48,6 +48,7 @@
  - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
+ - [ir-billing](../../ir-billing)
  - [ir-booked-by-cell](../../table-cells/booking/ir-booked-by-cell)
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-details](../../ir-booking-details)
@@ -81,6 +82,7 @@ graph TD;
   ir-actions-cell --> ir-custom-button
   ir-applicable-policies --> ir-custom-button
   ir-balance-cell --> ir-custom-button
+  ir-billing --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
   ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-custom-button

@@ -66,7 +66,7 @@
 - [ir-room-guests](ir-room-guests)
 - [ir-extra-service-config](./ir-extra-services/ir-extra-service-config)
 - [ir-pickup](ir-pickup)
-- [ir-invoice](../ir-invoice)
+- [ir-billing-drawer](../ir-billing/ir-billing-drawer)
 - [ir-guest-info-drawer](../ir-guest-info/ir-guest-info-drawer)
 - [ir-payment-folio](./ir-payment-details/ir-payment-folio)
 - [igl-book-property](../igloo-calendar/igl-book-property)
@@ -89,7 +89,7 @@ graph TD;
   ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-pickup
-  ir-booking-details --> ir-invoice
+  ir-booking-details --> ir-billing-drawer
   ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
@@ -165,6 +165,12 @@ graph TD;
   ir-pickup-form --> ir-validator
   ir-pickup-form --> ir-custom-date-picker
   ir-pickup-form --> ir-custom-input
+  ir-billing-drawer --> ir-drawer
+  ir-billing-drawer --> ir-billing
+  ir-billing --> ir-spinner
+  ir-billing --> ir-custom-button
+  ir-billing --> ir-invoice
+  ir-billing --> ir-dialog
   ir-invoice --> ir-drawer
   ir-invoice --> ir-invoice-form
   ir-invoice --> ir-custom-button

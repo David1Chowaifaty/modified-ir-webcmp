@@ -54,11 +54,13 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [ir-country-picker](../ir-country-picker)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-header --> ir-picker
   ir-country-picker --> ir-picker
   style ir-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```

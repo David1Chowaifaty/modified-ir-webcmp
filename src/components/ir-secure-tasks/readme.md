@@ -105,7 +105,7 @@ graph TD;
   ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-pickup
-  ir-booking-details --> ir-invoice
+  ir-booking-details --> ir-billing-drawer
   ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
@@ -175,6 +175,12 @@ graph TD;
   ir-pickup-form --> ir-validator
   ir-pickup-form --> ir-custom-date-picker
   ir-pickup-form --> ir-custom-input
+  ir-billing-drawer --> ir-drawer
+  ir-billing-drawer --> ir-billing
+  ir-billing --> ir-spinner
+  ir-billing --> ir-custom-button
+  ir-billing --> ir-invoice
+  ir-billing --> ir-dialog
   ir-invoice --> ir-drawer
   ir-invoice --> ir-invoice-form
   ir-invoice --> ir-custom-button
@@ -251,7 +257,8 @@ graph TD;
   ir-success-loader --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
-  igl-cal-header --> ir-m-combobox
+  igl-cal-header --> ir-picker
+  igl-cal-header --> ir-picker-item
   igl-cal-body --> ir-interactive-title
   igl-cal-body --> igl-booking-event
   igl-cal-body --> ir-modal

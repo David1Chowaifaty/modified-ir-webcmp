@@ -53,6 +53,7 @@ Type: `Promise<void>`
 ### Used by
 
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
+ - [ir-billing](../../ir-billing)
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
@@ -66,6 +67,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   igl-reallocation-dialog --> ir-dialog
+  ir-billing --> ir-dialog
   ir-booking-company-form --> ir-dialog
   ir-booking-details --> ir-dialog
   ir-booking-extra-note --> ir-dialog

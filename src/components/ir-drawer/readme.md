@@ -29,6 +29,7 @@
 ### Used by
 
  - [ir-arrivals](../ir-arrivals)
+ - [ir-billing-drawer](../ir-billing/ir-billing-drawer)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-departures](../ir-departures)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
@@ -42,6 +43,7 @@
 ```mermaid
 graph TD;
   ir-arrivals --> ir-drawer
+  ir-billing-drawer --> ir-drawer
   ir-booking-listing --> ir-drawer
   ir-departures --> ir-drawer
   ir-extra-service-config --> ir-drawer

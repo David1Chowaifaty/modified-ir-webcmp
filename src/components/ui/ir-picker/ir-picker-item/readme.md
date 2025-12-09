@@ -28,11 +28,13 @@
 
 ### Used by
 
+ - [igl-cal-header](../../../igloo-calendar/igl-cal-header)
  - [ir-country-picker](../../ir-country-picker)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-header --> ir-picker-item
   ir-country-picker --> ir-picker-item
   style ir-picker-item fill:#f9f,stroke:#333,stroke-width:4px
 ```
