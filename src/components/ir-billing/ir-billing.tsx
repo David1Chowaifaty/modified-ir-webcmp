@@ -84,7 +84,7 @@ export class IrBilling {
         <div class="billing__container">
           <section>
             <div class="billing__section-title-row">
-              <h4 class="billing__section-title">Physical documents</h4>
+              <h4 class="billing__section-title">Issued documents</h4>
               <ir-custom-button
                 variant="brand"
                 onClickHandler={e => {
@@ -100,9 +100,9 @@ export class IrBilling {
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Type</th>
-                    <th>Number</th>
+                    {/* <th>Type</th> */}
                     <th>Date</th>
+                    <th>Number</th>
                     <th class="billing__price-col">Amount</th>
                     <th></th>
                   </tr>
@@ -112,38 +112,54 @@ export class IrBilling {
                     const isValid = invoice.status.code === 'VALID';
                     return (
                       <tr class="ir-table-row">
-                        <td>{isValid ? 'Invoice' : 'Credit note'}</td>
-                        <td>
-                          <p class="billing__invoice-nbr">{isValid ? invoice.nbr : invoice.credit_note.nbr}</p>
-                          {!isValid && <p class="billing__invoice-nbr --secondary">{invoice.nbr}</p>}
-                        </td>
+                        {/* <td>{isValid ? 'Invoice' : 'Credit note'}</td> */}
                         <td>
                           {invoice.status.code === 'VALID'
                             ? moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')
                             : moment(invoice.credit_note.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
                         </td>
+                        <td>
+                          <p class="billing__invoice-nbr">
+                            <b>{isValid ? 'Invoice' : 'Credit note'}:</b> {isValid ? invoice.nbr : invoice.credit_note.nbr}
+                          </p>
+                          {!isValid && <p class="billing__invoice-nbr --secondary">{invoice.nbr}</p>}
+                        </td>
                         <td class="billing__price-col">
                           <span class="ir-price" style={{ fontWeight: '400' }}>
-                            {formatAmount(invoice.currency.symbol, invoice.total_amount ?? 0)}
+                            {formatAmount(invoice.currency.symbol, invoice.total_amount)}
                           </span>
                         </td>
                         <td>
                           <div class="billing__actions-row">
-                            <wa-tooltip for={`pdf-${invoice.system_id}`}>Download pdf</wa-tooltip>
-                            <ir-custom-button id={`pdf-${invoice.system_id}`} variant="neutral" appearance="outlined">
-                              <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
-                            </ir-custom-button>
-                            {invoice.status.code === 'VALID' && !invoice.credit_note && (
-                              <ir-custom-button
-                                onClickHandler={() => {
-                                  this.selectedInvoice = invoice.nbr;
-                                }}
-                                variant="danger"
-                                appearance="outlined"
-                              >
-                                Void with credit note
+                            <wa-dropdown
+                              onwa-hide={e => {
+                                e.stopImmediatePropagation();
+                                e.stopPropagation();
+                              }}
+                              onwa-select={e => {
+                                switch ((e.detail as any).item.value) {
+                                  case 'print':
+                                    break;
+                                  case 'void':
+                                    this.selectedInvoice = invoice.nbr;
+                                    break;
+                                }
+                              }}
+                            >
+                              <h3>Issued by:</h3>
+                              <wa-divider></wa-divider>
+                              <h3>Actions</h3>
+                              <wa-dropdown-item value="print">Print to pdf</wa-dropdown-item>
+                              {invoice.status.code === 'VALID' && !invoice.credit_note && (
+                                <wa-dropdown-item variant="danger" value="void">
+                                  Void with credit note
+                                </wa-dropdown-item>
+                              )}
+                              {/* <wa-tooltip for={`pdf-${invoice.system_id}`}>Download pdf</wa-tooltip> */}
+                              <ir-custom-button slot="trigger" id={`pdf-${invoice.system_id}`} variant="neutral" appearance="plain">
+                                <wa-icon name="ellipsis-vertical" style={{ fontSize: '1rem' }}></wa-icon>
                               </ir-custom-button>
-                            )}
+                            </wa-dropdown>
                           </div>
                         </td>
                         {/* <p>
@@ -204,7 +220,12 @@ export class IrBilling {
                 </wa-card>
               ))}
             </div>
-            {this.invoiceInfo.invoices?.length === 0 && <div>No invoices created</div>}
+            {this.invoiceInfo.invoices?.length === 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexDirection: 'column', color: 'var(--wa-color-neutral-60)' }}>
+                <wa-icon name="ban" style={{ transform: 'rotate(90deg)', fontSize: '2rem' }}></wa-icon>
+                <p>No records found</p>
+              </div>
+            )}
           </section>
         </div>
         <ir-invoice

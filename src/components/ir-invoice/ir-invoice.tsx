@@ -1,7 +1,7 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Event, EventEmitter, Host, Method, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { v4 } from 'uuid';
-import { BookingInvoiceInfo } from './types';
+import { BookingInvoiceInfo, ViewMode } from './types';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
@@ -109,7 +109,10 @@ export class IrInvoice {
     this.open = false;
     this.invoiceClose.emit();
   }
+
+  @State() viewMode: ViewMode = 'invoice';
   private _id = `invoice-form__${v4()}`;
+
   render() {
     return (
       <Host>
@@ -130,8 +133,23 @@ export class IrInvoice {
             this.closeDrawer();
           }}
         >
+          <div class="d-flex align-items-center" slot="header-actions">
+            <wa-switch
+              onchange={e => {
+                if ((e.target as any).checked) {
+                  this.viewMode = 'proforma';
+                } else {
+                  this.viewMode = 'invoice';
+                }
+              }}
+            >
+              Pro-forma
+            </wa-switch>
+          </div>
+
           {this.open && (
             <ir-invoice-form
+              viewMode={this.viewMode}
               for={this.for}
               roomIdentifier={this.roomIdentifier}
               booking={this.booking}

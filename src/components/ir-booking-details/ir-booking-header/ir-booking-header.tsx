@@ -70,6 +70,7 @@ export class IrBookingHeader {
         position: 'top-right',
       });
       this.bookingStatus = null;
+      this.modalEl.closeModal();
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
@@ -95,7 +96,58 @@ export class IrBookingHeader {
       <div class="fluid-container px-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0">
-            <p style={{ color: 'black' }} class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>
+            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <p style={{ color: 'black' }} class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>
+              {/* <wa-select
+                onchange={e => {
+                  this.bookingStatus = (e.target as any).value;
+                }}
+                style={{ width: '140px' }}
+                size="small"
+                placeholder="Change status..."
+                value={this.bookingStatus ?? ''}
+              >
+                <wa-option value="">Change status...</wa-option>
+                {this.booking.allowed_actions.map(option => (
+                  <wa-option value={option.code}>{option.description}</wa-option>
+                ))}
+              </wa-select> */}
+              <wa-dropdown
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
+                onwa-select={e => {
+                  this.bookingStatus = (e.detail as any).item.value;
+                  this.modalEl.openModal();
+                }}
+              >
+                <ir-custom-button
+                  slot="trigger"
+                  // onClickHandler={() => {
+                  //   if (!this.booking.is_direct) {
+                  //     this.modalEl.openModal();
+                  //     return;
+                  //   }
+                  //   this.updateStatus();
+                  // }}
+                  withCaret
+                  // loading={isRequestPending('/Change_Exposed_Booking_Status')}
+                  appearance={'outlined'}
+                  size="small"
+                  variant="brand"
+                >
+                  <ir-booking-status-tag slot="start" status={this.booking.status} isRequestToCancel={this.booking.is_requested_to_cancel}></ir-booking-status-tag>
+                  <span>Update status</span>
+                </ir-custom-button>
+                {this.booking.allowed_actions.map(option => (
+                  <wa-dropdown-item variant={['CANC_RA', 'NOSHOW_RA'].includes(option.code) ? 'danger' : 'default'} value={option.code}>
+                    {option.description}
+                  </wa-dropdown-item>
+                ))}
+              </wa-dropdown>
+            </div>
+
             <p class="m-0 p-0">{!this.booking.is_direct && <span class="mr-1 m-0">{this.booking.channel_booking_nbr}</span>}</p>
           </div>
 
@@ -104,7 +156,6 @@ export class IrBookingHeader {
               {/* <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
                 {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
               </span> */}
-              <ir-booking-status-tag status={this.booking.status} isRequestToCancel={this.booking.is_requested_to_cancel}></ir-booking-status-tag>
               {lastManipulation && (
                 <ir-popover
                   trigger="hover"
@@ -132,35 +183,6 @@ export class IrBookingHeader {
                   class="sm-padding-right m-0 "
                   selectedValue={this.bookingStatus}
                 ></ir-select> */}
-                <wa-select
-                  onchange={e => {
-                    this.bookingStatus = (e.target as any).value;
-                  }}
-                  style={{ width: '120px' }}
-                  size="small"
-                  placeholder="Select..."
-                  value={this.bookingStatus ?? ''}
-                >
-                  <wa-option value="">Select...</wa-option>
-                  {this.booking.allowed_actions.map(option => (
-                    <wa-option value={option.code}>{option.description}</wa-option>
-                  ))}
-                </wa-select>
-                <ir-custom-button
-                  onClickHandler={() => {
-                    if (!this.booking.is_direct) {
-                      this.modalEl.openModal();
-                      return;
-                    }
-                    this.updateStatus();
-                  }}
-                  loading={isRequestPending('/Change_Exposed_Booking_Status')}
-                  appearance={'accent'}
-                  size="small"
-                  variant="brand"
-                >
-                  Update
-                </ir-custom-button>
               </div>
             )}
             <ir-custom-button
@@ -191,24 +213,24 @@ export class IrBookingHeader {
             {this.hasReceipt && (
               <Fragment>
                 <ir-custom-button id="invoice" variant="brand" size="small" appearance="outlined">
-                  Billings
+                  Billing
                 </ir-custom-button>
               </Fragment>
             )}
             {this.hasPrint && (
               <Fragment>
                 <wa-tooltip for="print">Print booking</wa-tooltip>
-                <ir-custom-button id="print" variant="neutral" size="small" appearance="plain">
-                  <wa-icon label="Print" name="print" style={{ fontSize: '1.65rem' }}></wa-icon>
+                <ir-custom-button id="print" variant="brand" size="small" appearance="outlined">
+                  <wa-icon label="Print" name="print" style={{ fontSize: '1.2rem' }}></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
 
             {this.hasEmail && (
               <Fragment>
-                <wa-tooltip for="email">Email this booking</wa-tooltip>
-                <ir-custom-button id="email" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                <wa-tooltip for="email">Email this booking to guest</wa-tooltip>
+                <ir-custom-button id="email" variant="brand" size="small" appearance="outlined">
+                  <wa-icon name="envelope" style={{ fontSize: '1.2rem' }} label="Email this booking"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -264,9 +286,14 @@ export class IrBookingHeader {
             e.stopImmediatePropagation();
             e.stopPropagation();
           }}
+          onIrDialogAfterHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.bookingStatus = null;
+          }}
         >
-          <p>{locales.entries.Lcz_OTA_Modification_Alter}</p>
-          <div class="ir-dialog__footer">
+          <p>{this.booking.is_direct ? 'Are you sure you want to update this booking status?' : locales.entries.Lcz_OTA_Modification_Alter}</p>
+          <div class="ir-dialog__footer" slot="footer">
             <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
               {locales?.entries?.Lcz_Cancel}
             </ir-custom-button>
@@ -277,7 +304,7 @@ export class IrBookingHeader {
                 this.updateStatus();
               }}
               size="medium"
-              variant="danger"
+              variant="brand"
               loading={isRequestPending('/Change_Exposed_Booking_Status')}
             >
               {locales?.entries?.Lcz_Confirm}

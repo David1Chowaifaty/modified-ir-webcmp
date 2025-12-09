@@ -26,8 +26,9 @@
 .billing__actions-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-width: 160px;
+  /* justify-content: center; */
+  justify-content: flex-end;
+  /* min-width: 160px; */
   gap: 0.5rem;
 }
 .billing__invoice-nbr {

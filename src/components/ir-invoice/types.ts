@@ -76,3 +76,4 @@ export const BookingInvoiceInfoSchema = z.object({
   invoices: z.array(InvoiceSchema).nullable(),
 });
 export type BookingInvoiceInfo = z.infer<typeof BookingInvoiceInfoSchema>;
+export type ViewMode = 'invoice' | 'proforma';

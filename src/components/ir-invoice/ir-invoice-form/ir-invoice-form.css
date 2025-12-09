@@ -28,7 +28,7 @@
   box-sizing: border-box;
   width: 100%;
 }
-.ir-invoice__service:hover {
+.ir-invoice__service:not(:disabled):hover {
   background-color: color-mix(in srgb, var(--wa-color-surface-default) 95%, var(--wa-color-mix-hover));
 }
 .ir-invoice__checkbox,

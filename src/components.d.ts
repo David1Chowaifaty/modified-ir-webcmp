@@ -43,7 +43,7 @@ import { Element } from "@stencil/core";
 import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
-import { BookingInvoiceInfo } from "./components/ir-invoice/types";
+import { BookingInvoiceInfo, ViewMode } from "./components/ir-invoice/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -99,7 +99,7 @@ export { Element } from "@stencil/core";
 export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
-export { BookingInvoiceInfo } from "./components/ir-invoice/types";
+export { BookingInvoiceInfo, ViewMode } from "./components/ir-invoice/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -1818,6 +1818,9 @@ export namespace Components {
           * Specifies what the invoice is for. - `"room"`: invoice for a specific room - `"booking"`: invoice for the entire booking
          */
         "for": 'room' | 'booking';
+        /**
+          * Unique ID applied to the underlying <form> element.
+         */
         "formId": string;
         "invoiceInfo": BookingInvoiceInfo;
         /**
@@ -1832,6 +1835,10 @@ export namespace Components {
           * The identifier of the room for which the invoice is being generated. Used when invoicing at room level instead of booking level.
          */
         "roomIdentifier": string;
+        /**
+          * Controls how the invoice form behaves (e.g., "invoice", "proforma", "preview").
+         */
+        "viewMode": ViewMode;
     }
     interface IrLabel {
         /**
@@ -8744,6 +8751,9 @@ declare namespace LocalJSX {
           * Specifies what the invoice is for. - `"room"`: invoice for a specific room - `"booking"`: invoice for the entire booking
          */
         "for"?: 'room' | 'booking';
+        /**
+          * Unique ID applied to the underlying <form> element.
+         */
         "formId"?: string;
         "invoiceInfo"?: BookingInvoiceInfo;
         /**
@@ -8776,6 +8786,10 @@ declare namespace LocalJSX {
           * The identifier of the room for which the invoice is being generated. Used when invoicing at room level instead of booking level.
          */
         "roomIdentifier"?: string;
+        /**
+          * Controls how the invoice form behaves (e.g., "invoice", "proforma", "preview").
+         */
+        "viewMode"?: ViewMode;
     }
     interface IrLabel {
         /**
