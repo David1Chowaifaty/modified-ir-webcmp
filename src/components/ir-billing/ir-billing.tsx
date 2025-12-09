@@ -128,8 +128,54 @@ export class IrBilling {
                   ))}
                 </tbody>
               </table>
-              {this.invoiceInfo.invoices?.length === 0 && <div>No invoices created</div>}
             </div>
+            <div class="billing__cards">
+              {this.invoiceInfo.invoices?.map(invoice => (
+                <wa-card key={invoice.nbr} class="billing__card">
+                  <div class="billing__card-header">
+                    <div class="billing__card-header-info">
+                      <p class="billing__card-number">
+                        {calendar_data.property.company?.invoice_prefix}-{invoice.nbr}
+                      </p>
+                      <p class="billing__card-type">{invoice.status.code === 'VALID' ? 'Invoice' : 'Credit note'}</p>
+                    </div>
+
+                    <wa-tooltip for={`mobile-pdf-${invoice.system_id}`}>Download pdf</wa-tooltip>
+                    <ir-custom-button id={`mobile-pdf-${invoice.system_id}`} variant="neutral" appearance="plain" class="billing__card-download-btn">
+                      <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
+                    </ir-custom-button>
+                  </div>
+
+                  <div class="billing__card-details">
+                    <div class="billing__card-detail">
+                      <p class="billing__card-detail-label">Date</p>
+                      <p class="billing__card-detail-value">{moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
+                    </div>
+
+                    <div class="billing__card-detail">
+                      <p class="billing__card-detail-label --amount">Amount</p>
+                      <p class="billing__card-detail-value">{formatAmount(invoice.currency.symbol, invoice.total_amount ?? 0)}</p>
+                    </div>
+                  </div>
+
+                  {invoice.status.code === 'VALID' && (
+                    <div slot="footer" class="billing__card-footer">
+                      <ir-custom-button
+                        onClickHandler={() => {
+                          this.selectedInvoice = invoice.nbr;
+                        }}
+                        variant="danger"
+                        appearance="outlined"
+                        class="billing__card-void-btn"
+                      >
+                        Void with credit note
+                      </ir-custom-button>
+                    </div>
+                  )}
+                </wa-card>
+              ))}
+            </div>
+            {this.invoiceInfo.invoices?.length === 0 && <div>No invoices created</div>}
           </section>
         </div>
         <ir-invoice

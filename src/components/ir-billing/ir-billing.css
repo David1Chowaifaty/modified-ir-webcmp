@@ -30,3 +30,97 @@
 .billing__price-col {
   text-align: end !important;
 }
+
+/* Billing Cards Container */
+.billing__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-m);
+}
+
+/* Individual Card */
+.billing__card {
+  display: block;
+}
+
+/* Header */
+.billing__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.billing__card-header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.billing__card-number {
+  margin: 0;
+  font-weight: var(--wa-font-weight-heading);
+  font-family: var(--wa-font-family-heading);
+}
+
+.billing__card-type {
+  margin: 0;
+  font-size: var(--wa-font-size-xs);
+  color: var(--wa-color-text-secondary);
+}
+
+/* PDF Download Button */
+.billing__card-download-btn {
+  display: flex;
+  align-items: center;
+}
+
+/* Details Section */
+.billing__card-details {
+  display: flex;
+  /* flex-direction: column; */
+  gap: var(--wa-space-xs);
+  justify-content: space-between;
+}
+
+.billing__card-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.billing__card-detail-label {
+  margin: 0;
+  font-size: var(--wa-font-size-xs);
+  color: var(--wa-color-text-quiet);
+}
+.billing__card-detail-label.--amount {
+  text-align: end !important;
+}
+.billing__card-detail-value {
+  margin: 0;
+  font-weight: var(--wa-font-weight-regular);
+  font-size: var(--wa-font-size-s);
+}
+.billing__card-void-btn {
+  flex: 1 1 0%;
+}
+
+/* Footer (Void button) */
+.billing__card-footer {
+  display: flex;
+}
+.table-container {
+  display: none;
+}
+.billing__card::part(footer) {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+/*md*/
+@media (min-width: 768px) {
+  .billing__cards {
+    display: none;
+  }
+  .table-container {
+    display: block;
+  }
+}
