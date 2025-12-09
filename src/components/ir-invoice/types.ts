@@ -26,12 +26,17 @@ export const ItemSchema = z.object({
   type: z.string(),
 });
 export type Item = z.infer<typeof ItemSchema>;
-
+export const CreditNoteSchema = z.object({
+  date: z.string(),
+  nbr: z.string(),
+  reason: z.string(),
+  system_id: z.string().nullable(),
+});
 export const InvoiceSchema = z.object({
   billed_to_name: z.any(),
   billed_to_tax: z.any(),
   booking_nbr: z.string(),
-  credit_note: z.any(),
+  credit_note: CreditNoteSchema.nullable(),
   currency: CurrencySchema,
   date: z.string(),
   items: z.array(ItemSchema),

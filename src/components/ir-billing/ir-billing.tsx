@@ -2,7 +2,6 @@ import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Fragment, Listen, Prop, State, h } from '@stencil/core';
 import { BookingInvoiceInfo } from '../ir-invoice/types';
 import { BookingService } from '@/services/booking-service/booking.service';
-import calendar_data from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
 import moment from 'moment';
 
@@ -95,10 +94,12 @@ export class IrBilling {
                   {this.invoiceInfo?.invoices?.map(invoice => (
                     <tr class="ir-table-row">
                       <td>{invoice.status.code === 'VALID' ? 'Invoice' : 'Credit note'}</td>
+                      <td>{invoice.status.code === 'VALID' ? invoice.nbr : invoice.credit_note.nbr}</td>
                       <td>
-                        {calendar_data.property.company?.invoice_prefix}-{invoice.nbr}
+                        {invoice.status.code === 'VALID'
+                          ? moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')
+                          : moment(invoice.credit_note.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
                       </td>
-                      <td>{moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</td>
                       <td class="billing__price-col">
                         <span class="ir-price">{formatAmount(invoice.currency.symbol, invoice.total_amount ?? 0)}</span>
                       </td>
@@ -134,9 +135,7 @@ export class IrBilling {
                 <wa-card key={invoice.nbr} class="billing__card">
                   <div class="billing__card-header">
                     <div class="billing__card-header-info">
-                      <p class="billing__card-number">
-                        {calendar_data.property.company?.invoice_prefix}-{invoice.nbr}
-                      </p>
+                      <p class="billing__card-number">{invoice.status.code === 'VALID' ? invoice.nbr : invoice.credit_note.nbr}</p>
                       <p class="billing__card-type">{invoice.status.code === 'VALID' ? 'Invoice' : 'Credit note'}</p>
                     </div>
 
@@ -149,7 +148,12 @@ export class IrBilling {
                   <div class="billing__card-details">
                     <div class="billing__card-detail">
                       <p class="billing__card-detail-label">Date</p>
-                      <p class="billing__card-detail-value">{moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
+                      <p class="billing__card-detail-value">
+                        {' '}
+                        {invoice.status.code === 'VALID'
+                          ? moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')
+                          : moment(invoice.credit_note.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
+                      </p>
                     </div>
 
                     <div class="billing__card-detail">
