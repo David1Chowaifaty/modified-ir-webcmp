@@ -153,11 +153,11 @@ export class IrInvoice {
             >
               Cancel
             </ir-custom-button>
-            <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="brand" form={this._id}>
+            {/* <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="neutral" form={this._id}>
               Pro-forma invoice
-            </ir-custom-button>
+            </ir-custom-button> */}
             <ir-custom-button loading={isRequestPending('/Issue_Invoice')} value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
-              Confirm invoice
+              Confirm
             </ir-custom-button>
           </div>
         </ir-drawer>

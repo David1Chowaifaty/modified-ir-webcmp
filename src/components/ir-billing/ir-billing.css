@@ -28,6 +28,14 @@
   align-items: center;
   justify-content: center;
   min-width: 160px;
+  gap: 0.5rem;
+}
+.billing__invoice-nbr {
+  margin: 0;
+  padding: 0;
+}
+.billing__invoice-nbr.--secondary {
+  font-size: 0.75rem;
 }
 .billing__price-col {
   text-align: end !important;

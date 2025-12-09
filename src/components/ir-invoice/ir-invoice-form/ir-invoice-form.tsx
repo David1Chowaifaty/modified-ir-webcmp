@@ -356,6 +356,7 @@ export class IrInvoiceForm {
         return (
           <div class="ir-invoice__service" key={room.identifier}>
             <wa-checkbox
+              disabled
               size="small"
               onchange={e => {
                 const value = (e.target as any).checked;
@@ -387,6 +388,7 @@ export class IrInvoiceForm {
       return (
         <div class="ir-invoice__service" key={group.order}>
           <wa-checkbox
+            disabled
             size="small"
             onchange={e => {
               const value = (e.target as any).checked;
@@ -518,7 +520,9 @@ export class IrInvoiceForm {
           ></ir-custom-date-picker>
           <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
           <div class={'ir-invoice__services'}>
-            <p class="ir-invoice__form-control-label">Choose what to invoice</p>
+            <p class="ir-invoice__form-control-label">
+              Choose what to invoice <span style={{ color: 'var(--wa-color-gray-60)', paddingLeft: '0.5rem' }}> (Disabled services are not eligible to be invoiced yet)</span>
+            </p>
             <div class="ir-invoice__services-container">
               {this.renderRooms()}
               {this.booking.pickup_info && this.renderPickup()}
