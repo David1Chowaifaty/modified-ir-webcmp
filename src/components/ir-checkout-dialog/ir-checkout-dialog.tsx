@@ -24,9 +24,8 @@ export class IrCheckoutDialog {
   @State() isLoading: 'checkout' | 'skipCheckout' | 'checkout&invoice' | 'page' = 'page';
   @State() buttons: Set<'checkout' | 'checkout_without_invoice' | 'invoice_checkout'> = new Set();
   @State() invoiceInfo: BookingInvoiceInfo;
-  @State() isOpen: boolean;
 
-  @Event() checkoutDialogClosed: EventEmitter<void>;
+  @Event({ composed: true, bubbles: true }) checkoutDialogClosed: EventEmitter<{ reason: 'dialog' | 'openInvoice' }>;
 
   private bookingService = new BookingService();
 
@@ -41,10 +40,7 @@ export class IrCheckoutDialog {
         status: '002',
       });
       this.isLoading = null;
-      if (source === 'checkout&invoice') {
-        this.isOpen = true;
-      }
-      this.checkoutDialogClosed.emit();
+      this.checkoutDialogClosed.emit({ reason: source === 'checkout&invoice' ? 'openInvoice' : 'dialog' });
     } catch (error) {
       console.error(error);
     }
@@ -123,17 +119,6 @@ export class IrCheckoutDialog {
                 Checkout
               </ir-custom-button>
             )}
-            <ir-invoice
-              invoiceInfo={this.invoiceInfo}
-              onInvoiceClose={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.isOpen = false;
-              }}
-              open={this.isOpen}
-              booking={this.booking}
-              roomIdentifier={this.identifier}
-            ></ir-invoice>
             {this.buttons.has('checkout_without_invoice') && (
               <ir-custom-button
                 loading={this.isLoading === 'skipCheckout'}

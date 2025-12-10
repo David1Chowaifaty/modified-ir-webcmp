@@ -47,6 +47,7 @@ export class IrRoom {
   @State() modalReason: RoomModalReason = null;
   @State() mainGuest: SharedPerson;
   @State() isModelOpen: boolean = false;
+  @State() isOpen: boolean = false;
 
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
@@ -580,11 +581,24 @@ export class IrRoom {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.modalReason = null;
+            if (e.detail.reason === 'openInvoice') {
+              this.isOpen = true;
+            }
           }}
           identifier={this.room.identifier}
           open={this.modalReason === 'checkout'}
           booking={this.booking}
         ></ir-checkout-dialog>
+        <ir-invoice
+          onInvoiceClose={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.isOpen = false;
+          }}
+          open={this.isOpen}
+          booking={this.booking}
+          roomIdentifier={this.room.identifier}
+        ></ir-invoice>
       </Host>
     );
   }

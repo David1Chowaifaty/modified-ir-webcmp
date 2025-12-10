@@ -4701,7 +4701,7 @@ declare global {
         new (): HTMLIrCheckboxesElement;
     };
     interface HTMLIrCheckoutDialogElementEventMap {
-        "checkoutDialogClosed": void;
+        "checkoutDialogClosed": { reason: 'dialog' | 'openInvoice' };
     }
     interface HTMLIrCheckoutDialogElement extends Components.IrCheckoutDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrCheckoutDialogElementEventMap>(type: K, listener: (this: HTMLIrCheckoutDialogElement, ev: IrCheckoutDialogCustomEvent<HTMLIrCheckoutDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7561,7 +7561,7 @@ declare namespace LocalJSX {
           * Unique identifier of the room being checked out.
          */
         "identifier"?: string;
-        "onCheckoutDialogClosed"?: (event: IrCheckoutDialogCustomEvent<void>) => void;
+        "onCheckoutDialogClosed"?: (event: IrCheckoutDialogCustomEvent<{ reason: 'dialog' | 'openInvoice' }>) => void;
         "open"?: boolean;
     }
     interface IrCombobox {
