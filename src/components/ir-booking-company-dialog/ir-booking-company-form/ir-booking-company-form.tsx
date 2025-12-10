@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Method, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking-service/booking.service';
 @Component({
@@ -8,29 +8,25 @@ import { BookingService } from '@/services/booking-service/booking.service';
 })
 export class IrBookingCompanyForm {
   @Prop() booking: Booking;
-
+  @Prop() formId: string;
   @State() open: boolean;
   @State() isLoading: boolean;
   @State() formData: Pick<Booking, 'company_name' | 'company_tax_nbr'>;
 
-  @Event() resetBookingEvt: EventEmitter<Booking>;
-  @Event() companyFormClosed: EventEmitter<void>;
+  @Event({ composed: true, bubbles: true }) resetBookingEvt: EventEmitter<Booking>;
 
   private bookingService = new BookingService();
+
   componentWillLoad() {
     this.formData = { company_name: this.booking.company_name, company_tax_nbr: this.booking.company_tax_nbr };
   }
 
-  @Method()
-  async openCompanyForm() {
-    this.open = true;
-  }
   private updateGuest(params: Partial<Booking['guest']>) {
     this.formData = { ...this.formData, ...params };
   }
+
   private async saveCompany() {
     try {
-      this.isLoading = true;
       const booking = {
         assign_units: true,
         is_pms: true,
@@ -59,38 +55,33 @@ export class IrBookingCompanyForm {
       await this.bookingService.doReservation(booking);
       this.resetBookingEvt.emit({ ...this.booking, ...this.formData });
       this.open = false;
-    } catch (error) {
-    } finally {
-      this.isLoading = false;
-    }
+    } catch (error) {}
   }
 
   render() {
     return (
-      <ir-dialog
-        open={this.open}
-        onIrDialogHide={e => {
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          this.open = false;
-          this.companyFormClosed.emit();
+      <form
+        id={this.formId}
+        onSubmit={e => {
+          e.preventDefault();
+          this.saveCompany();
         }}
-        label="Company"
-        id="dialog-overview"
+        class="booking-company__form"
       >
-        <div class="d-flex  flex-column" style={{ gap: '1rem' }}>
-          <ir-custom-input onText-change={e => this.updateGuest({ company_name: e.detail })} label="Name" autofocus placeholder="XYZ LTD"></ir-custom-input>
-          <ir-custom-input onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })} label="Tax ID" placeholder="VAT 123456"></ir-custom-input>
-        </div>
-        <div slot="footer" class="ir-dialog__footer">
-          <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
-            Cancel
-          </ir-custom-button>
-          <ir-custom-button loading={this.isLoading} size="medium" variant="brand" onClickHandler={() => this.saveCompany()}>
-            Save
-          </ir-custom-button>
-        </div>
-      </ir-dialog>
+        <ir-custom-input
+          value={this.formData.company_name}
+          onText-change={e => this.updateGuest({ company_name: e.detail })}
+          label="Name"
+          autofocus
+          placeholder="XYZ LTD"
+        ></ir-custom-input>
+        <ir-custom-input
+          value={this.formData.company_tax_nbr}
+          onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })}
+          label="Tax ID"
+          placeholder="VAT 123456"
+        ></ir-custom-input>
+      </form>
     );
   }
 }

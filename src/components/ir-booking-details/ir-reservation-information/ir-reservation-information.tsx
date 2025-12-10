@@ -214,7 +214,7 @@ export class IrReservationInformation {
             </ir-custom-button>
           </div>
           <ir-booking-extra-note booking={this.booking} ref={el => (this.irBookingExtraNoteRef = el)}></ir-booking-extra-note>
-          <ir-booking-company-form booking={this.booking} ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-form>
+          <ir-booking-company-dialog booking={this.booking} ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-dialog>
         </div>
       </wa-card>
     );

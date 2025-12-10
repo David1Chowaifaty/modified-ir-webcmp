@@ -14,7 +14,7 @@ export class IrBookingBillingRecipient {
   @Event() recipientChange: EventEmitter<string>;
 
   private initialValue: string;
-  private bookingCompanyFormRef: HTMLIrBookingCompanyFormElement;
+  private bookingCompanyFormRef: HTMLIrBookingCompanyDialogElement;
 
   componentWillLoad() {
     this.initializeDefaultValue();
@@ -104,7 +104,7 @@ export class IrBookingBillingRecipient {
             {this.booking.company_name ? this.booking.company_name : 'Company'}
           </wa-radio>
         </wa-radio-group>
-        <ir-booking-company-form
+        <ir-booking-company-dialog
           onCompanyFormClosed={() => {
             if (this.selectedRecipient === 'company' && !this.booking.company_name) {
               this.handleRecipientChange(this.initialValue);
@@ -118,7 +118,7 @@ export class IrBookingBillingRecipient {
           }}
           booking={this.booking}
           ref={el => (this.bookingCompanyFormRef = el)}
-        ></ir-booking-company-form>
+        ></ir-booking-company-dialog>
       </Host>
     );
   }

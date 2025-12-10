@@ -488,9 +488,13 @@ export namespace Components {
     interface IrBookingBillingRecipient {
         "booking": Booking;
     }
-    interface IrBookingCompanyForm {
+    interface IrBookingCompanyDialog {
         "booking": Booking;
         "openCompanyForm": () => Promise<void>;
+    }
+    interface IrBookingCompanyForm {
+        "booking": Booking;
+        "formId": string;
     }
     interface IrBookingDetails {
         "bookingNumber": string;
@@ -3314,6 +3318,10 @@ export interface IrBookingBillingRecipientCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLIrBookingBillingRecipientElement;
 }
+export interface IrBookingCompanyDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingCompanyDialogElement;
+}
 export interface IrBookingCompanyFormCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingCompanyFormElement;
@@ -4426,9 +4434,26 @@ declare global {
         prototype: HTMLIrBookingBillingRecipientElement;
         new (): HTMLIrBookingBillingRecipientElement;
     };
+    interface HTMLIrBookingCompanyDialogElementEventMap {
+        "companyFormClosed": void;
+        "resetBookingEvt": Booking;
+    }
+    interface HTMLIrBookingCompanyDialogElement extends Components.IrBookingCompanyDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingCompanyDialogElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyDialogElement, ev: IrBookingCompanyDialogCustomEvent<HTMLIrBookingCompanyDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingCompanyDialogElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyDialogElement, ev: IrBookingCompanyDialogCustomEvent<HTMLIrBookingCompanyDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingCompanyDialogElement: {
+        prototype: HTMLIrBookingCompanyDialogElement;
+        new (): HTMLIrBookingCompanyDialogElement;
+    };
     interface HTMLIrBookingCompanyFormElementEventMap {
         "resetBookingEvt": Booking;
-        "companyFormClosed": void;
     }
     interface HTMLIrBookingCompanyFormElement extends Components.IrBookingCompanyForm, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingCompanyFormElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyFormElement, ev: IrBookingCompanyFormCustomEvent<HTMLIrBookingCompanyFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6671,6 +6696,7 @@ declare global {
         "ir-booked-on-cell": HTMLIrBookedOnCellElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
+        "ir-booking-company-dialog": HTMLIrBookingCompanyDialogElement;
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
@@ -7310,9 +7336,14 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "onRecipientChange"?: (event: IrBookingBillingRecipientCustomEvent<string>) => void;
     }
+    interface IrBookingCompanyDialog {
+        "booking"?: Booking;
+        "onCompanyFormClosed"?: (event: IrBookingCompanyDialogCustomEvent<void>) => void;
+        "onResetBookingEvt"?: (event: IrBookingCompanyDialogCustomEvent<Booking>) => void;
+    }
     interface IrBookingCompanyForm {
         "booking"?: Booking;
-        "onCompanyFormClosed"?: (event: IrBookingCompanyFormCustomEvent<void>) => void;
+        "formId"?: string;
         "onResetBookingEvt"?: (event: IrBookingCompanyFormCustomEvent<Booking>) => void;
     }
     interface IrBookingDetails {
@@ -10364,6 +10395,7 @@ declare namespace LocalJSX {
         "ir-booked-on-cell": IrBookedOnCell;
         "ir-booking": IrBooking;
         "ir-booking-billing-recipient": IrBookingBillingRecipient;
+        "ir-booking-company-dialog": IrBookingCompanyDialog;
         "ir-booking-company-form": IrBookingCompanyForm;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-email-logs": IrBookingEmailLogs;
@@ -10575,6 +10607,7 @@ declare module "@stencil/core" {
             "ir-booked-on-cell": LocalJSX.IrBookedOnCell & JSXBase.HTMLAttributes<HTMLIrBookedOnCellElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;
+            "ir-booking-company-dialog": LocalJSX.IrBookingCompanyDialog & JSXBase.HTMLAttributes<HTMLIrBookingCompanyDialogElement>;
             "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
