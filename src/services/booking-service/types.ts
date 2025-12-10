@@ -202,5 +202,7 @@ export type VoidInvoiceProps = z.infer<typeof VoidInvoicePropsSchema>;
 
 export const PrintInvoicePropsSchema = z.object({
   invoice_nbr: z.string().optional(),
+  mode: z.enum(['invoice', 'creditnote', 'proforma']),
+  invoice: InvoiceSchema.optional(),
 });
 export type PrintInvoiceProps = z.infer<typeof PrintInvoicePropsSchema>;

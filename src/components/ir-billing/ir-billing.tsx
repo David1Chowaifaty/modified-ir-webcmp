@@ -4,6 +4,7 @@ import { BookingInvoiceInfo, Invoice } from '../ir-invoice/types';
 import { BookingService } from '@/services/booking-service/booking.service';
 import { formatAmount } from '@/utils/utils';
 import moment from 'moment';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-billing',
@@ -71,6 +72,18 @@ export class IrBilling {
     });
   }
 
+  private async printInvoice(invoice: Invoice) {
+    try {
+      const { My_Result } = await this.bookingService.printInvoice({
+        invoice_nbr: invoice.nbr,
+        mode: invoice.credit_note ? 'creditnote' : 'invoice',
+      });
+      window.open(My_Result.url);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     if (this.isLoading === 'page') {
       return (
@@ -136,9 +149,10 @@ export class IrBilling {
                                 e.stopImmediatePropagation();
                                 e.stopPropagation();
                               }}
-                              onwa-select={e => {
+                              onwa-select={async e => {
                                 switch ((e.detail as any).item.value) {
                                   case 'print':
+                                    this.printInvoice(invoice);
                                     break;
                                   case 'void':
                                     this.selectedInvoice = invoice.nbr;
@@ -149,8 +163,11 @@ export class IrBilling {
                               <h3>Issued by:</h3>
                               <wa-divider></wa-divider>
                               <h3>Actions</h3>
-                              <wa-dropdown-item value="print">Print to pdf</wa-dropdown-item>
-                              {invoice.status.code === 'VALID' && !invoice.credit_note && (
+                              <wa-dropdown-item value="print">
+                                Print to pdf
+                                {isRequestPending('/Print_Invoice') && <wa-spinner slot="details"></wa-spinner>}
+                              </wa-dropdown-item>
+                              {isValid && !invoice.credit_note && (
                                 <wa-dropdown-item variant="danger" value="void">
                                   Void with credit note
                                 </wa-dropdown-item>
@@ -172,53 +189,64 @@ export class IrBilling {
               </table>
             </div>
             <div class="billing__cards">
-              {this.invoices?.map(invoice => (
-                <wa-card key={invoice.nbr} class="billing__card">
-                  <div class="billing__card-header">
-                    <div class="billing__card-header-info">
-                      <p class="billing__card-number">{invoice.status.code === 'VALID' ? invoice.nbr : invoice.credit_note.nbr}</p>
-                      <p class="billing__card-type">{invoice.status.code === 'VALID' ? 'Invoice' : 'Credit note'}</p>
-                    </div>
+              {this.invoices?.map(invoice => {
+                const isValid = invoice.status.code === 'VALID';
 
-                    <wa-tooltip for={`mobile-pdf-${invoice.system_id}`}>Download pdf</wa-tooltip>
-                    <ir-custom-button id={`mobile-pdf-${invoice.system_id}`} variant="neutral" appearance="plain" class="billing__card-download-btn">
-                      <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
-                    </ir-custom-button>
-                  </div>
+                return (
+                  <wa-card key={invoice.nbr} class="billing__card">
+                    <div class="billing__card-header">
+                      <div class="billing__card-header-info">
+                        <p class="billing__card-number">
+                          {isValid ? 'Invoice' : 'Credit note'}:{isValid ? invoice.nbr : invoice.credit_note.nbr}
+                        </p>
+                        <p class="billing__card-type">{isValid ? '' : invoice.nbr}</p>
+                      </div>
 
-                  <div class="billing__card-details">
-                    <div class="billing__card-detail">
-                      <p class="billing__card-detail-label">Date</p>
-                      <p class="billing__card-detail-value">
-                        {' '}
-                        {invoice.status.code === 'VALID'
-                          ? moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY')
-                          : moment(invoice.credit_note.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
-                      </p>
-                    </div>
-
-                    <div class="billing__card-detail">
-                      <p class="billing__card-detail-label --amount">Amount</p>
-                      <p class="billing__card-detail-value">{formatAmount(invoice.currency.symbol, invoice.total_amount ?? 0)}</p>
-                    </div>
-                  </div>
-
-                  {invoice.status.code === 'VALID' && (
-                    <div slot="footer" class="billing__card-footer">
+                      <wa-tooltip for={`mobile-pdf-${invoice.system_id}`}>Download pdf</wa-tooltip>
                       <ir-custom-button
-                        onClickHandler={() => {
-                          this.selectedInvoice = invoice.nbr;
-                        }}
-                        variant="danger"
-                        appearance="outlined"
-                        class="billing__card-void-btn"
+                        onClickHandler={() => this.printInvoice(invoice)}
+                        loading={isRequestPending('/Print_Invoice')}
+                        id={`mobile-pdf-${invoice.system_id}`}
+                        variant="neutral"
+                        appearance="plain"
+                        class="billing__card-download-btn"
                       >
-                        Void with credit note
+                        <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
                       </ir-custom-button>
                     </div>
-                  )}
-                </wa-card>
-              ))}
+
+                    <div class="billing__card-details">
+                      <div class="billing__card-detail">
+                        <p class="billing__card-detail-label">Date</p>
+                        <p class="billing__card-detail-value">
+                          {' '}
+                          {isValid ? moment(invoice.date, 'YYYY-MM-DD').format('MMM DD, YYYY') : moment(invoice.credit_note.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
+                        </p>
+                      </div>
+
+                      <div class="billing__card-detail">
+                        <p class="billing__card-detail-label --amount">Amount</p>
+                        <p class="billing__card-detail-value">{formatAmount(invoice.currency.symbol, invoice.total_amount ?? 0)}</p>
+                      </div>
+                    </div>
+
+                    {isValid && !invoice.credit_note && (
+                      <div slot="footer" class="billing__card-footer">
+                        <ir-custom-button
+                          onClickHandler={() => {
+                            this.selectedInvoice = invoice.nbr;
+                          }}
+                          variant="danger"
+                          appearance="outlined"
+                          class="billing__card-void-btn"
+                        >
+                          Void with credit note
+                        </ir-custom-button>
+                      </div>
+                    )}
+                  </wa-card>
+                );
+              })}
             </div>
             {this.invoiceInfo.invoices?.length === 0 && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexDirection: 'column', color: 'var(--wa-color-neutral-60)' }}>
