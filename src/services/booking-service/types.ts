@@ -167,7 +167,14 @@ export type TableEntries =
 export type GroupedTableEntries = {
   [K in TableEntries as K extends `_${infer Rest}` ? Lowercase<Rest> : never]: IEntries[];
 };
-
+/**Arrivals */
+export const GetRoomsToCheckInPropsSchema = z.object({
+  property_id: z.string(),
+  check_in_date: z.string(),
+  page_index: z.number().default(1),
+  page_size: z.number().default(10),
+});
+export type GetRoomsToCheckInProps = z.infer<typeof GetRoomsToCheckInPropsSchema>;
 /* INVOICE TYPES */
 
 export const GetBookingInvoiceInfoPropsSchema = z.object({

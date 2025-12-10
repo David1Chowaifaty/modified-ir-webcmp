@@ -24,7 +24,7 @@ export class IrArrivalsTable {
 
   private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean) {
     const rowKey = `${booking.booking_nbr}-${room?.identifier ?? index}`;
-    const isOverdueCheckIn = moment(room.from_date, 'YYYY-MM-DD').isBefore(moment());
+    const isOverdueCheckIn = moment(room.from_date, 'YYYY-MM-DD').startOf('day').isBefore(moment().startOf('day'), 'dates');
     return (
       <tr class="ir-table-row" key={rowKey}>
         <td class="sticky-column">
@@ -47,7 +47,7 @@ export class IrArrivalsTable {
         <td>
           <ir-dates-cell overdueCheckin={isOverdueCheckIn} checkIn={room.from_date} checkOut={room.to_date}></ir-dates-cell>
         </td>
-        <td class="text-right">
+        <td class="text-center">
           <ir-balance-cell
             bookingNumber={booking.booking_nbr}
             isDirect={booking.is_direct}
@@ -58,7 +58,7 @@ export class IrArrivalsTable {
         </td>
         <td>
           <div class="arrivals-table__actions-cell">
-            {showAction ? <ir-actions-cell buttons={isOverdueCheckIn ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : 'In-house'}
+            {showAction ? <ir-actions-cell buttons={isOverdueCheckIn ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : room.in_out.code === '001' ? 'In-house' : ''}
           </div>
         </td>
       </tr>
@@ -66,7 +66,7 @@ export class IrArrivalsTable {
   }
 
   render() {
-    const { needsCheckInBookings, inHouseBookings } = arrivalsStore;
+    const { needsCheckInBookings, inHouseBookings, futureBookings } = arrivalsStore;
     return (
       <Host>
         <div class="table--container">
@@ -84,11 +84,12 @@ export class IrArrivalsTable {
                 <th>Guest name</th>
                 <th>Unit</th>
                 <th>Dates</th>
-                <th class="text-right">Balance</th>
+                <th class="text-center">Balance</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
+              {this.renderSection(futureBookings)}
               {this.renderSection(needsCheckInBookings, true)}
               {this.renderSection(inHouseBookings)}
               {!needsCheckInBookings.length && !inHouseBookings.length && (

@@ -4,11 +4,11 @@ import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';
-import { arrivalsStore } from '@/stores/arrivals.store';
+import { arrivalsStore, initializeArrivalsStore, onArrivalsStoreChange, setArrivalsTotal } from '@/stores/arrivals.store';
 
 @Component({
   tag: 'ir-arrivals',
-  styleUrls: ['../../assets/webawesome/component/host.css', 'ir-arrivals.css'],
+  styleUrls: ['ir-arrivals.css'],
   scoped: true,
 })
 export class IrArrivals {
@@ -34,6 +34,9 @@ export class IrArrivals {
       this.tokenService.setToken(this.ticket);
       this.init();
     }
+    onArrivalsStoreChange('today', _ => {
+      this.getBookings();
+    });
   }
 
   @Watch('ticket')
@@ -74,6 +77,7 @@ export class IrArrivals {
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
+        this.getBookings(),
       ]);
 
       const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries);
@@ -83,6 +87,17 @@ export class IrArrivals {
     } finally {
       this.isPageLoading = false;
     }
+  }
+
+  private async getBookings() {
+    const { bookings, total_count } = await this.bookingService.getRoomsToCheckIn({
+      property_id: this.propertyid?.toString(),
+      check_in_date: arrivalsStore.today,
+      page_index: arrivalsStore.pagination.page,
+      page_size: arrivalsStore.pagination.pageSize,
+    });
+    setArrivalsTotal(total_count);
+    initializeArrivalsStore(bookings);
   }
 
   render() {
@@ -108,9 +123,9 @@ export class IrArrivals {
             '--ir-drawer-width': '80rem',
             '--ir-drawer-background-color': '#F2F3F8',
             '--ir-drawer-padding-left': '0',
-            '--ir-drawer-padding-right': '0',
             '--ir-drawer-padding-top': '0',
             '--ir-drawer-padding-bottom': '0',
+            '--ir-drawer-padding-right': '0',
           }}
         >
           {this.bookingNumber && (

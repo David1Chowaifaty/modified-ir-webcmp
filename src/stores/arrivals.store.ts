@@ -1,6 +1,7 @@
 import { Booking, Room } from '@/models/booking.dto';
+import { canCheckIn } from '@/utils/utils';
 import { createStore } from '@stencil/store';
-import { data as arrivalsMockData } from '@/components/ir-arrivals/_data';
+import moment from 'moment';
 
 export interface ArrivalsPagination {
   page: number;
@@ -15,6 +16,7 @@ export interface ArrivalsStore {
   paginatedBookings: Booking[];
   needsCheckInBookings: Booking[];
   inHouseBookings: Booking[];
+  futureBookings: Booking[];
   searchTerm: string;
   pagination: ArrivalsPagination;
   today: string;
@@ -24,6 +26,7 @@ const initialState: ArrivalsStore = {
   bookings: [],
   filteredBookings: [],
   paginatedBookings: [],
+  futureBookings: [],
   needsCheckInBookings: [],
   inHouseBookings: [],
   searchTerm: '',
@@ -38,7 +41,7 @@ const initialState: ArrivalsStore = {
 
 export const { state: arrivalsStore, onChange: onArrivalsStoreChange } = createStore<ArrivalsStore>(initialState);
 
-export function initializeArrivalsStore(bookings: Booking[] = arrivalsMockData as any[]) {
+export function initializeArrivalsStore(bookings: Booking[] = []) {
   arrivalsStore.bookings = Array.isArray(bookings) ? [...bookings] : [];
   runArrivalsPipeline();
 }
@@ -53,7 +56,10 @@ export function setArrivalsPage(page: number) {
   arrivalsStore.pagination = { ...arrivalsStore.pagination, page: safePage };
   runArrivalsPipeline();
 }
-
+export function setArrivalsTotal(total: number) {
+  const totalPages = total === 0 ? 1 : Math.ceil(total / arrivalsStore.pagination.pageSize);
+  arrivalsStore.pagination = { ...arrivalsStore.pagination, total, totalPages };
+}
 export function setArrivalsPageSize(pageSize: number) {
   if (!Number.isFinite(pageSize) || pageSize <= 0) {
     return;
@@ -62,8 +68,8 @@ export function setArrivalsPageSize(pageSize: number) {
   runArrivalsPipeline();
 }
 
-export function setArrivalsReferenceDate(date: string | Date) {
-  arrivalsStore.today = formatDateInput(date ?? new Date());
+export function setArrivalsReferenceDate(date: string) {
+  arrivalsStore.today = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
   runArrivalsPipeline();
 }
 
@@ -71,35 +77,21 @@ function runArrivalsPipeline() {
   const bookingsForToday = getBookingsForDate(arrivalsStore.bookings, arrivalsStore.today);
   const searchedBookings = filterBookingsBySearch(bookingsForToday, arrivalsStore.searchTerm);
 
-  const total = searchedBookings.length;
-  const { pageSize } = arrivalsStore.pagination;
-  const totalPages = total === 0 ? 1 : Math.ceil(total / pageSize);
-  const safePage = clamp(arrivalsStore.pagination.page, 1, totalPages);
-  const start = (safePage - 1) * pageSize;
-  const paginated = searchedBookings.slice(start, start + pageSize);
-
   arrivalsStore.filteredBookings = searchedBookings;
-  arrivalsStore.pagination = { ...arrivalsStore.pagination, total, totalPages, page: safePage };
-  arrivalsStore.paginatedBookings = paginated;
-
-  const split = splitBookingsByStatus(paginated);
+  arrivalsStore.paginatedBookings = searchedBookings;
+  console.log(searchedBookings);
+  const split = splitBookingsByStatus(searchedBookings);
+  console.log(split);
   arrivalsStore.needsCheckInBookings = split.needsCheckIn;
   arrivalsStore.inHouseBookings = split.inHouse;
+  arrivalsStore.futureBookings = split.futureRooms;
 }
 
 function getBookingsForDate(bookings: Booking[], date: string) {
   if (!date) {
     return [];
   }
-  return bookings
-    .map(booking => {
-      const roomsForToday = (booking.rooms ?? []).filter(room => normalizeDate(room.from_date) === date);
-      if (!roomsForToday.length) {
-        return null;
-      }
-      return { ...booking, rooms: roomsForToday };
-    })
-    .filter((booking): booking is Booking => Boolean(booking));
+  return bookings;
 }
 
 function filterBookingsBySearch(bookings: Booking[], term: string) {
@@ -136,15 +128,27 @@ function splitBookingsByStatus(bookings: Booking[]) {
       if (inHouseRooms.length) {
         acc.inHouse.push({ ...booking, rooms: inHouseRooms });
       }
+      const futureCheckIns = rooms.filter(room => isFutureCheckIn(room));
+      if (futureCheckIns.length) {
+        acc.futureRooms.push({ ...booking, rooms: futureCheckIns });
+      }
       return acc;
     },
-    { needsCheckIn: [] as Booking[], inHouse: [] as Booking[] },
+    { needsCheckIn: [] as Booking[], inHouse: [] as Booking[], futureRooms: [] as Booking[] },
   );
 }
 
 function isNeedsCheckIn(room: Room) {
+  return canCheckIn({
+    from_date: room.from_date,
+    to_date: room.to_date,
+    isCheckedIn: room.in_out.code === '001',
+  });
+}
+
+function isFutureCheckIn(room: Room) {
   const code = room.in_out?.code ?? '';
-  return code === '000';
+  return code === '000' && moment().startOf('date').isBefore(moment(room.from_date, 'YYYY-MM-DD').startOf('day'));
 }
 
 function isInHouse(room: Room) {
@@ -157,28 +161,7 @@ function buildName(person?: { first_name?: string | null; last_name?: string | n
 }
 
 function getTodayString() {
-  return formatDateInput(new Date());
-}
-
-function formatDateInput(value: string | Date) {
-  if (value instanceof Date) {
-    const year = value.getFullYear();
-    const month = `${value.getMonth() + 1}`.padStart(2, '0');
-    const day = `${value.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-  return normalizeDate(value);
-}
-
-function normalizeDate(value?: string | null) {
-  if (!value) {
-    return '';
-  }
-  return value.slice(0, 10);
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
+  return moment().format('YYYY-MM-DD');
 }
 
 initializeArrivalsStore();
