@@ -55,11 +55,14 @@ graph TD;
   ir-departures-table --> ir-dates-cell
   ir-departures-table --> ir-balance-cell
   ir-departures-table --> ir-actions-cell
+  ir-departures-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-actions-cell --> ir-custom-button
+  ir-pagination --> ir-select
+  ir-pagination --> ir-custom-button
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast

@@ -1,5 +1,7 @@
+import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
 import { Booking } from '@/models/booking.dto';
-import { departuresStore } from '@/stores/departures.store';
+import { departuresStore, setDeparturesPage, setDeparturesPageSize } from '@/stores/departures.store';
+import locales from '@/stores/locales.store';
 import { Component, Host, h } from '@stencil/core';
 import moment from 'moment';
 @Component({
@@ -8,6 +10,8 @@ import moment from 'moment';
   scoped: true,
 })
 export class IrDeparturesTable {
+  private readonly pageSizes = [10, 20, 50];
+
   private renderSection(bookings: Booking[], showAction = false) {
     if (!bookings?.length) {
       return null;
@@ -64,8 +68,45 @@ export class IrDeparturesTable {
     );
   }
 
+  private getPaginationShowing() {
+    const { page, pageSize, total } = departuresStore.pagination;
+    if (!total) {
+      return { from: 0, to: 0 };
+    }
+    const start = (page - 1) * pageSize + 1;
+    return {
+      from: Math.max(start, 1),
+      to: Math.min(start + pageSize - 1, total),
+    };
+  }
+
+  private handlePageChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    const nextPage = event.detail?.currentPage ?? 1;
+    if (nextPage === departuresStore.pagination.page) {
+      return;
+    }
+    setDeparturesPage(nextPage);
+  }
+
+  private handlePageSizeChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    const nextSize = event.detail?.pageSize;
+    if (!Number.isFinite(nextSize)) {
+      return;
+    }
+    const normalizedSize = Math.floor(Number(nextSize));
+    if (normalizedSize === departuresStore.pagination.pageSize) {
+      return;
+    }
+    setDeparturesPageSize(normalizedSize);
+  }
+
   render() {
-    const { needsCheckOutBookings, outBookings } = departuresStore;
+    const { needsCheckOutBookings, outBookings, pagination } = departuresStore;
+    const showing = this.getPaginationShowing();
     return (
       <Host>
         <div class="table--container">
@@ -93,14 +134,28 @@ export class IrDeparturesTable {
               {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
                   <td colSpan={7} class="empty-row">
-                    No departures found.
+                    <ir-empty-state></ir-empty-state>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-        {/* <div style={{ height: '30px' }}>pagination</div> */}
+        {needsCheckOutBookings.length > 0 && outBookings.length > 0 && (
+          <ir-pagination
+            class="data-table--pagination"
+            showing={showing}
+            total={pagination.total}
+            pages={pagination.totalPages}
+            pageSize={pagination.pageSize}
+            currentPage={pagination.page}
+            allowPageSizeChange={true}
+            pageSizes={this.pageSizes}
+            recordLabel={locales.entries?.Lcz_Bookings ?? 'bookings'}
+            onPageChange={event => this.handlePageChange(event as CustomEvent<PaginationChangeEvent>)}
+            onPageSizeChange={event => this.handlePageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
+          ></ir-pagination>
+        )}
       </Host>
     );
   }

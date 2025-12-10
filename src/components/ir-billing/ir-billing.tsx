@@ -248,12 +248,7 @@ export class IrBilling {
                 );
               })}
             </div>
-            {this.invoiceInfo.invoices?.length === 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexDirection: 'column', color: 'var(--wa-color-neutral-60)' }}>
-                <wa-icon name="ban" style={{ transform: 'rotate(90deg)', fontSize: '2rem' }}></wa-icon>
-                <p>No records found</p>
-              </div>
-            )}
+            {this.invoiceInfo.invoices?.length === 0 && <ir-empty-state></ir-empty-state>}
           </section>
         </div>
         <ir-invoice

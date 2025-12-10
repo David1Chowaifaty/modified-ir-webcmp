@@ -1352,6 +1352,9 @@ export namespace Components {
          */
         "value": string;
     }
+    interface IrEmptyState {
+        "message": string;
+    }
     interface IrEventsLog {
         "booking": Booking;
         "bookingNumber": string;
@@ -5063,6 +5066,12 @@ declare global {
         prototype: HTMLIrDropdownItemElement;
         new (): HTMLIrDropdownItemElement;
     };
+    interface HTMLIrEmptyStateElement extends Components.IrEmptyState, HTMLStencilElement {
+    }
+    var HTMLIrEmptyStateElement: {
+        prototype: HTMLIrEmptyStateElement;
+        new (): HTMLIrEmptyStateElement;
+    };
     interface HTMLIrEventsLogElement extends Components.IrEventsLog, HTMLStencilElement {
     }
     var HTMLIrEventsLogElement: {
@@ -6756,6 +6765,7 @@ declare global {
         "ir-drawer": HTMLIrDrawerElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-dropdown-item": HTMLIrDropdownItemElement;
+        "ir-empty-state": HTMLIrEmptyStateElement;
         "ir-events-log": HTMLIrEventsLogElement;
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
@@ -8313,6 +8323,9 @@ declare namespace LocalJSX {
           * Required value for the option
          */
         "value": string;
+    }
+    interface IrEmptyState {
+        "message"?: string;
     }
     interface IrEventsLog {
         "booking"?: Booking;
@@ -10458,6 +10471,7 @@ declare namespace LocalJSX {
         "ir-drawer": IrDrawer;
         "ir-dropdown": IrDropdown;
         "ir-dropdown-item": IrDropdownItem;
+        "ir-empty-state": IrEmptyState;
         "ir-events-log": IrEventsLog;
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
@@ -10670,6 +10684,7 @@ declare module "@stencil/core" {
             "ir-drawer": LocalJSX.IrDrawer & JSXBase.HTMLAttributes<HTMLIrDrawerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-dropdown-item": LocalJSX.IrDropdownItem & JSXBase.HTMLAttributes<HTMLIrDropdownItemElement>;
+            "ir-empty-state": LocalJSX.IrEmptyState & JSXBase.HTMLAttributes<HTMLIrEmptyStateElement>;
             "ir-events-log": LocalJSX.IrEventsLog & JSXBase.HTMLAttributes<HTMLIrEventsLogElement>;
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;

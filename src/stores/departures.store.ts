@@ -1,6 +1,5 @@
 import { Booking, Room } from '@/models/booking.dto';
 import { createStore } from '@stencil/store';
-import { data as arrivalsMockData } from '@/components/ir-arrivals/_data';
 import moment from 'moment';
 
 export interface DeparturesPagination {
@@ -39,7 +38,7 @@ const initialState: DeparturesStore = {
 
 export const { state: departuresStore, onChange: onDeparturesStoreChange } = createStore<DeparturesStore>(initialState);
 
-export function initializeDeparturesStore(bookings: Booking[] = arrivalsMockData as any[]) {
+export function initializeDeparturesStore(bookings: Booking[] = []) {
   departuresStore.bookings = Array.isArray(bookings) ? [...bookings] : [];
   runDeparturesPipeline();
 }
@@ -72,18 +71,10 @@ function runDeparturesPipeline() {
   const bookingsForToday = getBookingsForDate(departuresStore.bookings, departuresStore.today);
   const searchedBookings = filterBookingsBySearch(bookingsForToday, departuresStore.searchTerm);
 
-  const total = searchedBookings.length;
-  const { pageSize } = departuresStore.pagination;
-  const totalPages = total === 0 ? 1 : Math.ceil(total / pageSize);
-  const safePage = clamp(departuresStore.pagination.page, 1, totalPages);
-  const start = (safePage - 1) * pageSize;
-  const paginated = searchedBookings.slice(start, start + pageSize);
-
   departuresStore.filteredBookings = searchedBookings;
-  departuresStore.pagination = { ...departuresStore.pagination, total, totalPages, page: safePage };
-  departuresStore.paginatedBookings = paginated;
+  departuresStore.paginatedBookings = searchedBookings;
 
-  const split = splitBookingsByStatus(paginated);
+  const split = splitBookingsByStatus(searchedBookings);
   departuresStore.needsCheckOutBookings = split.needsCheckOut;
   departuresStore.outBookings = split.out;
 }
@@ -166,10 +157,6 @@ function normalizeDate(value?: string | null) {
     return '';
   }
   return value.slice(0, 10);
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
 }
 
 initializeDeparturesStore();

@@ -7,10 +7,11 @@
 
 ## Events
 
-| Event                   | Description | Type                                 |
-| ----------------------- | ----------- | ------------------------------------ |
-| `requestPageChange`     |             | `CustomEvent<PaginationChangeEvent>` |
-| `requestPageSizeChange` |             | `CustomEvent<PaginationChangeEvent>` |
+| Event                   | Description | Type                                                                                                                                                             |
+| ----------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `checkInRoom`           |             | `CustomEvent<{ roomName: string; sharing_persons: SharedPerson[]; totalGuests: number; checkin: boolean; identifier: string; booking_nbr?: string \| number; }>` |
+| `requestPageChange`     |             | `CustomEvent<PaginationChangeEvent>`                                                                                                                             |
+| `requestPageSizeChange` |             | `CustomEvent<PaginationChangeEvent>`                                                                                                                             |
 
 
 ## Dependencies
