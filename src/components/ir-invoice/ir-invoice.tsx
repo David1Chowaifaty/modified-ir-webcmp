@@ -126,21 +126,19 @@ export class IrInvoice {
             this.closeDrawer();
           }}
         >
-          {this.roomIdentifier && (
-            <div class="d-flex align-items-center" slot="header-actions">
-              <wa-switch
-                onchange={e => {
-                  if ((e.target as any).checked) {
-                    this.viewMode = 'proforma';
-                  } else {
-                    this.viewMode = 'invoice';
-                  }
-                }}
-              >
-                Pro-forma
-              </wa-switch>
-            </div>
-          )}
+          <div class="d-flex align-items-center" slot="header-actions">
+            <wa-switch
+              onchange={e => {
+                if ((e.target as any).checked) {
+                  this.viewMode = 'proforma';
+                } else {
+                  this.viewMode = 'invoice';
+                }
+              }}
+            >
+              Pro-forma
+            </wa-switch>
+          </div>
 
           {this.open && (
             <ir-invoice-form
