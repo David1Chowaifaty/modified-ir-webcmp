@@ -1,10 +1,12 @@
+import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking-service/booking.service';
 import { RoomService } from '@/services/room.service';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-import { Payment, PaymentEntries } from '../ir-booking-details/types';
-import { arrivalsStore, initializeArrivalsStore, onArrivalsStoreChange, setArrivalsTotal } from '@/stores/arrivals.store';
+import { Payment, PaymentEntries, RoomGuestsPayload } from '../ir-booking-details/types';
+import { arrivalsStore, initializeArrivalsStore, onArrivalsStoreChange, setArrivalsPage, setArrivalsPageSize, setArrivalsTotal } from '@/stores/arrivals.store';
+import { ICountry } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-arrivals',
@@ -22,6 +24,8 @@ export class IrArrivals {
   @State() paymentEntries: PaymentEntries;
   @State() isPageLoading: boolean;
   @State() payment: Payment;
+  @State() roomGuestState: RoomGuestsPayload = null;
+  @State() countries: ICountry[];
 
   private tokenService = new Token();
   private roomService = new RoomService();
@@ -73,13 +77,14 @@ export class IrArrivals {
   private async init() {
     try {
       this.isPageLoading = true;
-      const [_, __, setupEntries] = await Promise.all([
+      const [_, __, countries, setupEntries] = await Promise.all([
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
+        this.bookingService.getCountries(this.language),
         this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
         this.getBookings(),
       ]);
-
+      this.countries = countries;
       const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries);
 
       this.paymentEntries = { types: pay_type, groups: pay_type_group, methods: pay_method };
@@ -93,13 +98,43 @@ export class IrArrivals {
     const { bookings, total_count } = await this.bookingService.getRoomsToCheckIn({
       property_id: this.propertyid?.toString(),
       check_in_date: arrivalsStore.today,
-      page_index: arrivalsStore.pagination.page,
+      page_index: arrivalsStore.pagination.currentPage,
       page_size: arrivalsStore.pagination.pageSize,
     });
-    setArrivalsTotal(total_count);
+    setArrivalsTotal(total_count ?? 0);
     initializeArrivalsStore(bookings);
   }
 
+  private async handlePaginationChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    const nextPage = event.detail?.currentPage ?? 1;
+    if (nextPage === arrivalsStore.pagination.currentPage) {
+      return;
+    }
+    setArrivalsPage(nextPage);
+    await this.getBookings();
+  }
+
+  private async handlePaginationPageSizeChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    const nextPageSize = event.detail?.pageSize;
+    if (!Number.isFinite(nextPageSize)) {
+      return;
+    }
+    const normalizedPageSize = Math.floor(Number(nextPageSize));
+    if (normalizedPageSize === arrivalsStore.pagination.pageSize) {
+      return;
+    }
+    setArrivalsPageSize(normalizedPageSize);
+    await this.getBookings();
+  }
+  private handleCheckingRoom(event: CustomEvent<RoomGuestsPayload>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.roomGuestState = event.detail;
+  }
   render() {
     if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -110,7 +145,11 @@ export class IrArrivals {
         <ir-interceptor style={{ display: 'none' }}></ir-interceptor>
         <h3 class="page-title">Arrivals</h3>
         <ir-arrivals-filters></ir-arrivals-filters>
-        <ir-arrivals-table></ir-arrivals-table>
+        <ir-arrivals-table
+          onCheckInRoom={event => this.handleCheckingRoom(event as CustomEvent<RoomGuestsPayload>)}
+          onRequestPageChange={event => this.handlePaginationChange(event as CustomEvent<PaginationChangeEvent>)}
+          onRequestPageSizeChange={event => this.handlePaginationPageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
+        ></ir-arrivals-table>
         <ir-drawer
           onDrawerHide={e => {
             e.stopImmediatePropagation();
@@ -157,6 +196,18 @@ export class IrArrivals {
             this.payment = null;
           }}
         ></ir-payment-folio>
+        <ir-room-guests
+          open={this.roomGuestState !== null}
+          countries={this.countries}
+          language={this.language}
+          identifier={this.roomGuestState?.identifier}
+          bookingNumber={this.roomGuestState?.booking_nbr?.toString()}
+          roomName={this.roomGuestState?.roomName}
+          totalGuests={this.roomGuestState?.totalGuests}
+          sharedPersons={this.roomGuestState?.sharing_persons}
+          checkIn={this.roomGuestState?.checkin}
+          onCloseModal={() => (this.roomGuestState = null)}
+        ></ir-room-guests>
       </Host>
     );
   }

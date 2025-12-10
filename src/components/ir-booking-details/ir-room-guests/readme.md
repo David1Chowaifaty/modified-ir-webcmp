@@ -32,6 +32,7 @@
 ### Used by
 
  - [igloo-calendar](../../igloo-calendar)
+ - [ir-arrivals](../../ir-arrivals)
  - [ir-booking-details](..)
 
 ### Depends on
@@ -54,6 +55,7 @@ graph TD;
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   igloo-calendar --> ir-room-guests
+  ir-arrivals --> ir-room-guests
   ir-booking-details --> ir-room-guests
   style ir-room-guests fill:#f9f,stroke:#333,stroke-width:4px
 ```

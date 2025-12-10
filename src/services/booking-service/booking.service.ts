@@ -1285,7 +1285,7 @@ export class BookingService {
   public async getRoomsToCheckIn(props: GetRoomsToCheckInProps): Promise<{ bookings: Booking[]; total_count: number }> {
     const payload = GetRoomsToCheckInPropsSchema.parse(props);
     const { data } = await axios.post('/Get_Rooms_To_Check_in', payload);
-    return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_in?.total_count };
+    return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_In?.total_count };
   }
 
   /* INVOICE */

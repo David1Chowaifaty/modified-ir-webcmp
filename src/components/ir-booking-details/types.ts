@@ -24,6 +24,7 @@ export type RoomGuestsPayload = {
   totalGuests: number;
   checkin: boolean;
   identifier: string;
+  booking_nbr?: string | number;
 };
 export type PaymentEntries = {
   types: IEntries[];

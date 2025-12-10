@@ -50,7 +50,7 @@
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
  - [ir-billing](../../ir-billing)
  - [ir-booked-by-cell](../../table-cells/booking/ir-booked-by-cell)
- - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
+ - [ir-booking-company-dialog](../../ir-booking-company-dialog)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
@@ -85,7 +85,7 @@ graph TD;
   ir-balance-cell --> ir-custom-button
   ir-billing --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
-  ir-booking-company-form --> ir-custom-button
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-details --> ir-custom-button
   ir-booking-extra-note --> ir-custom-button
   ir-booking-header --> ir-custom-button

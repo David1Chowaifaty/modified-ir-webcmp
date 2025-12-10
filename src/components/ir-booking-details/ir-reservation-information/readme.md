@@ -32,7 +32,7 @@
 - [ir-custom-button](../../ui/ir-custom-button)
 - [ota-label](../../ui/ota-label)
 - [ir-booking-extra-note](../ir-booking-extra-note)
-- [ir-booking-company-form](../ir-booking-company-form)
+- [ir-booking-company-dialog](../../ir-booking-company-dialog)
 
 ### Graph
 ```mermaid
@@ -41,12 +41,13 @@ graph TD;
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
   ir-reservation-information --> ir-booking-extra-note
-  ir-reservation-information --> ir-booking-company-form
+  ir-reservation-information --> ir-booking-company-dialog
   ir-booking-extra-note --> ir-dialog
   ir-booking-extra-note --> ir-custom-button
-  ir-booking-company-form --> ir-dialog
+  ir-booking-company-dialog --> ir-dialog
+  ir-booking-company-dialog --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-reservation-information
   style ir-reservation-information fill:#f9f,stroke:#333,stroke-width:4px
 ```

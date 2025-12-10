@@ -37,6 +37,7 @@
 
 ### Used by
 
+ - [ir-arrivals-table](../ir-arrivals/ir-arrivals-table)
  - [ir-booking-listing-table](../ir-booking-listing/ir-booking-listing-table)
  - [ir-tasks-table-pagination](../ir-housekeeping/ir-hk-tasks/ir-tasks-table/ir-tasks-table-pagination)
 
@@ -50,6 +51,7 @@
 graph TD;
   ir-pagination --> ir-select
   ir-pagination --> ir-custom-button
+  ir-arrivals-table --> ir-pagination
   ir-booking-listing-table --> ir-pagination
   ir-tasks-table-pagination --> ir-pagination
   style ir-pagination fill:#f9f,stroke:#333,stroke-width:4px

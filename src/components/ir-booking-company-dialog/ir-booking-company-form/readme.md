@@ -10,50 +10,31 @@
 | Property  | Attribute | Description | Type      | Default     |
 | --------- | --------- | ----------- | --------- | ----------- |
 | `booking` | --        |             | `Booking` | `undefined` |
+| `formId`  | `form-id` |             | `string`  | `undefined` |
 
 
 ## Events
 
-| Event               | Description | Type                   |
-| ------------------- | ----------- | ---------------------- |
-| `companyFormClosed` |             | `CustomEvent<void>`    |
-| `resetBookingEvt`   |             | `CustomEvent<Booking>` |
-
-
-## Methods
-
-### `openCompanyForm() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
+| Event             | Description | Type                   |
+| ----------------- | ----------- | ---------------------- |
+| `resetBookingEvt` |             | `CustomEvent<Booking>` |
 
 
 ## Dependencies
 
 ### Used by
 
- - [ir-booking-billing-recipient](../../ir-booking-billing-recipient)
- - [ir-reservation-information](../ir-reservation-information)
+ - [ir-booking-company-dialog](..)
 
 ### Depends on
 
-- [ir-dialog](../../ui/ir-dialog)
 - [ir-custom-input](../../ui/ir-custom-input)
-- [ir-custom-button](../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
-  ir-booking-billing-recipient --> ir-booking-company-form
-  ir-reservation-information --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-booking-company-form
   style ir-booking-company-form fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

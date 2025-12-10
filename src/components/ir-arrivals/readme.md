@@ -27,6 +27,7 @@
 - [ir-drawer](../ir-drawer)
 - [ir-booking-details](../ir-booking-details)
 - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+- [ir-room-guests](../ir-booking-details/ir-room-guests)
 
 ### Graph
 ```mermaid
@@ -39,6 +40,7 @@ graph TD;
   ir-arrivals --> ir-drawer
   ir-arrivals --> ir-booking-details
   ir-arrivals --> ir-payment-folio
+  ir-arrivals --> ir-room-guests
   ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
@@ -55,11 +57,14 @@ graph TD;
   ir-arrivals-table --> ir-dates-cell
   ir-arrivals-table --> ir-balance-cell
   ir-arrivals-table --> ir-actions-cell
+  ir-arrivals-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-actions-cell --> ir-custom-button
+  ir-pagination --> ir-select
+  ir-pagination --> ir-custom-button
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
@@ -95,10 +100,11 @@ graph TD;
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
-  ir-booking-billing-recipient --> ir-booking-company-form
-  ir-booking-company-form --> ir-dialog
+  ir-booking-billing-recipient --> ir-booking-company-dialog
+  ir-booking-company-dialog --> ir-dialog
+  ir-booking-company-dialog --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-custom-button
@@ -111,7 +117,7 @@ graph TD;
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
   ir-reservation-information --> ir-booking-extra-note
-  ir-reservation-information --> ir-booking-company-form
+  ir-reservation-information --> ir-booking-company-dialog
   ir-booking-extra-note --> ir-dialog
   ir-booking-extra-note --> ir-custom-button
   ir-pickup-view --> ir-custom-button

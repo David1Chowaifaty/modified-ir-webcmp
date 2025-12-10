@@ -27,15 +27,16 @@
 
 ### Depends on
 
-- [ir-booking-company-form](../ir-booking-details/ir-booking-company-form)
+- [ir-booking-company-dialog](../ir-booking-company-dialog)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-billing-recipient --> ir-booking-company-form
-  ir-booking-company-form --> ir-dialog
+  ir-booking-billing-recipient --> ir-booking-company-dialog
+  ir-booking-company-dialog --> ir-dialog
+  ir-booking-company-dialog --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   ir-invoice-form --> ir-booking-billing-recipient
   style ir-booking-billing-recipient fill:#f9f,stroke:#333,stroke-width:4px
 ```

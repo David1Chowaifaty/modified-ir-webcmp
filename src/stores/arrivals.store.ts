@@ -3,11 +3,17 @@ import { canCheckIn } from '@/utils/utils';
 import { createStore } from '@stencil/store';
 import moment from 'moment';
 
+interface PaginationRange {
+  from: number;
+  to: number;
+}
+
 export interface ArrivalsPagination {
-  page: number;
+  currentPage: number;
   pageSize: number;
   total: number;
   totalPages: number;
+  showing: PaginationRange;
 }
 
 export interface ArrivalsStore {
@@ -31,10 +37,11 @@ const initialState: ArrivalsStore = {
   inHouseBookings: [],
   searchTerm: '',
   pagination: {
-    page: 1,
+    currentPage: 1,
     pageSize: 20,
     total: 0,
     totalPages: 1,
+    showing: { from: 0, to: 0 },
   },
   today: getTodayString(),
 };
@@ -52,24 +59,47 @@ export function setArrivalsSearchTerm(term: string) {
 }
 
 export function setArrivalsPage(page: number) {
-  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
-  arrivalsStore.pagination = { ...arrivalsStore.pagination, page: safePage };
+  const safePage = clampPage(page, Math.max(arrivalsStore.pagination.totalPages, 1));
+  arrivalsStore.pagination = {
+    ...arrivalsStore.pagination,
+    currentPage: safePage,
+    showing: calculateShowing(safePage, arrivalsStore.pagination.pageSize, arrivalsStore.pagination.total),
+  };
   runArrivalsPipeline();
 }
 export function setArrivalsTotal(total: number) {
-  const totalPages = total === 0 ? 1 : Math.ceil(total / arrivalsStore.pagination.pageSize);
-  arrivalsStore.pagination = { ...arrivalsStore.pagination, total, totalPages };
+  const normalizedTotal = Number.isFinite(total) && total > 0 ? Math.floor(total) : 0;
+  const totalPages = calculateTotalPages(normalizedTotal, arrivalsStore.pagination.pageSize);
+  const safePage = clampPage(arrivalsStore.pagination.currentPage, Math.max(totalPages, 1));
+  arrivalsStore.pagination = {
+    ...arrivalsStore.pagination,
+    total: normalizedTotal,
+    totalPages: Math.max(totalPages, 1),
+    currentPage: safePage,
+    showing: calculateShowing(safePage, arrivalsStore.pagination.pageSize, normalizedTotal),
+  };
 }
 export function setArrivalsPageSize(pageSize: number) {
   if (!Number.isFinite(pageSize) || pageSize <= 0) {
     return;
   }
-  arrivalsStore.pagination = { ...arrivalsStore.pagination, pageSize: Math.floor(pageSize), page: 1 };
+  const normalizedPageSize = Math.floor(pageSize);
+  arrivalsStore.pagination = {
+    ...arrivalsStore.pagination,
+    pageSize: normalizedPageSize,
+    currentPage: 1,
+    showing: calculateShowing(1, normalizedPageSize, arrivalsStore.pagination.total),
+  };
   runArrivalsPipeline();
 }
 
 export function setArrivalsReferenceDate(date: string) {
   arrivalsStore.today = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+  arrivalsStore.pagination = {
+    ...arrivalsStore.pagination,
+    currentPage: 1,
+    showing: calculateShowing(1, arrivalsStore.pagination.pageSize, arrivalsStore.pagination.total),
+  };
   runArrivalsPipeline();
 }
 
@@ -162,6 +192,32 @@ function buildName(person?: { first_name?: string | null; last_name?: string | n
 
 function getTodayString() {
   return moment().format('YYYY-MM-DD');
+}
+
+function calculateShowing(page: number, pageSize: number, total: number): PaginationRange {
+  if (!total || !pageSize) {
+    return { from: 0, to: 0 };
+  }
+  const start = (page - 1) * pageSize + 1;
+  return {
+    from: Math.max(start, 1),
+    to: Math.min(start + pageSize - 1, total),
+  };
+}
+
+function calculateTotalPages(total: number, pageSize: number) {
+  if (!total || !pageSize) {
+    return 0;
+  }
+  return Math.ceil(total / pageSize);
+}
+
+function clampPage(page: number, totalPages: number) {
+  if (!Number.isFinite(page) || page <= 0) {
+    return 1;
+  }
+  const normalizedPage = Math.floor(page);
+  return Math.min(Math.max(normalizedPage, 1), Math.max(totalPages, 1));
 }
 
 initializeArrivalsStore();

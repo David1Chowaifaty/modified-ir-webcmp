@@ -18,7 +18,12 @@
   position: sticky;
   left: var(--ir-table-sticky-padding,-1rem);
 } */
-
+.table--container {
+  flex: 1 1 0%;
+}
+.table--container {
+  overflow-x: auto;
+}
 .table td {
   border-top: 0;
   border-bottom: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);

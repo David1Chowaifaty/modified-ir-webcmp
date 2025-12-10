@@ -24,10 +24,11 @@ graph TD;
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
   ir-custom-date-picker --> ir-custom-input
-  ir-booking-billing-recipient --> ir-booking-company-form
-  ir-booking-company-form --> ir-dialog
+  ir-booking-billing-recipient --> ir-booking-company-dialog
+  ir-booking-company-dialog --> ir-dialog
+  ir-booking-company-dialog --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   style ir-test2-cmp fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

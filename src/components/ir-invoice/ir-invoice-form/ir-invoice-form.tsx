@@ -623,7 +623,6 @@ export class IrInvoiceForm {
         </div>
       );
     }
-    console.log(this.toBeInvoicedItems);
     return (
       <Host size="small">
         <form

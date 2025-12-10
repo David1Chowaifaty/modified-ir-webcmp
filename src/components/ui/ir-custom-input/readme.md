@@ -58,7 +58,7 @@
 ### Used by
 
  - [ir-arrivals-filters](../../ir-arrivals/ir-arrivals-filters)
- - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
+ - [ir-booking-company-form](../../ir-booking-company-dialog/ir-booking-company-form)
  - [ir-custom-date-picker](../../ir-custom-date-picker)
  - [ir-departures-filter](../../ir-departures/ir-departures-filter)
  - [ir-extra-service-config-form](../../ir-booking-details/ir-extra-services/ir-extra-service-config/ir-extra-service-config-form)

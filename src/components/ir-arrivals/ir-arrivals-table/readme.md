@@ -5,6 +5,14 @@
 <!-- Auto Generated Below -->
 
 
+## Events
+
+| Event                   | Description | Type                                 |
+| ----------------------- | ----------- | ------------------------------------ |
+| `requestPageChange`     |             | `CustomEvent<PaginationChangeEvent>` |
+| `requestPageSizeChange` |             | `CustomEvent<PaginationChangeEvent>` |
+
+
 ## Dependencies
 
 ### Used by
@@ -20,6 +28,7 @@
 - [ir-dates-cell](../../table-cells/booking/ir-dates-cell)
 - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
 - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
+- [ir-pagination](../../ir-pagination)
 
 ### Graph
 ```mermaid
@@ -31,11 +40,14 @@ graph TD;
   ir-arrivals-table --> ir-dates-cell
   ir-arrivals-table --> ir-balance-cell
   ir-arrivals-table --> ir-actions-cell
+  ir-arrivals-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-actions-cell --> ir-custom-button
+  ir-pagination --> ir-select
+  ir-pagination --> ir-custom-button
   ir-arrivals --> ir-arrivals-table
   style ir-arrivals-table fill:#f9f,stroke:#333,stroke-width:4px
 ```

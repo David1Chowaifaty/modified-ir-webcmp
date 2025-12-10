@@ -97,7 +97,7 @@ export class IrRoomGuests {
           </ir-custom-button>
 
           <ir-custom-button loading={isRequestPending('/Handle_Exposed_Room_Guests')} size="medium" form={`room-guests__${this.identifier}`} type="submit" variant="brand">
-            {locales?.entries?.Lcz_Save}
+            {this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
           </ir-custom-button>
         </div>
       </ir-drawer>

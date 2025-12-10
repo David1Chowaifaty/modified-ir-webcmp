@@ -95,10 +95,11 @@ graph TD;
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
-  ir-booking-billing-recipient --> ir-booking-company-form
-  ir-booking-company-form --> ir-dialog
+  ir-booking-billing-recipient --> ir-booking-company-dialog
+  ir-booking-company-dialog --> ir-dialog
+  ir-booking-company-dialog --> ir-booking-company-form
+  ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-custom-button
@@ -111,7 +112,7 @@ graph TD;
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
   ir-reservation-information --> ir-booking-extra-note
-  ir-reservation-information --> ir-booking-company-form
+  ir-reservation-information --> ir-booking-company-dialog
   ir-booking-extra-note --> ir-dialog
   ir-booking-extra-note --> ir-custom-button
   ir-pickup-view --> ir-custom-button
