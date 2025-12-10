@@ -64,6 +64,7 @@ export class IrInvoiceForm {
   @State() toBeInvoicedItems: InvoiceableItem[];
   @State() invoiceDate: Moment = moment();
   @State() notInvoiceableItemKeys: Set<number> = new Set();
+  private splitDisabledKeys: Set<number> = new Set();
 
   /**
    * Emitted when the invoice drawer is opened.
@@ -128,15 +129,21 @@ export class IrInvoiceForm {
   handleInvoiceInfoChange() {
     this.setupInvoicables(this.invoiceInfo);
   }
+
   private setUpDisabledItems() {
     if (!this.booking || !this.invoicableKey?.size) {
       this.notInvoiceableItemKeys = new Set();
+      this.splitDisabledKeys = new Set();
       return;
     }
 
     const invoiceDate = (this.invoiceDate ?? moment()).clone().startOf('day');
     const disabledKeys = new Set<number>();
-    const markIfBefore = (key: number | undefined, dateStr?: string | null) => {
+    this.splitDisabledKeys = new Set();
+    const markIfBefore = (key: number | undefined, dateStr?: string | null, options?: { checkedOut?: boolean }) => {
+      if (options?.checkedOut) {
+        return;
+      }
       if (typeof key !== 'number' || !this.invoicableKey.has(key) || !dateStr) {
         return;
       }
@@ -148,7 +155,7 @@ export class IrInvoiceForm {
 
     const rooms = this.booking.rooms ?? [];
     rooms.forEach(room => {
-      markIfBefore(room.system_id, room.to_date);
+      markIfBefore(room.system_id, room.to_date, { checkedOut: room?.in_out?.code === '002' });
     });
 
     const pickupInfo: any = this.booking.pickup_info;
@@ -168,11 +175,24 @@ export class IrInvoiceForm {
         if (chain.length <= 1) {
           return;
         }
-        const chainSystemIds = chain.map(id => roomsByIdentifier.get(id)?.system_id).filter((id): id is number => typeof id === 'number');
-        const chainHasDisabledRoom = chainSystemIds.some(id => disabledKeys.has(id));
-        if (chainHasDisabledRoom) {
-          chainSystemIds.forEach(id => disabledKeys.add(id));
+        const tailIdentifier = chain[chain.length - 1];
+        const tailRoom = roomsByIdentifier.get(tailIdentifier);
+        if (!tailRoom) {
+          return;
         }
+        const tailCheckedOut = tailRoom.in_out?.code === '002';
+        chain.forEach(identifier => {
+          const room = roomsByIdentifier.get(identifier);
+          if (!room || typeof room.system_id !== 'number' || !this.invoicableKey.has(room.system_id)) {
+            return;
+          }
+          if (tailCheckedOut) {
+            disabledKeys.delete(room.system_id);
+            return;
+          }
+          disabledKeys.add(room.system_id);
+          this.splitDisabledKeys.add(room.system_id);
+        });
       });
     }
 
@@ -187,12 +207,15 @@ export class IrInvoiceForm {
     const nextKeys = new Set(this.selectedItemKeys);
     let changed = false;
     disabledKeys.forEach(key => {
-      if (this.viewMode === 'proforma') {
+      const isSplitDisabled = this.splitDisabledKeys.has(key);
+      if (this.viewMode === 'proforma' && !isSplitDisabled) {
         if (!nextKeys.has(key)) {
           nextKeys.add(key);
           changed = true;
         }
-      } else if (nextKeys.delete(key)) {
+        return;
+      }
+      if (nextKeys.delete(key)) {
         changed = true;
       }
     });
@@ -472,8 +495,8 @@ export class IrInvoiceForm {
         return null;
       }
       const roomIds = this.getInvoiceableRoomIds(group.rooms);
-      const isSelected = this.isSelected(roomIds);
       const isDisabled = this.isDisabled(roomIds);
+      const isSelected = this.isSelected(roomIds);
       return (
         <div class="ir-invoice__service" key={group.order}>
           <wa-checkbox
@@ -600,6 +623,7 @@ export class IrInvoiceForm {
         </div>
       );
     }
+    console.log(this.toBeInvoicedItems);
     return (
       <Host size="small">
         <form

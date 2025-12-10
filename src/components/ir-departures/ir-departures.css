@@ -4,6 +4,7 @@
   flex-direction: column;
   gap: var(--wa-space-l, 1.5rem);
   min-height: 100vh;
+  padding: var(--wa-space-l);
 }
 .page-title {
   font-family: var(--wa-font-family-heading);
