@@ -109,9 +109,7 @@ function runArrivalsPipeline() {
 
   arrivalsStore.filteredBookings = searchedBookings;
   arrivalsStore.paginatedBookings = searchedBookings;
-  console.log(searchedBookings);
   const split = splitBookingsByStatus(searchedBookings);
-  console.log(split);
   arrivalsStore.needsCheckInBookings = split.needsCheckIn;
   arrivalsStore.inHouseBookings = split.inHouse;
   arrivalsStore.futureBookings = split.futureRooms;
