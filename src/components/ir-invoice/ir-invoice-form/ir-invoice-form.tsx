@@ -4,7 +4,7 @@ import { buildSplitIndex } from '@/utils/booking';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { BookingInvoiceInfo, InvoicableItem, ViewMode } from '../types';
+import { BookingInvoiceInfo, InvoiceableItem, ViewMode } from '../types';
 import { IEntries } from '@/models/IBooking';
 @Component({
   tag: 'ir-invoice-form',
@@ -37,13 +37,6 @@ export class IrInvoiceForm {
   @Prop() booking: Booking;
 
   /**
-   * Determines what should happen after creating the invoice.
-   * - `"create"`: create an invoice normally
-   * - `"check_in-create"`: create an invoice as part of the check-in flow
-   */
-  @Prop() mode: 'create' | 'check_in-create' = 'create';
-
-  /**
    * Specifies what the invoice is for.
    * - `"room"`: invoice for a specific room
    * - `"booking"`: invoice for the entire booking
@@ -67,8 +60,8 @@ export class IrInvoiceForm {
   @State() selectedRecipient: string;
   @State() isLoading: boolean;
   @State() selectedItemKeys: Set<number> = new Set();
-  @State() invoicableKey: Map<InvoicableItem['key'], InvoicableItem>;
-  @State() toBeInvoicedItems: InvoicableItem[];
+  @State() invoicableKey: Map<InvoiceableItem['key'], InvoiceableItem>;
+  @State() toBeInvoicedItems: InvoiceableItem[];
   @State() invoiceDate: Moment = moment();
   @State() notInvoiceableItemKeys: Set<number> = new Set();
 
@@ -103,8 +96,10 @@ export class IrInvoiceForm {
     recipientId: string;
     for: 'room' | 'booking';
     roomIdentifier?: string;
-    mode: 'create' | 'check_in-create';
+    mode: 'create' | 'check_out-create';
   }>;
+
+  @Event() loadingChange: EventEmitter<boolean>;
 
   private room: Booking['rooms'][0];
 
@@ -173,9 +168,7 @@ export class IrInvoiceForm {
         if (chain.length <= 1) {
           return;
         }
-        const chainSystemIds = chain
-          .map(id => roomsByIdentifier.get(id)?.system_id)
-          .filter((id): id is number => typeof id === 'number');
+        const chainSystemIds = chain.map(id => roomsByIdentifier.get(id)?.system_id).filter((id): id is number => typeof id === 'number');
         const chainHasDisabledRoom = chainSystemIds.some(id => disabledKeys.has(id));
         if (chainHasDisabledRoom) {
           chainSystemIds.forEach(id => disabledKeys.add(id));
@@ -210,7 +203,7 @@ export class IrInvoiceForm {
   }
   private syncSelectedItems(selectedKeys: Set<number>) {
     this.selectedItemKeys = selectedKeys;
-    const selectedItems: InvoicableItem[] = [];
+    const selectedItems: InvoiceableItem[] = [];
     selectedKeys.forEach(key => {
       const item = this.invoicableKey?.get(key);
       if (item) {
@@ -262,7 +255,7 @@ export class IrInvoiceForm {
   }
 
   private setupInvoicables(invoiceInfo: BookingInvoiceInfo) {
-    const invoiceableItems = (invoiceInfo.invoicable_items ?? []).filter(item => item.is_invoiceable);
+    const invoiceableItems = (invoiceInfo.invoiceable_items ?? []).filter(item => item.is_invoiceable);
     this.invoicableKey = new Map(invoiceableItems.map(item => [item.key, item]));
     this.syncSelectedItems(new Set(invoiceableItems.map(item => item.key)));
     this.setUpDisabledItems();
@@ -276,6 +269,7 @@ export class IrInvoiceForm {
    */
   private async handleConfirmInvoice(isProforma: boolean = false) {
     try {
+      this.loadingChange.emit(true);
       const billed_to_name = this.selectedRecipient?.startsWith('room__') ? this.selectedRecipient.replace('room__', '').trim() : '';
       let target: {};
       const setTarget = (code: string) => {
@@ -305,14 +299,6 @@ export class IrInvoiceForm {
         is_proforma: isProforma,
         invoice,
       });
-      if (!isProforma)
-        this.invoiceCreated.emit({
-          booking: this.booking,
-          recipientId: this.selectedRecipient,
-          for: this.for,
-          roomIdentifier: this.roomIdentifier,
-          mode: this.mode,
-        });
       if (this.autoPrint) {
         try {
           // window.print();
@@ -324,6 +310,8 @@ export class IrInvoiceForm {
       this.invoiceClose.emit();
     } catch (error) {
       console.error(error);
+    } finally {
+      this.loadingChange.emit(false);
     }
   }
 

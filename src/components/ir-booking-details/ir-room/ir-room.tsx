@@ -380,7 +380,14 @@ export class IrRoom {
                   </ir-custom-button>
                 )}
                 {this.hasCheckOut && (
-                  <ir-custom-button appearance="outlined" variant="brand" onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout">
+                  <ir-custom-button
+                    appearance="outlined"
+                    variant="brand"
+                    onClickHandler={() => {
+                      this.modalReason = 'checkout';
+                    }}
+                    id="checkout"
+                  >
                     {locales.entries.Lcz_CheckOut}
                   </ir-custom-button>
                 )}
@@ -568,6 +575,16 @@ export class IrRoom {
             </ir-custom-button>
           </div>
         </ir-dialog>
+        <ir-checkout-dialog
+          onCheckoutDialogClosed={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.modalReason = null;
+          }}
+          identifier={this.room.identifier}
+          open={this.modalReason === 'checkout'}
+          booking={this.booking}
+        ></ir-checkout-dialog>
       </Host>
     );
   }

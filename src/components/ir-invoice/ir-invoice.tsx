@@ -2,7 +2,6 @@ import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingInvoiceInfo, ViewMode } from './types';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-invoice',
@@ -24,13 +23,6 @@ export class IrInvoice {
    * Should contain room, guest, and pricing information.
    */
   @Prop() booking: Booking;
-
-  /**
-   * Determines what should happen after creating the invoice.
-   * - `"create"`: create an invoice normally
-   * - `"check_in-create"`: create an invoice as part of the check-in flow
-   */
-  @Prop() mode: 'create' | 'check_in-create' = 'create';
 
   /**
    * Specifies what the invoice is for.
@@ -111,6 +103,7 @@ export class IrInvoice {
   }
 
   @State() viewMode: ViewMode = 'invoice';
+  @State() isLoading: boolean;
   private _id = `invoice-form__${v4()}`;
 
   render() {
@@ -154,9 +147,9 @@ export class IrInvoice {
               roomIdentifier={this.roomIdentifier}
               booking={this.booking}
               autoPrint={this.autoPrint}
-              mode={this.mode}
               formId={this._id}
               invoiceInfo={this.invoiceInfo}
+              onLoadingChange={e => (this.isLoading = e.detail)}
             ></ir-invoice-form>
           )}
           <div slot="footer" class="ir__drawer-footer">
@@ -174,7 +167,7 @@ export class IrInvoice {
             {/* <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="neutral" form={this._id}>
               Pro-forma invoice
             </ir-custom-button> */}
-            <ir-custom-button loading={isRequestPending('/Issue_Invoice')} value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
+            <ir-custom-button loading={this.isLoading} value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
               Confirm
             </ir-custom-button>
           </div>

@@ -106,6 +106,7 @@ export class IrDialog {
         label={this.label}
         id="dialog-overview"
         open={this.open}
+        style={{ '--width': 'var(--ir-dialog-width,31rem)' }}
         without-header={this.withoutHeader}
         lightDismiss={this.lightDismiss}
       >

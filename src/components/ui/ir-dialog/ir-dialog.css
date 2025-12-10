@@ -35,6 +35,8 @@
   align-items: center;
   height: 100%;
   width: 100%;
+  min-height: 50px;
+  min-width: 31rem;
 }
 .dialog__content {
   box-sizing: border-box;
