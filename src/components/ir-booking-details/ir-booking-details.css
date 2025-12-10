@@ -3,6 +3,7 @@
   --ir-dialog-max-width: 20rem;
   text-align: start;
   padding: var(--wa-space-l);
+  position: relative;
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 :host * {

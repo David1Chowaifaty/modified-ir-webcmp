@@ -179,11 +179,27 @@ graph TD;
   ir-room --> ir-unit-tag
   ir-room --> ir-label
   ir-room --> ir-dialog
+  ir-room --> ir-checkout-dialog
+  ir-room --> ir-invoice
+  ir-checkout-dialog --> ir-dialog
+  ir-checkout-dialog --> ir-spinner
+  ir-checkout-dialog --> ir-custom-button
+  ir-invoice --> ir-drawer
+  ir-invoice --> ir-invoice-form
+  ir-invoice --> ir-custom-button
+  ir-invoice-form --> ir-spinner
+  ir-invoice-form --> ir-custom-date-picker
+  ir-invoice-form --> ir-booking-billing-recipient
+  ir-custom-date-picker --> ir-custom-input
+  ir-booking-billing-recipient --> ir-booking-company-form
+  ir-booking-company-form --> ir-dialog
+  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-custom-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
+  ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-booking-status-tag
   ir-booking-header --> ir-popover
-  ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
@@ -194,9 +210,6 @@ graph TD;
   ir-reservation-information --> ir-booking-company-form
   ir-booking-extra-note --> ir-dialog
   ir-booking-extra-note --> ir-custom-button
-  ir-booking-company-form --> ir-dialog
-  ir-booking-company-form --> ir-custom-input
-  ir-booking-company-form --> ir-custom-button
   ir-pickup-view --> ir-custom-button
   ir-pickup-view --> ir-label
   ir-extra-services --> ir-custom-button
@@ -230,7 +243,6 @@ graph TD;
   ir-extra-service-config-form --> ir-validator
   ir-extra-service-config-form --> ir-custom-date-picker
   ir-extra-service-config-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
   ir-pickup --> ir-drawer
   ir-pickup --> ir-pickup-form
   ir-pickup --> ir-custom-button
@@ -243,13 +255,6 @@ graph TD;
   ir-billing --> ir-custom-button
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
-  ir-invoice --> ir-drawer
-  ir-invoice --> ir-invoice-form
-  ir-invoice --> ir-custom-button
-  ir-invoice-form --> ir-spinner
-  ir-invoice-form --> ir-custom-date-picker
-  ir-invoice-form --> ir-booking-billing-recipient
-  ir-booking-billing-recipient --> ir-booking-company-form
   ir-guest-info-drawer --> ir-drawer
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button

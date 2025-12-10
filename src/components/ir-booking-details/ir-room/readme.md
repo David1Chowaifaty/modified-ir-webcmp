@@ -56,6 +56,8 @@
 - [ir-unit-tag](../../ir-unit-tag)
 - [ir-label](../../ui/ir-label)
 - [ir-dialog](../../ui/ir-dialog)
+- [ir-checkout-dialog](../../ir-checkout-dialog)
+- [ir-invoice](../../ir-invoice)
 
 ### Graph
 ```mermaid
@@ -65,6 +67,22 @@ graph TD;
   ir-room --> ir-unit-tag
   ir-room --> ir-label
   ir-room --> ir-dialog
+  ir-room --> ir-checkout-dialog
+  ir-room --> ir-invoice
+  ir-checkout-dialog --> ir-dialog
+  ir-checkout-dialog --> ir-spinner
+  ir-checkout-dialog --> ir-custom-button
+  ir-invoice --> ir-drawer
+  ir-invoice --> ir-invoice-form
+  ir-invoice --> ir-custom-button
+  ir-invoice-form --> ir-spinner
+  ir-invoice-form --> ir-custom-date-picker
+  ir-invoice-form --> ir-booking-billing-recipient
+  ir-custom-date-picker --> ir-custom-input
+  ir-booking-billing-recipient --> ir-booking-company-form
+  ir-booking-company-form --> ir-dialog
+  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-room
   style ir-room fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -22,6 +22,7 @@
  - [igl-book-property](../../igloo-calendar/igl-book-property)
  - [ir-billing](../../ir-billing)
  - [ir-booking-details](../../ir-booking-details)
+ - [ir-checkout-dialog](../../ir-checkout-dialog)
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-interceptor](../../ir-interceptor)
@@ -36,6 +37,7 @@ graph TD;
   igl-book-property --> ir-spinner
   ir-billing --> ir-spinner
   ir-booking-details --> ir-spinner
+  ir-checkout-dialog --> ir-spinner
   ir-events-log --> ir-spinner
   ir-guest-info --> ir-spinner
   ir-interceptor --> ir-spinner

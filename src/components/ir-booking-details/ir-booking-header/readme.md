@@ -38,9 +38,9 @@
 
 - [ir-pms-logs](ir-pms-logs)
 - [ir-events-log](events-log)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-booking-status-tag](../../ui/ir-booking-status-tag)
 - [ir-popover](../../ui/ir-popover)
-- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-dialog](../../ui/ir-dialog)
 
 ### Graph
@@ -48,9 +48,9 @@
 graph TD;
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
+  ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-booking-status-tag
   ir-booking-header --> ir-popover
-  ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner

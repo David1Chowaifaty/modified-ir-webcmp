@@ -57,6 +57,7 @@
  - [ir-booking-listing-mobile-card](../../ir-booking-listing/ir-booking-listing-mobile-card)
  - [ir-booking-listing-table](../../ir-booking-listing/ir-booking-listing-table)
  - [ir-booking-number-cell](../../table-cells/booking/ir-booking-number-cell)
+ - [ir-checkout-dialog](../../ir-checkout-dialog)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-extra-services](../../ir-booking-details/ir-extra-services)
@@ -91,6 +92,7 @@ graph TD;
   ir-booking-listing-mobile-card --> ir-custom-button
   ir-booking-listing-table --> ir-custom-button
   ir-booking-number-cell --> ir-custom-button
+  ir-checkout-dialog --> ir-custom-button
   ir-extra-service --> ir-custom-button
   ir-extra-service-config --> ir-custom-button
   ir-extra-services --> ir-custom-button
