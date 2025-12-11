@@ -39,9 +39,13 @@ export class IrPicker {
   @Prop({ reflect: true }) defaultValue: NativeWaInput['defaultValue'];
 
   /** The input's size. */
-  @Prop({ reflect: true }) size: NativeWaInput['size'];
+  @Prop({ reflect: true }) size: NativeWaInput['size'] = 'small';
   /** The input's visual appearance. */
   @Prop({ reflect: true }) appearance: NativeWaInput['appearance'];
+
+  /** Delay (in milliseconds) before filtering results after user input. */
+  @Prop() debounce: number = 0;
+
   private static idCounter = 0;
   private readonly componentId = ++IrPicker.idCounter;
   private readonly listboxId = `ir-combobox-listbox-${this.componentId}`;
@@ -51,6 +55,7 @@ export class IrPicker {
   private inputRef?: WaInput;
   private nativeInput?: HTMLInputElement;
   private slotRef?: HTMLSlotElement;
+  private debounceTimer?: number;
 
   @Element() hostEl!: HTMLElement;
 
@@ -61,7 +66,11 @@ export class IrPicker {
   @State() liveRegionMessage = '';
   @State() slottedPickerItems: PickerItemElement[] = [];
 
+  /** Emitted when a value is selected from the combobox list. */
   @Event({ eventName: 'combobox-select' }) comboboxSelect!: EventEmitter<IrComboboxSelectEventDetail>;
+
+  /** Emitted when the text input value changes. */
+  @Event({ eventName: 'text-change' }) textChange!: EventEmitter<string>;
 
   componentWillLoad() {
     const hostItems = Array.from(this.hostEl?.querySelectorAll('ir-picker-item') ?? []) as PickerItemElement[];
@@ -140,7 +149,7 @@ export class IrPicker {
     this.updateSelectedFromValue(newValue);
     this.syncQueryWithValue(newValue);
     if (this.mode === 'select') {
-      this.applyFilter('', { updateQuery: false });
+      this.applyFilter('', { updateQuery: false, emitEvent: false });
     }
   }
 
@@ -201,31 +210,60 @@ export class IrPicker {
     }
   };
 
-  private applyFilter(value: string, options: { updateQuery?: boolean } = {}) {
-    const { updateQuery = true } = options;
-    if (updateQuery) {
-      this.query = value;
+  /** Applies the filter after the debounce delay and emits text-change when requested. */
+  private applyFilter(value: string, options: { updateQuery?: boolean; emitEvent?: boolean } = {}) {
+    // Clear any pending debounce run
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
     }
-    const normalizedQuery = value.trim().toLowerCase();
-    const items = this.slottedPickerItems;
-    const filtered = normalizedQuery ? items.filter(item => this.matchesQuery(item, normalizedQuery)) : [...items];
-    const previousActiveItem = this.activeIndex >= 0 ? this.filteredItems[this.activeIndex] : undefined;
 
-    this.filteredItems = filtered;
-    this.updateItemVisibility(filtered);
+    const runFilter = () => {
+      const { updateQuery = true, emitEvent = true } = options;
 
-    let nextIndex = previousActiveItem ? filtered.indexOf(previousActiveItem) : -1;
-    if (filtered.length === 0) {
-      this.activeIndex = -1;
-    } else {
-      if (nextIndex === -1) {
-        nextIndex = this.findNearestEnabledIndex(0, 1);
+      // Emit AFTER debounce only when caller requested it.
+      if (emitEvent) {
+        this.textChange.emit(value);
       }
-      this.activeIndex = nextIndex;
+
+      if (updateQuery) {
+        this.query = value;
+      }
+
+      const normalizedQuery = value.trim().toLowerCase();
+      const items = this.slottedPickerItems;
+
+      const filtered = normalizedQuery ? items.filter(item => this.matchesQuery(item, normalizedQuery)) : [...items];
+
+      const previousActiveItem = this.activeIndex >= 0 ? this.filteredItems[this.activeIndex] : undefined;
+
+      this.filteredItems = filtered;
+      this.updateItemVisibility(filtered);
+
+      let nextIndex = previousActiveItem ? filtered.indexOf(previousActiveItem) : -1;
+
+      if (filtered.length === 0) {
+        this.activeIndex = -1;
+      } else {
+        if (nextIndex === -1) {
+          nextIndex = this.findNearestEnabledIndex(0, 1);
+        }
+        this.activeIndex = nextIndex;
+      }
+
+      this.updateActiveItemIndicators();
+
+      const context = normalizedQuery ? `"${value.trim()}"` : undefined;
+      this.updateLiveRegion(filtered.length, context);
+    };
+
+    // No debounce → run immediately
+    if (!this.debounce) {
+      runFilter();
+      return;
     }
-    this.updateActiveItemIndicators();
-    const context = normalizedQuery ? `"${value.trim()}"` : undefined;
-    this.updateLiveRegion(filtered.length, context);
+
+    // Debounced execution
+    this.debounceTimer = window.setTimeout(runFilter, this.debounce);
   }
 
   private syncQueryWithValue(value: string) {
@@ -263,9 +301,9 @@ export class IrPicker {
     this.closeCombobox({ restoreFocus: true });
     if (this.mode === 'select') {
       this.query = this.getItemDisplayLabel(item);
-      this.applyFilter('', { updateQuery: false });
+      this.applyFilter('', { updateQuery: false, emitEvent: false });
     } else {
-      this.applyFilter('');
+      this.applyFilter('', { emitEvent: false });
     }
     this.activeIndex = -1;
   }
@@ -325,11 +363,11 @@ export class IrPicker {
   private processPickerItems(pickerItems: PickerItemElement[]) {
     this.slottedPickerItems = [...pickerItems];
     this.ensureItemIds();
-    this.applyFilter(this.query);
+    this.applyFilter(this.query, { emitEvent: false });
     this.updateSelectedFromValue(this.value);
     this.syncQueryWithValue(this.value);
     if (this.mode === 'select' && this.value) {
-      this.applyFilter('', { updateQuery: false });
+      this.applyFilter('', { updateQuery: false, emitEvent: false });
     }
   }
 
@@ -464,13 +502,14 @@ export class IrPicker {
 
     return (
       <Host>
-        <wa-popup flip shift sync="width" auto-size="vertical" auto-size-padding={10} active={this.isOpen}>
+        <wa-popup flip shift placement="bottom" sync="width" auto-size="vertical" auto-size-padding={10} active={this.isOpen}>
           <wa-input
             slot="anchor"
             class="search-bar"
             // withClear
             size={this.size}
             value={this.query}
+            defaultValue={this.defaultValue}
             ref={el => (this.inputRef = el)}
             appearance={this.appearance}
             label={this.label}

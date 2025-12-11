@@ -2347,6 +2347,10 @@ export namespace Components {
         "appearance": NativeWaInput['appearance'];
         "close": () => Promise<void>;
         /**
+          * Delay (in milliseconds) before filtering results after user input.
+         */
+        "debounce": number;
+        /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
         "defaultValue": NativeWaInput['defaultValue'];
@@ -3811,7 +3815,6 @@ declare global {
         "buttonClicked": { key: TPropertyButtonsTypes };
         "toast": IToast;
         "spiltBookingSelected": { key: string; data: unknown };
-        "animateIrButton": string;
         "animateIrSelect": string;
     }
     interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
@@ -5908,6 +5911,7 @@ declare global {
     };
     interface HTMLIrPickerElementEventMap {
         "combobox-select": IrComboboxSelectEventDetail;
+        "text-change": string;
     }
     interface HTMLIrPickerElement extends Components.IrPicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickerElementEventMap>(type: K, listener: (this: HTMLIrPickerElement, ev: IrPickerCustomEvent<HTMLIrPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6926,7 +6930,6 @@ declare namespace LocalJSX {
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
-        "onAnimateIrButton"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onAnimateIrSelect"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -9411,6 +9414,10 @@ declare namespace LocalJSX {
          */
         "appearance"?: NativeWaInput['appearance'];
         /**
+          * Delay (in milliseconds) before filtering results after user input.
+         */
+        "debounce"?: number;
+        /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
         "defaultValue"?: NativeWaInput['defaultValue'];
@@ -9420,7 +9427,14 @@ declare namespace LocalJSX {
         "label"?: string;
         "loading"?: boolean;
         "mode"?: 'select' | 'default';
+        /**
+          * Emitted when a value is selected from the combobox list.
+         */
         "onCombobox-select"?: (event: IrPickerCustomEvent<IrComboboxSelectEventDetail>) => void;
+        /**
+          * Emitted when the text input value changes.
+         */
+        "onText-change"?: (event: IrPickerCustomEvent<string>) => void;
         "pill"?: boolean;
         /**
           * Placeholder shown inside the input when there is no query.
