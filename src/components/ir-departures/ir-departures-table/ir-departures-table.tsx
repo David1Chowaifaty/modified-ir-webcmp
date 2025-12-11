@@ -1,31 +1,37 @@
 import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
 import { Booking } from '@/models/booking.dto';
-import { departuresStore, setDeparturesPage, setDeparturesPageSize } from '@/stores/departures.store';
+import { departuresStore } from '@/stores/departures.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
 import moment from 'moment';
+export type CheckoutRoomEvent = {
+  booking: Booking;
+  identifier: string;
+};
 @Component({
   tag: 'ir-departures-table',
   styleUrls: ['ir-departures-table.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrDeparturesTable {
-  private readonly pageSizes = [10, 20, 50];
+  @Event() checkoutRoom: EventEmitter<CheckoutRoomEvent>;
+  @Event() requestPageChange: EventEmitter<PaginationChangeEvent>;
+  @Event() requestPageSizeChange: EventEmitter<PaginationChangeEvent>;
 
-  private renderSection(bookings: Booking[], showAction = false) {
+  private renderSection({ bookings, showAction = false, isFuture = false }: { bookings: Booking[]; showAction?: boolean; isFuture?: boolean }) {
     if (!bookings?.length) {
       return null;
     }
 
-    const rows = bookings.flatMap(booking => this.renderBookingRows(booking, showAction));
+    const rows = bookings.flatMap(booking => this.renderBookingRows({ booking, showAction, isFuture }));
     return [...rows];
   }
 
-  private renderBookingRows(booking: Booking, showAction: boolean) {
-    return (booking.rooms ?? []).map((room, index) => this.renderRow(booking, room, index, showAction));
+  private renderBookingRows({ booking, isFuture, showAction }: { booking: Booking; showAction?: boolean; isFuture?: boolean }) {
+    return (booking.rooms ?? []).map((room, index) => this.renderRow(booking, room, index, showAction, isFuture));
   }
 
-  private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean) {
+  private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean, isFuture) {
     const rowKey = `${booking.booking_nbr}-${room?.identifier ?? index}`;
     const isOverdueCheckout = moment(room.to_date, 'YYYY-MM-DD').startOf('day').isBefore(moment().startOf('day'));
     return (
@@ -61,52 +67,43 @@ export class IrDeparturesTable {
         </td>
         <td>
           <div class="departures-table__actions-cell">
-            {showAction ? <ir-actions-cell buttons={isOverdueCheckout ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : 'In-house'}
+            {showAction ? (
+              <ir-actions-cell
+                onIrAction={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.checkoutRoom.emit({
+                    booking: booking,
+                    identifier: room.identifier,
+                  });
+                }}
+                buttons={isOverdueCheckout ? ['overdue_check_out'] : ['check_out']}
+              ></ir-actions-cell>
+            ) : isFuture ? (
+              ''
+            ) : (
+              'In-house'
+            )}
           </div>
         </td>
       </tr>
     );
   }
 
-  private getPaginationShowing() {
-    const { page, pageSize, total } = departuresStore.pagination;
-    if (!total) {
-      return { from: 0, to: 0 };
-    }
-    const start = (page - 1) * pageSize + 1;
-    return {
-      from: Math.max(start, 1),
-      to: Math.min(start + pageSize - 1, total),
-    };
-  }
-
   private handlePageChange(event: CustomEvent<PaginationChangeEvent>) {
     event.stopImmediatePropagation();
     event.stopPropagation();
-    const nextPage = event.detail?.currentPage ?? 1;
-    if (nextPage === departuresStore.pagination.page) {
-      return;
-    }
-    setDeparturesPage(nextPage);
+    this.requestPageChange.emit(event.detail);
   }
 
   private handlePageSizeChange(event: CustomEvent<PaginationChangeEvent>) {
     event.stopImmediatePropagation();
     event.stopPropagation();
-    const nextSize = event.detail?.pageSize;
-    if (!Number.isFinite(nextSize)) {
-      return;
-    }
-    const normalizedSize = Math.floor(Number(nextSize));
-    if (normalizedSize === departuresStore.pagination.pageSize) {
-      return;
-    }
-    setDeparturesPageSize(normalizedSize);
+    this.requestPageSizeChange.emit(event.detail);
   }
 
   render() {
-    const { needsCheckOutBookings, outBookings, pagination } = departuresStore;
-    const showing = this.getPaginationShowing();
+    const { needsCheckOutBookings, futureRooms, outBookings, pagination } = departuresStore;
     return (
       <Host>
         <div class="table--container">
@@ -124,13 +121,14 @@ export class IrDeparturesTable {
                 <th>Guest name</th>
                 <th>Unit</th>
                 <th>Dates</th>
-                <th class="text-right">Balance</th>
+                <th class="text-center">Balance</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {this.renderSection(needsCheckOutBookings, true)}
-              {this.renderSection(outBookings)}
+              {this.renderSection({ bookings: futureRooms, isFuture: true })}
+              {this.renderSection({ bookings: needsCheckOutBookings, showAction: true })}
+              {this.renderSection({ bookings: outBookings })}
               {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
                   <td colSpan={7} class="empty-row">
@@ -141,17 +139,17 @@ export class IrDeparturesTable {
             </tbody>
           </table>
         </div>
-        {needsCheckOutBookings.length > 0 && outBookings.length > 0 && (
+        {(needsCheckOutBookings.length > 0 || outBookings.length > 0 || futureRooms.length > 0) && (
           <ir-pagination
             class="data-table--pagination"
-            showing={showing}
+            showing={pagination.showing}
             total={pagination.total}
             pages={pagination.totalPages}
             pageSize={pagination.pageSize}
-            currentPage={pagination.page}
-            allowPageSizeChange={true}
-            pageSizes={this.pageSizes}
-            recordLabel={locales.entries?.Lcz_Bookings ?? 'bookings'}
+            currentPage={pagination.currentPage}
+            allowPageSizeChange={false}
+            pageSizes={[pagination.pageSize]}
+            recordLabel={locales.entries?.Lcz_Bookings ?? 'Bookings'}
             onPageChange={event => this.handlePageChange(event as CustomEvent<PaginationChangeEvent>)}
             onPageSizeChange={event => this.handlePageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
           ></ir-pagination>

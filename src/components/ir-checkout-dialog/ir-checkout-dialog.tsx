@@ -4,6 +4,8 @@ import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import { BookingInvoiceInfo } from '../ir-invoice/types';
 
+export type CheckoutDialogCloseEvent = { reason: 'cancel' | 'checkout' | 'openInvoice' };
+
 @Component({
   tag: 'ir-checkout-dialog',
   styleUrl: 'ir-checkout-dialog.css',
@@ -25,7 +27,7 @@ export class IrCheckoutDialog {
   @State() buttons: Set<'checkout' | 'checkout_without_invoice' | 'invoice_checkout'> = new Set();
   @State() invoiceInfo: BookingInvoiceInfo;
 
-  @Event({ composed: true, bubbles: true }) checkoutDialogClosed: EventEmitter<{ reason: 'dialog' | 'openInvoice' }>;
+  @Event({ composed: true, bubbles: true }) checkoutDialogClosed: EventEmitter<CheckoutDialogCloseEvent>;
 
   private bookingService = new BookingService();
 
@@ -40,7 +42,7 @@ export class IrCheckoutDialog {
         status: '002',
       });
       this.isLoading = null;
-      this.checkoutDialogClosed.emit({ reason: source === 'checkout&invoice' ? 'openInvoice' : 'dialog' });
+      this.checkoutDialogClosed.emit({ reason: source === 'checkout&invoice' ? 'openInvoice' : 'checkout' });
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +94,7 @@ export class IrCheckoutDialog {
         onIrDialogHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          this.checkoutDialogClosed.emit();
+          this.checkoutDialogClosed.emit({ reason: 'cancel' });
         }}
       >
         {this.isLoading === 'page' ? (
@@ -100,7 +102,7 @@ export class IrCheckoutDialog {
             <ir-spinner></ir-spinner>
           </div>
         ) : (
-          <p>Are you sure you want to Check Out this unit?</p>
+          <p style={{ width: 'calc(31rem - var(--spacing))' }}>Are you sure you want to Check Out this unit?</p>
         )}
         <div slot="footer" class="ir-dialog__footer">
           {/* {!this.isLoading && ( */}

@@ -28,6 +28,7 @@ import { BookingService } from "./services/booking-service/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
+import { CheckoutDialogCloseEvent } from "./components/ir-checkout-dialog/ir-checkout-dialog";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
@@ -35,6 +36,7 @@ import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button"
 import { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+import { CheckoutRoomEvent } from "./components/ir-departures/ir-departures-table/ir-departures-table";
 import { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -84,6 +86,7 @@ export { BookingService } from "./services/booking-service/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
+export { CheckoutDialogCloseEvent } from "./components/ir-checkout-dialog/ir-checkout-dialog";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
@@ -91,6 +94,7 @@ export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button"
 export { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+export { CheckoutRoomEvent } from "./components/ir-departures/ir-departures-table/ir-departures-table";
 export { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -381,9 +385,25 @@ export namespace Components {
         "propertyId": number;
     }
     interface IrArrivals {
+        /**
+          * Two-letter language code (ISO) used for translations and API locale. Defaults to `'en'`.
+         */
         "language": string;
+        /**
+          * Property alias or short identifier used by backend endpoints (aname). Passed to `getExposedProperty` when initializing the component.
+         */
         "p": string;
+        /**
+          * Number of arrivals to load per page in the arrivals table. Used to configure pagination via Arrivals Store. Defaults to `20`.
+         */
+        "pageSize": number;
+        /**
+          * ID of the property (hotel) for which arrivals should be displayed. Used in API calls related to rooms, bookings, and check-ins.
+         */
         "propertyid": number;
+        /**
+          * Authentication token issued by the PMS backend. Required for initializing the component and making API calls.
+         */
         "ticket": string;
     }
     interface IrArrivalsFilters {
@@ -3425,6 +3445,10 @@ export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDeleteModalElement;
 }
+export interface IrDeparturesTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDeparturesTableElement;
+}
 export interface IrDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDialogElement;
@@ -4746,7 +4770,7 @@ declare global {
         new (): HTMLIrCheckboxesElement;
     };
     interface HTMLIrCheckoutDialogElementEventMap {
-        "checkoutDialogClosed": { reason: 'dialog' | 'openInvoice' };
+        "checkoutDialogClosed": CheckoutDialogCloseEvent;
     }
     interface HTMLIrCheckoutDialogElement extends Components.IrCheckoutDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrCheckoutDialogElementEventMap>(type: K, listener: (this: HTMLIrCheckoutDialogElement, ev: IrCheckoutDialogCustomEvent<HTMLIrCheckoutDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4986,7 +5010,20 @@ declare global {
         prototype: HTMLIrDeparturesFilterElement;
         new (): HTMLIrDeparturesFilterElement;
     };
+    interface HTMLIrDeparturesTableElementEventMap {
+        "checkoutRoom": CheckoutRoomEvent;
+        "requestPageChange": PaginationChangeEvent;
+        "requestPageSizeChange": PaginationChangeEvent;
+    }
     interface HTMLIrDeparturesTableElement extends Components.IrDeparturesTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDeparturesTableElementEventMap>(type: K, listener: (this: HTMLIrDeparturesTableElement, ev: IrDeparturesTableCustomEvent<HTMLIrDeparturesTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDeparturesTableElementEventMap>(type: K, listener: (this: HTMLIrDeparturesTableElement, ev: IrDeparturesTableCustomEvent<HTMLIrDeparturesTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrDeparturesTableElement: {
         prototype: HTMLIrDeparturesTableElement;
@@ -7241,9 +7278,25 @@ declare namespace LocalJSX {
         "propertyId"?: number;
     }
     interface IrArrivals {
+        /**
+          * Two-letter language code (ISO) used for translations and API locale. Defaults to `'en'`.
+         */
         "language"?: string;
+        /**
+          * Property alias or short identifier used by backend endpoints (aname). Passed to `getExposedProperty` when initializing the component.
+         */
         "p"?: string;
+        /**
+          * Number of arrivals to load per page in the arrivals table. Used to configure pagination via Arrivals Store. Defaults to `20`.
+         */
+        "pageSize"?: number;
+        /**
+          * ID of the property (hotel) for which arrivals should be displayed. Used in API calls related to rooms, bookings, and check-ins.
+         */
         "propertyid"?: number;
+        /**
+          * Authentication token issued by the PMS backend. Required for initializing the component and making API calls.
+         */
         "ticket"?: string;
     }
     interface IrArrivalsFilters {
@@ -7622,7 +7675,7 @@ declare namespace LocalJSX {
           * Unique identifier of the room being checked out.
          */
         "identifier"?: string;
-        "onCheckoutDialogClosed"?: (event: IrCheckoutDialogCustomEvent<{ reason: 'dialog' | 'openInvoice' }>) => void;
+        "onCheckoutDialogClosed"?: (event: IrCheckoutDialogCustomEvent<CheckoutDialogCloseEvent>) => void;
         "open"?: boolean;
     }
     interface IrCombobox {
@@ -8220,6 +8273,9 @@ declare namespace LocalJSX {
     interface IrDeparturesFilter {
     }
     interface IrDeparturesTable {
+        "onCheckoutRoom"?: (event: IrDeparturesTableCustomEvent<CheckoutRoomEvent>) => void;
+        "onRequestPageChange"?: (event: IrDeparturesTableCustomEvent<PaginationChangeEvent>) => void;
+        "onRequestPageSizeChange"?: (event: IrDeparturesTableCustomEvent<PaginationChangeEvent>) => void;
     }
     interface IrDialog {
         /**

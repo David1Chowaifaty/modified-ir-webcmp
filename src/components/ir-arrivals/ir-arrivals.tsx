@@ -14,10 +14,36 @@ import { ICountry } from '@/models/IBooking';
   scoped: true,
 })
 export class IrArrivals {
+  /**
+   * Authentication token issued by the PMS backend.
+   * Required for initializing the component and making API calls.
+   */
   @Prop() ticket: string;
+
+  /**
+   * ID of the property (hotel) for which arrivals should be displayed.
+   * Used in API calls related to rooms, bookings, and check-ins.
+   */
   @Prop() propertyid: number;
+
+  /**
+   * Two-letter language code (ISO) used for translations and API locale.
+   * Defaults to `'en'`.
+   */
   @Prop() language: string = 'en';
+
+  /**
+   * Property alias or short identifier used by backend endpoints (aname).
+   * Passed to `getExposedProperty` when initializing the component.
+   */
   @Prop() p: string;
+
+  /**
+   * Number of arrivals to load per page in the arrivals table.
+   * Used to configure pagination via Arrivals Store.
+   * Defaults to `20`.
+   */
+  @Prop() pageSize: number = 20;
 
   @State() bookingNumber: number;
   @State() booking: Booking;
@@ -38,9 +64,15 @@ export class IrArrivals {
       this.tokenService.setToken(this.ticket);
       this.init();
     }
+    setArrivalsPageSize(this.pageSize);
     onArrivalsStoreChange('today', _ => {
       this.getBookings();
     });
+  }
+
+  @Watch('pageSize')
+  handlePageSizeChange(newValue: number, oldValue: number) {
+    if (newValue !== oldValue) setArrivalsPageSize(newValue);
   }
 
   @Watch('ticket')
@@ -77,6 +109,9 @@ export class IrArrivals {
   private async init() {
     try {
       this.isPageLoading = true;
+      if (!this.propertyid && !this.p) {
+        throw new Error('Missing credentials');
+      }
       const [_, __, countries, setupEntries] = await Promise.all([
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
@@ -135,79 +170,87 @@ export class IrArrivals {
     event.stopPropagation();
     this.roomGuestState = event.detail;
   }
+  // @Listen("resetBookingEvt")
+  // handleResetBookings(e:CustomEvent){
+  //   e.stopImmediatePropagation();
+  //   e.stopPropagation();
+  //   this.
+  // }
   render() {
     if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
       <Host>
-        <ir-toast style={{ display: 'none' }}></ir-toast>
-        <ir-interceptor style={{ display: 'none' }}></ir-interceptor>
-        <h3 class="page-title">Arrivals</h3>
-        <ir-arrivals-filters></ir-arrivals-filters>
-        <ir-arrivals-table
-          onCheckInRoom={event => this.handleCheckingRoom(event as CustomEvent<RoomGuestsPayload>)}
-          onRequestPageChange={event => this.handlePaginationChange(event as CustomEvent<PaginationChangeEvent>)}
-          onRequestPageSizeChange={event => this.handlePaginationPageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
-        ></ir-arrivals-table>
-        <ir-drawer
-          onDrawerHide={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            this.bookingNumber = null;
-          }}
-          withoutHeader
-          open={!!this.bookingNumber}
-          style={{
-            '--ir-drawer-width': '80rem',
-            '--ir-drawer-background-color': '#F2F3F8',
-            '--ir-drawer-padding-left': '0',
-            '--ir-drawer-padding-top': '0',
-            '--ir-drawer-padding-bottom': '0',
-            '--ir-drawer-padding-right': '0',
-          }}
-        >
-          {this.bookingNumber && (
-            <ir-booking-details
-              hasPrint
-              hasReceipt
-              hasCloseButton
-              onCloseSidebar={() => (this.bookingNumber = null)}
-              is_from_front_desk
-              propertyid={this.propertyid as any}
-              hasRoomEdit
-              hasRoomDelete
-              bookingNumber={this.bookingNumber.toString()}
-              ticket={this.ticket}
-              language={this.language}
-              hasRoomAdd
-            ></ir-booking-details>
-          )}
-        </ir-drawer>
-        <ir-payment-folio
-          style={{ height: 'auto' }}
-          bookingNumber={this.booking?.booking_nbr}
-          paymentEntries={this.paymentEntries}
-          payment={this.payment}
-          mode={'payment-action'}
-          ref={el => (this.paymentFolioRef = el)}
-          onCloseModal={() => {
-            this.booking = null;
-            this.payment = null;
-          }}
-        ></ir-payment-folio>
-        <ir-room-guests
-          open={this.roomGuestState !== null}
-          countries={this.countries}
-          language={this.language}
-          identifier={this.roomGuestState?.identifier}
-          bookingNumber={this.roomGuestState?.booking_nbr?.toString()}
-          roomName={this.roomGuestState?.roomName}
-          totalGuests={this.roomGuestState?.totalGuests}
-          sharedPersons={this.roomGuestState?.sharing_persons}
-          checkIn={this.roomGuestState?.checkin}
-          onCloseModal={() => (this.roomGuestState = null)}
-        ></ir-room-guests>
+        <ir-toast></ir-toast>
+        <ir-interceptor handledEndpoints={['/Get_Rooms_To_Check_in']}></ir-interceptor>
+        <div class="ir-page__container">
+          <h3 class="page-title">Arrivals</h3>
+          <ir-arrivals-filters></ir-arrivals-filters>
+          <ir-arrivals-table
+            onCheckInRoom={event => this.handleCheckingRoom(event as CustomEvent<RoomGuestsPayload>)}
+            onRequestPageChange={event => this.handlePaginationChange(event as CustomEvent<PaginationChangeEvent>)}
+            onRequestPageSizeChange={event => this.handlePaginationPageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
+          ></ir-arrivals-table>
+          <ir-drawer
+            onDrawerHide={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.bookingNumber = null;
+            }}
+            withoutHeader
+            open={!!this.bookingNumber}
+            style={{
+              '--ir-drawer-width': '80rem',
+              '--ir-drawer-background-color': '#F2F3F8',
+              '--ir-drawer-padding-left': '0',
+              '--ir-drawer-padding-top': '0',
+              '--ir-drawer-padding-bottom': '0',
+              '--ir-drawer-padding-right': '0',
+            }}
+          >
+            {this.bookingNumber && (
+              <ir-booking-details
+                hasPrint
+                hasReceipt
+                hasCloseButton
+                onCloseSidebar={() => (this.bookingNumber = null)}
+                is_from_front_desk
+                propertyid={this.propertyid as any}
+                hasRoomEdit
+                hasRoomDelete
+                bookingNumber={this.bookingNumber.toString()}
+                ticket={this.ticket}
+                language={this.language}
+                hasRoomAdd
+              ></ir-booking-details>
+            )}
+          </ir-drawer>
+          <ir-payment-folio
+            style={{ height: 'auto' }}
+            bookingNumber={this.booking?.booking_nbr}
+            paymentEntries={this.paymentEntries}
+            payment={this.payment}
+            mode={'payment-action'}
+            ref={el => (this.paymentFolioRef = el)}
+            onCloseModal={() => {
+              this.booking = null;
+              this.payment = null;
+            }}
+          ></ir-payment-folio>
+          <ir-room-guests
+            open={this.roomGuestState !== null}
+            countries={this.countries}
+            language={this.language}
+            identifier={this.roomGuestState?.identifier}
+            bookingNumber={this.roomGuestState?.booking_nbr?.toString()}
+            roomName={this.roomGuestState?.roomName}
+            totalGuests={this.roomGuestState?.totalGuests}
+            sharedPersons={this.roomGuestState?.sharing_persons}
+            checkIn={this.roomGuestState?.checkin}
+            onCloseModal={() => (this.roomGuestState = null)}
+          ></ir-room-guests>
+        </div>
       </Host>
     );
   }

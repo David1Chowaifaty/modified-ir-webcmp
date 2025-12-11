@@ -555,10 +555,13 @@ import {
   GetBookingInvoiceInfoPropsSchema,
   GetRoomsToCheckInProps,
   GetRoomsToCheckInPropsSchema,
+  GetRoomsToCheckOutProps,
+  GetRoomsToCheckOutPropsSchema,
   IssueInvoiceProps,
   IssueInvoicePropsSchema,
   PrintInvoiceProps,
   PrintInvoicePropsSchema,
+  RoomsToProcessResult,
   VoidInvoiceProps,
   VoidInvoicePropsSchema,
 } from './types';
@@ -1282,11 +1285,17 @@ export class BookingService {
   }
 
   /*Arrivals*/
-  public async getRoomsToCheckIn(props: GetRoomsToCheckInProps): Promise<{ bookings: Booking[]; total_count: number }> {
+  public async getRoomsToCheckIn(props: GetRoomsToCheckInProps): Promise<RoomsToProcessResult> {
     const payload = GetRoomsToCheckInPropsSchema.parse(props);
-    const { data } = await axios.post('/Get_Rooms_To_Check_in', payload);
+    const { data } = await axios.post('/Get_Rooms_To_Check_In', payload);
     return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_In?.total_count };
   }
+  public async getRoomsToCheckout(props: GetRoomsToCheckOutProps): Promise<RoomsToProcessResult> {
+    const payload = GetRoomsToCheckOutPropsSchema.parse(props);
+    const { data } = await axios.post('/Get_Rooms_To_Check_Out', payload);
+    return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_Out?.total_count };
+  }
+  /*Departures */
 
   /* INVOICE */
 

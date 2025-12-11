@@ -24,7 +24,7 @@ export class IrDeparturesFilter {
           class="departures-filters__date-picker"
         >
           <wa-icon name="calendar" slot="start"></wa-icon>
-          <wa-spinner slot="end"></wa-spinner>
+          {/* <wa-spinner slot="end"></wa-spinner> */}
         </ir-custom-date-picker>
         <ir-custom-input
           withClear

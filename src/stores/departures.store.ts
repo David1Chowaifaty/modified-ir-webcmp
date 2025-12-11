@@ -1,4 +1,6 @@
+import { PaginationRange } from '@/components/ir-pagination/ir-pagination';
 import { Booking, Room } from '@/models/booking.dto';
+import { canCheckout } from '@/utils/utils';
 import { createStore } from '@stencil/store';
 import moment from 'moment';
 
@@ -7,6 +9,8 @@ export interface DeparturesPagination {
   pageSize: number;
   total: number;
   totalPages: number;
+  currentPage: number;
+  showing: PaginationRange;
 }
 
 export interface DeparturesStore {
@@ -14,6 +18,7 @@ export interface DeparturesStore {
   filteredBookings: Booking[];
   paginatedBookings: Booking[];
   needsCheckOutBookings: Booking[];
+  futureRooms: Booking[];
   outBookings: Booking[];
   searchTerm: string;
   pagination: DeparturesPagination;
@@ -25,6 +30,7 @@ const initialState: DeparturesStore = {
   filteredBookings: [],
   paginatedBookings: [],
   needsCheckOutBookings: [],
+  futureRooms: [],
   outBookings: [],
   searchTerm: '',
   pagination: {
@@ -32,6 +38,8 @@ const initialState: DeparturesStore = {
     pageSize: 20,
     total: 0,
     totalPages: 1,
+    currentPage: 1,
+    showing: { from: 0, to: 0 },
   },
   today: getTodayString(),
 };
@@ -43,14 +51,56 @@ export function initializeDeparturesStore(bookings: Booking[] = []) {
   runDeparturesPipeline();
 }
 
+export function setDepartureTotal(total: number) {
+  const normalizedTotal = Number.isFinite(total) && total > 0 ? Math.floor(total) : 0;
+  const totalPages = calculateTotalPages(normalizedTotal, departuresStore.pagination.pageSize);
+  const safePage = clampPage(departuresStore.pagination.currentPage, Math.max(totalPages, 1));
+  departuresStore.pagination = {
+    ...departuresStore.pagination,
+    total: normalizedTotal,
+    totalPages: Math.max(totalPages, 1),
+    currentPage: safePage,
+    showing: calculateShowing(safePage, departuresStore.pagination.pageSize, normalizedTotal),
+  };
+}
+
+function calculateTotalPages(total: number, pageSize: number) {
+  if (!total || !pageSize) {
+    return 0;
+  }
+  return Math.ceil(total / pageSize);
+}
+
+function clampPage(page: number, totalPages: number) {
+  if (!Number.isFinite(page) || page <= 0) {
+    return 1;
+  }
+  const normalizedPage = Math.floor(page);
+  return Math.min(Math.max(normalizedPage, 1), Math.max(totalPages, 1));
+}
+
+function calculateShowing(page: number, pageSize: number, total: number): PaginationRange {
+  if (!total || !pageSize) {
+    return { from: 0, to: 0 };
+  }
+  const start = (page - 1) * pageSize + 1;
+  return {
+    from: Math.max(start, 1),
+    to: Math.min(start + pageSize - 1, total),
+  };
+}
 export function setDeparturesSearchTerm(term: string) {
   departuresStore.searchTerm = term ?? '';
   runDeparturesPipeline();
 }
 
 export function setDeparturesPage(page: number) {
-  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
-  departuresStore.pagination = { ...departuresStore.pagination, page: safePage };
+  const safePage = clampPage(page, Math.max(departuresStore.pagination.totalPages, 1));
+  departuresStore.pagination = {
+    ...departuresStore.pagination,
+    currentPage: safePage,
+    showing: calculateShowing(safePage, departuresStore.pagination.pageSize, departuresStore.pagination.total),
+  };
   runDeparturesPipeline();
 }
 
@@ -58,7 +108,13 @@ export function setDeparturesPageSize(pageSize: number) {
   if (!Number.isFinite(pageSize) || pageSize <= 0) {
     return;
   }
-  departuresStore.pagination = { ...departuresStore.pagination, pageSize: Math.floor(pageSize), page: 1 };
+  const normalizedPageSize = Math.floor(pageSize);
+  departuresStore.pagination = {
+    ...departuresStore.pagination,
+    pageSize: normalizedPageSize,
+    currentPage: 1,
+    showing: calculateShowing(1, normalizedPageSize, departuresStore.pagination.total),
+  };
   runDeparturesPipeline();
 }
 
@@ -68,33 +124,19 @@ export function setDeparturesReferenceDate(date: string | Date) {
 }
 
 function runDeparturesPipeline() {
-  const bookingsForToday = getBookingsForDate(departuresStore.bookings, departuresStore.today);
-  const searchedBookings = filterBookingsBySearch(bookingsForToday, departuresStore.searchTerm);
-
+  const searchedBookings = filterBookingsBySearch(departuresStore.searchTerm);
+  console.log(searchedBookings);
   departuresStore.filteredBookings = searchedBookings;
   departuresStore.paginatedBookings = searchedBookings;
 
   const split = splitBookingsByStatus(searchedBookings);
   departuresStore.needsCheckOutBookings = split.needsCheckOut;
   departuresStore.outBookings = split.out;
+  departuresStore.futureRooms = split.futureRooms;
 }
 
-function getBookingsForDate(bookings: Booking[], date: string) {
-  if (!date) {
-    return [];
-  }
-  return bookings
-    .map(booking => {
-      const roomsForToday = (booking.rooms ?? []).filter(room => normalizeDate(room.to_date) === date);
-      if (!roomsForToday.length) {
-        return null;
-      }
-      return { ...booking, rooms: roomsForToday };
-    })
-    .filter((booking): booking is Booking => Boolean(booking));
-}
-
-function filterBookingsBySearch(bookings: Booking[], term: string) {
+function filterBookingsBySearch(term: string) {
+  const bookings = departuresStore.bookings;
   const normalizedTerm = term?.trim().toLowerCase();
   if (!normalizedTerm) {
     return bookings;
@@ -128,19 +170,25 @@ function splitBookingsByStatus(bookings: Booking[]) {
       if (isOutRooms.length) {
         acc.out.push({ ...booking, rooms: isOutRooms });
       }
+      const futureRooms = rooms.filter(room => isFuture(room));
+      if (futureRooms.length) {
+        acc.out.push({ ...booking, rooms: futureRooms });
+      }
       return acc;
     },
-    { needsCheckOut: [] as Booking[], out: [] as Booking[] },
+    { needsCheckOut: [] as Booking[], out: [] as Booking[], futureRooms: [] as Booking[] },
   );
 }
 
 function isNeedsCheckOut(room: Room) {
-  const code = room.in_out?.code ?? '';
-  return code === '001';
+  return canCheckout({ to_date: room.to_date, inOutCode: room.in_out.code });
 }
 
 function isOut(room: Room) {
   return room.in_out?.code === '002';
+}
+function isFuture(room: Room) {
+  return moment().isBefore(moment(room.to_date, 'YYYY-MM-DD'), 'date');
 }
 
 function buildName(person?: { first_name?: string | null; last_name?: string | null } | null) {
@@ -150,13 +198,6 @@ function buildName(person?: { first_name?: string | null; last_name?: string | n
 
 function getTodayString() {
   return moment().format('YYYY-MM-DD');
-}
-
-function normalizeDate(value?: string | null) {
-  if (!value) {
-    return '';
-  }
-  return value.slice(0, 10);
 }
 
 initializeDeparturesStore();

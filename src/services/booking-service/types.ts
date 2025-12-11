@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { ExtraService, IBookingPickupInfo, RoomInOut } from '@/models/booking.dto';
+import { Booking, ExtraService, IBookingPickupInfo, RoomInOut } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 
 const NumberOrStringSchema = z.union([z.number(), z.string().optional()]);
@@ -167,7 +167,7 @@ export type TableEntries =
 export type GroupedTableEntries = {
   [K in TableEntries as K extends `_${infer Rest}` ? Lowercase<Rest> : never]: IEntries[];
 };
-/**Arrivals */
+/*Arrivals */
 export const GetRoomsToCheckInPropsSchema = z.object({
   property_id: z.string(),
   check_in_date: z.string(),
@@ -175,6 +175,18 @@ export const GetRoomsToCheckInPropsSchema = z.object({
   page_size: z.number().default(10),
 });
 export type GetRoomsToCheckInProps = z.infer<typeof GetRoomsToCheckInPropsSchema>;
+/*Departures */
+export const GetRoomsToCheckOutPropsSchema = z.object({
+  property_id: z.string(),
+  check_out_date: z.string(),
+  page_index: z.number().default(1),
+  page_size: z.number().default(10),
+});
+export type GetRoomsToCheckOutProps = z.infer<typeof GetRoomsToCheckOutPropsSchema>;
+export interface RoomsToProcessResult {
+  bookings: Booking[];
+  total_count: number;
+}
 /* INVOICE TYPES */
 
 export const GetBookingInvoiceInfoPropsSchema = z.object({

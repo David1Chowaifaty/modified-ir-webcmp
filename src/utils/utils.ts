@@ -393,6 +393,15 @@ export function canCheckIn({ from_date, to_date, isCheckedIn }: CheckInParams): 
   }
   return false;
 }
+export function canCheckout({ to_date, inOutCode }: { to_date: string; inOutCode: string }): boolean {
+  if (!calendarData.checkin_enabled || calendarData.is_automatic_check_in_out) {
+    return false;
+  }
+  if (inOutCode === '002') {
+    return false;
+  }
+  return moment().startOf('day').isSameOrAfter(moment(to_date, 'YYYY-MM-DD').startOf('date'), 'dates');
+}
 /**
  * Downloads a file from a given URL.
  *
