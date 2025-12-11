@@ -39,10 +39,10 @@ export class IglBookPropertyFooter {
     label,
     type,
     disabled,
-    icon_name,
+    // icon_name,
     isLoading,
-    icon_position = 'right',
-  }: {
+  }: // icon_position = 'right',
+  {
     type: TPropertyButtonsTypes;
     label: string;
     disabled?: boolean;
@@ -55,21 +55,24 @@ export class IglBookPropertyFooter {
         {/* <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit({ key: type })} disabled={disabled}>
           {label}
         </button> */}
-        <ir-button
-          isLoading={isLoading}
-          btn_color={type === 'cancel' || type === 'back' ? 'secondary' : 'primary'}
-          text={label}
-          btn_disabled={disabled}
+        <ir-custom-button
+          size={'medium'}
+          loading={isLoading}
+          appearance={type === 'cancel' || type === 'back' ? 'filled' : 'accent'}
+          variant={type === 'cancel' || type === 'back' ? 'neutral' : 'brand'}
+          disabled={disabled}
           onClickHandler={() => {
             this.buttonClicked.emit({ key: type });
           }}
           class="full-width"
-          btn_styles="justify-content-center"
-          icon_name={icon_name}
-          iconPosition={icon_position}
-          style={{ '--icon-size': '1rem' }}
-          icon_style={{ paddingBottom: '1.9px' }}
-        ></ir-button>
+
+          // icon_name={icon_name}
+          // iconPosition={icon_position}
+          // style={{ '--icon-size': '1rem' }}
+          // icon_style={{ paddingBottom: '1.9px' }}
+        >
+          {label}
+        </ir-custom-button>
       </div>
     );
   }
