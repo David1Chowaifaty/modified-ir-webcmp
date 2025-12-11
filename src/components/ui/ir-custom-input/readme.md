@@ -67,6 +67,7 @@
  - [ir-payment-folio-form](../../ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio-form)
  - [ir-pickup-form](../../ir-booking-details/ir-pickup/ir-pickup-form)
  - [ir-room-guests-form](../../ir-booking-details/ir-room-guests/ir-room-guests-form)
+ - [ir-secure-tasks](../../ir-secure-tasks)
 
 ### Graph
 ```mermaid
@@ -81,6 +82,7 @@ graph TD;
   ir-payment-folio-form --> ir-custom-input
   ir-pickup-form --> ir-custom-input
   ir-room-guests-form --> ir-custom-input
+  ir-secure-tasks --> ir-custom-input
   style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

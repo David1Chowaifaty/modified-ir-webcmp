@@ -99,7 +99,7 @@ export class IrSecureTasks {
         </Host>
       );
     return (
-      <Host>
+      <div class={'ir-page__container'}>
         <section class="secure-header">
           <div class="secure-header__top">
             <form
@@ -160,7 +160,7 @@ export class IrSecureTasks {
           </nav>
         </section>
         {this.renderPage()}
-      </Host>
+      </div>
     );
   }
   private logout() {

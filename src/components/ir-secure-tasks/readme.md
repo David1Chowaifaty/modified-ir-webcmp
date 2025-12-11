@@ -20,6 +20,8 @@
 ### Depends on
 
 - [ir-login](../ir-login)
+- [ir-custom-input](../ui/ir-custom-input)
+- [ir-custom-button](../ui/ir-custom-button)
 - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
 - [igloo-calendar](../igloo-calendar)
 - [ir-housekeeping](../ir-housekeeping)
@@ -37,6 +39,8 @@
 ```mermaid
 graph TD;
   ir-secure-tasks --> ir-login
+  ir-secure-tasks --> ir-custom-input
+  ir-secure-tasks --> ir-custom-button
   ir-secure-tasks --> ir-hk-tasks
   ir-secure-tasks --> igloo-calendar
   ir-secure-tasks --> ir-housekeeping
