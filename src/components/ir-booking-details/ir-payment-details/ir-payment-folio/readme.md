@@ -73,8 +73,8 @@ graph TD;
   ir-payment-folio --> ir-custom-button
   ir-payment-folio-form --> ir-custom-date-picker
   ir-payment-folio-form --> ir-validator
-  ir-payment-folio-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
+  ir-payment-folio-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-arrivals --> ir-payment-folio
   ir-booking-details --> ir-payment-folio
   ir-booking-listing --> ir-payment-folio

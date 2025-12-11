@@ -1,5 +1,5 @@
 import WaInput from '@awesome.me/webawesome/dist/components/input/input';
-import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { masks } from './masks';
 import IMask, { FactoryArg, InputMask } from 'imask';
 
@@ -14,6 +14,7 @@ export type NativeWaInput = WaInput;
   shadow: true,
 })
 export class IrInput {
+  @Element() el: HTMLIrInputElement;
   /** The value of the input. */
   @Prop({ reflect: true, mutable: true }) value: string = '';
 
@@ -148,16 +149,22 @@ export class IrInput {
   @Event({ bubbles: true, composed: true }) inputFocus: EventEmitter<void>;
 
   @State() private isValid: boolean = true;
+  @State() private slotState = new Map<string, boolean>();
 
   private _mask?: InputMask<any>;
   private inputRef: WaInput;
   private animationFrame: number;
+  private slotObserver: MutationObserver;
+
+  private readonly SLOT_NAMES = ['label', 'start', 'end', 'clear-icon', 'hide-password-icon', 'show-password-icon', 'hint'] as const;
 
   componentWillLoad() {
     if (this.mask === 'price' && typeof this.mask === 'string') {
       this.returnMaskedValue = true;
     }
+    this.updateSlotState();
   }
+
   componentDidLoad() {
     if (this.disabled) {
       this.inputRef.disabled = this.disabled;
@@ -165,9 +172,11 @@ export class IrInput {
     // Find the closest form element (if any)
     // track slotted prefix to compute width
     this.initializeMask();
+    this.setupSlotListeners();
   }
   disconnectedCallback() {
     this.destroyMask();
+    this.removeSlotListeners();
   }
 
   @Watch('disabled')
@@ -225,6 +234,37 @@ export class IrInput {
       this.handleInput(value);
     });
   }
+  private setupSlotListeners() {
+    // Listen to slotchange events on the host element
+    this.el.addEventListener('slotchange', this.handleSlotChange);
+
+    // Also use MutationObserver as a fallback for browsers that don't fire slotchange reliably
+    this.slotObserver = new MutationObserver(this.handleSlotChange);
+    this.slotObserver.observe(this.el, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['slot'],
+    });
+  }
+  private removeSlotListeners() {
+    this.el.removeEventListener('slotchange', this.handleSlotChange);
+    this.slotObserver?.disconnect();
+  }
+
+  private handleSlotChange = () => {
+    this.updateSlotState();
+  };
+
+  private updateSlotState() {
+    const newState = new Map<string, boolean>();
+
+    this.SLOT_NAMES.forEach(name => {
+      newState.set(name, this.hasSlot(name));
+    });
+
+    this.slotState = newState;
+  }
 
   private rebuildMask() {
     this.destroyMask();
@@ -271,6 +311,7 @@ export class IrInput {
     e.stopPropagation();
     if (!this.mask) this.handleInput((e.target as any).value);
   };
+
   private handleClear = (e: CustomEvent) => {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -279,16 +320,22 @@ export class IrInput {
     }
     this.handleInput('');
   };
+
   private handleBlur = (e: CustomEvent) => {
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.inputBlur.emit();
   };
+
   private handleFocus = (e: CustomEvent) => {
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.inputFocus.emit();
   };
+
+  private hasSlot(name: string): boolean {
+    return !!this.el.querySelector(`[slot="${name}"]`);
+  }
 
   render() {
     let displayValue = this.value;
@@ -342,13 +389,13 @@ export class IrInput {
           onfocus={this.handleFocus}
           exportparts="base"
         >
-          <slot name="label" slot="label"></slot>
-          <slot name="start" slot="start"></slot>
-          <slot name="end" slot="end"></slot>
-          <slot name="clear-icon" slot="clear-icon"></slot>
-          <slot name="hide-password-icon" slot="hide-password-icon"></slot>
-          <slot name="show-password-icon" slot="show-password-icon"></slot>
-          <slot name="hint" slot="hint"></slot>
+          {this.slotState.get('label') && <slot name="label" slot="label"></slot>}
+          {this.slotState.get('start') && <slot name="start" slot="start"></slot>}
+          {this.slotState.get('end') && <slot name="end" slot="end"></slot>}
+          {this.slotState.get('clear-icon') && <slot name="clear-icon" slot="clear-icon"></slot>}
+          {this.slotState.get('hide-password-icon') && <slot name="hide-password-icon" slot="hide-password-icon"></slot>}
+          {this.slotState.get('show-password-icon') && <slot name="show-password-icon" slot="show-password-icon"></slot>}
+          {this.slotState.get('hint') && <slot name="hint" slot="hint"></slot>}
         </wa-input>
       </Host>
     );

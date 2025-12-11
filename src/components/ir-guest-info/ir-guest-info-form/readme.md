@@ -31,7 +31,7 @@
 ### Depends on
 
 - [ir-validator](../../ui/ir-validator)
-- [ir-custom-input](../../ui/ir-custom-input)
+- [ir-input](../../ui/ir-input)
 - [ir-country-picker](../../ui/ir-country-picker)
 - [ir-mobile-input](../../ui/ir-mobile-input)
 
@@ -39,7 +39,7 @@
 ```mermaid
 graph TD;
   ir-guest-info-form --> ir-validator
-  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
   ir-country-picker --> ir-picker

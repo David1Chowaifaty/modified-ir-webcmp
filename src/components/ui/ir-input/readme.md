@@ -15,9 +15,11 @@
 | `autocorrect`        | `autocorrect`          | Indicates whether the browser's autocorrect feature is on or off.                                                                                                                                                                                                                      | `"off" \| "on"`                                                                                                     | `undefined` |
 | `autofocus`          | `autofocus`            | Indicates that the input should receive focus on page load.                                                                                                                                                                                                                            | `boolean`                                                                                                           | `undefined` |
 | `defaultValue`       | `default-value`        | The default value of the form control. Primarily used for resetting the form control.                                                                                                                                                                                                  | `string`                                                                                                            | `undefined` |
+| `disabled`           | `disabled`             | Disables the input.                                                                                                                                                                                                                                                                    | `boolean`                                                                                                           | `undefined` |
 | `enterkeyhint`       | `enterkeyhint`         | Used to customize the label or icon of the Enter key on virtual keyboards.                                                                                                                                                                                                             | `"done" \| "enter" \| "go" \| "next" \| "previous" \| "search" \| "send"`                                           | `undefined` |
 | `form`               | --                     | By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you to place the form control outside of a form and associate it with the form that has this `id`. The form must be in the same document or shadow root for this to work. | `null`                                                                                                              | `undefined` |
 | `hint`               | `hint`                 | The input's hint. If you need to display HTML, use the `hint` slot instead.                                                                                                                                                                                                            | `string`                                                                                                            | `undefined` |
+| `inputClass`         | `input-class`          | Custom CSS classes applied to the inner `<wa-input>` element.  You can also target the exposed parts `::part(input)` and `::part(base)` for deeper styling of the native input and container.                                                                                          | `string`                                                                                                            | `undefined` |
 | `inputmode`          | `inputmode`            | Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual keyboard on supportive devices.                                                                                                                                        | `"decimal" \| "email" \| "none" \| "numeric" \| "search" \| "tel" \| "text" \| "url"`                               | `undefined` |
 | `label`              | `label`                | The input's label. If you need to display HTML, use the `label` slot instead.                                                                                                                                                                                                          | `string`                                                                                                            | `undefined` |
 | `mask`               | `mask`                 | Mask for the input field (optional)                                                                                                                                                                                                                                                    | `MaskConfig<"date" \| "time" \| "price" \| "url"> \| FactoryArg`                                                    | `undefined` |
@@ -72,18 +74,18 @@
 ### Graph
 ```mermaid
 graph TD;
-  ir-arrivals-filters --> ir-custom-input
-  ir-booking-company-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
-  ir-departures-filter --> ir-custom-input
-  ir-extra-service-config-form --> ir-custom-input
-  ir-guest-info-form --> ir-custom-input
-  ir-listing-header --> ir-custom-input
-  ir-payment-folio-form --> ir-custom-input
-  ir-pickup-form --> ir-custom-input
-  ir-room-guests-form --> ir-custom-input
-  ir-secure-tasks --> ir-custom-input
-  style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
+  ir-arrivals-filters --> ir-input
+  ir-booking-company-form --> ir-input
+  ir-custom-date-picker --> ir-input
+  ir-departures-filter --> ir-input
+  ir-extra-service-config-form --> ir-input
+  ir-guest-info-form --> ir-input
+  ir-listing-header --> ir-input
+  ir-payment-folio-form --> ir-input
+  ir-pickup-form --> ir-input
+  ir-room-guests-form --> ir-input
+  ir-secure-tasks --> ir-input
+  style ir-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

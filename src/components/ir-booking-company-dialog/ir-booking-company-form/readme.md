@@ -28,12 +28,12 @@
 
 ### Depends on
 
-- [ir-custom-input](../../ui/ir-custom-input)
+- [ir-input](../../ui/ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-input
   ir-booking-company-dialog --> ir-booking-company-form
   style ir-booking-company-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

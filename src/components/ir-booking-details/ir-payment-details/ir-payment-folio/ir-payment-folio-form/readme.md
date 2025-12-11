@@ -36,15 +36,15 @@
 
 - [ir-custom-date-picker](../../../../ir-custom-date-picker)
 - [ir-validator](../../../../ui/ir-validator)
-- [ir-custom-input](../../../../ui/ir-custom-input)
+- [ir-input](../../../../ui/ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-payment-folio-form --> ir-custom-date-picker
   ir-payment-folio-form --> ir-validator
-  ir-payment-folio-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
+  ir-payment-folio-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-payment-folio --> ir-payment-folio-form
   style ir-payment-folio-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

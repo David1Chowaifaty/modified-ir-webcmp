@@ -20,7 +20,7 @@
 ### Depends on
 
 - [ir-login](../ir-login)
-- [ir-custom-input](../ui/ir-custom-input)
+- [ir-input](../ui/ir-input)
 - [ir-custom-button](../ui/ir-custom-button)
 - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
 - [igloo-calendar](../igloo-calendar)
@@ -39,7 +39,7 @@
 ```mermaid
 graph TD;
   ir-secure-tasks --> ir-login
-  ir-secure-tasks --> ir-custom-input
+  ir-secure-tasks --> ir-input
   ir-secure-tasks --> ir-custom-button
   ir-secure-tasks --> ir-hk-tasks
   ir-secure-tasks --> igloo-calendar
@@ -133,12 +133,12 @@ graph TD;
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
-  ir-custom-date-picker --> ir-custom-input
+  ir-custom-date-picker --> ir-input
   ir-booking-billing-recipient --> ir-booking-company-dialog
   ir-booking-company-dialog --> ir-dialog
   ir-booking-company-dialog --> ir-booking-company-form
   ir-booking-company-dialog --> ir-custom-button
-  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-input
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-custom-button
@@ -179,7 +179,7 @@ graph TD;
   ir-room-guests --> ir-custom-button
   ir-room-guests-form --> ir-spinner
   ir-room-guests-form --> ir-validator
-  ir-room-guests-form --> ir-custom-input
+  ir-room-guests-form --> ir-input
   ir-room-guests-form --> ir-country-picker
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
@@ -189,13 +189,13 @@ graph TD;
   ir-extra-service-config --> ir-custom-button
   ir-extra-service-config-form --> ir-validator
   ir-extra-service-config-form --> ir-custom-date-picker
-  ir-extra-service-config-form --> ir-custom-input
+  ir-extra-service-config-form --> ir-input
   ir-pickup --> ir-drawer
   ir-pickup --> ir-pickup-form
   ir-pickup --> ir-custom-button
   ir-pickup-form --> ir-validator
   ir-pickup-form --> ir-custom-date-picker
-  ir-pickup-form --> ir-custom-input
+  ir-pickup-form --> ir-input
   ir-billing-drawer --> ir-drawer
   ir-billing-drawer --> ir-billing
   ir-billing --> ir-spinner
@@ -207,7 +207,7 @@ graph TD;
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
   ir-guest-info-form --> ir-validator
-  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
   ir-payment-folio --> ir-drawer
@@ -215,7 +215,7 @@ graph TD;
   ir-payment-folio --> ir-custom-button
   ir-payment-folio-form --> ir-custom-date-picker
   ir-payment-folio-form --> ir-validator
-  ir-payment-folio-form --> ir-custom-input
+  ir-payment-folio-form --> ir-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -422,7 +422,7 @@ graph TD;
   ir-booking-listing --> ir-payment-folio
   ir-listing-header --> igl-book-property-container
   ir-listing-header --> ir-custom-button
-  ir-listing-header --> ir-custom-input
+  ir-listing-header --> ir-input
   ir-listing-header --> ir-range-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
@@ -470,14 +470,11 @@ graph TD;
   ir-arrivals --> ir-loading-screen
   ir-arrivals --> ir-toast
   ir-arrivals --> ir-interceptor
-  ir-arrivals --> ir-arrivals-filters
   ir-arrivals --> ir-arrivals-table
   ir-arrivals --> ir-drawer
   ir-arrivals --> ir-booking-details
   ir-arrivals --> ir-payment-folio
   ir-arrivals --> ir-room-guests
-  ir-arrivals-filters --> ir-custom-date-picker
-  ir-arrivals-filters --> ir-custom-input
   ir-arrivals-table --> ir-booking-number-cell
   ir-arrivals-table --> ir-booked-by-cell
   ir-arrivals-table --> ir-guest-name-cell
@@ -489,15 +486,12 @@ graph TD;
   ir-departures --> ir-loading-screen
   ir-departures --> ir-toast
   ir-departures --> ir-interceptor
-  ir-departures --> ir-departures-filter
   ir-departures --> ir-departures-table
   ir-departures --> ir-drawer
   ir-departures --> ir-booking-details
   ir-departures --> ir-payment-folio
   ir-departures --> ir-checkout-dialog
   ir-departures --> ir-invoice
-  ir-departures-filter --> ir-custom-date-picker
-  ir-departures-filter --> ir-custom-input
   ir-departures-table --> ir-booking-number-cell
   ir-departures-table --> ir-booked-by-cell
   ir-departures-table --> ir-guest-name-cell

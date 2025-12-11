@@ -45,7 +45,7 @@ graph TD;
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
   ir-guest-info-form --> ir-validator
-  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
   ir-country-picker --> ir-picker

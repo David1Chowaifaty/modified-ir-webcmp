@@ -76,12 +76,12 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [ir-custom-input](../ui/ir-custom-input)
+- [ir-input](../ui/ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-custom-date-picker --> ir-custom-input
+  ir-custom-date-picker --> ir-input
   ir-arrivals-filters --> ir-custom-date-picker
   ir-departures-filter --> ir-custom-date-picker
   ir-extra-service-config-form --> ir-custom-date-picker

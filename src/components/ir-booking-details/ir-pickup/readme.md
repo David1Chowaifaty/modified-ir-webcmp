@@ -43,8 +43,8 @@ graph TD;
   ir-pickup --> ir-custom-button
   ir-pickup-form --> ir-validator
   ir-pickup-form --> ir-custom-date-picker
-  ir-pickup-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
+  ir-pickup-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-booking-details --> ir-pickup
   style ir-pickup fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -31,7 +31,7 @@
 
 - [igl-book-property-container](../../igl-book-property-container)
 - [ir-custom-button](../../ui/ir-custom-button)
-- [ir-custom-input](../../ui/ir-custom-input)
+- [ir-input](../../ui/ir-input)
 - [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
 
 ### Graph
@@ -39,7 +39,7 @@
 graph TD;
   ir-listing-header --> igl-book-property-container
   ir-listing-header --> ir-custom-button
-  ir-listing-header --> ir-custom-input
+  ir-listing-header --> ir-input
   ir-listing-header --> ir-range-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor

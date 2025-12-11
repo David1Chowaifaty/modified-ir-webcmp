@@ -36,7 +36,7 @@ graph TD;
   ir-booking-company-dialog --> ir-dialog
   ir-booking-company-dialog --> ir-booking-company-form
   ir-booking-company-dialog --> ir-custom-button
-  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-input
   ir-invoice-form --> ir-booking-billing-recipient
   style ir-booking-billing-recipient fill:#f9f,stroke:#333,stroke-width:4px
 ```

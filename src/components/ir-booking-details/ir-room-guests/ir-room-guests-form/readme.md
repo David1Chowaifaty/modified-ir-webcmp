@@ -38,7 +38,7 @@
 
 - [ir-spinner](../../../ui/ir-spinner)
 - [ir-validator](../../../ui/ir-validator)
-- [ir-custom-input](../../../ui/ir-custom-input)
+- [ir-input](../../../ui/ir-input)
 - [ir-country-picker](../../../ui/ir-country-picker)
 
 ### Graph
@@ -46,7 +46,7 @@
 graph TD;
   ir-room-guests-form --> ir-spinner
   ir-room-guests-form --> ir-validator
-  ir-room-guests-form --> ir-custom-input
+  ir-room-guests-form --> ir-input
   ir-room-guests-form --> ir-country-picker
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item

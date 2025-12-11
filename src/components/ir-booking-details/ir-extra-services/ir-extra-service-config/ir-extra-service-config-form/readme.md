@@ -31,15 +31,15 @@
 
 - [ir-validator](../../../../ui/ir-validator)
 - [ir-custom-date-picker](../../../../ir-custom-date-picker)
-- [ir-custom-input](../../../../ui/ir-custom-input)
+- [ir-input](../../../../ui/ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-extra-service-config-form --> ir-validator
   ir-extra-service-config-form --> ir-custom-date-picker
-  ir-extra-service-config-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
+  ir-extra-service-config-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-extra-service-config --> ir-extra-service-config-form
   style ir-extra-service-config-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

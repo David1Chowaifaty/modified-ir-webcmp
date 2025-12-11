@@ -47,7 +47,7 @@ graph TD;
   ir-booking-company-dialog --> ir-dialog
   ir-booking-company-dialog --> ir-booking-company-form
   ir-booking-company-dialog --> ir-custom-button
-  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-input
   ir-booking-details --> ir-reservation-information
   style ir-reservation-information fill:#f9f,stroke:#333,stroke-width:4px
 ```

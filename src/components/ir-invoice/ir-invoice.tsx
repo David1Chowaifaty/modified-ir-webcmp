@@ -118,7 +118,7 @@ export class IrInvoice {
             '--ir-drawer-padding-top': 'var(--spacing)',
             '--ir-drawer-padding-bottom': 'var(--spacing)',
           }}
-          label="Invoice"
+          label="Issue Invoice"
           open={this.open}
           onDrawerHide={e => {
             e.stopImmediatePropagation();

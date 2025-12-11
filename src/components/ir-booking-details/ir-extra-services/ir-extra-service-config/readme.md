@@ -41,8 +41,8 @@ graph TD;
   ir-extra-service-config --> ir-custom-button
   ir-extra-service-config-form --> ir-validator
   ir-extra-service-config-form --> ir-custom-date-picker
-  ir-extra-service-config-form --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-input
+  ir-extra-service-config-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-booking-details --> ir-extra-service-config
   style ir-extra-service-config fill:#f9f,stroke:#333,stroke-width:4px
 ```

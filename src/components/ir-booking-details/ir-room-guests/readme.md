@@ -49,7 +49,7 @@ graph TD;
   ir-room-guests --> ir-custom-button
   ir-room-guests-form --> ir-spinner
   ir-room-guests-form --> ir-validator
-  ir-room-guests-form --> ir-custom-input
+  ir-room-guests-form --> ir-input
   ir-room-guests-form --> ir-country-picker
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
