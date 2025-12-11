@@ -372,7 +372,7 @@ export class IrCustomDatePicker {
     return (
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
-          <ir-custom-input
+          <ir-input
             placeholder={this.placeholder}
             withClear={this.withClear}
             tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
@@ -389,7 +389,7 @@ export class IrCustomDatePicker {
           >
             <slot name="start" slot="start"></slot>
             <slot name="end" slot="end"></slot>
-          </ir-custom-input>
+          </ir-input>
 
           <div class="picker-surface">
             <div class="picker-surface__calendar" ref={el => (this.calendarContainerRef = el)}></div>

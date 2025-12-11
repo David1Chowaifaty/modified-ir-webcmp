@@ -1,9 +1,9 @@
-import { MaskedRange, MaskedNumber } from 'imask';
+import { MaskedRange } from 'imask';
 import moment from 'moment';
 
 export const masks = {
   price: {
-    mask: MaskedNumber,
+    mask: Number,
     scale: 2,
     radix: '.',
     mapToRadix: [','],

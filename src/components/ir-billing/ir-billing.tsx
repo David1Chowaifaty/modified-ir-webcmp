@@ -248,7 +248,7 @@ export class IrBilling {
                 );
               })}
             </div>
-            {this.invoiceInfo.invoices?.length === 0 && <ir-empty-state></ir-empty-state>}
+            {this.invoiceInfo.invoices?.length === 0 && <ir-empty-state style={{ width: '100%', height: '40vh' }}></ir-empty-state>}
           </section>
         </div>
         <ir-invoice

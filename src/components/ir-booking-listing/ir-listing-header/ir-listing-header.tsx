@@ -100,7 +100,7 @@ export class IrListingHeader {
               }}
               class="booking-search-field width-fill"
             >
-              <ir-custom-input
+              <ir-input
                 class={'flex-fill w-100'}
                 value={this.inputValue}
                 onText-change={e => (this.inputValue = e.detail)}
@@ -108,7 +108,7 @@ export class IrListingHeader {
                 placeholder={locales.entries?.Lcz_FindBookNbrorName}
               >
                 <wa-icon name="magnifying-glass" slot="start"></wa-icon>
-              </ir-custom-input>
+              </ir-input>
               <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries?.Lcz_Or}</h5>
             </form>
           </div>

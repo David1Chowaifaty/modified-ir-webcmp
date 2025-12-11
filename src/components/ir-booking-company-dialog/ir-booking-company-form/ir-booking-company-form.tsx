@@ -68,19 +68,8 @@ export class IrBookingCompanyForm {
         }}
         class="booking-company__form"
       >
-        <ir-custom-input
-          value={this.formData.company_name}
-          onText-change={e => this.updateGuest({ company_name: e.detail })}
-          label="Name"
-          autofocus
-          placeholder="XYZ LTD"
-        ></ir-custom-input>
-        <ir-custom-input
-          value={this.formData.company_tax_nbr}
-          onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })}
-          label="Tax ID"
-          placeholder="VAT 123456"
-        ></ir-custom-input>
+        <ir-input value={this.formData.company_name} onText-change={e => this.updateGuest({ company_name: e.detail })} label="Name" autofocus placeholder="XYZ LTD"></ir-input>
+        <ir-input value={this.formData.company_tax_nbr} onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })} label="Tax ID" placeholder="VAT 123456"></ir-input>
       </form>
     );
   }

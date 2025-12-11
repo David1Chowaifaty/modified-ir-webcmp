@@ -13,7 +13,9 @@ export class IrEmptyState {
         <slot name="icon">
           <wa-icon name="ban" style={{ transform: 'rotate(90deg)', fontSize: '2rem' }}></wa-icon>
         </slot>
-        <p part="message">No records found</p>
+        <p part="message" class="message">
+          No records found
+        </p>
         <slot></slot>
       </Host>
     );

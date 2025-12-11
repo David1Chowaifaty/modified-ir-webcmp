@@ -366,7 +366,7 @@ export class IrPaymentFolioForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur"
         >
-          <ir-custom-input
+          <ir-input
             id={this.controlIds.amount}
             aria-invalid={String(!!this.errors?.amount)}
             value={this.folioData?.amount?.toString() ?? ''}
@@ -376,7 +376,7 @@ export class IrPaymentFolioForm {
             onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
           >
             <span slot="start">{calendar_data.currency.symbol}</span>
-          </ir-custom-input>
+          </ir-input>
         </ir-validator>
         <ir-validator
           value={this.folioData?.reference ?? ''}
@@ -385,13 +385,13 @@ export class IrPaymentFolioForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur"
         >
-          <ir-custom-input
+          <ir-input
             id={this.controlIds.reference}
             value={this.folioData?.reference ?? ''}
             label="Reference"
             maxlength={50}
             onText-change={e => this.updateFolioData({ reference: e.detail ?? '' })}
-          ></ir-custom-input>
+          ></ir-input>
         </ir-validator>
       </form>
     );

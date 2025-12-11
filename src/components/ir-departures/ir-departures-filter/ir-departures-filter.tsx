@@ -24,9 +24,8 @@ export class IrDeparturesFilter {
           class="departures-filters__date-picker"
         >
           <wa-icon name="calendar" slot="start"></wa-icon>
-          {/* <wa-spinner slot="end"></wa-spinner> */}
         </ir-custom-date-picker>
-        <ir-custom-input
+        <ir-input
           withClear
           class="departures-filters__search-bar"
           placeholder="Search guests or bookings"
@@ -34,7 +33,7 @@ export class IrDeparturesFilter {
           onText-change={this.handleSearchChange}
         >
           <wa-icon name="magnifying-glass" slot="start"></wa-icon>
-        </ir-custom-input>
+        </ir-input>
       </div>
     );
   }

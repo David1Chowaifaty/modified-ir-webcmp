@@ -223,7 +223,7 @@ export class IrRoomGuestsForm {
                         First name
                       </label>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.first_name}>
-                        <ir-custom-input
+                        <ir-input
                           aria-invalid={String(!!this.error['first_name'] && !isRowValid)}
                           size="small"
                           id={`first_name_${idx}`}
@@ -231,13 +231,13 @@ export class IrRoomGuestsForm {
                           onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
                           value={guest.first_name}
                           maxlength={40}
-                        ></ir-custom-input>
+                        ></ir-input>
                       </ir-validator>
                     </div>
                     <div class="room-guest__section">
                       <label class="guest_label">Last name</label>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.last_name}>
-                        <ir-custom-input
+                        <ir-input
                           aria-invalid={String(!!this.error['last_name'] && !isRowValid)}
                           size="small"
                           id={`last_name_${idx}`}
@@ -245,13 +245,13 @@ export class IrRoomGuestsForm {
                           onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
                           value={guest.last_name}
                           maxlength={40}
-                        ></ir-custom-input>
+                        ></ir-input>
                       </ir-validator>
                     </div>
                     <div class="room-guest__section">
                       <p class="guest_label">{locales.entries.Lcz_DOB}</p>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.dob}>
-                        <ir-custom-input
+                        <ir-input
                           aria-invalid={String(!!this.error['dob'] && !isRowValid)}
                           id={`dob_${idx}`}
                           mask={dateMask}
@@ -261,7 +261,7 @@ export class IrRoomGuestsForm {
                             this.updateGuestInfo(idx, { dob: e.detail });
                           }}
                           value={guest.dob}
-                        ></ir-custom-input>
+                        ></ir-input>
                       </ir-validator>
                     </div>
                     <div class="room-guest__section">

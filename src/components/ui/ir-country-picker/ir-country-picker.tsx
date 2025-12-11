@@ -1,6 +1,6 @@
 import { ICountry } from '@/models/IBooking';
 import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
-import { NativeWaInput } from '../ir-custom-input/ir-custom-input';
+import { NativeWaInput } from '../ir-input/ir-input';
 
 @Component({
   tag: 'ir-country-picker',

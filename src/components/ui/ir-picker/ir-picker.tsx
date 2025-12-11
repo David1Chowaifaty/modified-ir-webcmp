@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Listen, Method, State, Watch, h, Host, Prop } from '@stencil/core';
 import WaInput from '@awesome.me/webawesome/dist/components/input/input.js';
-import { NativeWaInput } from '../ir-custom-input/ir-custom-input';
+import { NativeWaInput } from '../ir-input/ir-input';
 
 export interface IrComboboxOption {
   value: string;

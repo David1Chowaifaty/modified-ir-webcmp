@@ -121,7 +121,7 @@ export class IrExtraServiceConfigForm {
         ></ir-custom-date-picker>
         {/* Prices and cost */}
         <ir-validator value={this.s_service?.price ?? null} schema={ExtraServiceSchema.shape.price}>
-          <ir-custom-input
+          <ir-input
             onText-change={e => {
               this.updateService({ price: Number(e.detail) });
             }}
@@ -132,10 +132,10 @@ export class IrExtraServiceConfigForm {
             label={locales.entries.Lcz_Price}
           >
             <span slot="start">{this.booking.currency.symbol}</span>
-          </ir-custom-input>
+          </ir-input>
         </ir-validator>
         <ir-validator value={this.s_service?.cost ?? null} schema={ExtraServiceSchema.shape.cost}>
-          <ir-custom-input
+          <ir-input
             defaultValue={this.s_service?.cost?.toString()}
             onText-change={e => this.updateService({ cost: Number(e.detail) })}
             value={this.s_service?.cost?.toString()}
@@ -143,7 +143,7 @@ export class IrExtraServiceConfigForm {
             label={locales.entries.Lcz_Cost}
           >
             <span slot="start">{this.booking.currency.symbol}</span>
-          </ir-custom-input>
+          </ir-input>
         </ir-validator>
       </form>
     );

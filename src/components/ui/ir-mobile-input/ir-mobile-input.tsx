@@ -2,7 +2,7 @@ import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@st
 import IMask, { FactoryArg, InputMask } from 'imask';
 import { masks } from './countries_masks';
 import { ICountry } from '@/models/IBooking';
-import { NativeWaInput } from '../ir-custom-input/ir-custom-input';
+import { NativeWaInput } from '../ir-input/ir-input';
 
 export interface IrMobileInputChangeDetail {
   country: ICountry;

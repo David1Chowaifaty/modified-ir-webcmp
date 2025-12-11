@@ -118,14 +118,7 @@ export class IrSecureTasks {
                 AName
               </label>
               <div class="secure-header__aname-input">
-                <ir-custom-input
-                  id="aname-input"
-                  type="text"
-                  value={this.inputValue}
-                  onText-change={e => (this.inputValue = e.detail)}
-                  placeholder="AName"
-                  aria-label="AName"
-                ></ir-custom-input>
+                <ir-input id="aname-input" type="text" value={this.inputValue} onText-change={e => (this.inputValue = e.detail)} placeholder="AName" aria-label="AName"></ir-input>
                 <ir-custom-button variant="brand" type="submit" id="button-save">
                   Save
                 </ir-custom-button>

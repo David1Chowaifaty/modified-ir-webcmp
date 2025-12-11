@@ -31,13 +31,13 @@ export class IrGuestInfoForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur blur"
         >
-          <ir-custom-input
+          <ir-input
             id={'firstName'}
             value={this.guest?.first_name}
             required
             onText-change={e => this.handleInputChange({ first_name: e.detail })}
             label={locales.entries?.Lcz_FirstName}
-          ></ir-custom-input>
+          ></ir-input>
         </ir-validator>
         <ir-validator
           schema={guestInfoFormSchema.shape.last_name}
@@ -46,13 +46,13 @@ export class IrGuestInfoForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur blur"
         >
-          <ir-custom-input
+          <ir-input
             value={this.guest?.last_name}
             required
             id="lastName"
             onText-change={e => this.handleInputChange({ last_name: e.detail })}
             label={locales.entries?.Lcz_LastName}
-          ></ir-custom-input>
+          ></ir-input>
         </ir-validator>
         <ir-validator
           schema={guestInfoFormSchema.shape.email}
@@ -61,13 +61,7 @@ export class IrGuestInfoForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur blur"
         >
-          <ir-custom-input
-            label={locales.entries?.Lcz_Email}
-            id="email"
-            value={this.guest?.email}
-            required
-            onText-change={e => this.handleInputChange({ email: e.detail })}
-          ></ir-custom-input>
+          <ir-input label={locales.entries?.Lcz_Email} id="email" value={this.guest?.email} required onText-change={e => this.handleInputChange({ email: e.detail })}></ir-input>
         </ir-validator>
         <ir-validator
           schema={guestInfoFormSchema.shape.alternative_email}
@@ -76,12 +70,12 @@ export class IrGuestInfoForm {
           valueEvent="text-change input input-change"
           blurEvent="input-blur blur"
         >
-          <ir-custom-input
+          <ir-input
             label={locales.entries?.Lcz_AlternativeEmail}
             id="altEmail"
             value={this.guest?.alternative_email}
             onText-change={e => this.handleInputChange({ alternative_email: e.detail })}
-          ></ir-custom-input>
+          ></ir-input>
         </ir-validator>
 
         <ir-validator schema={guestInfoFormSchema.shape.country_id} value={this.guest?.country_id ?? undefined} autovalidate={this.autoValidate} valueEvent="countryChange">

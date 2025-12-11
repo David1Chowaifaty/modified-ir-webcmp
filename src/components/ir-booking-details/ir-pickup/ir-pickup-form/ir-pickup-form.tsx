@@ -270,14 +270,14 @@ export class IrPickupForm {
               valueEvent="text-change input input-change"
               blurEvent="input-blur blur"
             >
-              <ir-custom-input
+              <ir-input
                 value={this.pickupData.arrival_time}
                 onText-change={e => {
                   this.updatePickupData('arrival_time', e.detail);
                 }}
                 mask={'time'}
                 label={locales.entries.Lcz_Time}
-              ></ir-custom-input>
+              ></ir-input>
             </ir-validator>
             <ir-validator
               schema={this.pickupSchema.shape.flight_details}
@@ -286,11 +286,11 @@ export class IrPickupForm {
               valueEvent="text-change input input-change"
               blurEvent="input-blur blur"
             >
-              <ir-custom-input
+              <ir-input
                 onText-change={e => this.updatePickupData('flight_details', e.detail)}
                 value={this.pickupData.flight_details}
                 label={locales.entries.Lcz_FlightDetails}
-              ></ir-custom-input>
+              ></ir-input>
             </ir-validator>
             <ir-validator
               schema={this.pickupSchema.shape.vehicle_type_code}
@@ -335,9 +335,9 @@ export class IrPickupForm {
                 ))}
               </wa-select>
             </ir-validator>
-            <ir-custom-input mask={'price'} readonly label={`${locales.entries.Lcz_DueUponBooking}`} value={this.pickupData.due_upon_booking}>
+            <ir-input mask={'price'} readonly label={`${locales.entries.Lcz_DueUponBooking}`} value={this.pickupData.due_upon_booking}>
               <span slot="start">{this.pickupData.currency?.symbol}</span>
-            </ir-custom-input>
+            </ir-input>
           </div>
         )}
       </form>

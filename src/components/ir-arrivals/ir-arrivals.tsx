@@ -199,7 +199,7 @@ export class IrArrivals {
         <ir-interceptor handledEndpoints={['/Get_Rooms_To_Check_in']}></ir-interceptor>
         <div class="ir-page__container">
           <h3 class="page-title">Arrivals</h3>
-          <ir-arrivals-filters></ir-arrivals-filters>
+          {/* <ir-arrivals-filters></ir-arrivals-filters> */}
           <ir-arrivals-table
             onCheckInRoom={event => this.handleCheckingRoom(event as CustomEvent<RoomGuestsPayload>)}
             onRequestPageChange={event => this.handlePaginationChange(event as CustomEvent<PaginationChangeEvent>)}
