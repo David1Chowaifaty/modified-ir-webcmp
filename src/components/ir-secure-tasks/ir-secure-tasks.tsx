@@ -20,13 +20,13 @@ export type SecureScreens =
   shadow: false,
 })
 export class IrSecureTasks {
-  @Prop() propertyid: number;
+  @Prop({ mutable: true }) propertyid: number;
   @Prop() p: string;
   @Prop() bookingNumber: string;
   @Prop() ticket: string;
 
   @State() isAuthenticated: boolean = false;
-  @State() currentPage: SecureScreens;
+  @State() currentPage: SecureScreens = 'front';
   @State() inputValue: string;
 
   private token = new Token();
@@ -99,7 +99,7 @@ export class IrSecureTasks {
         </Host>
       );
     return (
-      <div class={'ir-page__container'}>
+      <div class={'ir-page__container p-0'}>
         <section class="secure-header">
           <div class="secure-header__top">
             <form
@@ -174,15 +174,17 @@ export class IrSecureTasks {
 
       case 'front':
         return (
-          <igloo-calendar
-            currencyName="USD"
-            propertyid={this.propertyid}
-            p={this.p}
-            ticket={this.token.getToken()}
-            from_date={this.dates.from_date}
-            to_date={this.dates.to_date}
-            language="en"
-          ></igloo-calendar>
+          <div style={{ flex: '1 1 0%', display: 'block', background: 'red' }}>
+            <igloo-calendar
+              currencyName="USD"
+              propertyid={this.propertyid}
+              p={this.p}
+              ticket={this.token.getToken()}
+              from_date={this.dates.from_date}
+              to_date={this.dates.to_date}
+              language="en"
+            ></igloo-calendar>
+          </div>
         );
       case 'hk':
         return <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>;
@@ -201,9 +203,9 @@ export class IrSecureTasks {
       case 'channel-sales':
         return <ir-sales-by-channel language="en" propertyid={this.propertyid.toString()} ticket={this.token.getToken()}></ir-sales-by-channel>;
       case 'arrivals':
-        return <ir-arrivals language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-arrivals>;
+        return <ir-arrivals p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-arrivals>;
       case 'departures':
-        return <ir-departures language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-departures>;
+        return <ir-departures p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-departures>;
       default:
         return null;
     }

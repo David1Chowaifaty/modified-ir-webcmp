@@ -12,10 +12,18 @@
 .active {
   color: var(--blue);
 }
+.ir-page__container {
+  background: #f4f5fa;
+  height: 100%;
+  gap: 0 !important;
+}
 .secure-header {
   background: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 .secure-header__top {
   display: flex;

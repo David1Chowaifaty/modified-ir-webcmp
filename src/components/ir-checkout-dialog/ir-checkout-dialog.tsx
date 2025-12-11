@@ -108,7 +108,7 @@ export class IrCheckoutDialog {
           {/* {!this.isLoading && ( */}
           <Fragment>
             <ir-custom-button size="medium" data-dialog="close" appearance="filled" variant="neutral">
-              {locales.entries.Lcz_Cancel}
+              {locales?.entries?.Lcz_Cancel ?? 'Cancel'}
             </ir-custom-button>
             {this.buttons.has('checkout') && (
               <ir-custom-button

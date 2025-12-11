@@ -93,11 +93,11 @@ export class IrRoomGuests {
         )}
         <div slot="footer" class="ir__drawer-footer">
           <ir-custom-button size="medium" data-drawer="close" appearance="filled" variant="neutral">
-            {locales?.entries?.Lcz_Cancel}
+            {locales?.entries?.Lcz_Cancel ?? 'Save'}
           </ir-custom-button>
 
           <ir-custom-button loading={isRequestPending('/Handle_Exposed_Room_Guests')} size="medium" form={`room-guests__${this.identifier}`} type="submit" variant="brand">
-            {this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
+            {this.checkIn ? locales.entries?.Lcz_CheckIn ?? 'Check in' : locales?.entries?.Lcz_Save ?? 'Save'}
           </ir-custom-button>
         </div>
       </ir-drawer>
