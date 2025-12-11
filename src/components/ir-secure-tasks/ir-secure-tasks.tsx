@@ -100,64 +100,65 @@ export class IrSecureTasks {
       );
     return (
       <Host>
-        <div class="px-1 nav flex-column flex-sm-row d-flex align-items-center justify-content-between">
-          <div class="d-flex  align-items-center">
-            <div class="d-flex align-items-center p-0 m-0" style={{ gap: '0.5rem' }}>
-              <h4 class="m-0 p-0">AName: </h4>
-              <form
-                class="input-group"
-                onSubmit={e => {
-                  e.preventDefault();
-                  if (this.inputValue) {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('aname', this.inputValue);
-                    window.history.pushState({}, '', url);
-                  }
-                  this.logout();
-                }}
-              >
-                <input
+        <section class="secure-header">
+          <div class="secure-header__top">
+            <form
+              class="secure-header__aname"
+              onSubmit={e => {
+                e.preventDefault();
+                if (this.inputValue) {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set('aname', this.inputValue);
+                  window.history.pushState({}, '', url);
+                }
+                this.logout();
+              }}
+            >
+              <label class="secure-header__label" htmlFor="aname-input">
+                AName
+              </label>
+              <div class="secure-header__aname-input">
+                <ir-custom-input
+                  id="aname-input"
                   type="text"
                   value={this.inputValue}
-                  onInput={e => (this.inputValue = (e.target as HTMLInputElement).value)}
-                  style={{ maxWidth: '60px' }}
-                  class="form-control"
+                  onText-change={e => (this.inputValue = e.detail)}
                   placeholder="AName"
                   aria-label="AName"
-                  aria-describedby="button-save"
-                ></input>
-                <div class="input-group-append">
-                  <button class="btn btn-sm btn-outline-secondary" type="submit" id="button-save">
-                    save
-                  </button>
-                </div>
-              </form>
-            </div>
-            <ul class="nav  m-0 p-0">
+                ></ir-custom-input>
+                <ir-custom-button variant="brand" type="submit" id="button-save">
+                  Save
+                </ir-custom-button>
+              </div>
+            </form>
+            <ir-custom-button
+              variant="danger"
+              onClick={() => {
+                this.logout();
+              }}
+            >
+              Logout
+            </ir-custom-button>
+          </div>
+          <nav class="secure-header__tabs" aria-label="Secure screens navigation">
+            <ul class="secure-tabs">
               {this.routes.map(route => (
-                <li key={route.name} class=" nav-item">
-                  <a
-                    class={{ 'nav-link': true, 'active': this.currentPage === route.value }}
-                    href="#"
+                <li key={route.name} class="secure-tabs__item">
+                  <button
+                    type="button"
+                    class={{ 'secure-tabs__btn': true, 'active': this.currentPage === route.value }}
+                    aria-current={this.currentPage === route.value ? 'page' : undefined}
                     onClick={() => {
                       this.currentPage = route.value;
                     }}
                   >
                     {route.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
-          </div>
-          <button
-            class="btn btn-sm btn-primary"
-            onClick={() => {
-              this.logout();
-            }}
-          >
-            Logout
-          </button>
-        </div>
+          </nav>
+        </section>
         {this.renderPage()}
       </Host>
     );
