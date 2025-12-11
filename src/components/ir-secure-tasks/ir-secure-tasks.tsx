@@ -1,7 +1,19 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-export type SecureScreens = 'hk' | 'tasks' | 'daily-revenue' | 'front' | 'users' | 'email-logs' | 'country-sales' | 'daily-occupancy' | 'booking-listing' | 'channel-sales';
+export type SecureScreens =
+  | 'hk'
+  | 'tasks'
+  | 'daily-revenue'
+  | 'arrivals'
+  | 'departures'
+  | 'front'
+  | 'users'
+  | 'email-logs'
+  | 'country-sales'
+  | 'daily-occupancy'
+  | 'booking-listing'
+  | 'channel-sales';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
@@ -70,6 +82,8 @@ export class IrSecureTasks {
     { name: 'Email logs', value: 'email-logs' },
     { name: 'Booking Listing', value: 'booking-listing' },
     { name: 'Sales by Channel', value: 'channel-sales' },
+    { name: 'Arrivals', value: 'arrivals' },
+    { name: 'Departures', value: 'departures' },
   ];
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
@@ -185,7 +199,10 @@ export class IrSecureTasks {
         return <ir-booking-listing p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-booking-listing>;
       case 'channel-sales':
         return <ir-sales-by-channel language="en" propertyid={this.propertyid.toString()} ticket={this.token.getToken()}></ir-sales-by-channel>;
-
+      case 'arrivals':
+        return <ir-arrivals language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-arrivals>;
+      case 'departures':
+        return <ir-departures language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-departures>;
       default:
         return null;
     }

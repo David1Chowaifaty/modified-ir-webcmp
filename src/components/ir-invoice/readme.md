@@ -64,6 +64,7 @@ Resolves once the drawer state is updated.
 ### Used by
 
  - [ir-billing](../ir-billing)
+ - [ir-departures](../ir-departures)
  - [ir-room](../ir-booking-details/ir-room)
  - [ir-test2-cmp](../ir-test-cmp)
 
@@ -89,6 +90,7 @@ graph TD;
   ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-custom-input
   ir-billing --> ir-invoice
+  ir-departures --> ir-invoice
   ir-room --> ir-invoice
   ir-test2-cmp --> ir-invoice
   style ir-invoice fill:#f9f,stroke:#333,stroke-width:4px

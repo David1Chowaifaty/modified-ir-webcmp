@@ -16,15 +16,16 @@
 
 ## Events
 
-| Event                  | Description | Type                                                  |
-| ---------------------- | ----------- | ----------------------------------------------------- |
-| `checkoutDialogClosed` |             | `CustomEvent<{ reason: "dialog" \| "openInvoice"; }>` |
+| Event                  | Description | Type                                                                |
+| ---------------------- | ----------- | ------------------------------------------------------------------- |
+| `checkoutDialogClosed` |             | `CustomEvent<{ reason: "cancel" \| "checkout" \| "openInvoice"; }>` |
 
 
 ## Dependencies
 
 ### Used by
 
+ - [ir-departures](../ir-departures)
  - [ir-room](../ir-booking-details/ir-room)
 
 ### Depends on
@@ -39,6 +40,7 @@ graph TD;
   ir-checkout-dialog --> ir-dialog
   ir-checkout-dialog --> ir-spinner
   ir-checkout-dialog --> ir-custom-button
+  ir-departures --> ir-checkout-dialog
   ir-room --> ir-checkout-dialog
   style ir-checkout-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```

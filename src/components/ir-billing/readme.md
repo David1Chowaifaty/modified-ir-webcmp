@@ -29,6 +29,7 @@
 
 - [ir-spinner](../ui/ir-spinner)
 - [ir-custom-button](../ui/ir-custom-button)
+- [ir-empty-state](../ir-empty-state)
 - [ir-invoice](../ir-invoice)
 - [ir-dialog](../ui/ir-dialog)
 
@@ -37,6 +38,7 @@
 graph TD;
   ir-billing --> ir-spinner
   ir-billing --> ir-custom-button
+  ir-billing --> ir-empty-state
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
   ir-invoice --> ir-drawer

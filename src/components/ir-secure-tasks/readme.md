@@ -30,6 +30,8 @@
 - [ir-booking-email-logs](../ir-booking-email-logs)
 - [ir-booking-listing](../ir-booking-listing)
 - [ir-sales-by-channel](../ir-sales-by-channel)
+- [ir-arrivals](../ir-arrivals)
+- [ir-departures](../ir-departures)
 
 ### Graph
 ```mermaid
@@ -45,6 +47,8 @@ graph TD;
   ir-secure-tasks --> ir-booking-email-logs
   ir-secure-tasks --> ir-booking-listing
   ir-secure-tasks --> ir-sales-by-channel
+  ir-secure-tasks --> ir-arrivals
+  ir-secure-tasks --> ir-departures
   ir-login --> ir-interceptor
   ir-login --> ir-toast
   ir-login --> ir-input-text
@@ -192,6 +196,7 @@ graph TD;
   ir-billing-drawer --> ir-billing
   ir-billing --> ir-spinner
   ir-billing --> ir-custom-button
+  ir-billing --> ir-empty-state
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
   ir-guest-info-drawer --> ir-drawer
@@ -458,6 +463,46 @@ graph TD;
   ir-filters-panel --> ir-button
   ir-sales-by-channel-table --> ir-progress-indicator
   ir-sales-by-channel-table --> ir-button
+  ir-arrivals --> ir-loading-screen
+  ir-arrivals --> ir-toast
+  ir-arrivals --> ir-interceptor
+  ir-arrivals --> ir-arrivals-filters
+  ir-arrivals --> ir-arrivals-table
+  ir-arrivals --> ir-drawer
+  ir-arrivals --> ir-booking-details
+  ir-arrivals --> ir-payment-folio
+  ir-arrivals --> ir-room-guests
+  ir-arrivals-filters --> ir-custom-date-picker
+  ir-arrivals-filters --> ir-custom-input
+  ir-arrivals-table --> ir-booking-number-cell
+  ir-arrivals-table --> ir-booked-by-cell
+  ir-arrivals-table --> ir-guest-name-cell
+  ir-arrivals-table --> ir-unit-cell
+  ir-arrivals-table --> ir-dates-cell
+  ir-arrivals-table --> ir-balance-cell
+  ir-arrivals-table --> ir-actions-cell
+  ir-arrivals-table --> ir-pagination
+  ir-departures --> ir-loading-screen
+  ir-departures --> ir-toast
+  ir-departures --> ir-interceptor
+  ir-departures --> ir-departures-filter
+  ir-departures --> ir-departures-table
+  ir-departures --> ir-drawer
+  ir-departures --> ir-booking-details
+  ir-departures --> ir-payment-folio
+  ir-departures --> ir-checkout-dialog
+  ir-departures --> ir-invoice
+  ir-departures-filter --> ir-custom-date-picker
+  ir-departures-filter --> ir-custom-input
+  ir-departures-table --> ir-booking-number-cell
+  ir-departures-table --> ir-booked-by-cell
+  ir-departures-table --> ir-guest-name-cell
+  ir-departures-table --> ir-unit-cell
+  ir-departures-table --> ir-dates-cell
+  ir-departures-table --> ir-balance-cell
+  ir-departures-table --> ir-actions-cell
+  ir-departures-table --> ir-empty-state
+  ir-departures-table --> ir-pagination
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

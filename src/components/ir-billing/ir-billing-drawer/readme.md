@@ -38,6 +38,7 @@ graph TD;
   ir-billing-drawer --> ir-billing
   ir-billing --> ir-spinner
   ir-billing --> ir-custom-button
+  ir-billing --> ir-empty-state
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
   ir-invoice --> ir-drawer

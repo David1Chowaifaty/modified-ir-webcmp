@@ -17,6 +17,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-secure-tasks](../ir-secure-tasks)
+
 ### Depends on
 
 - [ir-loading-screen](../ir-loading-screen)
@@ -27,6 +31,8 @@
 - [ir-drawer](../ir-drawer)
 - [ir-booking-details](../ir-booking-details)
 - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+- [ir-checkout-dialog](../ir-checkout-dialog)
+- [ir-invoice](../ir-invoice)
 
 ### Graph
 ```mermaid
@@ -39,6 +45,8 @@ graph TD;
   ir-departures --> ir-drawer
   ir-departures --> ir-booking-details
   ir-departures --> ir-payment-folio
+  ir-departures --> ir-checkout-dialog
+  ir-departures --> ir-invoice
   ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
@@ -55,6 +63,7 @@ graph TD;
   ir-departures-table --> ir-dates-cell
   ir-departures-table --> ir-balance-cell
   ir-departures-table --> ir-actions-cell
+  ir-departures-table --> ir-empty-state
   ir-departures-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
@@ -164,6 +173,7 @@ graph TD;
   ir-billing-drawer --> ir-billing
   ir-billing --> ir-spinner
   ir-billing --> ir-custom-button
+  ir-billing --> ir-empty-state
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
   ir-guest-info-drawer --> ir-drawer
@@ -208,6 +218,7 @@ graph TD;
   igl-property-booked-by --> ir-select
   ir-phone-input --> ir-combobox
   igl-book-property-footer --> ir-button
+  ir-secure-tasks --> ir-departures
   style ir-departures fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

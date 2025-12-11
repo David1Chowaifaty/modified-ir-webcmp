@@ -7,15 +7,20 @@
 
 ## Properties
 
-| Property     | Attribute    | Description | Type     | Default     |
-| ------------ | ------------ | ----------- | -------- | ----------- |
-| `language`   | `language`   |             | `string` | `'en'`      |
-| `p`          | `p`          |             | `string` | `undefined` |
-| `propertyid` | `propertyid` |             | `number` | `undefined` |
-| `ticket`     | `ticket`     |             | `string` | `undefined` |
+| Property     | Attribute    | Description                                                                                                                           | Type     | Default     |
+| ------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
+| `language`   | `language`   | Two-letter language code (ISO) used for translations and API locale. Defaults to `'en'`.                                              | `string` | `'en'`      |
+| `p`          | `p`          | Property alias or short identifier used by backend endpoints (aname). Passed to `getExposedProperty` when initializing the component. | `string` | `undefined` |
+| `pageSize`   | `page-size`  | Number of arrivals to load per page in the arrivals table. Used to configure pagination via Arrivals Store. Defaults to `20`.         | `number` | `20`        |
+| `propertyid` | `propertyid` | ID of the property (hotel) for which arrivals should be displayed. Used in API calls related to rooms, bookings, and check-ins.       | `number` | `undefined` |
+| `ticket`     | `ticket`     | Authentication token issued by the PMS backend. Required for initializing the component and making API calls.                         | `string` | `undefined` |
 
 
 ## Dependencies
+
+### Used by
+
+ - [ir-secure-tasks](../ir-secure-tasks)
 
 ### Depends on
 
@@ -166,6 +171,7 @@ graph TD;
   ir-billing-drawer --> ir-billing
   ir-billing --> ir-spinner
   ir-billing --> ir-custom-button
+  ir-billing --> ir-empty-state
   ir-billing --> ir-invoice
   ir-billing --> ir-dialog
   ir-guest-info-drawer --> ir-drawer
@@ -210,6 +216,7 @@ graph TD;
   igl-property-booked-by --> ir-select
   ir-phone-input --> ir-combobox
   igl-book-property-footer --> ir-button
+  ir-secure-tasks --> ir-arrivals
   style ir-arrivals fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
