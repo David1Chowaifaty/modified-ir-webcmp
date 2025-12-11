@@ -23,7 +23,6 @@
 
  - [igl-application-info](../../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
  - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
- - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-monthly-bookings-report-table](../../ir-monthly-bookings-report/ir-monthly-bookings-report-table)
 
@@ -32,7 +31,6 @@
 graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-tooltip
-  igl-rate-plan --> ir-tooltip
   ir-hk-archive --> ir-tooltip
   ir-monthly-bookings-report-table --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px

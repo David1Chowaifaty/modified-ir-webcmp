@@ -50,15 +50,14 @@
 graph TD;
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-book-property-header --> ir-autocomplete
-  igl-book-property-header --> ir-select
-  igl-book-property-header --> ir-button
+  igl-book-property-header --> ir-picker
+  igl-book-property-header --> ir-picker-item
+  igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  ir-button --> ir-icons
   igl-date-range --> ir-date-range
   igl-room-type --> igl-rate-plan
-  igl-rate-plan --> ir-tooltip
-  igl-rate-plan --> ir-price-input
+  igl-rate-plan --> ir-input
+  igl-rate-plan --> ir-custom-button
   igl-book-property --> igl-booking-overview-page
   style igl-booking-overview-page fill:#f9f,stroke:#333,stroke-width:4px
 ```

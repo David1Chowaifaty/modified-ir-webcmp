@@ -59,6 +59,7 @@
 
 ### Used by
 
+ - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-arrivals-filters](../../ir-arrivals/ir-arrivals-filters)
  - [ir-booking-company-form](../../ir-booking-company-dialog/ir-booking-company-form)
  - [ir-custom-date-picker](../../ir-custom-date-picker)
@@ -74,6 +75,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-rate-plan --> ir-input
   ir-arrivals-filters --> ir-input
   ir-booking-company-form --> ir-input
   ir-custom-date-picker --> ir-input

@@ -34,14 +34,14 @@
 
 ### Depends on
 
-- [ir-tooltip](../../../../../ui/ir-tooltip)
-- [ir-price-input](../../../../../ui/ir-price-input)
+- [ir-input](../../../../../ui/ir-input)
+- [ir-custom-button](../../../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-rate-plan --> ir-tooltip
-  igl-rate-plan --> ir-price-input
+  igl-rate-plan --> ir-input
+  igl-rate-plan --> ir-custom-button
   igl-room-type --> igl-rate-plan
   style igl-rate-plan fill:#f9f,stroke:#333,stroke-width:4px
 ```

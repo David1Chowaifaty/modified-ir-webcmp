@@ -28,12 +28,14 @@
 
 ### Used by
 
+ - [igl-book-property-header](../../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-cal-header](../../../igloo-calendar/igl-cal-header)
  - [ir-country-picker](../../ir-country-picker)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property-header --> ir-picker-item
   igl-cal-header --> ir-picker-item
   ir-country-picker --> ir-picker-item
   style ir-picker-item fill:#f9f,stroke:#333,stroke-width:4px

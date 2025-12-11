@@ -42,13 +42,11 @@
 
 ### Used by
 
- - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-rate-plan --> ir-price-input
   ir-room-nights --> ir-price-input
   style ir-price-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
