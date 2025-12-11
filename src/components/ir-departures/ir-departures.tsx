@@ -122,12 +122,16 @@ export class IrDepartures {
   private async handleCheckoutDialogClosed(event: CustomEvent<CheckoutDialogCloseEvent>) {
     event.stopImmediatePropagation();
     event.stopPropagation();
-    if (event.detail.reason === 'openInvoice') {
-      this.invoiceState = { ...this.checkoutState };
-    }
+    const state = { ...this.checkoutState };
     this.checkoutState = null;
-    if (event.detail.reason === 'checkout') {
-      await this.getBookings();
+    switch (event.detail.reason) {
+      case 'checkout':
+        await this.getBookings();
+        break;
+      case 'openInvoice':
+        this.invoiceState = { ...state };
+        await this.getBookings();
+        break;
     }
   }
 
@@ -145,7 +149,11 @@ export class IrDepartures {
     setDeparturesPageSize(normalizedPageSize);
     await this.getBookings();
   }
-
+  private handleInvoiceClose(event: CustomEvent<void>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.invoiceState = null;
+  }
   render() {
     if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -215,7 +223,12 @@ export class IrDepartures {
           open={this.checkoutState !== null}
           onCheckoutDialogClosed={event => this.handleCheckoutDialogClosed(event as CustomEvent<CheckoutDialogCloseEvent>)}
         ></ir-checkout-dialog>
-        <ir-invoice booking={this.invoiceState?.booking} roomIdentifier={this.invoiceState?.identifier} open={this.invoiceState !== null}></ir-invoice>
+        <ir-invoice
+          onInvoiceClose={event => this.handleInvoiceClose(event as CustomEvent<void>)}
+          booking={this.invoiceState?.booking}
+          roomIdentifier={this.invoiceState?.identifier}
+          open={this.invoiceState !== null}
+        ></ir-invoice>
       </Host>
     );
   }

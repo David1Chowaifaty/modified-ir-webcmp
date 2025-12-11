@@ -125,7 +125,6 @@ export function setDeparturesReferenceDate(date: string | Date) {
 
 function runDeparturesPipeline() {
   const searchedBookings = filterBookingsBySearch(departuresStore.searchTerm);
-  console.log(searchedBookings);
   departuresStore.filteredBookings = searchedBookings;
   departuresStore.paginatedBookings = searchedBookings;
 
