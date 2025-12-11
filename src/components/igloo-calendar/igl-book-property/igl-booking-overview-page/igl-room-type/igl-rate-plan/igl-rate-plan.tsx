@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { RatePlan, Variation } from '@/models/property';
 import booking_store, { IRatePlanSelection, reserveRooms, resetReserved, updateRoomParams } from '@/stores/booking.store';
-import WaRadio from '@awesome.me/webawesome/dist/components/radio/radio';
 
 @Component({
   tag: 'igl-rate-plan',
@@ -22,11 +21,6 @@ export class IglRatePlan {
   @Prop() visibleInventory!: IRatePlanSelection;
 
   @Event() buttonClicked!: EventEmitter<{ [key: string]: any }>;
-  private radioRef: WaRadio;
-
-  componentDidLoad() {
-    this.radioRef.name = 'ratePlanGroup';
-  }
 
   // Determine if the form inputs should be disabled
   private disableForm(): boolean {
