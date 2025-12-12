@@ -225,3 +225,30 @@ export const PrintInvoicePropsSchema = z.object({
   invoice: InvoiceSchema.optional(),
 });
 export type PrintInvoiceProps = z.infer<typeof PrintInvoicePropsSchema>;
+
+export const ExposedGuestSchema = z.object({
+  address: z.null(),
+  alternative_email: z.null(),
+  cci: z.null(),
+  city: z.null(),
+  country: z.null(),
+  country_id: z.number(),
+  country_phone_prefix: z.string(),
+  dob: z.null(),
+  email: z.string(),
+  first_name: z.string(),
+  id: z.number(),
+  id_info: z.null(),
+  is_main: z.boolean(),
+  last_name: z.string(),
+  mobile: z.string(),
+  mobile_without_prefix: z.string(),
+  nbr_confirmed_bookings: z.number(),
+  notes: z.null(),
+  password: z.null(),
+  subscribe_to_news_letter: z.null(),
+});
+export type ExposedGuest = z.infer<typeof ExposedGuestSchema>;
+
+export const ExposedGuestsSchema = z.array(ExposedGuestSchema);
+export type ExposedGuests = z.infer<typeof ExposedGuestsSchema>;

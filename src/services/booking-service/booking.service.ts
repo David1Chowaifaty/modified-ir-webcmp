@@ -551,6 +551,7 @@ import calendar_data from '@/stores/calendar-data';
 import { PaymentEntries } from '@/components/ir-booking-details/types';
 import { z } from 'zod';
 import {
+  ExposedGuests,
   GetBookingInvoiceInfoProps,
   GetBookingInvoiceInfoPropsSchema,
   GetRoomsToCheckInProps,
@@ -1103,7 +1104,7 @@ export class BookingService {
     }
     return +rate / +totalNights;
   }
-  public async fetchExposedGuest(email: string, property_id: number) {
+  public async fetchExposedGuest(email: string, property_id: number): Promise<ExposedGuests> {
     try {
       const { data } = await axios.post(`/Fetch_Exposed_Guests`, {
         email,

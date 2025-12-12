@@ -58,7 +58,7 @@ export class IglBookPropertyHeader {
   private getSplitBookingList() {
     return (
       <ir-picker
-        mode="select"
+        mode="select-async"
         class="sourceContainer"
         debounce={300}
         onText-change={e => {

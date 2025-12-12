@@ -2344,7 +2344,7 @@ export namespace Components {
         "appearance": NativeWaInput['appearance'];
         "close": () => Promise<void>;
         /**
-          * Delay (in milliseconds) before filtering results after user input.
+          * Delay (in milliseconds) before emitting the `text-change` event. Defaults to 300ms for async mode.
          */
         "debounce": number;
         /**
@@ -2356,7 +2356,7 @@ export namespace Components {
          */
         "label"?: string;
         "loading": boolean;
-        "mode": 'select' | 'default';
+        "mode": 'select' | 'default' | 'select-async';
         "open": () => Promise<void>;
         "pill": boolean;
         /**
@@ -2371,6 +2371,11 @@ export namespace Components {
           * Selected value (also shown in the input when `mode="select"`).
          */
         "value": string;
+        /**
+          * Whether to show a clear button inside the input. When clicked, the input value is cleared and the `combobox-clear` event is emitted.
+          * @default false
+         */
+        "withClear": boolean;
     }
     interface IrPickerItem {
         "active": boolean;
@@ -5907,6 +5912,7 @@ declare global {
     interface HTMLIrPickerElementEventMap {
         "combobox-select": IrComboboxSelectEventDetail;
         "text-change": string;
+        "combobox-clear": void;
     }
     interface HTMLIrPickerElement extends Components.IrPicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickerElementEventMap>(type: K, listener: (this: HTMLIrPickerElement, ev: IrPickerCustomEvent<HTMLIrPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9404,7 +9410,7 @@ declare namespace LocalJSX {
          */
         "appearance"?: NativeWaInput['appearance'];
         /**
-          * Delay (in milliseconds) before filtering results after user input.
+          * Delay (in milliseconds) before emitting the `text-change` event. Defaults to 300ms for async mode.
          */
         "debounce"?: number;
         /**
@@ -9416,7 +9422,11 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         "loading"?: boolean;
-        "mode"?: 'select' | 'default';
+        "mode"?: 'select' | 'default' | 'select-async';
+        /**
+          * Emitted when the clear button is clicked and the combobox value is cleared.
+         */
+        "onCombobox-clear"?: (event: IrPickerCustomEvent<void>) => void;
         /**
           * Emitted when a value is selected from the combobox list.
          */
@@ -9438,6 +9448,11 @@ declare namespace LocalJSX {
           * Selected value (also shown in the input when `mode="select"`).
          */
         "value"?: string;
+        /**
+          * Whether to show a clear button inside the input. When clicked, the input value is cleared and the `combobox-clear` event is emitted.
+          * @default false
+         */
+        "withClear"?: boolean;
     }
     interface IrPickerItem {
         "active"?: boolean;

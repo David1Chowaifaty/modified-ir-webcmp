@@ -17,6 +17,8 @@ export interface IrComboboxSelectEventDetail {
   item: IrComboboxOption;
 }
 
+const DEFAULT_ASYNC_DEBOUNCE = 300;
+
 @Component({
   tag: 'ir-picker',
   styleUrl: 'ir-picker.css',
@@ -28,7 +30,7 @@ export class IrPicker {
 
   @Prop({ reflect: true }) loading = false;
 
-  @Prop() mode: 'select' | 'default' = 'default';
+  @Prop() mode: 'select' | 'default' | 'select-async' = 'default';
 
   @Prop({ reflect: true }) pill: boolean = false;
   /** Placeholder shown inside the input when there is no query. */
@@ -37,13 +39,19 @@ export class IrPicker {
   @Prop() label?: string;
   /** The default value of the form control. Primarily used for resetting the form control. */
   @Prop({ reflect: true }) defaultValue: NativeWaInput['defaultValue'];
-
+  /**
+   * Whether to show a clear button inside the input.
+   * When clicked, the input value is cleared and the `combobox-clear` event is emitted.
+   *
+   * @default false
+   */
+  @Prop() withClear: boolean = false;
   /** The input's size. */
   @Prop({ reflect: true }) size: NativeWaInput['size'] = 'small';
   /** The input's visual appearance. */
   @Prop({ reflect: true }) appearance: NativeWaInput['appearance'];
 
-  /** Delay (in milliseconds) before filtering results after user input. */
+  /** Delay (in milliseconds) before emitting the `text-change` event. Defaults to 300ms for async mode. */
   @Prop() debounce: number = 0;
 
   private static idCounter = 0;
@@ -72,6 +80,9 @@ export class IrPicker {
   /** Emitted when the text input value changes. */
   @Event({ eventName: 'text-change' }) textChange!: EventEmitter<string>;
 
+  /** Emitted when the clear button is clicked and the combobox value is cleared. */
+  @Event({ eventName: 'combobox-clear' }) comboboxClear!: EventEmitter<void>;
+
   componentWillLoad() {
     const hostItems = Array.from(this.hostEl?.querySelectorAll('ir-picker-item') ?? []) as PickerItemElement[];
     if (hostItems.length) {
@@ -86,6 +97,13 @@ export class IrPicker {
       this.nativeInput = this.inputRef.input;
     }
     this.applyAriaAttributes();
+  }
+
+  disconnectedCallback() {
+    if (this.debounceTimer) {
+      window.clearTimeout(this.debounceTimer);
+      this.debounceTimer = undefined;
+    }
   }
 
   @Method()
@@ -148,7 +166,7 @@ export class IrPicker {
   protected handleValueChange(newValue: string) {
     this.updateSelectedFromValue(newValue);
     this.syncQueryWithValue(newValue);
-    if (this.mode === 'select') {
+    if (['select-async', 'select'].includes(this.mode)) {
       this.applyFilter('', { updateQuery: false, emitEvent: false });
     }
   }
@@ -168,6 +186,9 @@ export class IrPicker {
 
   private handleInputFocus = () => {
     if (!this.isOpen) {
+      if (this.mode === 'select-async' && !this.query) {
+        return;
+      }
       this.open();
     }
   };
@@ -210,69 +231,83 @@ export class IrPicker {
     }
   };
 
-  /** Applies the filter after the debounce delay and emits text-change when requested. */
+  /** Applies the filter and optionally emits a debounced text-change event. */
   private applyFilter(value: string, options: { updateQuery?: boolean; emitEvent?: boolean } = {}) {
-    // Clear any pending debounce run
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
+    const { updateQuery = true, emitEvent = true } = options;
+
+    if (updateQuery) {
+      this.query = value;
     }
 
-    const runFilter = () => {
-      const { updateQuery = true, emitEvent = true } = options;
+    const normalizedQuery = value.trim().toLowerCase();
+    const items = this.slottedPickerItems;
+    const filtered = normalizedQuery ? items.filter(item => this.matchesQuery(item, normalizedQuery)) : [...items];
 
-      // Emit AFTER debounce only when caller requested it.
-      if (emitEvent) {
-        this.textChange.emit(value);
+    const previousActiveItem = this.activeIndex >= 0 ? this.filteredItems[this.activeIndex] : undefined;
+
+    this.filteredItems = filtered;
+    this.updateItemVisibility(filtered);
+
+    let nextIndex = previousActiveItem ? filtered.indexOf(previousActiveItem) : -1;
+
+    if (filtered.length === 0) {
+      this.activeIndex = -1;
+    } else {
+      if (nextIndex === -1) {
+        nextIndex = this.findNearestEnabledIndex(0, 1);
       }
+      this.activeIndex = nextIndex;
+    }
 
-      if (updateQuery) {
-        this.query = value;
-      }
+    this.updateActiveItemIndicators();
 
-      const normalizedQuery = value.trim().toLowerCase();
-      const items = this.slottedPickerItems;
+    const context = normalizedQuery ? `"${value.trim()}"` : undefined;
+    this.updateLiveRegion(filtered.length, context);
 
-      const filtered = normalizedQuery ? items.filter(item => this.matchesQuery(item, normalizedQuery)) : [...items];
+    if (emitEvent) {
+      this.emitTextChange(value);
+    }
+  }
 
-      const previousActiveItem = this.activeIndex >= 0 ? this.filteredItems[this.activeIndex] : undefined;
+  /** Emit the latest query value with a debounce suited for async searches. */
+  private emitTextChange(value: string) {
+    const delay = this.getTextChangeDelay();
 
-      this.filteredItems = filtered;
-      this.updateItemVisibility(filtered);
+    if (this.debounceTimer) {
+      window.clearTimeout(this.debounceTimer);
+    }
 
-      let nextIndex = previousActiveItem ? filtered.indexOf(previousActiveItem) : -1;
-
-      if (filtered.length === 0) {
-        this.activeIndex = -1;
-      } else {
-        if (nextIndex === -1) {
-          nextIndex = this.findNearestEnabledIndex(0, 1);
-        }
-        this.activeIndex = nextIndex;
-      }
-
-      this.updateActiveItemIndicators();
-
-      const context = normalizedQuery ? `"${value.trim()}"` : undefined;
-      this.updateLiveRegion(filtered.length, context);
+    const emit = () => {
+      this.textChange.emit(value);
     };
 
-    // No debounce → run immediately
-    if (!this.debounce) {
-      runFilter();
+    if (delay > 0) {
+      this.debounceTimer = window.setTimeout(emit, delay);
       return;
     }
 
-    // Debounced execution
-    this.debounceTimer = window.setTimeout(runFilter, this.debounce);
+    emit();
   }
 
-  private syncQueryWithValue(value: string) {
-    if (this.mode !== 'select') {
+  private getTextChangeDelay() {
+    if (typeof this.debounce === 'number' && this.debounce > 0) {
+      return this.debounce;
+    }
+    if (this.mode === 'select-async') {
+      return DEFAULT_ASYNC_DEBOUNCE;
+    }
+    return 0;
+  }
+
+  private syncQueryWithValue(value: string, options: { allowEmptyFallback?: boolean } = {}) {
+    if (!['select', 'select-async'].includes(this.mode)) {
       return;
     }
 
     if (!value) {
-      this.query = '';
+      if (options.allowEmptyFallback !== false) {
+        this.query = '';
+      }
       return;
     }
 
@@ -299,7 +334,7 @@ export class IrPicker {
     this.updateSelectedFromValue();
     this.comboboxSelect.emit({ item: detail });
     this.closeCombobox({ restoreFocus: true });
-    if (this.mode === 'select') {
+    if (['select', 'select-async'].includes(this.mode)) {
       this.query = this.getItemDisplayLabel(item);
       this.applyFilter('', { updateQuery: false, emitEvent: false });
     } else {
@@ -365,8 +400,8 @@ export class IrPicker {
     this.ensureItemIds();
     this.applyFilter(this.query, { emitEvent: false });
     this.updateSelectedFromValue(this.value);
-    this.syncQueryWithValue(this.value);
-    if (this.mode === 'select' && this.value) {
+    this.syncQueryWithValue(this.value, { allowEmptyFallback: false });
+    if (['select', 'select-async'].includes(this.mode) && this.value) {
       this.applyFilter('', { updateQuery: false, emitEvent: false });
     }
   }
@@ -497,8 +532,9 @@ export class IrPicker {
     this.capturePickerItemsFromSlot(slot);
   };
   render() {
-    const hasResults = this.query && this.filteredItems.length > 0;
-    const emptyDescriptionId = hasResults ? undefined : this.emptyStateId;
+    const hasResults = this.filteredItems.length > 0;
+    const showEmptyState = !this.loading && !hasResults;
+    const emptyDescriptionId = showEmptyState ? this.emptyStateId : undefined;
 
     return (
       <Host>
@@ -506,7 +542,7 @@ export class IrPicker {
           <wa-input
             slot="anchor"
             class="search-bar"
-            // withClear
+            withClear={this.withClear}
             size={this.size}
             value={this.query}
             defaultValue={this.defaultValue}
@@ -521,36 +557,42 @@ export class IrPicker {
             onwa-clear={() => {
               this.applyFilter('');
               this.open();
+              this.comboboxClear.emit();
             }}
           >
             {this.loading && <wa-spinner slot="end"></wa-spinner>}
 
             <wa-icon slot="start" name="magnifying-glass" aria-hidden="true"></wa-icon>
           </wa-input>
-          {!this.loading && (
-            <div class="menu" role="presentation">
-              <p class="sr-only" id={this.listboxLabelId}>
-                Available search shortcuts
-              </p>
-              <ul
-                class="results"
-                id={this.listboxId}
-                role="listbox"
-                aria-labelledby={this.listboxLabelId}
-                aria-describedby={emptyDescriptionId}
-                onClick={this.handleResultsClick}
-                onPointerDown={this.handleResultsPointerDown}
-              >
-                <slot onSlotchange={this.handleSlotChange}></slot>
-                {!hasResults && (
-                  <li class="empty-state" role="presentation" id={this.emptyStateId}>
-                    <wa-icon name="circle-info" aria-hidden="true"></wa-icon>
-                    <p>No results found</p>
-                  </li>
-                )}
-              </ul>
-            </div>
-          )}
+          <div class="menu" role="presentation">
+            <p class="sr-only" id={this.listboxLabelId}>
+              Available search shortcuts
+            </p>
+            <ul
+              class="results"
+              id={this.listboxId}
+              role="listbox"
+              aria-labelledby={this.listboxLabelId}
+              aria-describedby={emptyDescriptionId}
+              aria-busy={this.loading ? 'true' : undefined}
+              onClick={this.handleResultsClick}
+              onPointerDown={this.handleResultsPointerDown}
+            >
+              {this.loading && (
+                <li class="loading-state" role="presentation">
+                  <wa-spinner></wa-spinner>
+                  <p>Loading suggestions…</p>
+                </li>
+              )}
+              <slot onSlotchange={this.handleSlotChange}></slot>
+              {showEmptyState && (
+                <li class="empty-state" role="presentation" id={this.emptyStateId}>
+                  <wa-icon name="circle-info" aria-hidden="true"></wa-icon>
+                  <p>No results found</p>
+                </li>
+              )}
+            </ul>
+          </div>
         </wa-popup>
         <span class="sr-only" aria-live="polite">
           {this.liveRegionMessage}
