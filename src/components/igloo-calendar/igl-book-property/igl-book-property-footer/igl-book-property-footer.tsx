@@ -5,6 +5,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { TIcons } from '@/components/ui/ir-icons/icons';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
+import { NativeButton } from '@/components/ui/ir-custom-button/ir-custom-button';
 
 @Component({
   tag: 'igl-book-property-footer',
@@ -41,6 +42,8 @@ export class IglBookPropertyFooter {
     disabled,
     // icon_name,
     isLoading,
+    appearance,
+    variant,
   }: // icon_position = 'right',
   {
     type: TPropertyButtonsTypes;
@@ -49,6 +52,8 @@ export class IglBookPropertyFooter {
     icon_name?: TIcons;
     isLoading?: boolean;
     icon_position?: 'right' | 'left';
+    appearance: NativeButton['appearance'];
+    variant: NativeButton['variant'];
   }) {
     return (
       <div class={this.shouldRenderTwoButtons() ? ` ${this.editNext(label)}` : 'flex-fill'}>
@@ -58,8 +63,8 @@ export class IglBookPropertyFooter {
         <ir-custom-button
           size={'medium'}
           loading={isLoading}
-          appearance={type === 'cancel' || type === 'back' ? 'filled' : 'accent'}
-          variant={type === 'cancel' || type === 'back' ? 'neutral' : 'brand'}
+          appearance={appearance}
+          variant={variant}
           disabled={disabled}
           onClickHandler={() => {
             this.buttonClicked.emit({ key: type });
@@ -88,19 +93,22 @@ export class IglBookPropertyFooter {
           {/* <div class="d-flex justify-content-between gap-30 align-items-center full-width"> */}
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
-              {this.renderButton({ type: 'cancel', label: locales.entries.Lcz_Cancel })}
+              {this.renderButton({ type: 'cancel', label: locales.entries.Lcz_Cancel, appearance: 'filled', variant: 'neutral' })}
               {this.shouldRenderTwoButtons() &&
                 this.renderButton({
                   type: 'next',
                   label: `${locales.entries.Lcz_Next}`,
                   disabled: isRequestPending('/Get_Exposed_Booking_Availability'),
                   icon_name: 'angles_right',
+                  variant: 'brand',
+                  appearance: 'accent',
                 })}
             </Fragment>
           ) : (
             <Fragment>
-              {this.renderButton({ type: 'cancel', label: locales.entries.Lcz_Cancel })}
-              {this.shouldRenderTwoButtons() && this.renderButton({ type: 'next', label: `${locales.entries.Lcz_Next}`, icon_name: 'angles_right' })}
+              {this.renderButton({ type: 'cancel', label: locales.entries.Lcz_Cancel, appearance: 'filled', variant: 'neutral' })}
+              {this.shouldRenderTwoButtons() &&
+                this.renderButton({ type: 'next', label: `${locales.entries.Lcz_Next}`, icon_name: 'angles_right', variant: 'brand', appearance: 'accent' })}
             </Fragment>
           )}
           {/* </div> */}
@@ -112,14 +120,27 @@ export class IglBookPropertyFooter {
       <Fragment>
         {this.isEditOrAddRoomEvent ? (
           <Fragment>
-            {this.renderButton({ type: 'back', icon_position: 'left', label: locales.entries.Lcz_Back, icon_name: 'angles_left' })}
-            {this.renderButton({ type: 'save', label: locales.entries.Lcz_Save, isLoading: this.isLoading === 'save' })}
+            {this.renderButton({ type: 'back', icon_position: 'left', label: locales.entries.Lcz_Back, icon_name: 'angles_left', appearance: 'filled', variant: 'neutral' })}
+            {this.renderButton({ type: 'save', label: locales.entries.Lcz_Save, isLoading: this.isLoading === 'save', variant: 'brand', appearance: 'accent' })}
           </Fragment>
         ) : (
           <Fragment>
-            {this.renderButton({ type: 'back', icon_position: 'left', label: locales.entries.Lcz_Back, icon_name: 'angles_left' })}
-            {this.renderButton({ type: 'book', label: locales.entries.Lcz_Book, isLoading: this.isLoading === 'book' })}
-            {showBookAndCheckin && this.renderButton({ type: 'bookAndCheckIn', label: locales.entries.Lcz_BookAndChekcIn, isLoading: this.isLoading === 'bookAndCheckIn' })}
+            {this.renderButton({ type: 'back', icon_position: 'left', label: locales.entries.Lcz_Back, icon_name: 'angles_left', appearance: 'filled', variant: 'neutral' })}
+            {this.renderButton({
+              type: 'book',
+              label: locales.entries.Lcz_Book,
+              isLoading: this.isLoading === 'book',
+              variant: 'brand',
+              appearance: showBookAndCheckin ? 'outlined' : 'accent',
+            })}
+            {showBookAndCheckin &&
+              this.renderButton({
+                type: 'bookAndCheckIn',
+                label: locales.entries.Lcz_BookAndChekcIn,
+                isLoading: this.isLoading === 'bookAndCheckIn',
+                variant: 'brand',
+                appearance: 'accent',
+              })}
           </Fragment>
         )}
       </Fragment>

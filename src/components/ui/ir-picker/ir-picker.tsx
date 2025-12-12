@@ -497,7 +497,7 @@ export class IrPicker {
     this.capturePickerItemsFromSlot(slot);
   };
   render() {
-    const hasResults = this.filteredItems.length > 0;
+    const hasResults = this.query && this.filteredItems.length > 0;
     const emptyDescriptionId = hasResults ? undefined : this.emptyStateId;
 
     return (
