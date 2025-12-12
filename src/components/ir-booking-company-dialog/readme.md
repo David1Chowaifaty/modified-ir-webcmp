@@ -22,6 +22,16 @@
 
 ## Methods
 
+### `closeCompanyForm() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `openCompanyForm() => Promise<void>`
 
 

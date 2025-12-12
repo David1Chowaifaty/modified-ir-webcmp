@@ -73,16 +73,15 @@ graph TD;
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-application-info --> ir-tooltip
-  igl-property-booked-by --> ir-autocomplete
-  igl-property-booked-by --> ir-tooltip
+  igl-application-info --> ir-input
+  igl-property-booked-by --> ir-picker
+  igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
-  igl-property-booked-by --> ir-phone-input
-  igl-property-booked-by --> ir-select
+  igl-property-booked-by --> ir-mobile-input
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
-  ir-phone-input --> ir-combobox
   ir-button --> ir-icons
   igl-book-property-footer --> ir-custom-button
   igl-book-property-container --> igl-book-property

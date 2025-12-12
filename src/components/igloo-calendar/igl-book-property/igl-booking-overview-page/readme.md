@@ -10,7 +10,6 @@
 | Property                 | Attribute                   | Description | Type                                                                       | Default     |
 | ------------------------ | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
 | `adultChildConstraints`  | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
-| `adultChildCount`        | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
 | `bookedByInfoData`       | `booked-by-info-data`       |             | `any`                                                                      | `undefined` |
 | `bookingData`            | `booking-data`              |             | `any`                                                                      | `undefined` |
 | `currency`               | `currency`                  |             | `any`                                                                      | `undefined` |
@@ -23,7 +22,6 @@
 | `ratePricingMode`        | `rate-pricing-mode`         |             | `any`                                                                      | `undefined` |
 | `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>`                                            | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                                                                  | `undefined` |
-| `sourceOptions`          | --                          |             | `TSourceOptions[]`                                                         | `undefined` |
 | `wasBlockedUnit`         | `was-blocked-unit`          |             | `boolean`                                                                  | `undefined` |
 
 

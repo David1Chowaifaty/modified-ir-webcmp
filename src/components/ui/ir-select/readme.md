@@ -60,7 +60,6 @@
 
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
- - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
  - [ir-financial-filters](../../ir-financial-actions/ir-financial-filters)
@@ -83,7 +82,6 @@
 graph TD;
   igl-bulk-block --> ir-select
   igl-bulk-stop-sale --> ir-select
-  igl-property-booked-by --> ir-select
   igl-split-booking --> ir-select
   ir-delete-modal --> ir-select
   ir-financial-filters --> ir-select

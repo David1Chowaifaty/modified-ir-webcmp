@@ -59,6 +59,8 @@
 
 ### Used by
 
+ - [igl-application-info](../../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-arrivals-filters](../../ir-arrivals/ir-arrivals-filters)
  - [ir-booking-company-form](../../ir-booking-company-dialog/ir-booking-company-form)
@@ -75,6 +77,8 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-application-info --> ir-input
+  igl-property-booked-by --> ir-input
   igl-rate-plan --> ir-input
   ir-arrivals-filters --> ir-input
   ir-booking-company-form --> ir-input

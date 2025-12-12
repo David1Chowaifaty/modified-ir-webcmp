@@ -7,15 +7,16 @@
 
 ## Properties
 
-| Property             | Attribute              | Description | Type                      | Default     |
-| -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
-| `dateLabel`          | `date-label`           |             | `string`                  | `undefined` |
-| `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
-| `disabled`           | `disabled`             |             | `boolean`                 | `false`     |
-| `maxDate`            | `max-date`             |             | `string`                  | `undefined` |
-| `minDate`            | `min-date`             |             | `string`                  | `undefined` |
-| `variant`            | `variant`              |             | `"booking" \| "default"`  | `'default'` |
-| `withDateDifference` | `with-date-difference` |             | `boolean`                 | `true`      |
+| Property             | Attribute              | Description | Type                             | Default     |
+| -------------------- | ---------------------- | ----------- | -------------------------------- | ----------- |
+| `dateLabel`          | `date-label`           |             | `string`                         | `undefined` |
+| `defaultData`        | --                     |             | `{ [key: string]: any; }`        | `undefined` |
+| `disabled`           | `disabled`             |             | `boolean`                        | `false`     |
+| `maxDate`            | `max-date`             |             | `string`                         | `undefined` |
+| `minDate`            | `min-date`             |             | `string`                         | `undefined` |
+| `size`               | `size`                 |             | `"large" \| "medium" \| "small"` | `'small'`   |
+| `variant`            | `variant`              |             | `"booking" \| "default"`         | `'default'` |
+| `withDateDifference` | `with-date-difference` |             | `boolean`                        | `true`      |
 
 
 ## Events
