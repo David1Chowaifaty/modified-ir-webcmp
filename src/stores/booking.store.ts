@@ -1,5 +1,5 @@
 import { Booking, Guest } from '@/models/booking.dto';
-import { BookingSource, TEventType, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
+import { BookingSource, TEventType } from '@/models/igl-book-property';
 import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/models/property';
 import { createStore } from '@stencil/store';
 import moment, { Moment } from 'moment';

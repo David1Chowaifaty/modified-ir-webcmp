@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, Prop, h, Event, EventEmitter, State, Fragment } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 
 import moment from 'moment';
@@ -115,7 +115,7 @@ export class IglBookPropertyHeader {
   private getAdultChildConstraints() {
     const { adults, children } = booking_store.bookingDraft.occupancy;
     return (
-      <div class={'fd-book-property__constraints-container'}>
+      <Fragment>
         <wa-animation iterations={2} name="bounce" easing="ease-in-out" duration={2000} ref={el => (this.adultAnimationContainer = el)}>
           <wa-select
             class="fd-book-property__adults-select"
@@ -169,7 +169,7 @@ export class IglBookPropertyHeader {
         <ir-custom-button loading={isRequestPending('/Check_Availability')} variant="brand" onClickHandler={() => this.handleButtonClicked()}>
           {locales.entries.Lcz_Check}
         </ir-custom-button>
-      </div>
+      </Fragment>
     );
   }
 

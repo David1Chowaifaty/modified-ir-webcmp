@@ -141,7 +141,7 @@ export class IglBookProperty {
       this.dateRangeData = opt.data;
       if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
         this.defaultData.roomsInfo = [];
-      } else if (booking_store.bookingDraft.occupancy.adults !== 0) {
+      } else if (booking_store.bookingDraft.occupancy.adults) {
         this.checkBookingAvailability();
         // this.checkBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }

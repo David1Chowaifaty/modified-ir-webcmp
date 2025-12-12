@@ -275,6 +275,7 @@ export namespace Components {
         "disabled": boolean;
         "maxDate": string;
         "minDate": string;
+        "size": 'small' | 'medium' | 'large';
         "variant": 'booking' | 'default';
         "withDateDifference": boolean;
     }
@@ -7063,6 +7064,7 @@ declare namespace LocalJSX {
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
+        "size"?: 'small' | 'medium' | 'large';
         "variant"?: 'booking' | 'default';
         "withDateDifference"?: boolean;
     }
