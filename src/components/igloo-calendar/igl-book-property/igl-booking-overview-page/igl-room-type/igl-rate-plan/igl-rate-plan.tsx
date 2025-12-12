@@ -90,14 +90,14 @@ export class IglRatePlan {
     });
   }
   // Render the rate amount
-  private renderRate(): string {
+  private get rate(): string {
     const { visibleInventory } = this;
     if (!visibleInventory) return '';
     if (visibleInventory.is_amount_modified) {
       return visibleInventory.rp_amount.toString();
     }
     const { selected_variation, view_mode } = visibleInventory;
-    const amount = view_mode === '001' ? selected_variation?.discounted_amount : selected_variation?.amount_per_night_gross;
+    const amount = view_mode === '001' ? selected_variation?.discounted_gross_amount : selected_variation?.amount_per_night_gross;
     return amount?.toString() || '';
   }
 
@@ -235,9 +235,11 @@ export class IglRatePlan {
                         rp_amount: Number(e.detail),
                       })
                     }
+                    id={`rate-input-${this.ratePlan.id}`}
                     aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
                     aria-describedby={`${this.ratePlan.short_name}'s rate`}
-                    value={this.renderRate()}
+                    value={this.rate}
+                    defaultValue={this.rate}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
                     mask="price"
                   >

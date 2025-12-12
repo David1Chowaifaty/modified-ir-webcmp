@@ -203,7 +203,19 @@ export class IrInput {
   handleAriaInvalidChange(e) {
     this.isValid = !JSON.parse(e);
   }
+  @Watch('value')
+  handleValueChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      if (this._mask && this.returnMaskedValue && this._mask.value !== newValue) {
+        this._mask.value = newValue;
+        this._mask.updateValue();
+      }
+    }
+  }
   private handleInput = (nextValue: string) => {
+    if (nextValue === this.value) {
+      return;
+    }
     this.value = nextValue ?? '';
     this.textChange.emit(this.value);
   };
@@ -339,7 +351,6 @@ export class IrInput {
 
   render() {
     let displayValue = this.value;
-
     if (this._mask && this.returnMaskedValue) {
       // IMask holds the formatted string (e.g., "1,000.00")
       // this.value holds the raw number (e.g., "1000")
