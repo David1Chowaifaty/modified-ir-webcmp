@@ -19,6 +19,11 @@ export class IrBookingCompanyDialog {
   async openCompanyForm() {
     this.open = true;
   }
+  @Method()
+  async closeCompanyForm() {
+    this.open = false;
+    this.companyFormClosed.emit();
+  }
 
   render() {
     const formId = `${this.booking.booking_nbr}-${v4()}`;
@@ -28,8 +33,7 @@ export class IrBookingCompanyDialog {
         onIrDialogHide={e => {
           e.stopPropagation();
           e.stopImmediatePropagation();
-          this.open = false;
-          this.companyFormClosed.emit();
+          this.closeCompanyForm();
         }}
         label="Company"
         id="dialog-overview"
@@ -40,6 +44,7 @@ export class IrBookingCompanyDialog {
               e.stopImmediatePropagation();
               e.stopPropagation();
               this.resetBookingEvt.emit(e.detail);
+              this.closeCompanyForm();
             }}
             formId={formId}
             booking={this.booking}
@@ -49,7 +54,7 @@ export class IrBookingCompanyDialog {
           <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
             Cancel
           </ir-custom-button>
-          <ir-custom-button type="submit" form={formId} loading={isRequestPending('/Do_Reservation')} size="medium" variant="brand">
+          <ir-custom-button type="submit" form={formId} loading={isRequestPending('/DoReservation')} size="medium" variant="brand">
             Save
           </ir-custom-button>
         </div>

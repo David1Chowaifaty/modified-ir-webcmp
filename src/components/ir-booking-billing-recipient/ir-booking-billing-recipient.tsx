@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 @Component({
   tag: 'ir-booking-billing-recipient',
@@ -65,6 +65,11 @@ export class IrBookingBillingRecipient {
       _rooms.push(room);
     }
     this.rooms = [..._rooms];
+  }
+
+  @Listen('resetBookingEvt')
+  handleBookingRecipient() {
+    this.bookingCompanyFormRef?.closeCompanyForm();
   }
 
   render() {

@@ -38,6 +38,12 @@
   display: flex;
   box-sizing: border-box;
 }
+.ir-invoice__room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
 .ir-invoice__checkbox::part(base) {
   min-height: var(--wa-form-control-height);
   padding: 0 var(--wa-form-control-padding-inline);
@@ -60,6 +66,7 @@
   width: 100%;
   justify-content: space-between;
   text-align: start;
+  align-items: center;
 }
 .ir-invoice__room-checkbox-container.group {
   flex-direction: column;

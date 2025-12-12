@@ -6,6 +6,7 @@ import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@st
 import moment, { Moment } from 'moment';
 import { BookingInvoiceInfo, InvoiceableItem, ViewMode } from '../types';
 import { IEntries } from '@/models/IBooking';
+import { IssueInvoiceProps } from '@/services/booking-service/types';
 @Component({
   tag: 'ir-invoice-form',
   styleUrl: 'ir-invoice-form.css',
@@ -92,13 +93,7 @@ export class IrInvoiceForm {
    * - `roomIdentifier`: the room identifier when invoicing a specific room
    * - `mode`: the current invoice mode
    */
-  @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<{
-    booking: Booking;
-    recipientId: string;
-    for: 'room' | 'booking';
-    roomIdentifier?: string;
-    mode: 'create' | 'check_out-create';
-  }>;
+  @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<IssueInvoiceProps>;
 
   @Event() loadingChange: EventEmitter<boolean>;
 
@@ -330,6 +325,7 @@ export class IrInvoiceForm {
           console.error('Auto print failed:', error);
         }
       }
+      this.invoiceCreated.emit({ invoice });
       this.invoiceClose.emit();
     } catch (error) {
       console.error(error);
@@ -447,6 +443,22 @@ export class IrInvoiceForm {
     return { groups: grouped, indexById, hasSplitGroups: true };
   }
 
+  private getDateView(fromDate: string, toDate: string) {
+    if (!fromDate) {
+      return;
+    }
+    const from_date = moment(fromDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
+    if (!toDate) {
+      return <span>{from_date}</span>;
+    }
+    const to_date = moment(toDate, 'YYYY-MM-DD').format('MMM DD, YYYY');
+    return (
+      <span>
+        {from_date} <wa-icon name="arrow-right"></wa-icon> {to_date}
+      </span>
+    );
+  }
+
   private renderRooms() {
     const rooms = this.booking?.rooms ?? [];
     if (!rooms.length || !this.invoicableKey?.size) {
@@ -477,9 +489,14 @@ export class IrInvoiceForm {
               checked={isSelected}
               class="ir-invoice__checkbox"
             >
-              <div class={'ir-invoice__room-checkbox-container'}>
-                <b>{room.roomtype.name}</b>
-                <span>{room.rateplan.short_name}</span>
+              <div class={'ir-invoice__room-checkbox-container align-items-center'}>
+                <div class="ir-invoice__room-info">
+                  <span>
+                    <b>{room.roomtype.name}</b>
+                    <span style={{ paddingLeft: '0.5rem' }}>{room.rateplan.short_name}</span>
+                  </span>
+                  {this.getDateView(room.from_date, room.to_date)}
+                </div>
                 <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, room.gross_total)}</span>
               </div>
             </wa-checkbox>
@@ -517,8 +534,13 @@ export class IrInvoiceForm {
                 }
                 return (
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-                    <b>{room.roomtype.name}</b>
-                    <span>{room.rateplan.short_name}</span>
+                    <div class="ir-invoice__room-info">
+                      <p>
+                        <b>{room.roomtype.name}</b>
+                        <span>{room.rateplan.short_name}</span>
+                      </p>
+                      {this.getDateView(room.from_date, room.to_date)}
+                    </div>
                     <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, room.gross_total)}</span>
                   </div>
                 );
@@ -608,6 +630,7 @@ export class IrInvoiceForm {
         >
           <div class="ir-invoice__room-checkbox-container">
             <span>Pickup</span>
+            {this.getDateView(this.booking.pickup_info.date, null)}
             <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, this.booking.pickup_info.selected_option.amount)}</span>
           </div>
         </wa-checkbox>
@@ -674,7 +697,10 @@ export class IrInvoiceForm {
                       checked={isSelected}
                     >
                       <div class="ir-invoice__room-checkbox-container">
-                        <span>{extra_service.description}</span>
+                        <div class={'ir-invoice__room-info'}>
+                          <span>{extra_service.description}</span>
+                          {this.getDateView(extra_service.start_date, extra_service.end_date)}
+                        </div>
                         <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, extra_service.price)}</span>
                       </div>
                     </wa-checkbox>

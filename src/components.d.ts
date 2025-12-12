@@ -45,6 +45,7 @@ import { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-in
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
 import { BookingInvoiceInfo, ViewMode } from "./components/ir-invoice/types";
+import { IssueInvoiceProps } from "./services/booking-service/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -102,6 +103,7 @@ export { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-in
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
 export { BookingInvoiceInfo, ViewMode } from "./components/ir-invoice/types";
+export { IssueInvoiceProps } from "./services/booking-service/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -505,6 +507,7 @@ export namespace Components {
     }
     interface IrBookingCompanyDialog {
         "booking": Booking;
+        "closeCompanyForm": () => Promise<void>;
         "openCompanyForm": () => Promise<void>;
     }
     interface IrBookingCompanyForm {
@@ -5420,13 +5423,7 @@ declare global {
     interface HTMLIrInvoiceFormElementEventMap {
         "invoiceOpen": void;
         "invoiceClose": void;
-        "invoiceCreated": {
-    booking: Booking;
-    recipientId: string;
-    for: 'room' | 'booking';
-    roomIdentifier?: string;
-    mode: 'create' | 'check_out-create';
-  };
+        "invoiceCreated": IssueInvoiceProps;
         "loadingChange": boolean;
     }
     interface HTMLIrInvoiceFormElement extends Components.IrInvoiceForm, HTMLStencilElement {
@@ -8783,13 +8780,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when an invoice is created/confirmed.  The event `detail` contains: - `booking`: the booking associated with the invoice - `recipientId`: the selected billing recipient - `for`: whether the invoice is for `"room"` or `"booking"` - `roomIdentifier`: the room identifier when invoicing a specific room - `mode`: the current invoice mode
          */
-        "onInvoiceCreated"?: (event: IrInvoiceFormCustomEvent<{
-    booking: Booking;
-    recipientId: string;
-    for: 'room' | 'booking';
-    roomIdentifier?: string;
-    mode: 'create' | 'check_out-create';
-  }>) => void;
+        "onInvoiceCreated"?: (event: IrInvoiceFormCustomEvent<IssueInvoiceProps>) => void;
         /**
           * Emitted when the invoice drawer is opened.  Fired when `openDrawer()` is called and the component transitions into the open state.
          */

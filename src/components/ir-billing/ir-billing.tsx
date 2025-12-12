@@ -275,7 +275,7 @@ export class IrBilling {
             this.selectedInvoice = null;
           }}
         >
-          <p>Confirm that you want to void this invoice and generate a corresponding credit note.</p>
+          <p>Void invoice {this.selectedInvoice} by generating a credit note?</p>
           <div slot="footer" class="ir-dialog__footer">
             <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
               Cancel
