@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
-import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
+import { TAdultChildConstraints } from '../../../../models/igl-book-property';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import moment from 'moment';
 import booking_store from '@/stores/booking.store';
@@ -20,8 +20,6 @@ export class IglBookingOverviewPage {
   @Prop() dateRangeData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() selectedRooms: Map<string, Map<string, any>>;
-  @Prop() adultChildCount: { adult: number; child: number };
-  @Prop() sourceOptions: TSourceOptions[];
   @Prop() bookedByInfoData: any;
   @Prop() initialRoomIds: any;
   @Prop() wasBlockedUnit: boolean;
@@ -55,10 +53,8 @@ export class IglBookingOverviewPage {
           dateRangeData={this.dateRangeData}
           minDate={this.setMinDate()}
           // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
-          adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
           bookingData={this.bookingData}
-          sourceOptions={this.sourceOptions}
           message={this.message}
           bookingDataDefaultDateRange={this.bookingData.defaultDateRange}
           showSplitBookingOption={this.showSplitBookingOption}

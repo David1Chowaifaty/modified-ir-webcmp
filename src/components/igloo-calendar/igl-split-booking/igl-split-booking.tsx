@@ -71,7 +71,7 @@ export class IglSplitBooking {
   }
 
   private async checkBookingAvailability() {
-    resetBookingStore();
+    resetBookingStore(false);
     const from_date = this.selectedDates.from_date.format('YYYY-MM-DD');
     const to_date = this.selectedDates.to_date.format('YYYY-MM-DD');
 

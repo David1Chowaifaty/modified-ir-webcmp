@@ -1,5 +1,4 @@
 import { Booking, Room } from '@/models/booking.dto';
-import { TSourceOption } from '@/models/igl-book-property';
 import VariationService from '@/services/variation.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import { extras } from '@/utils/utils';
@@ -202,7 +201,7 @@ export class IglBookPropertyService {
     return rooms;
   }
 
-  async prepareBookUserServiceParams({ context, sourceOption, check_in }: { context: any; sourceOption: TSourceOption; check_in: boolean }) {
+  async prepareBookUserServiceParams({ context, check_in }: { context: any; check_in: boolean }) {
     try {
       // Validate context structure
       if (!context || !context.dateRangeData) {
@@ -243,6 +242,8 @@ export class IglBookPropertyService {
       };
 
       let newBooking = null;
+      const sourceOption = booking_store.bookingDraft.source;
+      console.log({ sourceOption });
       console.log({ event_type: context.defaultData.event_type, defaultData: context.defaultData });
       switch (context.defaultData.event_type) {
         case 'EDIT_BOOKING': {

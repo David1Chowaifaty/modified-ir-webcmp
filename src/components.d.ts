@@ -11,7 +11,7 @@ import { ICurrency } from "./models/calendarData";
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 import { IToast } from "./components/ui/ir-toast/toast";
-import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes } from "./models/igl-book-property";
 import { CalendarModalEvent, IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IPageTwoDataUpdateProps } from "./models/models";
@@ -68,7 +68,7 @@ export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 export { IToast } from "./components/ui/ir-toast/toast";
-export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes } from "./models/igl-book-property";
 export { CalendarModalEvent, IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IPageTwoDataUpdateProps } from "./models/models";
@@ -172,7 +172,6 @@ export namespace Components {
     }
     interface IglBookPropertyHeader {
         "adultChildConstraints": TAdultChildConstraints1;
-        "adultChildCount": { adult: number; child: number };
         "bookedByInfoData": any;
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
@@ -182,7 +181,6 @@ export namespace Components {
         "minDate": string;
         "propertyId": number;
         "showSplitBookingOption": boolean;
-        "sourceOptions": TSourceOptions[];
         "splitBookingId": any;
         "splitBookings": any[];
         "wasBlockedUnit": boolean;
@@ -221,7 +219,6 @@ export namespace Components {
     }
     interface IglBookingOverviewPage {
         "adultChildConstraints": TAdultChildConstraints1;
-        "adultChildCount": { adult: number; child: number };
         "bookedByInfoData": any;
         "bookingData": any;
         "currency": any;
@@ -234,7 +231,6 @@ export namespace Components {
         "ratePricingMode": any;
         "selectedRooms": Map<string, Map<string, any>>;
         "showSplitBookingOption": boolean;
-        "sourceOptions": TSourceOptions[];
         "wasBlockedUnit": boolean;
     }
     interface IglBulkBlock {
@@ -3809,8 +3805,6 @@ declare global {
     };
     interface HTMLIglBookPropertyHeaderElementEventMap {
         "splitBookingDropDownChange": any;
-        "sourceDropDownChange": string;
-        "adultChild": any;
         "checkClicked": any;
         "buttonClicked": { key: TPropertyButtonsTypes };
         "toast": IToast;
@@ -6921,7 +6915,6 @@ declare namespace LocalJSX {
     }
     interface IglBookPropertyHeader {
         "adultChildConstraints"?: TAdultChildConstraints1;
-        "adultChildCount"?: { adult: number; child: number };
         "bookedByInfoData"?: any;
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
@@ -6929,17 +6922,14 @@ declare namespace LocalJSX {
         "defaultDaterange"?: { from_date: string; to_date: string };
         "message"?: string;
         "minDate"?: string;
-        "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onAnimateIrSelect"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
-        "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onSpiltBookingSelected"?: (event: IglBookPropertyHeaderCustomEvent<{ key: string; data: unknown }>) => void;
         "onSplitBookingDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onToast"?: (event: IglBookPropertyHeaderCustomEvent<IToast>) => void;
         "propertyId"?: number;
         "showSplitBookingOption"?: boolean;
-        "sourceOptions"?: TSourceOptions[];
         "splitBookingId"?: any;
         "splitBookings"?: any[];
         "wasBlockedUnit"?: boolean;
@@ -6997,7 +6987,6 @@ declare namespace LocalJSX {
     }
     interface IglBookingOverviewPage {
         "adultChildConstraints"?: TAdultChildConstraints1;
-        "adultChildCount"?: { adult: number; child: number };
         "bookedByInfoData"?: any;
         "bookingData"?: any;
         "currency"?: any;
@@ -7011,7 +7000,6 @@ declare namespace LocalJSX {
         "ratePricingMode"?: any;
         "selectedRooms"?: Map<string, Map<string, any>>;
         "showSplitBookingOption"?: boolean;
-        "sourceOptions"?: TSourceOptions[];
         "wasBlockedUnit"?: boolean;
     }
     interface IglBulkBlock {

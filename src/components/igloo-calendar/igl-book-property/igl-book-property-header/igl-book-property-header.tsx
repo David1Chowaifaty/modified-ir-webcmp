@@ -1,12 +1,12 @@
 import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
-import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
+import { TAdultChildConstraints, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { modifyBookingStore } from '@/stores/booking.store';
+import booking_store, { setBookingDraft } from '@/stores/booking.store';
 
 import { BookingService } from '@/services/booking-service/booking.service';
 import { Booking } from '@/models/booking.dto';
@@ -20,13 +20,11 @@ export class IglBookPropertyHeader {
   @Prop() splitBookingId: any = '';
   @Prop() bookingData: any = '';
   @Prop() minDate: string;
-  @Prop() sourceOptions: TSourceOptions[] = [];
   @Prop() message: string;
   @Prop() bookingDataDefaultDateRange: { [key: string]: any };
   @Prop() showSplitBookingOption: boolean = false;
   @Prop() adultChildConstraints: TAdultChildConstraints;
   @Prop() splitBookings: any[];
-  @Prop() adultChildCount: { adult: number; child: number };
   @Prop() dateRangeData: any;
   @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
@@ -37,8 +35,6 @@ export class IglBookPropertyHeader {
   @State() bookings: Booking[] = [];
 
   @Event() splitBookingDropDownChange: EventEmitter<any>;
-  @Event() sourceDropDownChange: EventEmitter<string>;
-  @Event() adultChild: EventEmitter<any>;
   @Event() checkClicked: EventEmitter<any>;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   @Event() toast: EventEmitter<IToast>;
@@ -46,13 +42,6 @@ export class IglBookPropertyHeader {
   @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
 
   private bookingService = new BookingService();
-  private sourceOption: TSourceOption = {
-    code: '',
-    description: '',
-    tag: '',
-    id: '',
-    type: '',
-  };
   adultAnimationContainer: any;
 
   private async fetchExposedBookings(value: string) {
@@ -97,56 +86,34 @@ export class IglBookPropertyHeader {
     );
   }
   private getSourceNode() {
+    const { sources } = booking_store.selects;
     return (
       <wa-select
         size="small"
         placeholder={locales.entries.Lcz_Source}
-        value={this.sourceOption.code?.toString()}
-        defaultValue={this.sourceOptions[0]?.id}
+        value={booking_store.bookingDraft.source?.id?.toString()}
+        defaultValue={booking_store.bookingDraft.source?.id}
         id="xSmallSelect"
         onwa-hide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
         }}
-        onchange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}
+        onchange={evt => {
+          setBookingDraft({ source: sources.find(s => s.id === (evt.target as HTMLSelectElement).value) });
+        }}
       >
-        {this.sourceOptions.map(option => {
+        {sources.map(option => {
           if (option.type === 'LABEL') {
-            return <small>{option.value}</small>;
+            return <small>{option.description}</small>;
           }
-          return (
-            <wa-option value={option.id?.toString()} selected={this.sourceOption.code === option.id}>
-              {option.value}
-            </wa-option>
-          );
+          return <wa-option value={option.id?.toString()}>{option.description}</wa-option>;
         })}
       </wa-select>
     );
   }
-  private handleAdultChildChange(key: string, value: string) {
-    //const value = (event.target as HTMLSelectElement).value;
-    let obj = {};
-    if (value === '') {
-      obj = {
-        ...this.adultChildCount,
-        [key]: 0,
-      };
-    } else {
-      obj = {
-        ...this.adultChildCount,
-        [key]: value,
-      };
-    }
-    modifyBookingStore('bookingAvailabilityParams', {
-      from_date: this.bookingDataDefaultDateRange.fromDate,
-      to_date: this.bookingDataDefaultDateRange.toDate,
-      adult_nbr: obj?.['adult'] ?? 0,
-      child_nbr: obj?.['child'] ?? 0,
-    });
-    this.adultChild.emit(obj);
-  }
 
   private getAdultChildConstraints() {
+    const { adults, children } = booking_store.bookingDraft.occupancy;
     return (
       <div class={'fd-book-property__constraints-container'}>
         <wa-animation iterations={2} name="bounce" easing="ease-in-out" duration={2000} ref={el => (this.adultAnimationContainer = el)}>
@@ -156,8 +123,16 @@ export class IglBookPropertyHeader {
               e.stopImmediatePropagation();
               e.stopPropagation();
             }}
-            onchange={e => this.handleAdultChildChange('adult', (e.target as any).value)}
-            value={this.adultChildCount?.adult?.toString()}
+            onchange={e => {
+              setBookingDraft({
+                occupancy: {
+                  children,
+                  adults: Number((e.target as HTMLSelectElement).value),
+                },
+              });
+            }}
+            value={adults?.toString()}
+            defaultValue={adults?.toString()}
             placeholder={locales.entries.Lcz_AdultsCaption}
             size="small"
           >
@@ -173,8 +148,16 @@ export class IglBookPropertyHeader {
               e.stopImmediatePropagation();
               e.stopPropagation();
             }}
-            onchange={e => this.handleAdultChildChange('child', (e.target as any).value)}
-            value={this.adultChildCount?.child?.toString()}
+            onchange={e =>
+              setBookingDraft({
+                occupancy: {
+                  adults,
+                  children: Number((e.target as HTMLSelectElement).value),
+                },
+              })
+            }
+            defaultValue={children?.toString()}
+            value={children?.toString()}
             placeholder={this.renderChildCaption()}
             size="small"
           >
@@ -201,6 +184,7 @@ export class IglBookPropertyHeader {
   }
 
   private handleButtonClicked() {
+    const { occupancy } = booking_store.bookingDraft;
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
       this.toast.emit({
         type: 'error',
@@ -224,7 +208,7 @@ export class IglBookPropertyHeader {
           position: 'top-right',
         });
         return;
-      } else if (this.adultChildCount.adult === 0) {
+      } else if (occupancy.adults === 0) {
         this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
 
         this.adultAnimationContainer.play = true;
@@ -241,7 +225,7 @@ export class IglBookPropertyHeader {
         description: '',
         position: 'top-right',
       });
-    } else if (this.adultChildCount.adult === 0) {
+    } else if (occupancy.adults === 0) {
       this.adultAnimationContainer.play = true;
       this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
     } else {
@@ -285,6 +269,26 @@ export class IglBookPropertyHeader {
             disabled={(this.isEventType('BAR_BOOKING') && !this.wasBlockedUnit) || this.isEventType('SPLIT_BOOKING')}
             defaultData={this.bookingDataDefaultDateRange}
           ></igl-date-range>
+          {/* <ir-range-picker
+            onDateRangeChanged={e => {
+              // e.stopImmediatePropagation();
+              // e.stopPropagation();
+              // const { fromDate, toDate } = e.detail;
+              // let to_date = toDate.format('YYYY-MM-DD');
+              // if (
+              //   toDate.isSame(moment(booking_listing.userSelection.to, 'YYYY-MM-DD'), 'days') ||
+              //   toDate.isBefore(moment(booking_listing.userSelection.from, 'YYYY-MM-DD'), 'days')
+              // ) {
+              //   to_date = booking_listing.userSelection.to;
+              // }
+              // booking_listing.userSelection = { ...booking_listing.userSelection, to: to_date, from: fromDate.format('YYYY-MM-DD') };
+            }}
+            allowNullDates={false}
+            // fromDate={moment(booking_listing.userSelection.from, 'YYYY-MM-DD')}
+            // toDate={moment(booking_listing.userSelection.to, 'YYYY-MM-DD')}
+            fromDate={moment()}
+            toDate={moment()}
+          /> */}
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
         <p class="text-right message-label">{calendar_data.tax_statement}</p>
