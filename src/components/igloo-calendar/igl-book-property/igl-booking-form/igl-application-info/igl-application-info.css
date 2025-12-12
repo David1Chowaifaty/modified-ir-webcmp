@@ -1,4 +1,4 @@
-:host {
+/* :host {
   display: block;
 }
 .rate_amount {
@@ -75,7 +75,7 @@
   display: none;
 }
 
-/*md*/
+
 @media (min-width: 768px) {
   .booking-header {
     justify-content: flex-start;
@@ -100,7 +100,119 @@
   .unit-select-container {
     max-width: 250px;
   }
-  /* .preference-select-container {
-    max-width: 250px;
-  } */
+ 
+} */
+:host {
+  color: var(--wa-color-text-normal);
+  font-family: var(--wa-font-family-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+.fd-application-info__header {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.fd-application-info__variation {
+  padding: 0;
+  margin: 0;
+}
+
+.fd-application-info__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fd-application-info__price-inline,
+.fd-application-info__details {
+  display: none;
+}
+
+.fd-application-info__footer,
+.fd-application-info__rateplan {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.fd-application-info__footer {
+  justify-content: space-between;
+}
+.fd-application-info__rateplan-name {
+  font-size: var(--wa-font-size-m);
+  margin: 0;
+  padding: 0;
+}
+.fd-application-info__non-refundable {
+  color: var(--wa-color-success-fill-loud);
+  margin-inline-start: 0.5rem;
+}
+.fd-application-info__roomtype-title {
+  font-size: var(--wa-font-size-l);
+}
+.fd-application-info__infant {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+.fd-application-info__infant-label {
+  margin: 0;
+  padding: 0;
+  color: var(--wa-color-danger-fill-loud);
+}
+
+/*md*/
+@media (min-width: 768px) {
+  .fd-application-info__infant {
+    flex-direction: row;
+    align-items: center;
+  }
+  .fd-application-info__infant .fd-application-info__select {
+    max-width: 100px;
+  }
+  .fd-application-info__roomtype-title {
+    font-size: var(--wa-font-size-m);
+  }
+  .fd-application-info__header {
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .fd-application-info__form {
+    flex-direction: row;
+  }
+  .fd-application-info__price-inline {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+  }
+  .fd-application-info__details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .fd-application-info__price,
+  .fd-application-info__footer {
+    display: none;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
 }

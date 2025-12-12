@@ -684,7 +684,7 @@ export class IglBookProperty {
           ) : (
             <Fragment>
               <div class="sheet-header">
-                <div class="card-header-container mb-2">
+                <div class="card-header-container">
                   <h3 class="text-left font-medium-2 px-2">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
                   <ir-icon
                     class={'px-2'}

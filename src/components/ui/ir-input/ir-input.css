@@ -1,3 +1,8 @@
 :host {
   display: block;
 }
+wa-input[aria-invalid='true']::part(base) {
+  border-color: var(--wa-color-danger-border-loud);
+  outline-color: var(--wa-color-danger-border-loud);
+  border-width: 2px;
+}

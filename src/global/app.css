@@ -31,6 +31,8 @@ html {
   text-align: right;
   white-space: nowrap;
   color: var(--wa-color-text-normal);
+  margin: 0;
+  padding: 0;
 }
 .page-title {
   font-family: var(--wa-font-family-heading);
