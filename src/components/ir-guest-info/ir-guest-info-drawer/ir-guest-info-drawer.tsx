@@ -8,6 +8,7 @@ import { ICountry } from '@/models/IBooking';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { guestInfoFormSchema } from '../ir-guest-info-form/types';
+import { GuestChangedEvent } from '@/components';
 
 @Component({
   tag: 'ir-guest-info-drawer',
@@ -27,6 +28,7 @@ export class IrGuestInfoDrawer {
   @State() autoValidate = false;
 
   @Event() guestInfoDrawerClosed: EventEmitter<{ source: Element }>;
+  @Event() guestChanged: EventEmitter<GuestChangedEvent>;
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
   @Event() toast: EventEmitter<IToast>;
 
@@ -116,6 +118,7 @@ export class IrGuestInfoDrawer {
         position: 'top-right',
       });
       this.resetBookingEvt.emit(null);
+      this.guestChanged.emit(this.guest);
       this.guestInfoDrawerClosed.emit({ source: this.hostElement });
     } catch (error) {
       console.error(error);

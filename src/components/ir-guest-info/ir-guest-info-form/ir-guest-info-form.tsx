@@ -3,7 +3,7 @@ import { Guest } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
 import { ICountry } from '@/models/IBooking';
 import { guestInfoFormSchema } from './types';
-
+export type GuestChangedEvent = Partial<Guest>;
 @Component({
   tag: 'ir-guest-info-form',
   styleUrl: 'ir-guest-info-form.css',
@@ -15,7 +15,7 @@ export class IrGuestInfoForm {
   @Prop() countries: ICountry[];
   @Prop() autoValidate: boolean = false;
 
-  @Event() guestChanged: EventEmitter<Partial<Guest>>;
+  @Event() guestChanged: EventEmitter<GuestChangedEvent>;
 
   private handleInputChange(params: Partial<Guest>) {
     this.guestChanged.emit(params);

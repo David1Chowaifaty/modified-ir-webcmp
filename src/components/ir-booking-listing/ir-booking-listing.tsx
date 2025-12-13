@@ -18,6 +18,7 @@ import { BookingService } from '@/services/booking-service/booking.service';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';
 import { AllowedProperties, PropertyService } from '@/services/property.service';
 import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
+import { GuestChangedEvent } from '@/components';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -300,6 +301,21 @@ export class IrBookingListing {
     e.stopImmediatePropagation();
     e.stopPropagation();
     await this.fetchBookings();
+  }
+
+  @Listen('guestChanged')
+  handleGuestChanged(e: CustomEvent<GuestChangedEvent>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    booking_listing.bookings = booking_listing.bookings.map(b => {
+      const guest = { ...b.guest };
+      const newGuest = e.detail;
+      if (guest.id === newGuest.id) {
+        return { ...b, guest: { ...guest, ...newGuest } };
+      }
+      return b;
+    });
   }
 
   private findBooking(bookingNumber: Booking['booking_nbr']) {
