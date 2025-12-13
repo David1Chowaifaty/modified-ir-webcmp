@@ -24,17 +24,26 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+    <igloo-calendar currency-name="USD" propertyid="42" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        const booking_listing = document.querySelector("ir-booking-listing");
-        if (booking_listing) {
-            (async () => {
-                booking_listing.propertyid = getId();
-                booking_listing.ticket = await getToken()
-            })();
-        } 
+        //backend-cmp-injector
+        //aname - username -password
+        var today = new Date();
+        today.setDate(today.getDate() - 1);
+        var _FROM_DATE = today.toISOString().substring(0, 10)
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0, 10)
+        const calendar = document.querySelector("igloo-calendar");
+        calendar.from_date = _FROM_DATE;
+        calendar.to_date = _TO_DATE;
+        setTimeout(async () => {
+            const ticket = await getToken();
+            calendar.propertyid = getId();
+            calendar.ticket = ticket;
+        }, 300)
     </script>
 
 </body>
