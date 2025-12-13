@@ -24,7 +24,6 @@
 
 ### Used by
 
- - [igl-book-property](../../igloo-calendar/igl-book-property)
  - [ir-channel-editor](../../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../../ir-channel/ir-channel-mapping)
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
@@ -36,7 +35,6 @@
 ### Graph
 ```mermaid
 graph TD;
-  igl-book-property --> ir-icon
   ir-channel-editor --> ir-icon
   ir-channel-mapping --> ir-icon
   ir-hk-team --> ir-icon

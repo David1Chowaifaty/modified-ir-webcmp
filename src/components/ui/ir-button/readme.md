@@ -56,7 +56,6 @@ Type: `Promise<void>`
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
- - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [igl-tba-booking-view](../../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../../igloo-calendar/igl-to-be-assigned)
@@ -115,7 +114,6 @@ graph TD;
   igl-booking-event-hover --> ir-button
   igl-bulk-block --> ir-button
   igl-bulk-stop-sale --> ir-button
-  igl-cal-header --> ir-button
   igl-split-booking --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button

@@ -18,12 +18,12 @@
 
 ## Events
 
-| Event                               | Description | Type                                  |
-| ----------------------------------- | ----------- | ------------------------------------- |
-| `closeModal`                        |             | `CustomEvent<null>`                   |
-| `loadingChanged`                    |             | `CustomEvent<"save" \| "save-print">` |
-| `resetBookingEvt`                   |             | `CustomEvent<null>`                   |
-| `resetExposedCancellationDueAmount` |             | `CustomEvent<null>`                   |
+| Event                               | Description | Type                                    |
+| ----------------------------------- | ----------- | --------------------------------------- |
+| `closeModal`                        |             | `CustomEvent<null>`                     |
+| `loadingChanged`                    |             | `CustomEvent<"save" \| "save-print">`   |
+| `resetBookingEvt`                   |             | `CustomEvent<null>`                     |
+| `resetExposedCancellationDueAmount` |             | `CustomEvent<{ booking_nbr: string; }>` |
 
 
 ## Dependencies

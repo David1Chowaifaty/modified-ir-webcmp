@@ -10,7 +10,6 @@
 | Property               | Attribute                   | Description | Type                      | Default     |
 | ---------------------- | --------------------------- | ----------- | ------------------------- | ----------- |
 | `dateRangeData`        | --                          |             | `{ [key: string]: any; }` | `undefined` |
-| `disabled`             | `disabled`                  |             | `boolean`                 | `true`      |
 | `eventType`            | `event-type`                |             | `string`                  | `undefined` |
 | `isEditOrAddRoomEvent` | `is-edit-or-add-room-event` |             | `boolean`                 | `undefined` |
 | `isLoading`            | `is-loading`                |             | `string`                  | `undefined` |

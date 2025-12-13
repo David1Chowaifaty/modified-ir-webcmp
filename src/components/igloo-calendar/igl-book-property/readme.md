@@ -43,7 +43,7 @@
 
 - [igl-block-dates-view](../igl-block-dates-view)
 - [ir-spinner](../../ui/ir-spinner)
-- [ir-icon](../../ui/ir-icon)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [igl-booking-overview-page](igl-booking-overview-page)
 - [igl-booking-form](igl-booking-form)
 - [ir-button](../../ui/ir-button)
@@ -54,7 +54,7 @@
 graph TD;
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
-  igl-book-property --> ir-icon
+  igl-book-property --> ir-custom-button
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
   igl-book-property --> ir-button

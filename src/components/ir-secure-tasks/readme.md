@@ -218,7 +218,7 @@ graph TD;
   ir-payment-folio-form --> ir-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
-  igl-book-property --> ir-icon
+  igl-book-property --> ir-custom-button
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
   igl-book-property --> ir-button
@@ -269,7 +269,7 @@ graph TD;
   igl-legends --> ir-input-text
   igl-legends --> ir-success-loader
   ir-success-loader --> ir-icons
-  igl-cal-header --> ir-button
+  igl-cal-header --> ir-custom-button
   igl-cal-header --> ir-date-picker
   igl-cal-header --> ir-picker
   igl-cal-header --> ir-picker-item
