@@ -9,7 +9,6 @@ import { BookingService } from '@/services/booking-service/booking.service';
 export class IrBookingCompanyForm {
   @Prop() booking: Booking;
   @Prop() formId: string;
-  @State() open: boolean;
   @State() isLoading: boolean;
   @State() formData: Pick<Booking, 'company_name' | 'company_tax_nbr'>;
 
@@ -54,8 +53,9 @@ export class IrBookingCompanyForm {
       };
       await this.bookingService.doReservation(booking);
       this.resetBookingEvt.emit({ ...this.booking, ...this.formData });
-      this.open = false;
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {

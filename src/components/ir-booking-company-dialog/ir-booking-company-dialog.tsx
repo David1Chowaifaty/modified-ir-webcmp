@@ -44,7 +44,8 @@ export class IrBookingCompanyDialog {
               e.stopImmediatePropagation();
               e.stopPropagation();
               this.resetBookingEvt.emit(e.detail);
-              this.closeCompanyForm();
+              this.open = false;
+              // this.closeCompanyForm();
             }}
             formId={formId}
             booking={this.booking}

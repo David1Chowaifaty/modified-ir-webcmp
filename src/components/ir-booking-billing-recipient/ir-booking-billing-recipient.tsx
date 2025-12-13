@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 @Component({
   tag: 'ir-booking-billing-recipient',
@@ -67,11 +67,6 @@ export class IrBookingBillingRecipient {
     this.rooms = [..._rooms];
   }
 
-  @Listen('resetBookingEvt')
-  handleBookingRecipient() {
-    this.bookingCompanyFormRef?.closeCompanyForm();
-  }
-
   render() {
     return (
       <Host>
@@ -113,12 +108,16 @@ export class IrBookingBillingRecipient {
           onCompanyFormClosed={() => {
             if (this.selectedRecipient === 'company' && !this.booking.company_name) {
               this.handleRecipientChange(this.initialValue);
+            } else {
+              this.handleRecipientChange('company');
             }
           }}
           onResetBookingEvt={e => {
             this.booking = { ...e.detail };
             if (!this.booking.company_name) {
               this.handleRecipientChange(this.initialValue);
+            } else {
+              this.handleRecipientChange('company');
             }
           }}
           booking={this.booking}

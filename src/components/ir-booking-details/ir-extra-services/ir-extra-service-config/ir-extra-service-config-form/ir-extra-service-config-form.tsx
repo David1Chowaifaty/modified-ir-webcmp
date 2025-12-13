@@ -95,16 +95,18 @@ export class IrExtraServiceConfigForm {
             label={locales.entries.Lcz_Description}
           ></wa-textarea>
         </ir-validator>
-        <ir-custom-date-picker
-          placeholder="Select date"
-          withClear
-          label="Dates on"
-          emitEmptyDate
-          date={this.s_service?.start_date}
-          minDate={this.booking.from_date}
-          maxDate={this.booking.to_date}
-          onDateChanged={e => this.updateService({ start_date: e.detail.start?.format('YYYY-MM-DD') })}
-        ></ir-custom-date-picker>
+        <ir-validator value={this.s_service?.start_date ?? null} schema={ExtraServiceSchema.shape.price}>
+          <ir-custom-date-picker
+            placeholder="Select date"
+            withClear
+            label="Dates on"
+            emitEmptyDate
+            date={this.s_service?.start_date}
+            minDate={this.booking.from_date}
+            maxDate={this.booking.to_date}
+            onDateChanged={e => this.updateService({ start_date: e.detail.start?.format('YYYY-MM-DD') })}
+          ></ir-custom-date-picker>
+        </ir-validator>
         <ir-custom-date-picker
           withClear
           emitEmptyDate
