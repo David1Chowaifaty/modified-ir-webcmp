@@ -23,6 +23,9 @@
 /* .cellData[data-dirty-room='true'] { 
   border-bottom: 5px solid rgb(80, 80, 80) !important;
 } */
+.cellData {
+  background-color: var(--wa-color-surface-default);
+}
 .cellData[data-dirty-room='true']::after {
   content: '';
   position: absolute;
@@ -49,7 +52,7 @@
   background: var(--wa-color-neutral-fill-quiet);
 }
 .roomRow .room:hover[data-hk-enabled='false'] {
-  background: white;
+  background: var(--wa-color-surface-default);
   cursor: default;
 }
 .cellData {
@@ -92,7 +95,7 @@
   position: -webkit-sticky;
   position: sticky;
   left: 0;
-  background: #fff;
+  background: var(--wa-color-surface-default);
   border-right: 1px solid var(--wa-color-surface-border);
   width: 170px;
   z-index: 1;

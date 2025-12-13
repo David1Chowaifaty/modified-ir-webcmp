@@ -59,13 +59,35 @@
 .iglPopOver {
   /* max-width: 350px; */
   position: absolute;
-  background-color: #fff;
+  background-color: var(--wa-color-surface-default);
   padding: 10px;
-  border: 1px solid #656ee7;
+  border: 1px solid var(--wa-color-surface-border);
   border-radius: 6px;
   left: var(--el-left, 50%);
   transform: translateX(-50%) translateY(10px);
   box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
+  /* font-size: var(--wa-font-size-m);
+  line-height: var(--wa-line-height-normal);
+  text-align: start;
+  white-space: normal;
+  background-color: var(--wa-color-surface-default);
+  border-top: none;
+  border-left: none;
+  border-bottom: solid var(--wa-panel-border-width) var(--wa-color-surface-border);
+  border-right: solid var(--wa-panel-border-width) var(--wa-color-surface-border);
+  box-shadow: none; */
+  /* transform-origin: bottom; */
+  /* display: flex;
+  flex-direction: column; */
+  padding: var(--wa-space-l);
+  background-color: var(--wa-color-surface-default);
+  border: 1px solid var(--wa-color-surface-border);
+  border-radius: var(--wa-panel-border-radius);
+  border-style: var(--wa-panel-border-style);
+  box-shadow: var(--wa-shadow-l);
+  color: var(--wa-color-text-normal);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .iglPopOver.infoBubble {
@@ -91,14 +113,15 @@
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   transform: translate(-50%, 0px);
+  box-shadow: var(--wa-shadow-l);
 }
 
 .bubblePointTop {
-  border-top: 10px solid #656ee7;
+  border-top: 10px solid var(--wa-color-surface-default);
 }
 
 .bubblePointBottom {
-  border-bottom: 10px solid #656ee7;
+  border-bottom: 10px solid var(--wa-color-surface-default);
 }
 
 .bubbleInfoAbove {

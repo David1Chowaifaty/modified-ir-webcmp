@@ -19,6 +19,9 @@
   font-weight: bold;
   color: var(--wa-color-text-normal);
 }
+.cellData {
+  background-color: var(--wa-color-surface-default);
+}
 .stickyCell {
   display: -ms-inline-grid;
   display: -moz-inline-grid;
@@ -175,6 +178,7 @@
   padding-left: 8px;
 }
 .header__fd-actions {
+  color: var(--wa-color-text-normal);
   border-inline-end: 1px solid var(--wa-color-surface-border);
 }
 .badge-light {
@@ -192,6 +196,6 @@
   box-sizing: border-box;
   /* padding: 10px; */
   gap: 0.875rem;
-
+  color: var(--wa-color-text-normal);
   flex-direction: column;
 }
