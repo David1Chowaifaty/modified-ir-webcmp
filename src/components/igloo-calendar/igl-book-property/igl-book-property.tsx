@@ -685,8 +685,8 @@ export class IglBookProperty {
             <Fragment>
               <div class="sheet-header">
                 <div class="card-header-container">
-                  <h3 class="text-left font-medium-2 px-2">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
-                  <ir-icon
+                  <h2 class="fd-book-property__title">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h2>
+                  {/* <ir-icon
                     class={'px-2'}
                     onIconClickHandler={() => {
                       this.closeWindow();
@@ -698,7 +698,10 @@ export class IglBookProperty {
                         d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
                       />
                     </svg>
-                  </ir-icon>
+                  </ir-icon> */}
+                  <ir-custom-button appearance="plain" variant="neutral" size="medium" onClickHandler={() => this.closeWindow()}>
+                    <wa-icon name="xmark" library="system" variant="solid" label="Close" aria-label="Close"></wa-icon>
+                  </ir-custom-button>
                 </div>
               </div>
               <div class="px-2 sheet-body">

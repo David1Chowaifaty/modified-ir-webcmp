@@ -22,6 +22,15 @@
   padding: 1rem 0;
   justify-content: space-between;
 }
+.fd-book-property__title {
+  margin: 0;
+  padding: 0;
+  font-family: var(--wa-font-family-heading);
+  font-weight: var(--wa-font-weight-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  font-size: var(--wa-font-size-l);
+}
 .loading-container {
   height: 100%;
   width: 100%;
@@ -98,6 +107,19 @@ button:not(:disabled),
   width: 100%;
 }
 
+.card-header-container {
+  --spacing: var(--wa-space-l);
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  padding-inline-start: var(--spacing);
+  padding-block-end: 0;
+  padding-inline-end: calc(var(--spacing) - var(--wa-form-control-padding-block));
+  padding-block-start: calc(var(--spacing) - var(--wa-form-control-padding-block));
+  border-bottom: 1px solid var(--wa-color-surface-border);
+  padding-bottom: calc(var(--spacing) / 2);
+  background-color: var(--ir-drawer-background-color, var(--wa-color-surface-default));
+}
 /* .row {
   padding: 0 0 0 15px;
   margin: 0;
