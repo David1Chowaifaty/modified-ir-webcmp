@@ -166,7 +166,6 @@ export namespace Components {
     }
     interface IglBookPropertyFooter {
         "dateRangeData": { [key: string]: any };
-        "disabled": boolean;
         "eventType": string;
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
@@ -6910,7 +6909,6 @@ declare namespace LocalJSX {
     }
     interface IglBookPropertyFooter {
         "dateRangeData"?: { [key: string]: any };
-        "disabled"?: boolean;
         "eventType"?: string;
         "isEditOrAddRoomEvent"?: boolean;
         "isLoading"?: string;

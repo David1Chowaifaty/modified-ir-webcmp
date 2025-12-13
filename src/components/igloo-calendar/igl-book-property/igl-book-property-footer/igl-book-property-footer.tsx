@@ -1,7 +1,6 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 import { TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import locales from '@/stores/locales.store';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { TIcons } from '@/components/ui/ir-icons/icons';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
@@ -14,7 +13,6 @@ import { NativeButton } from '@/components/ui/ir-custom-button/ir-custom-button'
 })
 export class IglBookPropertyFooter {
   @Prop() eventType: string;
-  @Prop() disabled: boolean = true;
   @Prop() page: string;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
@@ -39,7 +37,7 @@ export class IglBookPropertyFooter {
   private renderButton({
     label,
     type,
-    disabled,
+    disabled = false,
     // icon_name,
     isLoading,
     appearance,
@@ -98,7 +96,7 @@ export class IglBookPropertyFooter {
                 this.renderButton({
                   type: 'next',
                   label: `${locales.entries.Lcz_Next}`,
-                  disabled: isRequestPending('/Get_Exposed_Booking_Availability'),
+
                   icon_name: 'angles_right',
                   variant: 'brand',
                   appearance: 'accent',
