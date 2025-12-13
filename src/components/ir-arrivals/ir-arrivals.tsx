@@ -106,7 +106,12 @@ export class IrArrivals {
   handleOpen(e: CustomEvent) {
     this.bookingNumber = e.detail;
   }
-
+  @Listen('resetExposedCancellationDueAmount')
+  async handleResetExposedCancellationDueAmount(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.getBookings();
+  }
   private async init() {
     try {
       this.isPageLoading = true;

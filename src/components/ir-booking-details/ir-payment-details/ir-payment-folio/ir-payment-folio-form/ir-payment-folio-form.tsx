@@ -7,6 +7,7 @@ import { PaymentService } from '@/services/payment.service';
 import { FolioEntryMode, Payment, PaymentEntries } from '../../../types';
 import { buildPaymentTypes } from '@/services/booking-service/utils';
 import { PAYMENT_TYPES_WITH_METHOD } from '../../global.variables';
+import { Booking } from '@/models/booking.dto';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -88,7 +89,7 @@ export class IrPaymentFolioForm {
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
-  @Event() resetExposedCancellationDueAmount: EventEmitter<null>;
+  @Event() resetExposedCancellationDueAmount: EventEmitter<Pick<Booking, 'booking_nbr'>>;
   @Event() loadingChanged: EventEmitter<'save' | 'save-print' | null>;
 
   private readonly today = moment().format(DATE_FORMAT);
@@ -185,7 +186,7 @@ export class IrPaymentFolioForm {
       };
       await this.paymentService.AddPayment(payload, this.bookingNumber);
       this.resetBookingEvt.emit(null);
-      this.resetExposedCancellationDueAmount.emit(null);
+      this.resetExposedCancellationDueAmount.emit({ booking_nbr: this.bookingNumber });
       this.closeModal.emit();
     } catch (error) {
       const err: Record<string, boolean> = {};

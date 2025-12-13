@@ -231,13 +231,6 @@ export class IrBookingListing {
     await this.fetchBookings();
   }
 
-  @Listen('resetData')
-  async handleResetData(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    await this.fetchBookings();
-  }
-
   @Listen('resetBookingData')
   async handleResetStoreData(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -300,6 +293,13 @@ export class IrBookingListing {
       booking,
       cause: 'edit',
     };
+  }
+
+  @Listen('resetExposedCancellationDueAmount')
+  async handleResetExposedCancellationDueAmount(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.fetchBookings();
   }
 
   private findBooking(bookingNumber: Booking['booking_nbr']) {

@@ -5809,7 +5809,7 @@ declare global {
     interface HTMLIrPaymentFolioFormElementEventMap {
         "closeModal": null;
         "resetBookingEvt": null;
-        "resetExposedCancellationDueAmount": null;
+        "resetExposedCancellationDueAmount": Pick<Booking, 'booking_nbr'>;
         "loadingChanged": 'save' | 'save-print' | null;
     }
     interface HTMLIrPaymentFolioFormElement extends Components.IrPaymentFolioForm, HTMLStencilElement {
@@ -9305,7 +9305,7 @@ declare namespace LocalJSX {
         "onCloseModal"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
         "onLoadingChanged"?: (event: IrPaymentFolioFormCustomEvent<'save' | 'save-print' | null>) => void;
         "onResetBookingEvt"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
-        "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
+        "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioFormCustomEvent<Pick<Booking, 'booking_nbr'>>) => void;
         "payment"?: Payment1;
         "paymentEntries"?: PaymentEntries1;
     }

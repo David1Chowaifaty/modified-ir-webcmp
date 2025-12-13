@@ -14,7 +14,6 @@
     <script src="assets/scripts/bootstrap.bundle.min.js"></script>
     <script src="assets/scripts/toastr/toastr.min.js"></script>
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
-    <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
     <script src="scripts/index.js"></script>
     <style>
         body {
@@ -25,17 +24,17 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-booking-details has-room-edit has-room-delete baseurl="https://gateway.igloorooms.com/IR" language="en"
-        has-print="true" has-receipt></ir-booking-details>
+    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
     <script>
-        const bookingDetail = document.querySelector("ir-booking-details");
-        setTimeout(async () => {
-            const ticket = await getToken();
-            bookingDetail.bookingNumber = "14757147401"
-            bookingDetail.propertyid = getId();
-            bookingDetail.ticket = ticket;
-        }, 300)
+        const booking_listing = document.querySelector("ir-booking-listing");
+        if (booking_listing) {
+            (async () => {
+                booking_listing.propertyid = getId();
+                booking_listing.ticket = await getToken()
+            })();
+        } 
     </script>
 
 </body>

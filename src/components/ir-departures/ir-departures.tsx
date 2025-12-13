@@ -74,7 +74,12 @@ export class IrDepartures {
     };
     this.paymentFolioRef.openFolio();
   }
-
+  @Listen('resetExposedCancellationDueAmount')
+  async handleResetExposedCancellationDueAmount(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.getBookings();
+  }
   private async init() {
     try {
       this.isPageLoading = true;
