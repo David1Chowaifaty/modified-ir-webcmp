@@ -121,6 +121,7 @@ export class IrDrawer {
         placement={this.placement}
         withoutHeader={this.withoutHeader}
         lightDismiss={this.lightDismiss}
+        exportparts="dialog, header, header-actions, title, close-button, close-button__base, body, footer"
       >
         {this.slotState.get('header-actions') && <slot name="header-actions" slot="header-actions"></slot>}
         {this.slotState.get('label') && <slot name="label" slot="label"></slot>}
