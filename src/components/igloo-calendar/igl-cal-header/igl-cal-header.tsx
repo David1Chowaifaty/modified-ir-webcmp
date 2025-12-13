@@ -4,7 +4,6 @@ import { dateToFormattedString, isWeekend } from '@/utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { handleUnAssignedDatesChange } from '@/stores/unassigned_dates.store';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 
 @Component({
   tag: 'igl-cal-header',

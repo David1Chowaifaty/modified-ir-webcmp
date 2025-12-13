@@ -285,7 +285,8 @@ export class IglLegends {
                 </div>
                 <div class="legendRow">
                   <div class="legendCal headerCell align-items-center br-s">
-                    <span class="badge badge-info  badge-pill">3</span>
+                    {/* <span class="badge badge-info  badge-pill">3</span> */}
+                    <wa-badge pill>3</wa-badge>
                   </div>
                   <div class="highphenLegend">
                     <div>{locales.entries.Lcz_UnassignedUnits}</div>

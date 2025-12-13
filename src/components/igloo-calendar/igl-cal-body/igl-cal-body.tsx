@@ -488,7 +488,7 @@ export class IglCalBody {
               this.hkModal.openModal();
             }}
             onMouseEnter={() => {
-              this.interactiveTitle[room.id]?.style?.setProperty('--ir-interactive-hk-bg', '#e0e0e0');
+              this.interactiveTitle[room.id]?.style?.setProperty('--ir-interactive-hk-bg', 'var(--wa-color-neutral-fill-quiet)');
             }}
             onMouseLeave={() => {
               this.interactiveTitle[room.id]?.style?.removeProperty('--ir-interactive-hk-bg');
@@ -498,7 +498,7 @@ export class IglCalBody {
               ref={el => {
                 if (el) this.interactiveTitle[room.id] = el;
               }}
-              style={room.hk_status === '003' && { '--dot-color': '#ededed' }}
+              style={room.hk_status === '003' && { '--dot-color': 'var(--wa-color-neutral-fill-quiet)' }}
               hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
               popoverTitle={name}
             >
