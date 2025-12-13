@@ -24,6 +24,23 @@ html {
   padding: var(--wa-space-l);
   position: relative;
 }
+.ir-dialog__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+.dialog__loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  min-height: 50px;
+  min-width: 31rem;
+}
 .ir-price {
   font-family: inherit;
   font-size: 1rem;
@@ -103,4 +120,44 @@ wa-select[aria-invalid='true']::part(combobox) {
   .label-on-left ::part(hint) {
     grid-column: 2;
   }
+}
+
+.ir__drawer {
+  text-align: left !important;
+}
+
+.ir__drawer::part(header) {
+  border-bottom: 1px solid var(--wa-color-surface-border);
+  padding-bottom: calc(var(--spacing) / 2);
+  background-color: var(--ir-drawer-background-color, var(--wa-color-surface-default));
+}
+.ir__drawer::part(body) {
+  background-color: var(--ir-drawer-background-color, var(--wa-color-surface-default));
+  padding: 0;
+  padding-left: var(--ir-drawer-padding-left, var(--spacing));
+  padding-right: var(--ir-drawer-padding-right, var(--spacing));
+  padding-top: var(--ir-drawer-padding-top, var(--spacing));
+  padding-bottom: var(--ir-drawer-padding-bottom, var(--spacing));
+}
+.ir__drawer::part(footer) {
+  background-color: var(--ir-drawer-background-color, var(--wa-color-surface-default));
+  padding-top: calc(var(--spacing) / 2);
+  border-top: 1px solid var(--wa-color-surface-border);
+}
+.ir__drawer-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+.ir__drawer-footer > * {
+  flex: 1 1 0%;
+}
+.drawer__loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }

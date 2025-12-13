@@ -1,14 +1,16 @@
 import { OverflowAdd, OverflowRelease } from '@/decorators/OverflowLock';
 import WaDrawer from '@awesome.me/webawesome/dist/components/drawer/drawer';
-import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 
 export type NativeDrawer = WaDrawer;
 @Component({
   tag: 'ir-drawer',
-  styleUrls: ['ir-drawer.css'],
-  shadow: false,
+  styleUrl: 'ir-drawer.css',
+  shadow: true,
 })
 export class IrDrawer {
+  @Element() el: HTMLIrDrawerElement;
+
   /** Indicates whether or not the drawer is open. Toggle this attribute to show and hide the drawer. */
   @Prop({ reflect: true }) open: NativeDrawer['open'];
   /**
@@ -23,6 +25,8 @@ export class IrDrawer {
   /** When enabled, the drawer will be closed when the user clicks outside of it. */
   @Prop({ reflect: true }) lightDismiss: NativeDrawer['lightDismiss'] = true;
 
+  @State() private slotState = new Map<string, boolean>();
+
   /** Emitted when the drawer opens. */
   @Event() drawerShow: EventEmitter<void>;
   /**Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. */
@@ -36,6 +40,21 @@ export class IrDrawer {
     this.emitDrawerHide(event);
   };
 
+  private slotObserver: MutationObserver;
+
+  private readonly SLOT_NAMES = ['label', 'header-actions', 'footer'] as const;
+
+  componentWillLoad() {
+    this.updateSlotState();
+  }
+
+  componentDidLoad() {
+    this.setupSlotListeners();
+  }
+
+  disconnectedCallback() {
+    this.removeSlotListeners();
+  }
   @OverflowAdd()
   private emitDrawerShow(e: CustomEvent<void>) {
     e.stopImmediatePropagation();
@@ -52,6 +71,44 @@ export class IrDrawer {
     }
     this.drawerHide.emit(e.detail);
   }
+
+  private setupSlotListeners() {
+    // Listen to slotchange events on the host element
+    this.el.addEventListener('slotchange', this.handleSlotChange);
+
+    // Also use MutationObserver as a fallback for browsers that don't fire slotchange reliably
+    this.slotObserver = new MutationObserver(this.handleSlotChange);
+    this.slotObserver.observe(this.el, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['slot'],
+    });
+  }
+
+  private removeSlotListeners() {
+    this.el.removeEventListener('slotchange', this.handleSlotChange);
+    this.slotObserver?.disconnect();
+  }
+
+  private handleSlotChange = () => {
+    this.updateSlotState();
+  };
+
+  private updateSlotState() {
+    const newState = new Map<string, boolean>();
+
+    this.SLOT_NAMES.forEach(name => {
+      newState.set(name, this.hasSlot(name));
+    });
+
+    this.slotState = newState;
+  }
+
+  private hasSlot(name: string): boolean {
+    return !!this.el.querySelector(`[slot="${name}"]`);
+  }
+
   render() {
     return (
       <wa-drawer
@@ -65,10 +122,10 @@ export class IrDrawer {
         withoutHeader={this.withoutHeader}
         lightDismiss={this.lightDismiss}
       >
-        <slot slot="label" name="label"></slot>
-        <slot slot="header-actions" name="header-actions"></slot>
+        {this.slotState.get('header-actions') && <slot name="header-actions" slot="header-actions"></slot>}
+        {this.slotState.get('label') && <slot name="label" slot="label"></slot>}
         <slot></slot>
-        <slot slot="footer" name="footer"></slot>
+        {this.slotState.get('footer') && <slot name="footer" slot="footer"></slot>}
       </wa-drawer>
     );
   }
