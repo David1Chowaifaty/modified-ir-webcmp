@@ -534,7 +534,7 @@ export interface Property {
   privacy_policy: string;
   promotions: Promotion[];
   registered_name: string;
-  roomtypes: any[];
+  roomtypes: any[] | null;
   social_media: Socialmedia[];
   sources: Paymentmode[];
   space_theme: Spacetheme;

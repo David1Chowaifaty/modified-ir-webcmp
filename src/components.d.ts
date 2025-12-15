@@ -17,7 +17,7 @@ import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
-import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Property, Room, SharedPerson } from "./models/booking.dto";
 import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 import { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 import { IPaymentAction } from "./services/payment.service";
@@ -76,7 +76,7 @@ export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
-export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Property, Room, SharedPerson } from "./models/booking.dto";
 export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 export { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 export { IPaymentAction } from "./services/payment.service";
@@ -2445,6 +2445,52 @@ export namespace Components {
          */
         "trigger": 'focus' | 'click' | 'hover';
     }
+    interface IrPreviewScreenDialog {
+        /**
+          * Determines which built-in action is rendered in the header. `print` triggers `window.print()` while `download` downloads the configured URL.
+         */
+        "action": PreviewAction;
+        /**
+          * Accessible label used for the default header action button. Falls back to context-sensitive defaults when omitted.
+         */
+        "actionButtonLabel"?: string;
+        /**
+          * Closes the preview dialog.
+         */
+        "closeDialog": () => Promise<void>;
+        /**
+          * Suggested file name for downloaded previews.
+         */
+        "downloadFileName"?: string;
+        /**
+          * URL used when the action is set to `download`. Can be overridden per invocation via {@link triggerAction}.
+         */
+        "downloadUrl"?: string;
+        /**
+          * When `true`, hides the default header action button so a custom implementation can be slotted.
+         */
+        "hideDefaultAction": boolean;
+        /**
+          * The dialog's label as displayed in the header. Required for accessibility and announced by assistive technologies.
+         */
+        "label": string;
+        /**
+          * Indicates whether or not the preview dialog is open. Toggle this attribute or use {@link openDialog} / {@link closeDialog} to control visibility.
+         */
+        "open": boolean;
+        /**
+          * Opens the preview dialog.
+         */
+        "openDialog": () => Promise<void>;
+        /**
+          * Executes the configured preview action.
+          * @param action Optional override of the default action type.
+          * @param url Optional URL used for downloads. Falls back to the `downloadUrl` prop.
+          * @param fileName Optional file name suggestion for downloads.
+          * @returns Resolves with `true` when the action was attempted, `false` when prerequisites are missing.
+         */
+        "triggerAction": (action?: PreviewAction, url?: string, fileName?: string) => Promise<boolean>;
+    }
     interface IrPriceInput {
         /**
           * The AutoValidate for the input, optional
@@ -2518,6 +2564,66 @@ export namespace Components {
           * A Zod schema for validating the input Example: z.coerce.number()
          */
         "zod"?: ZodType<any, any>;
+    }
+    interface IrPrintRoom {
+        /**
+          * Booking context
+         */
+        "booking": Booking;
+        /**
+          * Currency code (e.g. USD, EUR)
+         */
+        "currency": string;
+        /**
+          * Room index
+         */
+        "idx": number;
+        /**
+          * Property context
+         */
+        "property": Property;
+        /**
+          * Room data
+         */
+        "room": Booking['rooms'][0];
+    }
+    interface IrPrintingLabel {
+        "asHtml": boolean;
+        /**
+          * Fallback content text (used if no content slot is provided)
+         */
+        "content"?: string;
+        "display": 'inline' | 'flex';
+        /**
+          * Fallback label text (used if no label slot is provided)
+         */
+        "label"?: string;
+    }
+    interface IrProformaInvoicePreview {
+        /**
+          * Booking context used to display property, guest, and folio details.
+         */
+        "booking": Booking;
+        /**
+          * Optional footer text shown at the end of the preview.
+         */
+        "footerNote"?: string;
+        /**
+          * Invoice payload emitted by `ir-invoice-form`. Totals will fall back to booking data when omitted.
+         */
+        "invoice"?: InvoicePayload;
+        /**
+          * Optional metadata fetched via `getBookingInvoiceInfo`. Used to display reference numbers (invoice/credit note/etc.).
+         */
+        "invoiceInfo"?: BookingInvoiceInfo;
+        /**
+          * Locale used for date formatting.
+         */
+        "locale": string;
+        /**
+          * Property associated with the booking.
+         */
+        "property": Booking['property'];
     }
     interface IrProgressIndicator {
         /**
@@ -3599,6 +3705,10 @@ export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
 export interface IrPickupFormCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPickupFormElement;
+}
+export interface IrPreviewScreenDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPreviewScreenDialogElement;
 }
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -5426,6 +5536,7 @@ declare global {
         "invoiceOpen": void;
         "invoiceClose": void;
         "invoiceCreated": IssueInvoiceProps;
+        "previewProformaInvoice": IssueInvoiceProps;
         "loadingChange": boolean;
     }
     interface HTMLIrInvoiceFormElement extends Components.IrInvoiceForm, HTMLStencilElement {
@@ -5988,6 +6099,23 @@ declare global {
         prototype: HTMLIrPopoverElement;
         new (): HTMLIrPopoverElement;
     };
+    interface HTMLIrPreviewScreenDialogElementEventMap {
+        "previewAction": { action: PreviewAction; url?: string };
+    }
+    interface HTMLIrPreviewScreenDialogElement extends Components.IrPreviewScreenDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPreviewScreenDialogElementEventMap>(type: K, listener: (this: HTMLIrPreviewScreenDialogElement, ev: IrPreviewScreenDialogCustomEvent<HTMLIrPreviewScreenDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPreviewScreenDialogElementEventMap>(type: K, listener: (this: HTMLIrPreviewScreenDialogElement, ev: IrPreviewScreenDialogCustomEvent<HTMLIrPreviewScreenDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPreviewScreenDialogElement: {
+        prototype: HTMLIrPreviewScreenDialogElement;
+        new (): HTMLIrPreviewScreenDialogElement;
+    };
     interface HTMLIrPriceInputElementEventMap {
         "textChange": string;
         "inputBlur": string;
@@ -6006,6 +6134,24 @@ declare global {
     var HTMLIrPriceInputElement: {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
+    };
+    interface HTMLIrPrintRoomElement extends Components.IrPrintRoom, HTMLStencilElement {
+    }
+    var HTMLIrPrintRoomElement: {
+        prototype: HTMLIrPrintRoomElement;
+        new (): HTMLIrPrintRoomElement;
+    };
+    interface HTMLIrPrintingLabelElement extends Components.IrPrintingLabel, HTMLStencilElement {
+    }
+    var HTMLIrPrintingLabelElement: {
+        prototype: HTMLIrPrintingLabelElement;
+        new (): HTMLIrPrintingLabelElement;
+    };
+    interface HTMLIrProformaInvoicePreviewElement extends Components.IrProformaInvoicePreview, HTMLStencilElement {
+    }
+    var HTMLIrProformaInvoicePreviewElement: {
+        prototype: HTMLIrProformaInvoicePreviewElement;
+        new (): HTMLIrProformaInvoicePreviewElement;
     };
     interface HTMLIrProgressIndicatorElement extends Components.IrProgressIndicator, HTMLStencilElement {
     }
@@ -6802,7 +6948,11 @@ declare global {
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
+        "ir-preview-screen-dialog": HTMLIrPreviewScreenDialogElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-print-room": HTMLIrPrintRoomElement;
+        "ir-printing-label": HTMLIrPrintingLabelElement;
+        "ir-proforma-invoice-preview": HTMLIrProformaInvoicePreviewElement;
         "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
         "ir-range-picker": HTMLIrRangePickerElement;
@@ -8788,6 +8938,7 @@ declare namespace LocalJSX {
          */
         "onInvoiceOpen"?: (event: IrInvoiceFormCustomEvent<void>) => void;
         "onLoadingChange"?: (event: IrInvoiceFormCustomEvent<boolean>) => void;
+        "onPreviewProformaInvoice"?: (event: IrInvoiceFormCustomEvent<IssueInvoiceProps>) => void;
         /**
           * Whether the invoice drawer is open.  This prop is mutable and reflected to the host element, allowing parent components to control visibility via markup or via the public `openDrawer()` / `closeDrawer()` methods.
          */
@@ -9519,6 +9670,40 @@ declare namespace LocalJSX {
          */
         "trigger"?: 'focus' | 'click' | 'hover';
     }
+    interface IrPreviewScreenDialog {
+        /**
+          * Determines which built-in action is rendered in the header. `print` triggers `window.print()` while `download` downloads the configured URL.
+         */
+        "action"?: PreviewAction;
+        /**
+          * Accessible label used for the default header action button. Falls back to context-sensitive defaults when omitted.
+         */
+        "actionButtonLabel"?: string;
+        /**
+          * Suggested file name for downloaded previews.
+         */
+        "downloadFileName"?: string;
+        /**
+          * URL used when the action is set to `download`. Can be overridden per invocation via {@link triggerAction}.
+         */
+        "downloadUrl"?: string;
+        /**
+          * When `true`, hides the default header action button so a custom implementation can be slotted.
+         */
+        "hideDefaultAction"?: boolean;
+        /**
+          * The dialog's label as displayed in the header. Required for accessibility and announced by assistive technologies.
+         */
+        "label"?: string;
+        /**
+          * Fired whenever the preview action is executed, either via the header button or programmatically.
+         */
+        "onPreviewAction"?: (event: IrPreviewScreenDialogCustomEvent<{ action: PreviewAction; url?: string }>) => void;
+        /**
+          * Indicates whether or not the preview dialog is open. Toggle this attribute or use {@link openDialog} / {@link closeDialog} to control visibility.
+         */
+        "open"?: boolean;
+    }
     interface IrPriceInput {
         /**
           * The AutoValidate for the input, optional
@@ -9604,6 +9789,66 @@ declare namespace LocalJSX {
           * A Zod schema for validating the input Example: z.coerce.number()
          */
         "zod"?: ZodType<any, any>;
+    }
+    interface IrPrintRoom {
+        /**
+          * Booking context
+         */
+        "booking"?: Booking;
+        /**
+          * Currency code (e.g. USD, EUR)
+         */
+        "currency"?: string;
+        /**
+          * Room index
+         */
+        "idx"?: number;
+        /**
+          * Property context
+         */
+        "property"?: Property;
+        /**
+          * Room data
+         */
+        "room"?: Booking['rooms'][0];
+    }
+    interface IrPrintingLabel {
+        "asHtml"?: boolean;
+        /**
+          * Fallback content text (used if no content slot is provided)
+         */
+        "content"?: string;
+        "display"?: 'inline' | 'flex';
+        /**
+          * Fallback label text (used if no label slot is provided)
+         */
+        "label"?: string;
+    }
+    interface IrProformaInvoicePreview {
+        /**
+          * Booking context used to display property, guest, and folio details.
+         */
+        "booking"?: Booking;
+        /**
+          * Optional footer text shown at the end of the preview.
+         */
+        "footerNote"?: string;
+        /**
+          * Invoice payload emitted by `ir-invoice-form`. Totals will fall back to booking data when omitted.
+         */
+        "invoice"?: InvoicePayload;
+        /**
+          * Optional metadata fetched via `getBookingInvoiceInfo`. Used to display reference numbers (invoice/credit note/etc.).
+         */
+        "invoiceInfo"?: BookingInvoiceInfo;
+        /**
+          * Locale used for date formatting.
+         */
+        "locale"?: string;
+        /**
+          * Property associated with the booking.
+         */
+        "property"?: Booking['property'];
     }
     interface IrProgressIndicator {
         /**
@@ -10473,7 +10718,11 @@ declare namespace LocalJSX {
         "ir-pickup-view": IrPickupView;
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
+        "ir-preview-screen-dialog": IrPreviewScreenDialog;
         "ir-price-input": IrPriceInput;
+        "ir-print-room": IrPrintRoom;
+        "ir-printing-label": IrPrintingLabel;
+        "ir-proforma-invoice-preview": IrProformaInvoicePreview;
         "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
         "ir-range-picker": IrRangePicker;
@@ -10685,7 +10934,11 @@ declare module "@stencil/core" {
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
+            "ir-preview-screen-dialog": LocalJSX.IrPreviewScreenDialog & JSXBase.HTMLAttributes<HTMLIrPreviewScreenDialogElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-print-room": LocalJSX.IrPrintRoom & JSXBase.HTMLAttributes<HTMLIrPrintRoomElement>;
+            "ir-printing-label": LocalJSX.IrPrintingLabel & JSXBase.HTMLAttributes<HTMLIrPrintingLabelElement>;
+            "ir-proforma-invoice-preview": LocalJSX.IrProformaInvoicePreview & JSXBase.HTMLAttributes<HTMLIrProformaInvoicePreviewElement>;
             "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;

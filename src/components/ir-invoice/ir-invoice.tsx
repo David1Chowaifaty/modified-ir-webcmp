@@ -2,6 +2,7 @@ import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingInvoiceInfo, ViewMode } from './types';
+import { IssueInvoiceProps } from '@/components';
 
 @Component({
   tag: 'ir-invoice',
@@ -68,6 +69,7 @@ export class IrInvoice {
    * underlying drawer emits `onDrawerHide`.
    */
   @Event() invoiceClose: EventEmitter<void>;
+  @State() invoice: IssueInvoiceProps['invoice'] = null;
 
   /**
    * Opens the invoice drawer.
@@ -148,6 +150,7 @@ export class IrInvoice {
               booking={this.booking}
               autoPrint={this.autoPrint}
               formId={this._id}
+              onPreviewProformaInvoice={e => (this.invoice = e.detail.invoice)}
               invoiceInfo={this.invoiceInfo}
               onLoadingChange={e => (this.isLoading = e.detail)}
             ></ir-invoice-form>
@@ -171,6 +174,9 @@ export class IrInvoice {
               Confirm
             </ir-custom-button>
           </div>
+          <ir-preview-screen-dialog open={this.invoice !== null}>
+            <ir-proforma-invoice-preview invoice={this.invoice} booking={this.booking}></ir-proforma-invoice-preview>
+          </ir-preview-screen-dialog>
         </ir-drawer>
       </Host>
     );

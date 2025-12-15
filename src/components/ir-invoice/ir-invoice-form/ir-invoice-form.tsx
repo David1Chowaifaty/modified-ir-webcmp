@@ -95,6 +95,8 @@ export class IrInvoiceForm {
    */
   @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<IssueInvoiceProps>;
 
+  @Event() previewProformaInvoice: EventEmitter<IssueInvoiceProps>;
+
   @Event() loadingChange: EventEmitter<boolean>;
 
   private room: Booking['rooms'][0];
@@ -313,6 +315,10 @@ export class IrInvoiceForm {
         target,
         billed_to_name,
       };
+      if (isProforma) {
+        this.previewProformaInvoice.emit({ invoice });
+        return;
+      }
       await this.bookingService.issueInvoice({
         is_proforma: isProforma,
         invoice,
