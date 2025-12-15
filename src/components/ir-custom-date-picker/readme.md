@@ -14,6 +14,7 @@
 | `customPicker`          | `custom-picker`           | Controls how the date picker is triggered. - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`). - **`false`**: A default button input is used to open the picker.  Defaults to `false`.                                           | `boolean`           | `false`        |
 | `date`                  | `date`                    | The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.                                                                                                                                                                                         | `Date \| string`    | `null`         |
 | `dateFormat`            | `date-format`             | Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.                                                                                                                                                                                        | `string`            | `'yyyy-MM-dd'` |
+| `dates`                 | --                        |                                                                                                                                                                                                                                                                                        | `string[]`          | `undefined`    |
 | `disabled`              | `disabled`                | Disables the input and prevents interaction.                                                                                                                                                                                                                                           | `boolean`           | `false`        |
 | `emitEmptyDate`         | `emit-empty-date`         | If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.                                                                                          | `boolean`           | `false`        |
 | `forceDestroyOnUpdate`  | `force-destroy-on-update` | If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`. | `boolean`           | `false`        |
@@ -67,6 +68,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [igl-date-range](../igloo-calendar/igl-date-range)
  - [ir-arrivals-filters](../ir-arrivals/ir-arrivals-filters)
  - [ir-departures-filter](../ir-departures/ir-departures-filter)
  - [ir-extra-service-config-form](../ir-booking-details/ir-extra-services/ir-extra-service-config/ir-extra-service-config-form)
@@ -82,6 +84,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   ir-custom-date-picker --> ir-input
+  igl-date-range --> ir-custom-date-picker
   ir-arrivals-filters --> ir-custom-date-picker
   ir-departures-filter --> ir-custom-date-picker
   ir-extra-service-config-form --> ir-custom-date-picker

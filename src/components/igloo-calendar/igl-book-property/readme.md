@@ -66,7 +66,8 @@ graph TD;
   igl-book-property-header --> ir-picker-item
   igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-input
   igl-rate-plan --> ir-custom-button

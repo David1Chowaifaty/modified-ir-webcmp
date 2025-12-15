@@ -125,7 +125,8 @@ graph TD;
   igl-book-property-header --> ir-picker-item
   igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-input
   igl-rate-plan --> ir-custom-button
@@ -192,7 +193,6 @@ graph TD;
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
   ir-invoice-form --> ir-empty-state
-  ir-custom-date-picker --> ir-input
   ir-booking-billing-recipient --> ir-booking-company-dialog
   ir-booking-company-dialog --> ir-dialog
   ir-booking-company-dialog --> ir-booking-company-form

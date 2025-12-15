@@ -78,28 +78,28 @@ export class IglDateRange {
 
     this.renderAgain = !this.renderAgain;
   }
-  private renderDateSummary(showNights: boolean) {
-    const fromDateDisplay = moment(this.fromDate).format('MMM DD, YYYY');
-    const toDateDisplay = moment(this.toDate).format('MMM DD, YYYY');
-    const shouldRenderNights = showNights && this.totalNights > 0;
+  // private renderDateSummary(showNights: boolean) {
+  //   const fromDateDisplay = moment(this.fromDate).format('MMM DD, YYYY');
+  //   const toDateDisplay = moment(this.toDate).format('MMM DD, YYYY');
+  //   const shouldRenderNights = showNights && this.totalNights > 0;
 
-    return (
-      <div
-        class={{
-          'date-range-display': true,
-          'date-range-display--disabled': this.disabled,
-        }}
-      >
-        <wa-icon variant="regular" name="calendar"></wa-icon>
-        <span class="date-range-date">{fromDateDisplay}</span>
-        <wa-icon name="arrow-right"></wa-icon>
-        <span class="date-range-date">{toDateDisplay}</span>
-        {shouldRenderNights && (
-          <span class="date-range-nights">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
-        )}
-      </div>
-    );
-  }
+  //   return (
+  //     <div
+  //       class={{
+  //         'date-range-display': true,
+  //         'date-range-display--disabled': this.disabled,
+  //       }}
+  //     >
+  //       <wa-icon variant="regular" name="calendar"></wa-icon>
+  //       <span class="date-range-date">{fromDateDisplay}</span>
+  //       <wa-icon name="arrow-right"></wa-icon>
+  //       <span class="date-range-date">{toDateDisplay}</span>
+  //       {shouldRenderNights && (
+  //         <span class="date-range-nights">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
+  //       )}
+  //     </div>
+  //   );
+  // }
   private get dates() {
     const fromDate = moment(this.fromDate).format('YYYY-MM-DD');
     const toDate = moment(this.toDate).format('YYYY-MM-DD');

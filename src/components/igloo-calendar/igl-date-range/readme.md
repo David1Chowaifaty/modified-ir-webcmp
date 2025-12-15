@@ -35,12 +35,13 @@
 
 ### Depends on
 
-- [ir-date-range](../../ui/ir-date-range)
+- [ir-custom-date-picker](../../ir-custom-date-picker)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-book-property-header --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px
 ```
