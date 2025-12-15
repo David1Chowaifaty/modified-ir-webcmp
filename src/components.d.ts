@@ -431,6 +431,7 @@ export namespace Components {
         "financial": Booking['financial'];
         "isDirect": boolean;
         "label": string;
+        "removeBalance": boolean;
         "statusCode": string;
     }
     interface IrBilling {
@@ -7441,6 +7442,7 @@ declare namespace LocalJSX {
         "isDirect": boolean;
         "label"?: string;
         "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<{ booking_nbr: string; payment: Payment }>) => void;
+        "removeBalance"?: boolean;
         "statusCode": string;
     }
     interface IrBilling {

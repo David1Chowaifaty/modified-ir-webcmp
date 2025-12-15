@@ -31,6 +31,18 @@ export class IrDeparturesTable {
     return (booking.rooms ?? []).map((room, index) => this.renderRow(booking, room, index, showAction, isFuture));
   }
 
+  private compareGuests(booking: Booking, room: Booking['rooms'][number]): boolean {
+    const roomGuest = room?.guest;
+    const bookingGuest = booking?.guest;
+
+    if (!roomGuest || !bookingGuest) {
+      return false;
+    }
+
+    const normalize = (value?: string) => value?.trim().toLowerCase() ?? '';
+
+    return normalize(roomGuest.first_name) === normalize(bookingGuest.first_name) && normalize(roomGuest.last_name) === normalize(bookingGuest.last_name);
+  }
   private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean, isFuture) {
     const rowKey = `${booking.booking_nbr}-${room?.identifier ?? index}`;
     const isOverdueCheckout = moment(room.to_date, 'YYYY-MM-DD').startOf('day').isBefore(moment().startOf('day'));
@@ -46,10 +58,10 @@ export class IrDeparturesTable {
         </td>
         <td>
           <ir-booked-by-cell guest={booking.guest}></ir-booked-by-cell>
+          {!this.compareGuests(booking, room) && <ir-guest-name-cell name={room.guest}></ir-guest-name-cell>}
         </td>
-        <td>
-          <ir-guest-name-cell name={room.guest}></ir-guest-name-cell>
-        </td>
+        {/* <td>
+        </td> */}
         <td>
           <ir-unit-cell room={room}></ir-unit-cell>
         </td>
@@ -63,6 +75,7 @@ export class IrDeparturesTable {
             statusCode={booking.status.code}
             currencySymbol={booking.currency.symbol}
             financial={booking.financial}
+            removeBalance
           ></ir-balance-cell>
         </td>
         <td>
@@ -115,10 +128,11 @@ export class IrDeparturesTable {
                 </th>
                 <th>
                   <div>
-                    <p>Booked by</p>
+                    <p>Booked by /</p>
+                    <p>Guest name</p>
                   </div>
                 </th>
-                <th>Guest name</th>
+                {/* <th></th> */}
                 <th>Unit</th>
                 <th>Dates</th>
                 <th class="text-center">Balance</th>
@@ -131,7 +145,7 @@ export class IrDeparturesTable {
               {this.renderSection({ bookings: outBookings })}
               {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
-                  <td colSpan={7} class="empty-row">
+                  <td colSpan={6} class="empty-row">
                     <ir-empty-state></ir-empty-state>
                   </td>
                 </tr>

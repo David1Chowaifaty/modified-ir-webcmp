@@ -18,6 +18,7 @@ export class IrBalanceCell {
   @Prop() isDirect!: boolean;
   @Prop() bookingNumber!: string;
   @Prop() currencySymbol!: string;
+  @Prop() removeBalance: boolean;
 
   @Event({ composed: true, bubbles: true }) payBookingBalance: EventEmitter<{ booking_nbr: string; payment: Payment }>;
 
@@ -25,7 +26,11 @@ export class IrBalanceCell {
     return (
       <Host>
         {this.label && <p class="cell-label">{this.label}:</p>}
-        <p class="ir-price">{formatAmount(this.currencySymbol, this.financial.gross_total)}</p>
+        {this.removeBalance && this.isDirect && this.financial.due_amount !== 0 ? null : (
+          <p class="ir-price" style={{ fontWeight: '400' }}>
+            {formatAmount(this.currencySymbol, this.financial.gross_total)}
+          </p>
+        )}
         <div class="balance_button-container">
           {['003', '004'].includes(this.statusCode) && this.isDirect
             ? this.financial.cancelation_penality_as_if_today !== 0 &&
