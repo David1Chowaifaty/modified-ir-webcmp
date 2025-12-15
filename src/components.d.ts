@@ -918,6 +918,7 @@ export namespace Components {
           * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
          */
         "dateFormat": string;
+        "dates": string[];
         /**
           * Disables the input and prevents interaction.
          */
@@ -7978,6 +7979,7 @@ declare namespace LocalJSX {
           * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
          */
         "dateFormat"?: string;
+        "dates"?: string[];
         /**
           * Disables the input and prevents interaction.
          */

@@ -18,6 +18,8 @@ export class IrCustomDatePicker {
 
   @Prop() label: string;
 
+  @Prop() dates: string[];
+
   /**
    * Determines whether the date picker is rendered inline or in a pop-up.
    * If `true`, the picker is always visible inline.
@@ -177,7 +179,7 @@ export class IrCustomDatePicker {
       return;
     }
     if (!this.isSameDates(newVal, oldVal)) {
-      this.datePicker.update({ minDate: this.toValidDate(newVal) });
+      this.datePicker?.update({ minDate: this.toValidDate(newVal) ?? undefined });
     }
   }
 
@@ -187,7 +189,7 @@ export class IrCustomDatePicker {
       return;
     }
     if (!this.isSameDates(newVal, oldVal)) {
-      this.datePicker.update({ maxDate: this.toValidDate(newVal) });
+      this.datePicker?.update({ maxDate: this.toValidDate(newVal) ?? undefined });
     }
   }
 
@@ -267,8 +269,10 @@ export class IrCustomDatePicker {
 
   private toValidDate(value: string | Date | null): Date | null {
     if (!value) return null;
-    const parsedDate = value instanceof Date ? value : new Date(value);
-    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+    if (typeof value === 'string') {
+      return moment(value, 'YYYY-MM-DD').toDate();
+    }
+    return moment(value).toDate();
   }
 
   private updatePickerDate(newDate: string | Date | null) {
@@ -301,17 +305,17 @@ export class IrCustomDatePicker {
     }
 
     const containerTarget = this.container ?? this.calendarContainerRef ?? this.el;
-
+    console.log(this.minDate, this.maxDate);
     this.datePicker = new AirDatepicker(this.pickerRef, {
       container: containerTarget,
       inline: true,
-      selectedDates: this.currentDate ? [this.currentDate] : [],
+      selectedDates: this.dates ? this.dates : this.currentDate ? [this.currentDate] : [],
       multipleDates: this.multipleDates,
       range: this.range,
       dateFormat: this.dateFormat,
       timepicker: this.timepicker,
-      minDate: this.minDate,
-      maxDate: this.maxDate,
+      minDate: this.toValidDate(this.minDate) ?? undefined,
+      maxDate: this.toValidDate(this.maxDate) ?? undefined,
       autoClose: this.autoClose,
       locale: localeEn,
       showOtherMonths: this.showOtherMonths,
@@ -359,10 +363,12 @@ export class IrCustomDatePicker {
   }
 
   private getTriggerLabel(): string {
+    if (this.range) {
+      return this.dates.map(d => moment(d).format('MMM DD, YYYY')).join(' → ');
+    }
     if (!this.currentDate) {
       return null;
     }
-
     return this.timepicker ? moment(this.currentDate).format('MMM DD, YYYY, HH:mm') : moment(this.currentDate).format('MMM DD, YYYY');
   }
 
@@ -373,6 +379,7 @@ export class IrCustomDatePicker {
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
           <ir-input
+            disabled={this.disabled}
             placeholder={this.placeholder}
             withClear={this.withClear}
             tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
@@ -384,6 +391,7 @@ export class IrCustomDatePicker {
             onClick={this.handleAnchorClick}
             readonly
             slot="anchor"
+            defaultValue={this.getTriggerLabel()}
             value={this.getTriggerLabel()}
             label={this.label}
           >

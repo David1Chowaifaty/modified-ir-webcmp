@@ -1,4 +1,4 @@
-@import url('../../../assets/webawesome/utilities/size.css');
+/* @import url('../../../assets/webawesome/utilities/size.css');
 
 :host {
   display: flex;
@@ -88,7 +88,7 @@
 .date-range-nights {
   font-weight: 500;
 }
-/*md*/
+
 @media (min-width: 768px) {
   :host {
     width: fit-content;
@@ -97,4 +97,12 @@
     min-width: 290px;
     width: fit-content;
   }
+} */
+:host {
+  display: flex;
+
+  min-width: 280px;
+}
+.custom-picker {
+  width: 100%;
 }

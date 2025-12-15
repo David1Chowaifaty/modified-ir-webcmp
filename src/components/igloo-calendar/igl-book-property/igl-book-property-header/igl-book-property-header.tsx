@@ -245,7 +245,6 @@ export class IglBookPropertyHeader {
     }
     return this.minDate;
   }
-
   private getMaxDate() {
     if (!this.bookingData?.block_exposed_unit_props) {
       return undefined;

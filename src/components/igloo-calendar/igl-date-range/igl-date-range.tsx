@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import { Component, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
@@ -25,8 +25,8 @@ export class IglDateRange {
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
-  private fromDate: Date;
-  private toDate: Date;
+  @State() fromDate: Date = moment().toDate();
+  @State() toDate: Date = moment().add(1, 'day').toDate();
 
   componentWillLoad() {
     this.initializeDates();
@@ -100,28 +100,48 @@ export class IglDateRange {
       </div>
     );
   }
+  private get dates() {
+    const fromDate = moment(this.fromDate).format('YYYY-MM-DD');
+    const toDate = moment(this.toDate).format('YYYY-MM-DD');
+    return [fromDate, toDate];
+  }
   render() {
     const showNights = this.variant === 'booking' && this.withDateDifference;
-
     return (
-      <Host size={this.size}>
-        <div class={`date-range-shell ${this.disabled ? 'disabled' : ''} ${this.variant === 'booking' ? 'picker' : ''}`}>
-          <ir-date-range
-            maxDate={this.maxDate}
-            class={'date-range-input'}
-            disabled={this.disabled}
-            fromDate={this.fromDate}
-            toDate={this.toDate}
-            minDate={this.minDate}
-            autoApply
-            data-state={this.disabled ? 'disabled' : 'active'}
-            onDateChanged={evt => {
-              this.handleDateChange(evt);
-            }}
-          ></ir-date-range>
-          {this.renderDateSummary(showNights)}
-        </div>
-      </Host>
+      // <Host size={this.size}>
+      //   <div class={`date-range-shell ${this.disabled ? 'disabled' : ''} ${this.variant === 'booking' ? 'picker' : ''}`}>
+      //     <ir-date-range
+      //       maxDate={this.maxDate}
+      //       class={'date-range-input'}
+      //       disabled={this.disabled}
+      //       fromDate={this.fromDate}
+      //       toDate={this.toDate}
+      //       minDate={this.minDate}
+      //       autoApply
+      //       data-state={this.disabled ? 'disabled' : 'active'}
+      //       onDateChanged={evt => {
+      //         this.handleDateChange(evt);
+      //       }}
+      //     ></ir-date-range>
+      //     {this.renderDateSummary(showNights)}
+      //   </div>
+      // </Host>
+      <ir-custom-date-picker
+        disabled={this.disabled}
+        class="custom-picker"
+        minDate={this.minDate}
+        maxDate={this.maxDate}
+        onDateChanged={e => this.handleDateChange(e)}
+        range
+        dates={this.dates}
+      >
+        <wa-icon slot="start" variant="regular" name="calendar"></wa-icon>
+        {showNights && (
+          <span slot="end" class="date-range-nights">
+            {this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}
+          </span>
+        )}
+      </ir-custom-date-picker>
     );
   }
 }

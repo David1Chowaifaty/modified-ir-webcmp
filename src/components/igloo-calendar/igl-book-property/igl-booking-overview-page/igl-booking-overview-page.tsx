@@ -34,7 +34,7 @@ export class IglBookingOverviewPage {
   }
   setMinDate() {
     if (!this.isEventType('EDIT_BOOKING')) {
-      return;
+      return moment().format('YYYY-MM-DD');
     }
     const from_date = moment(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
     const today = moment();
