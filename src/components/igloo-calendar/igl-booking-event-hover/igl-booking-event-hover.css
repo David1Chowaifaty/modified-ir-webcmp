@@ -9,7 +9,7 @@
   padding-right: 4px !important;
 }
 .balance_amount {
-  color: #ff4961;
+  color: var(--wa-color-danger-fill-loud);
   font-size: 0.75rem;
 }
 .user-notes {
@@ -41,17 +41,6 @@
   margin-right: var(--m) !important;
 }
 
-.pointerContainerTop {
-  top: -26px;
-}
-
-.pointerContainer {
-  position: absolute;
-  height: 10px;
-  width: 350px;
-  left: var(--el-left, 50%);
-  transform: translateX(-50%);
-}
 .ota-notes {
   width: 450px;
 }
@@ -107,21 +96,50 @@
 
 .bubblePointer {
   position: absolute;
-  width: 0;
-  height: 0;
+  width: 22px;
+  height: 12px;
   left: 50%;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  transform: translate(-50%, 0px);
-  box-shadow: var(--wa-shadow-l);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.bubblePointer::before,
+.bubblePointer::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
 }
 
 .bubblePointTop {
+  bottom: -12px;
+}
+
+.bubblePointTop::before {
+  border-top: 11px solid var(--wa-color-surface-border);
+  top: 0;
+}
+
+.bubblePointTop::after {
   border-top: 10px solid var(--wa-color-surface-default);
+  top: 1px;
 }
 
 .bubblePointBottom {
+  top: -12px;
+}
+
+.bubblePointBottom::before {
+  border-bottom: 11px solid var(--wa-color-surface-border);
+  bottom: 0;
+}
+
+.bubblePointBottom::after {
   border-bottom: 10px solid var(--wa-color-surface-default);
+  bottom: 1px;
 }
 
 .bubbleInfoAbove {

@@ -418,6 +418,7 @@ export class IglBookingEventHover {
   private getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
+        {this.renderPointer()}
         <div class={`d-flex p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
           <div class="px-0  font-weight-bold font-medium-1 d-flex align-items-center" style={{ flex: '1 1 0%' }}>
             <img src={this.bookingEvent?.origin?.Icon} alt={this.bookingEvent?.origin?.Label} class={'icon-image'} />
@@ -579,6 +580,7 @@ export class IglBookingEventHover {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (
       <div class={`iglPopOver d-flex flex-column newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`} style={{ gap: '0.5rem' }}>
+        {this.renderPointer()}
         {shouldDisplayButtons ? (
           <Fragment>
             {/* <div class={'mb-1'}> */}
@@ -632,6 +634,7 @@ export class IglBookingEventHover {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
+        {this.renderPointer()}
         <igl-block-dates-view
           isEventHover={true}
           entryHour={this.bookingEvent.ENTRY_HOUR}
@@ -682,12 +685,13 @@ export class IglBookingEventHover {
     );
   }
 
+  private renderPointer() {
+    return <div class={`bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}`}></div>;
+  }
+
   render() {
     return (
       <Host>
-        <div class={`pointerContainer ${this.bubbleInfoTop ? 'pointerContainerTop' : ''}`}>
-          <div class={`bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}`}></div>
-        </div>
         {this.isBlockedDateEvent() ? this.getBlockedView() : null}
         {this.isNewBooking() ? this.getNewBookingOptions() : null}
         {!this.isBlockedDateEvent() && !this.isNewBooking() ? this.getInfoElement() : null}
