@@ -1,4 +1,5 @@
-@import url('../../assets/webawesome/component/host.css');
+@import url('../../../assets/webawesome/component/host.css');
+@import url('../printing.css');
 :host {
   display: block;
   min-height: 100vh;
@@ -37,4 +38,22 @@
   max-width: 56.25rem;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+.proforma__accommodation-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #d1d5db;
+}
+.proforma__accommodation-container .proforma__accommodation-title {
+  font-weight: 600;
+  font-size: 1.125rem /* 18px */;
+  line-height: 1.75rem /* 28px */;
+  color: #111827;
+}
+.invoice__title {
+  font-size: 1.3rem;
 }

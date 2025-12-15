@@ -1,9 +1,10 @@
 import { Booking } from '@/models/booking.dto';
-import { BookingInvoiceInfo } from '../ir-invoice/types';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { BookingInvoiceInfo } from '../../ir-invoice/types';
+import { Component, Fragment, Host, Prop, State, Watch, h } from '@stencil/core';
 import { IssueInvoiceProps } from '@/services/booking-service/types';
 import { data } from './data.demo';
 import moment from 'moment';
+import { calculateDaysBetweenDates } from '@/utils/booking';
 
 type InvoicePayload = IssueInvoiceProps['invoice'];
 
@@ -49,10 +50,13 @@ export class IrProformaInvoicePreview {
    * Optional footer text shown at the end of the preview.
    */
   @Prop() footerNote?: string;
+
   @State() invocableKeys: Set<string | number>;
+
   componentWillLoad() {
     this.invocableKeys = new Set(this.invoice?.items?.map(i => i.key));
   }
+
   @Watch('invoice')
   handleInvoiceChange() {
     this.invocableKeys = new Set(this.invoice?.items?.map(i => i.key));
@@ -143,6 +147,9 @@ export class IrProformaInvoicePreview {
       </section>
     );
   }
+  private formatBookingDates(date: string) {
+    return moment(date, 'YYYY-MM-DD').format('DD-MMM-YYYY');
+  }
   private renderBillToSection() {
     const { guest, company_name, company_tax_nbr } = this.booking;
     const target = this.invoice?.target;
@@ -167,6 +174,11 @@ export class IrProformaInvoicePreview {
     const billToContent = this.renderBillToSection();
     const companyDetails = this.renderPropertyCompanyHeader();
     const propertyOverview = this.renderPropertyInfo();
+    const totalNights = calculateDaysBetweenDates(this.booking.from_date, this.booking.to_date);
+    const invocableRoom = this.booking.rooms.filter(room => this.invocableKeys.has(room.system_id));
+    const existInvocableRoom = invocableRoom.length > 0;
+    const existInvocableExtraService = this.booking.extra_services.some(service => this.invocableKeys.has(service.system_id));
+    const existInvocablePickup = this.invocableKeys?.has(this.booking.pickup_info?.['system_id']);
     return (
       <Host>
         <article class="invoice" aria-label="Pro-forma invoice">
@@ -196,23 +208,45 @@ export class IrProformaInvoicePreview {
             </section>
           </header>
           <main>
-            <div style={{ marginTop: '2.5rem' }}>
-              {this.booking.rooms.map((room, idx) => {
-                if (!this.invocableKeys.has(room.system_id)) {
-                  return null;
-                }
-                return (
-                  <ir-print-room
-                    room={room}
-                    idx={idx}
-                    booking={this.booking}
-                    key={room.identifier}
-                    currency={this.booking.currency.symbol}
-                    property={this.property as any}
-                  ></ir-print-room>
-                );
-              })}
-            </div>
+            {existInvocableRoom && (
+              <section style={{ marginTop: '2.5rem' }}>
+                <div class="proforma__accommodation-container">
+                  <p class="proforma__accommodation-title">ACCOMMODATION</p>
+                  <p class="booking-dates">{this.formatBookingDates(this.booking?.from_date)}</p>
+                  <p class="booking-dates">{this.formatBookingDates(this.booking?.to_date)}</p>
+                  <p class="number-of-nights">
+                    {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+                  </p>
+                  <p class="vat-exclusion">
+                    <i>{this.property?.tax_statement}</i>
+                  </p>
+                </div>
+                <div>
+                  {invocableRoom.map((room, idx) => {
+                    return (
+                      <Fragment>
+                        <ir-print-room
+                          room={room}
+                          idx={idx}
+                          booking={this.booking}
+                          key={room.identifier}
+                          currency={this.booking.currency.symbol}
+                          property={this.property as any}
+                        ></ir-print-room>
+                      </Fragment>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+            {existInvocablePickup && <ir-printing-pickup pickup={this.booking.pickup_info}></ir-printing-pickup>}
+            {existInvocableExtraService && (
+              <ir-printing-extra-service
+                invocableKeys={this.invocableKeys}
+                extraServices={this.booking.extra_services}
+                currency={this.booking.currency}
+              ></ir-printing-extra-service>
+            )}
           </main>
           {this.footerNote && (
             <footer class="invoice__footer">

@@ -2587,6 +2587,17 @@ export namespace Components {
          */
         "room": Booking['rooms'][0];
     }
+    interface IrPrintingExtraService {
+        /**
+          * Booking currency
+         */
+        "currency": Booking['currency'];
+        /**
+          * Extra services attached to the booking
+         */
+        "extraServices": Booking['extra_services'];
+        "invocableKeys": Set<string | number>;
+    }
     interface IrPrintingLabel {
         "asHtml": boolean;
         /**
@@ -2598,6 +2609,12 @@ export namespace Components {
           * Fallback label text (used if no label slot is provided)
          */
         "label"?: string;
+    }
+    interface IrPrintingPickup {
+        /**
+          * Pickup information attached to the booking
+         */
+        "pickup": Booking['pickup_info'];
     }
     interface IrProformaInvoicePreview {
         /**
@@ -6141,11 +6158,23 @@ declare global {
         prototype: HTMLIrPrintRoomElement;
         new (): HTMLIrPrintRoomElement;
     };
+    interface HTMLIrPrintingExtraServiceElement extends Components.IrPrintingExtraService, HTMLStencilElement {
+    }
+    var HTMLIrPrintingExtraServiceElement: {
+        prototype: HTMLIrPrintingExtraServiceElement;
+        new (): HTMLIrPrintingExtraServiceElement;
+    };
     interface HTMLIrPrintingLabelElement extends Components.IrPrintingLabel, HTMLStencilElement {
     }
     var HTMLIrPrintingLabelElement: {
         prototype: HTMLIrPrintingLabelElement;
         new (): HTMLIrPrintingLabelElement;
+    };
+    interface HTMLIrPrintingPickupElement extends Components.IrPrintingPickup, HTMLStencilElement {
+    }
+    var HTMLIrPrintingPickupElement: {
+        prototype: HTMLIrPrintingPickupElement;
+        new (): HTMLIrPrintingPickupElement;
     };
     interface HTMLIrProformaInvoicePreviewElement extends Components.IrProformaInvoicePreview, HTMLStencilElement {
     }
@@ -6951,7 +6980,9 @@ declare global {
         "ir-preview-screen-dialog": HTMLIrPreviewScreenDialogElement;
         "ir-price-input": HTMLIrPriceInputElement;
         "ir-print-room": HTMLIrPrintRoomElement;
+        "ir-printing-extra-service": HTMLIrPrintingExtraServiceElement;
         "ir-printing-label": HTMLIrPrintingLabelElement;
+        "ir-printing-pickup": HTMLIrPrintingPickupElement;
         "ir-proforma-invoice-preview": HTMLIrProformaInvoicePreviewElement;
         "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
@@ -9812,6 +9843,17 @@ declare namespace LocalJSX {
          */
         "room"?: Booking['rooms'][0];
     }
+    interface IrPrintingExtraService {
+        /**
+          * Booking currency
+         */
+        "currency"?: Booking['currency'];
+        /**
+          * Extra services attached to the booking
+         */
+        "extraServices"?: Booking['extra_services'];
+        "invocableKeys"?: Set<string | number>;
+    }
     interface IrPrintingLabel {
         "asHtml"?: boolean;
         /**
@@ -9823,6 +9865,12 @@ declare namespace LocalJSX {
           * Fallback label text (used if no label slot is provided)
          */
         "label"?: string;
+    }
+    interface IrPrintingPickup {
+        /**
+          * Pickup information attached to the booking
+         */
+        "pickup"?: Booking['pickup_info'];
     }
     interface IrProformaInvoicePreview {
         /**
@@ -10721,7 +10769,9 @@ declare namespace LocalJSX {
         "ir-preview-screen-dialog": IrPreviewScreenDialog;
         "ir-price-input": IrPriceInput;
         "ir-print-room": IrPrintRoom;
+        "ir-printing-extra-service": IrPrintingExtraService;
         "ir-printing-label": IrPrintingLabel;
+        "ir-printing-pickup": IrPrintingPickup;
         "ir-proforma-invoice-preview": IrProformaInvoicePreview;
         "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
@@ -10937,7 +10987,9 @@ declare module "@stencil/core" {
             "ir-preview-screen-dialog": LocalJSX.IrPreviewScreenDialog & JSXBase.HTMLAttributes<HTMLIrPreviewScreenDialogElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-print-room": LocalJSX.IrPrintRoom & JSXBase.HTMLAttributes<HTMLIrPrintRoomElement>;
+            "ir-printing-extra-service": LocalJSX.IrPrintingExtraService & JSXBase.HTMLAttributes<HTMLIrPrintingExtraServiceElement>;
             "ir-printing-label": LocalJSX.IrPrintingLabel & JSXBase.HTMLAttributes<HTMLIrPrintingLabelElement>;
+            "ir-printing-pickup": LocalJSX.IrPrintingPickup & JSXBase.HTMLAttributes<HTMLIrPrintingPickupElement>;
             "ir-proforma-invoice-preview": LocalJSX.IrProformaInvoicePreview & JSXBase.HTMLAttributes<HTMLIrProformaInvoicePreviewElement>;
             "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
