@@ -46,6 +46,25 @@
   padding: 1rem 0;
   border-top: 1px solid #d1d5db;
 }
+.ir-proforma-invoice__service {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.ir-proforma-invoice__checkbox-price {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ir-proforma-invoice__cancellation-date {
+  font-size: 0.875rem;
+  color: #374151;
+}
+.ir-proforma-invoice__cancellation-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 80%;
+}
 .proforma__accommodation-container .proforma__accommodation-title {
   font-weight: 600;
   font-size: 1.125rem /* 18px */;
@@ -69,6 +88,8 @@
 
 @media print {
   .invoice {
-    max-width: 100%;
+    min-width: 100%;
+    height: auto;
+    min-height: auto;
   }
 }

@@ -173,7 +173,28 @@ export class IrProformaInvoicePreview {
       </div>
     );
   }
+  private renderCancellationPenalty() {
+    const cancellationPenalty = this.booking.financial.payments?.find(p => p.payment_type?.code === '013');
+    if (!cancellationPenalty) {
+      return null;
+    }
+    const sysId = cancellationPenalty.id;
+    if (!this.invocableKeys.has(sysId)) {
+      return null;
+    }
 
+    return (
+      <section class="proforma-payment__section">
+        <div class="ir-proforma-invoice__service">
+          <div class={'ir-proforma-invoice__cancellation-info'}>
+            <p>Cancellation penalty</p>
+            <p class={'ir-proforma-invoice__cancellation-date'}>( {this.formatDisplayDate(cancellationPenalty.date)} )</p>
+          </div>
+          <span class="ir-proforma-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, cancellationPenalty.amount)}</span>
+        </div>
+      </section>
+    );
+  }
   render() {
     if (!this.booking || !this.invoice || !this.property) {
       return;
@@ -254,6 +275,7 @@ export class IrProformaInvoicePreview {
                 currency={this.booking.currency}
               ></ir-printing-extra-service>
             )}
+            {this.renderCancellationPenalty()}
             <section class="proforma-payment__section">
               <ir-printing-label label="Balance:" content={formatAmount(this.booking.currency.symbol, this.booking.financial.due_amount)}></ir-printing-label>
               <ir-printing-label

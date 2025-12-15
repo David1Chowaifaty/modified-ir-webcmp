@@ -151,9 +151,9 @@ export class IrPreviewScreenDialog {
     return this.action === 'download' && !this.downloadUrl;
   }
 
-  private handleActionButtonClick = () => {
+  private handleActionButtonClick() {
     this.triggerAction();
-  };
+  }
 
   render() {
     return (
@@ -173,7 +173,7 @@ export class IrPreviewScreenDialog {
             slot="header-actions"
             variant="neutral"
             appearance="plain"
-            onClickHandler={this.handleActionButtonClick}
+            onClickHandler={this.handleActionButtonClick.bind(this)}
             disabled={this.shouldDisableActionButton()}
           >
             <wa-icon name={this.actionIconByType[this.action]} label={this.getActionLabel()} aria-label={this.getActionLabel()}></wa-icon>

@@ -13,4 +13,14 @@
   .ir-fullscreen-dialog::part(header) {
     display: none !important;
   }
+  @media print {
+    body,
+    .ir-fullscreen-dialog::part(dialog) {
+      min-height: auto;
+      height: auto;
+    }
+  }
+  @page {
+    margin: 0;
+  }
 }

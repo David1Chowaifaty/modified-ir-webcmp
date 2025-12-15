@@ -41,6 +41,7 @@
 - [ir-spinner](../../ui/ir-spinner)
 - [ir-custom-date-picker](../../ir-custom-date-picker)
 - [ir-booking-billing-recipient](../../ir-booking-billing-recipient)
+- [ir-empty-state](../../ir-empty-state)
 
 ### Graph
 ```mermaid
@@ -48,6 +49,7 @@ graph TD;
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
+  ir-invoice-form --> ir-empty-state
   ir-custom-date-picker --> ir-input
   ir-booking-billing-recipient --> ir-booking-company-dialog
   ir-booking-company-dialog --> ir-dialog

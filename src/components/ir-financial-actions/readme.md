@@ -78,6 +78,7 @@ graph TD;
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
+  ir-invoice-form --> ir-empty-state
   ir-custom-date-picker --> ir-input
   ir-booking-billing-recipient --> ir-booking-company-dialog
   ir-booking-company-dialog --> ir-dialog
