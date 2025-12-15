@@ -172,7 +172,17 @@ export class IrInvoice {
             {/* <ir-custom-button value="pro-forma" type="submit" size="medium" class="w-100 flex-fill" appearance="outlined" variant="neutral" form={this._id}>
               Pro-forma invoice
             </ir-custom-button> */}
-            <ir-custom-button loading={this.isLoading} value="invoice" type="submit" form={this._id} class="w-100 flex-fill" size="medium" variant="brand">
+            <ir-custom-button
+              disabled={this.invoiceInfo?.invoiceable_items?.filter(i => i.is_invoiceable)?.length === 0}
+              loading={this.isLoading}
+              value="invoice"
+              type="submit"
+              form={this._id}
+              class="w-100 flex-fill"
+              size="medium"
+              variant="brand"
+              id={`confirm-btn_${this._id}`}
+            >
               Confirm
             </ir-custom-button>
           </div>

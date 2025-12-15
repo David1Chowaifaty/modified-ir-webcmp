@@ -46,7 +46,7 @@ export class IrDepartures {
 
   @Watch('ticket')
   handleTicketChange(newValue: string, oldValue: string) {
-    if (newValue !== oldValue && newValue) {
+    if (newValue !== oldValue) {
       this.tokenService.setToken(this.ticket);
       this.init();
     }
@@ -114,7 +114,7 @@ export class IrDepartures {
 
   private async getBookings() {
     const { bookings, total_count } = await this.bookingService.getRoomsToCheckout({
-      property_id: calendar_data.property.id?.toString() ?? this.propertyid?.toString(),
+      property_id: calendar_data.property?.id?.toString() || this.propertyid?.toString(),
       check_out_date: departuresStore.today,
       page_index: departuresStore.pagination.currentPage,
       page_size: departuresStore.pagination.pageSize,

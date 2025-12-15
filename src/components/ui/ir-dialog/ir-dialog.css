@@ -1,1 +1,17 @@
-
+.ir-dialog__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+.dialog__loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  min-height: 50px;
+  min-width: 31rem;
+}

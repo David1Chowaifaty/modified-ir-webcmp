@@ -65,7 +65,6 @@ export class IrInvoiceForm {
   @State() toBeInvoicedItems: InvoiceableItem[];
   @State() invoiceDate: Moment = moment();
   @State() notInvoiceableItemKeys: Set<number> = new Set();
-  private splitDisabledKeys: Set<number> = new Set();
 
   /**
    * Emitted when the invoice drawer is opened.
@@ -100,14 +99,17 @@ export class IrInvoiceForm {
   @Event() loadingChange: EventEmitter<boolean>;
 
   private room: Booking['rooms'][0];
-
+  private splitDisabledKeys: Set<number> = new Set();
+  private confirmButtonRef: HTMLIrCustomButtonElement;
   private bookingService = new BookingService();
   private invoiceTarget: IEntries[];
 
   componentWillLoad() {
     this.init();
   }
-
+  componentDidLoad() {
+    this.confirmButtonRef = document.querySelector(`#confirm-btn_${this.formId}`);
+  }
   @Watch('viewMode')
   handleViewModeChange() {
     this.enforceNonInvoiceableSelections();
@@ -231,6 +233,16 @@ export class IrInvoiceForm {
       }
     });
     this.toBeInvoicedItems = selectedItems;
+    if (!this.confirmButtonRef) {
+      return;
+    }
+    if (this.toBeInvoicedItems.length === 0) {
+      this.confirmButtonRef.disabled = true;
+    } else {
+      if (this.confirmButtonRef.disabled) {
+        this.confirmButtonRef.disabled = false;
+      }
+    }
   }
 
   private canInvoiceRoom(room?: Room) {
@@ -635,8 +647,10 @@ export class IrInvoiceForm {
           class="ir-invoice__checkbox"
         >
           <div class="ir-invoice__room-checkbox-container">
-            <span>Pickup</span>
-            {this.getDateView(this.booking.pickup_info.date, null)}
+            <div class={'ir-invoice__room-info'}>
+              <span>Pickup</span>
+              {this.getDateView(this.booking.pickup_info.date, null)}
+            </div>
             <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, this.booking.pickup_info.selected_option.amount)}</span>
           </div>
         </wa-checkbox>
@@ -644,6 +658,42 @@ export class IrInvoiceForm {
     );
   }
 
+  private renderCancellationPenalty() {
+    const cancellationPenalty = this.booking.financial.payments?.find(p => p.payment_type?.code === '013');
+    if (!cancellationPenalty) {
+      return null;
+    }
+    const sysId = cancellationPenalty.id;
+    if (!this.invoicableKey.has(sysId)) {
+      return null;
+    }
+    const item = this.invoicableKey.get(sysId);
+    const isSelected = this.isSelected([sysId]);
+    const isDisabled = this.isDisabled([sysId]);
+    return (
+      <div class="ir-invoice__service">
+        <wa-checkbox
+          disabled={isDisabled}
+          size="small"
+          onchange={e => {
+            const value = (e.target as any).checked;
+            this.handleCheckChange({ checked: value, system_id: sysId });
+          }}
+          defaultChecked={isSelected}
+          checked={isSelected}
+          class="ir-invoice__checkbox"
+        >
+          <div class="ir-invoice__room-checkbox-container">
+            <div class={'ir-invoice__room-info'}>
+              <span>Cancellation penalty</span>
+              {this.getDateView(cancellationPenalty.date, null)}
+            </div>
+            <span class="ir-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, item.amount)}</span>
+          </div>
+        </wa-checkbox>
+      </div>
+    );
+  }
   render() {
     if (this.isLoading) {
       return (
@@ -679,7 +729,9 @@ export class IrInvoiceForm {
             <p class="ir-invoice__form-control-label">
               Choose what to invoice <span style={{ color: 'var(--wa-color-gray-60)', paddingLeft: '0.5rem' }}> (Disabled services are not eligible to be invoiced yet)</span>
             </p>
+
             <div class="ir-invoice__services-container">
+              {this.invoicableKey.size === 0 && <ir-empty-state style={{ marginTop: '3rem' }}></ir-empty-state>}
               {this.renderRooms()}
               {this.booking.pickup_info && this.renderPickup()}
               {this.booking.extra_services?.map(extra_service => {
@@ -713,6 +765,7 @@ export class IrInvoiceForm {
                   </div>
                 );
               })}
+              {this.renderCancellationPenalty()}
             </div>
           </div>
         </form>

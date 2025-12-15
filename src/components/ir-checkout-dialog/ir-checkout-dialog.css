@@ -1,3 +1,4 @@
+@import url('../ui/ir-dialog/ir-dialog.css');
 :host {
   display: block;
 }
