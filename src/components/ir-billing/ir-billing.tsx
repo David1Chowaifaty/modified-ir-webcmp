@@ -162,7 +162,7 @@ export class IrBilling {
                             >
                               <h3>Issued by: {invoice.credit_note ? invoice.credit_note.user : invoice.user}</h3>
                               <wa-divider></wa-divider>
-                              <h3>Actions</h3>
+                              {/* <h3>Actions</h3> */}
                               <wa-dropdown-item value="print">
                                 Print to pdf
                                 {isRequestPending('/Print_Invoice') && <wa-spinner slot="details"></wa-spinner>}

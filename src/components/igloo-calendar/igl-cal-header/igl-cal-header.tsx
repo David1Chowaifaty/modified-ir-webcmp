@@ -334,7 +334,7 @@ export class IglCalHeader {
                 data-day={dayInfo.day}
               >
                 {!this.calendarData.is_vacation_rental && (
-                  <div class="preventPageScroll">
+                  <div class="preventPageScroll" onClick={() => this.showToBeAssigned(dayInfo)}>
                     {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? (
                       <button class={'fd-header__badge-btn'}>
                         <wa-badge class="fd-header__badge" variant={'brand'} appearance={'accent'} pill>
@@ -349,7 +349,7 @@ export class IglCalHeader {
                     )}
                     {/* <span
                       class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
-                      onClick={() => this.showToBeAssigned(dayInfo)}
+                      
                     >
                       {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
                     </span> */}

@@ -101,7 +101,7 @@ export class IrBookingBillingRecipient {
             </wa-radio>
           ))}
           <wa-radio appearance="button" value="company">
-            {this.booking.company_name ? this.booking.company_name : 'Company'}
+            {this.booking.company_name ? this.booking.company_name : 'Use company name'}
           </wa-radio>
         </wa-radio-group>
         <ir-booking-company-dialog

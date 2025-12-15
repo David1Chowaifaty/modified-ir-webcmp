@@ -33,7 +33,7 @@
   height: 100%;
   left: 30%;
   right: 30%;
-  background-color: var(--wa-color-neutral-fill-quiet) !important;
+  background-color: #d4d0be !important;
 }
 
 /* .cellData.disabled[data-dirty-room='true'] {
