@@ -2,7 +2,6 @@
 @import url('../printing.css');
 :host {
   display: block;
-  min-height: 100vh;
   width: 100%;
   color: #1b1d26;
   background-color: white;
@@ -15,7 +14,6 @@
 .invoice__layout {
   display: flex;
   justify-content: space-between;
-  margin-top: 1.5rem;
 }
 .invoice__column,
 .property-overview {
@@ -35,7 +33,7 @@
   height: 2.5rem;
 }
 .invoice {
-  max-width: 56.25rem;
+  max-width: 58.25rem;
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -56,4 +54,21 @@
 }
 .invoice__title {
   font-size: 1.3rem;
+}
+.invoice__layout {
+  padding: 1rem 0;
+}
+.proforma-payment__section {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  gap: 0.5rem;
+  border-top: 1px solid #d1d5db;
+}
+
+@media print {
+  .invoice {
+    max-width: 100%;
+  }
 }

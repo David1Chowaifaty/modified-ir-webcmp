@@ -293,7 +293,7 @@ export class IrInvoiceForm {
       const billed_to_name = this.selectedRecipient?.startsWith('room__') ? this.selectedRecipient.replace('room__', '').trim() : '';
       let target: {};
       const setTarget = (code: string) => {
-        let f = this.invoiceTarget.find(t => t.CODE_NAME === '001');
+        let f = this.invoiceTarget.find(t => t.CODE_NAME === code);
         if (!f) {
           throw new Error(`Invalid code ${code}`);
         }
@@ -302,7 +302,7 @@ export class IrInvoiceForm {
           description: f.CODE_VALUE_EN,
         };
       };
-      if (this.selectedRecipient === 'guest') {
+      if (this.selectedRecipient === 'company') {
         target = setTarget('002');
       } else {
         target = setTarget('001');

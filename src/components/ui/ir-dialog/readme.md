@@ -62,6 +62,7 @@ Type: `Promise<void>`
  - [ir-checkout-dialog](../../ir-checkout-dialog)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
+ - [ir-preview-screen-dialog](../../ir-preview-screen-dialog)
  - [ir-room](../../ir-booking-details/ir-room)
 
 ### Graph
@@ -77,6 +78,7 @@ graph TD;
   ir-checkout-dialog --> ir-dialog
   ir-extra-service --> ir-dialog
   ir-payment-details --> ir-dialog
+  ir-preview-screen-dialog --> ir-dialog
   ir-room --> ir-dialog
   style ir-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```

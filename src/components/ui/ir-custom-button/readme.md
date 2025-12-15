@@ -76,6 +76,7 @@
  - [ir-payments-folio](../../ir-booking-details/ir-payment-details/ir-payments-folio)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
+ - [ir-preview-screen-dialog](../../ir-preview-screen-dialog)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
@@ -117,6 +118,7 @@ graph TD;
   ir-payments-folio --> ir-custom-button
   ir-pickup --> ir-custom-button
   ir-pickup-view --> ir-custom-button
+  ir-preview-screen-dialog --> ir-custom-button
   ir-reservation-information --> ir-custom-button
   ir-room --> ir-custom-button
   ir-room-guests --> ir-custom-button

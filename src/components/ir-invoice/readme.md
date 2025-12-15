@@ -73,6 +73,8 @@ Resolves once the drawer state is updated.
 - [ir-drawer](../ir-drawer)
 - [ir-invoice-form](ir-invoice-form)
 - [ir-custom-button](../ui/ir-custom-button)
+- [ir-preview-screen-dialog](../ir-preview-screen-dialog)
+- [ir-proforma-invoice-preview](../printing/ir-proforma-invoice-preview)
 
 ### Graph
 ```mermaid
@@ -80,6 +82,8 @@ graph TD;
   ir-invoice --> ir-drawer
   ir-invoice --> ir-invoice-form
   ir-invoice --> ir-custom-button
+  ir-invoice --> ir-preview-screen-dialog
+  ir-invoice --> ir-proforma-invoice-preview
   ir-invoice-form --> ir-spinner
   ir-invoice-form --> ir-custom-date-picker
   ir-invoice-form --> ir-booking-billing-recipient
@@ -89,6 +93,15 @@ graph TD;
   ir-booking-company-dialog --> ir-booking-company-form
   ir-booking-company-dialog --> ir-custom-button
   ir-booking-company-form --> ir-input
+  ir-preview-screen-dialog --> ir-dialog
+  ir-preview-screen-dialog --> ir-custom-button
+  ir-proforma-invoice-preview --> ir-printing-label
+  ir-proforma-invoice-preview --> ir-print-room
+  ir-proforma-invoice-preview --> ir-printing-pickup
+  ir-proforma-invoice-preview --> ir-printing-extra-service
+  ir-print-room --> ir-printing-label
+  ir-printing-pickup --> ir-printing-label
+  ir-printing-extra-service --> ir-printing-label
   ir-billing --> ir-invoice
   ir-departures --> ir-invoice
   ir-room --> ir-invoice

@@ -57,7 +57,7 @@ export class IrPreviewScreenDialog {
    * Fired whenever the preview action is executed, either via the header button or programmatically.
    */
   @Event() previewAction: EventEmitter<{ action: PreviewAction; url?: string }>;
-
+  @Event() openChanged: EventEmitter<boolean>;
   /**
    * Opens the preview dialog.
    */
@@ -161,6 +161,7 @@ export class IrPreviewScreenDialog {
         onIrDialogHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
+          this.openChanged.emit(false);
         }}
         label={this.label}
         open={this.open}

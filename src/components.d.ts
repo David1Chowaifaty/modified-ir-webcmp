@@ -6118,6 +6118,7 @@ declare global {
     };
     interface HTMLIrPreviewScreenDialogElementEventMap {
         "previewAction": { action: PreviewAction; url?: string };
+        "openChanged": boolean;
     }
     interface HTMLIrPreviewScreenDialogElement extends Components.IrPreviewScreenDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPreviewScreenDialogElementEventMap>(type: K, listener: (this: HTMLIrPreviewScreenDialogElement, ev: IrPreviewScreenDialogCustomEvent<HTMLIrPreviewScreenDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9726,6 +9727,7 @@ declare namespace LocalJSX {
           * The dialog's label as displayed in the header. Required for accessibility and announced by assistive technologies.
          */
         "label"?: string;
+        "onOpenChanged"?: (event: IrPreviewScreenDialogCustomEvent<boolean>) => void;
         /**
           * Fired whenever the preview action is executed, either via the header button or programmatically.
          */

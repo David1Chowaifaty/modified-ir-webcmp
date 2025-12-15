@@ -3,6 +3,7 @@ import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@s
 import { v4 } from 'uuid';
 import { BookingInvoiceInfo, ViewMode } from './types';
 import { IssueInvoiceProps } from '@/components';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-invoice',
@@ -109,6 +110,7 @@ export class IrInvoice {
   private _id = `invoice-form__${v4()}`;
 
   render() {
+    console.log(this.invoice);
     return (
       <Host>
         <ir-drawer
@@ -174,8 +176,17 @@ export class IrInvoice {
               Confirm
             </ir-custom-button>
           </div>
-          <ir-preview-screen-dialog open={this.invoice !== null}>
-            <ir-proforma-invoice-preview invoice={this.invoice} booking={this.booking}></ir-proforma-invoice-preview>
+          <ir-preview-screen-dialog
+            onOpenChanged={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              if (!e.detail) {
+                this.invoice = null;
+              }
+            }}
+            open={this.invoice !== null}
+          >
+            <ir-proforma-invoice-preview invoice={this.invoice} property={calendar_data.property as any} booking={this.booking}></ir-proforma-invoice-preview>
           </ir-preview-screen-dialog>
         </ir-drawer>
       </Host>

@@ -2,9 +2,9 @@ import { Booking } from '@/models/booking.dto';
 import { BookingInvoiceInfo } from '../../ir-invoice/types';
 import { Component, Fragment, Host, Prop, State, Watch, h } from '@stencil/core';
 import { IssueInvoiceProps } from '@/services/booking-service/types';
-import { data } from './data.demo';
 import moment from 'moment';
 import { calculateDaysBetweenDates } from '@/utils/booking';
+import { formatAmount } from '@/utils/utils';
 
 type InvoicePayload = IssueInvoiceProps['invoice'];
 
@@ -22,18 +22,18 @@ export class IrProformaInvoicePreview {
   /**
    * Booking context used to display property, guest, and folio details.
    */
-  @Prop() booking: Booking = data.booking as any;
+  @Prop() booking: Booking;
 
   /**
    * Invoice payload emitted by `ir-invoice-form`.
    * Totals will fall back to booking data when omitted.
    */
-  @Prop() invoice?: InvoicePayload = data.invoice as any;
+  @Prop() invoice?: InvoicePayload;
 
   /**
    * Property associated with the booking.
    */
-  @Prop() property: Booking['property'] = data.property as any;
+  @Prop() property: Booking['property'];
 
   /**
    * Optional metadata fetched via `getBookingInvoiceInfo`.
@@ -175,13 +175,16 @@ export class IrProformaInvoicePreview {
   }
 
   render() {
+    if (!this.booking || !this.invoice || !this.property) {
+      return;
+    }
     const billToContent = this.renderBillToSection();
     const companyDetails = this.renderPropertyCompanyHeader();
     const propertyOverview = this.renderPropertyInfo();
     const totalNights = calculateDaysBetweenDates(this.booking.from_date, this.booking.to_date);
     const invocableRoom = this.booking.rooms.filter(room => this.invocableKeys.has(room.system_id));
     const existInvocableRoom = invocableRoom.length > 0;
-    const existInvocableExtraService = this.booking.extra_services.some(service => this.invocableKeys.has(service.system_id));
+    const existInvocableExtraService = this.booking.extra_services?.some(service => this.invocableKeys.has(service.system_id));
     const existInvocablePickup = this.invocableKeys?.has(this.booking.pickup_info?.['system_id']);
     return (
       <Host>
@@ -251,6 +254,13 @@ export class IrProformaInvoicePreview {
                 currency={this.booking.currency}
               ></ir-printing-extra-service>
             )}
+            <section class="proforma-payment__section">
+              <ir-printing-label label="Balance:" content={formatAmount(this.booking.currency.symbol, this.booking.financial.due_amount)}></ir-printing-label>
+              <ir-printing-label
+                label="Collected (payments - refunds):"
+                content={formatAmount(this.booking.currency.symbol, this.booking.financial.collected + this.booking.financial.refunds)}
+              ></ir-printing-label>
+            </section>
           </main>
           {this.footerNote && (
             <footer class="invoice__footer">
