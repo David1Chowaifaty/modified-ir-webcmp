@@ -77,7 +77,7 @@ export class IrBookingGuarantee {
   }
 
   private shouldShowToggleButton() {
-    return !this.booking.is_direct || (this.booking.is_direct && this.booking.guest.cci);
+    return (!this.booking.is_direct && this.booking.ota_guarante) || (this.booking.is_direct && this.booking.guest.cci);
   }
 
   private renderCreditCardInfo() {
