@@ -489,7 +489,16 @@ export interface BookingColor {
   design: 'skew';
   name: string | null;
 }
-
+export interface LinkedPms {
+  ari_integration_mode: { code: string; description: string };
+  ari_last_call: { is_acknowledged: boolean; is_sent: boolean; sent_date: string; sent_hour: number; sent_minute: number };
+  booking_last_call: { is_acknowledged: boolean; is_sent: boolean; sent_date: string; sent_hour: number; sent_minute: number };
+  booking_integration_mode: { code: string; description: string };
+  code: string;
+  is_active: boolean;
+  description: string;
+  id: number;
+}
 export interface Property {
   address: string;
   adult_child_constraints: Adultchildconstraints;
@@ -499,6 +508,7 @@ export interface Property {
   allowed_cards: Allowedcard[];
   allowed_payment_methods: AllowedPaymentMethod[];
   amenities: Amenity[];
+  linked_pms: LinkedPms[];
   aname: string;
   area: string;
   baby_cot_offering: Babycotoffering;

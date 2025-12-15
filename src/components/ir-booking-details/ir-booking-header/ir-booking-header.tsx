@@ -6,6 +6,7 @@ import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State } from
 import { BookingDetailsDialogEvents, OpenDialogEvent, OpenSidebarEvent } from '../types';
 import { BookingService } from '@/services/booking.service';
 import WaBadge from '@awesome.me/webawesome/dist/components/badge/badge';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-booking-header',
@@ -89,6 +90,9 @@ export class IrBookingHeader {
   private renderDialogBody() {
     switch (this.currentDialogStatus) {
       case 'pms':
+        if (calendar_data.property?.linked_pms?.findIndex(lp => lp.is_active && lp.booking_integration_mode.code === '001') === -1) {
+          return null;
+        }
         return <ir-pms-logs bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
       case 'events-log':
         return <ir-events-log booking={this.booking} bookingNumber={this.booking.booking_nbr}></ir-events-log>;
