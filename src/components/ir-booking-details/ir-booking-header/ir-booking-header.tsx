@@ -90,9 +90,6 @@ export class IrBookingHeader {
   private renderDialogBody() {
     switch (this.currentDialogStatus) {
       case 'pms':
-        if (calendar_data.property?.linked_pms?.findIndex(lp => lp.is_active && lp.booking_integration_mode.code === '001') === -1) {
-          return null;
-        }
         return <ir-pms-logs bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
       case 'events-log':
         return <ir-events-log booking={this.booking} bookingNumber={this.booking.booking_nbr}></ir-events-log>;
@@ -101,6 +98,7 @@ export class IrBookingHeader {
 
   render() {
     const lastManipulation = this.booking.ota_manipulations ? this.booking.ota_manipulations[this.booking.ota_manipulations.length - 1] : null;
+    const showPms = (calendar_data.property?.linked_pms ?? [])?.findIndex(lp => lp?.is_active && lp?.booking_integration_mode?.code === '001') !== -1;
     return (
       <div class="fluid-container px-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between">
@@ -187,18 +185,20 @@ export class IrBookingHeader {
             >
               Events log
             </ir-custom-button>
-            <ir-custom-button
-              onClickHandler={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.openDialog({ type: 'pms' });
-              }}
-              appearance={'outlined'}
-              size="small"
-              variant="brand"
-            >
-              PMS
-            </ir-custom-button>
+            {showPms && (
+              <ir-custom-button
+                onClickHandler={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.openDialog({ type: 'pms' });
+                }}
+                appearance={'outlined'}
+                size="small"
+                variant="brand"
+              >
+                PMS
+              </ir-custom-button>
+            )}
 
             {this.hasReceipt && (
               <Fragment>
