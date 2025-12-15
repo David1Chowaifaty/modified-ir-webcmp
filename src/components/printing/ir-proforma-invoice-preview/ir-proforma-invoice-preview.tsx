@@ -152,7 +152,7 @@ export class IrProformaInvoicePreview {
   }
   private renderBillToSection() {
     const { guest, company_name, company_tax_nbr } = this.booking;
-    const target = this.invoice?.target;
+    const { target, billed_to_name } = this.invoice;
     if (target?.code === '002') {
       return (
         <div class="bill-to" aria-label="Bill to company">
@@ -163,7 +163,11 @@ export class IrProformaInvoicePreview {
     }
     return (
       <div class="bill-to" aria-label="Bill to guest">
-        <p class="bill-to__name">{[guest.first_name ?? '', guest.last_name ?? ''].join(' ').trim()}</p>
+        {billed_to_name && <p>{billed_to_name}</p>}
+        <p class="bill-to__name">
+          {' '}
+          {billed_to_name && <b>for</b>} {[guest.first_name ?? '', guest.last_name ?? ''].join(' ').trim()}
+        </p>
         {guest.email && <p class="bill-to__contact">{guest.email}</p>}
         {this.guestPhoneNumber && <p class="bill-to__contact">{this.guestPhoneNumber}</p>}
       </div>

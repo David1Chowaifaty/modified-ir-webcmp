@@ -897,7 +897,7 @@ export const data = {
       code: '001',
       description: 'Guest',
     },
-    billed_to_name: '',
+    billed_to_name: 'David',
   },
   property: {
     address: 'Ice Venue 11',
