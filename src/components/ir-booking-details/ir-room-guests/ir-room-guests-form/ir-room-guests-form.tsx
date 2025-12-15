@@ -242,7 +242,7 @@ export class IrRoomGuestsForm {
                           size="small"
                           id={`last_name_${idx}`}
                           placeholder="Last name"
-                          onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
+                          onText-change={e => this.updateGuestInfo(idx, { last_name: e.detail })}
                           value={guest.last_name}
                           maxlength={40}
                         ></ir-input>
