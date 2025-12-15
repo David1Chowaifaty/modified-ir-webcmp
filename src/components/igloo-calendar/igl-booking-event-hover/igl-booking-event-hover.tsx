@@ -519,7 +519,7 @@ export class IglBookingEventHover {
         {this.getInternalNote() && <ir-label labelText={`${locales.entries.Lcz_InternalRemark}:`} content={this.getInternalNote()}></ir-label>}
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
-            <ir-button
+            {/* <ir-button
               style={{ '--icon-size': '0.875rem' }}
               onClickHandler={() => this.handleEditBooking()}
               class={'w-100'}
@@ -528,63 +528,43 @@ export class IglBookingEventHover {
               // icon_name="edit"
               btn_styles="h-100"
               size="sm"
-            ></ir-button>
+            ></ir-button> */}
+            <ir-custom-button style={{ width: '100%' }} variant="brand" onClickHandler={() => this.handleEditBooking()}>
+              {locales.entries.Lcz_Edit}
+            </ir-custom-button>
             {this.bookingEvent.is_direct && this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
-              <ir-button
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_AddRoom}
-                // icon_name="square_plus"
-                size="sm"
-                class={'w-100'}
-                btn_styles="h-100"
-                onClickHandler={() => this.handleAddRoom()}
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleAddRoom()}>
+                {locales.entries.Lcz_AddRoom}
+              </ir-custom-button>
             )}
             {this.canSplitBooking() && (
-              <ir-button
-                class={'w-100'}
-                style={{ '--icon-size': '0.875rem' }}
-                text={'Split'}
-                onClickHandler={() => this.handleSplitBooking()}
-                btn_styles="h-100"
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleSplitBooking()}>
+                Split
+              </ir-custom-button>
             )}
             {this.canCheckIn() && (
-              <ir-button
-                class={'w-100'}
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_CheckIn}
-                onClickHandler={() => this.handleCustomerCheckIn()}
-                // icon_name="edit"
-                btn_styles="h-100"
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} onClickHandler={() => this.handleCustomerCheckIn()} variant="brand" appearance="outlined">
+                {locales.entries.Lcz_CheckIn}
+              </ir-custom-button>
             )}
             {this.canCheckOut() && (
-              <ir-button
-                class={'w-100'}
-                btn_styles="h-100"
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_CheckOut}
-                // icon_name="edit"
-                onClickHandler={() => this.handleCustomerCheckOut()}
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleCustomerCheckOut()}>
+                {locales.entries.Lcz_CheckOut}
+              </ir-custom-button>
             )}
             {this.hideButtons
               ? null
               : !this.shouldHideUnassignUnit && (
-                  <ir-button
-                    class={'w-100'}
-                    btn_styles="h-100"
-                    style={{ '--icon-size': '0.875rem' }}
-                    size="sm"
-                    text={locales.entries.Lcz_Unassign}
+                  <ir-custom-button
+                    variant="danger"
+                    style={{ width: '100%' }}
+                    appearance="outlined"
                     onClickHandler={_ => {
                       this.handleDeleteEvent();
                     }}
-                  ></ir-button>
+                  >
+                    {locales.entries.Lcz_Unassign}
+                  </ir-custom-button>
                 )}
           </div>
         </div>
@@ -602,27 +582,29 @@ export class IglBookingEventHover {
         {shouldDisplayButtons ? (
           <Fragment>
             {/* <div class={'mb-1'}> */}
-            <ir-button
-              size="sm"
-              btn_block
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
               data-testid="bar_booking_btn"
-              text={locales.entries.Lcz_CreateNewBooking}
               onClickHandler={_ => {
                 this.handleBookingOption('BAR_BOOKING');
               }}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_CreateNewBooking}
+            </ir-custom-button>
             {/* </div> */}
             {/* <div> */}
             {this.hasSplitBooking() && (
               // <div class="mb-1">
-              <ir-button
-                size="sm"
-                btn_block
-                text={locales.entries.Lcz_AssignUnitToExistingBooking}
+              <ir-custom-button
+                variant="brand"
+                appearance="outlined"
                 onClickHandler={_ => {
                   this.handleBookingOption('SPLIT_BOOKING');
                 }}
-              ></ir-button>
+              >
+                {locales.entries.Lcz_AssignUnitToExistingBooking}
+              </ir-custom-button>
               // </div>
             )}
             {/* </div> */}
@@ -631,14 +613,15 @@ export class IglBookingEventHover {
           <p class={'text-danger'}>{locales.entries.Lcz_NoRatePlanDefined}</p>
         )}
         {/* <div> */}
-        <ir-button
-          size="sm"
-          text={locales.entries.Lcz_Blockdates}
-          btn_block
+        <ir-custom-button
+          appearance="outlined"
+          variant="danger"
           onClickHandler={_ => {
             this.handleBookingOption('BLOCK_DATES');
           }}
-        ></ir-button>
+        >
+          {locales.entries.Lcz_Blockdates}
+        </ir-custom-button>
         {/* </div> */}
       </div>
     );
@@ -661,44 +644,38 @@ export class IglBookingEventHover {
         ></igl-block-dates-view>
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
-            <ir-button
-              btn_disabled={this.isLoading === 'update'}
-              text={locales.entries.Lcz_Update}
+            <ir-custom-button
+              disabled={this.isLoading === 'update'}
               onClickHandler={_ => {
                 this.handleUpdateBlockedDates();
               }}
-              icon_name="edit"
-              size="sm"
-              btn_styles="h-100"
-              isLoading={this.isLoading === 'update'}
-              style={{ '--icon-size': '0.875rem' }}
-              btn_block
-              class={'w-100'}
-            ></ir-button>
-            <ir-button
-              class={'w-100 h-100 my-0'}
-              btn_block
-              btn_styles="h-100"
-              size="sm"
-              text={locales.entries.Lcz_ConvertSplitBooking}
+              variant="brand"
+              loading={this.isLoading === 'update'}
+              style={{ width: '100%' }}
+            >
+              {locales.entries.Lcz_Update}
+            </ir-custom-button>
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
+              style={{ width: '100%' }}
               onClickHandler={() => {
                 this.handleConvertBlockedDateToBooking();
               }}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_ConvertSplitBooking}
+            </ir-custom-button>
 
-            <ir-button
-              class={'w-100'}
-              btn_styles="h-100"
-              btn_block
-              size="sm"
-              style={{ '--icon-size': '0.875rem' }}
-              icon_name="trash"
-              btn_color="danger"
+            <ir-custom-button
+              variant="danger"
+              style={{ width: '100%' }}
+              appearance="outlined"
               onClickHandler={_ => {
                 this.handleDeleteEvent();
               }}
-              text={locales.entries.Lcz_Delete}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_Delete}
+            </ir-custom-button>
           </div>
         </div>
       </div>
