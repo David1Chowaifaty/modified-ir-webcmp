@@ -9,18 +9,50 @@
   margin: 0;
   border-radius: 0;
 }
+
 @media print {
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: auto;
+  }
+
+  /* Disable fullscreen dialog behavior */
+  .ir-fullscreen-dialog::part(dialog) {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  /* Hide dialog chrome */
   .ir-fullscreen-dialog::part(header) {
     display: none !important;
   }
-  @media print {
-    body,
-    .ir-fullscreen-dialog::part(dialog) {
-      min-height: auto;
-      height: auto;
-    }
+
+  /* Print ONLY dialog content */
+  body * {
+    visibility: hidden;
   }
-  @page {
-    margin: 0;
+
+  .ir-fullscreen-dialog,
+  .ir-fullscreen-dialog * {
+    visibility: visible;
+  }
+
+  .ir-fullscreen-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Method, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Method, Prop, h } from '@stencil/core';
 
 type PreviewAction = 'print' | 'download';
 
@@ -8,9 +8,22 @@ type PreviewAction = 'print' | 'download';
   shadow: true,
 })
 export class IrPreviewScreenDialog {
+  @Element() el: HTMLIrPreviewScreenDialogElement;
   private readonly actionIconByType: Record<PreviewAction, string> = {
     print: 'file-pdf',
     download: 'download',
+  };
+  private printContainer?: HTMLDivElement;
+  private printPlaceholder?: Comment;
+  private isPrintLayoutActive = false;
+  private readonly handleBeforePrint = () => {
+    if (!this.open) {
+      return;
+    }
+    this.preparePrintLayout();
+  };
+  private readonly handleAfterPrint = () => {
+    this.restorePrintLayout();
   };
 
   /**
@@ -105,7 +118,12 @@ export class IrPreviewScreenDialog {
       return false;
     }
 
-    window.print();
+    this.preparePrintLayout();
+    try {
+      window.print();
+    } finally {
+      this.restorePrintLayout();
+    }
     return true;
   }
 
@@ -153,6 +171,61 @@ export class IrPreviewScreenDialog {
 
   private handleActionButtonClick() {
     this.triggerAction();
+  }
+  private preparePrintLayout() {
+    if (typeof document === 'undefined' || this.printContainer || this.isPrintLayoutActive) {
+      return;
+    }
+    const contentNodes = Array.from(this.el.children).filter((child: Element) => !child.hasAttribute('slot'));
+    if (!contentNodes.length) {
+      return;
+    }
+    const placeholder = document.createComment('ir-preview-print-placeholder');
+    this.el.insertBefore(placeholder, contentNodes[0]);
+    const container = document.createElement('div');
+    container.className = 'ir-preview-print-container';
+    contentNodes.forEach(node => {
+      container.appendChild(node);
+    });
+    document.body.appendChild(container);
+    document.body.classList.add('ir-preview-dialog-print-mode');
+    this.printPlaceholder = placeholder;
+    this.printContainer = container;
+    this.isPrintLayoutActive = true;
+  }
+
+  private restorePrintLayout() {
+    if (!this.printContainer || !this.printPlaceholder || typeof document === 'undefined') {
+      return;
+    }
+    const targetParent = this.printPlaceholder.parentNode;
+    if (targetParent) {
+      while (this.printContainer.firstChild) {
+        targetParent.insertBefore(this.printContainer.firstChild, this.printPlaceholder);
+      }
+    }
+    this.printPlaceholder.remove();
+    this.printContainer.remove();
+    document.body.classList.remove('ir-preview-dialog-print-mode');
+    this.printPlaceholder = undefined;
+    this.printContainer = undefined;
+    this.isPrintLayoutActive = false;
+  }
+
+  componentDidLoad() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.addEventListener('beforeprint', this.handleBeforePrint);
+    window.addEventListener('afterprint', this.handleAfterPrint);
+  }
+
+  disconnectedCallback() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('beforeprint', this.handleBeforePrint);
+      window.removeEventListener('afterprint', this.handleAfterPrint);
+    }
+    this.restorePrintLayout();
   }
 
   render() {

@@ -107,3 +107,35 @@ wa-select[aria-invalid='true']::part(combobox) {
     grid-column: 2;
   }
 }
+
+.ir-preview-print-container {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media print {
+  body.ir-preview-dialog-print-mode {
+    background: #fff !important;
+  }
+  body.ir-preview-dialog-print-mode > *:not(.ir-preview-print-container) {
+    display: none !important;
+  }
+  body.ir-preview-dialog-print-mode .ir-preview-print-container {
+    opacity: 1;
+    pointer-events: auto;
+    position: static;
+    z-index: auto;
+    width: 100%;
+    min-height: auto;
+    margin: 0 auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+}
+
+@page {
+  margin: 0.5in;
+}
