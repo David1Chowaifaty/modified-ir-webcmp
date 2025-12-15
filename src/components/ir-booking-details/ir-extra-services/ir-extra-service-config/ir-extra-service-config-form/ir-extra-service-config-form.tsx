@@ -95,7 +95,7 @@ export class IrExtraServiceConfigForm {
             label={locales.entries.Lcz_Description}
           ></wa-textarea>
         </ir-validator>
-        <ir-validator value={this.s_service?.start_date ?? null} schema={ExtraServiceSchema.shape.price}>
+        <ir-validator value={this.s_service?.start_date ?? null} schema={ExtraServiceSchema.shape.start_date}>
           <ir-custom-date-picker
             placeholder="Select date"
             withClear
