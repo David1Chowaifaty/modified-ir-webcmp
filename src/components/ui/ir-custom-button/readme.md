@@ -53,6 +53,7 @@
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
+ - [ir-arrivals-table](../../ir-arrivals/ir-arrivals-table)
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
  - [ir-billing](../../ir-billing)
  - [ir-booked-by-cell](../../table-cells/booking/ir-booked-by-cell)
@@ -64,6 +65,7 @@
  - [ir-booking-listing-table](../../ir-booking-listing/ir-booking-listing-table)
  - [ir-booking-number-cell](../../table-cells/booking/ir-booking-number-cell)
  - [ir-checkout-dialog](../../ir-checkout-dialog)
+ - [ir-departures-table](../../ir-departures/ir-departures-table)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-extra-services](../../ir-booking-details/ir-extra-services)
@@ -96,6 +98,7 @@ graph TD;
   igl-reallocation-dialog --> ir-custom-button
   ir-actions-cell --> ir-custom-button
   ir-applicable-policies --> ir-custom-button
+  ir-arrivals-table --> ir-custom-button
   ir-balance-cell --> ir-custom-button
   ir-billing --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
@@ -107,6 +110,7 @@ graph TD;
   ir-booking-listing-table --> ir-custom-button
   ir-booking-number-cell --> ir-custom-button
   ir-checkout-dialog --> ir-custom-button
+  ir-departures-table --> ir-custom-button
   ir-extra-service --> ir-custom-button
   ir-extra-service-config --> ir-custom-button
   ir-extra-services --> ir-custom-button

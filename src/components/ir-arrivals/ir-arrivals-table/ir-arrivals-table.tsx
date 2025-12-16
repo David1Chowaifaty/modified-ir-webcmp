@@ -153,7 +153,20 @@ export class IrArrivalsTable {
                 {/* <th></th> */}
                 <th>Unit</th>
                 <th>Dates</th>
-                <th class="text-center">Balance</th>
+                <th class="text-center">
+                  Balance
+                  <div style={{ width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
+                    <ir-custom-button
+                      id="balance-info"
+                      style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem', '--ir-c-btn-font-size': '0.725rem' }}
+                      size="small"
+                      variant="danger"
+                      appearance="outlined"
+                    >
+                      Click to collect
+                    </ir-custom-button>
+                  </div>
+                </th>
                 <th></th>
               </tr>
             </thead>

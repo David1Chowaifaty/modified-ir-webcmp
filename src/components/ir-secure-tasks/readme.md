@@ -496,6 +496,7 @@ graph TD;
   ir-arrivals-table --> ir-dates-cell
   ir-arrivals-table --> ir-balance-cell
   ir-arrivals-table --> ir-actions-cell
+  ir-arrivals-table --> ir-custom-button
   ir-arrivals-table --> ir-pagination
   ir-departures --> ir-loading-screen
   ir-departures --> ir-toast
@@ -513,6 +514,7 @@ graph TD;
   ir-departures-table --> ir-dates-cell
   ir-departures-table --> ir-balance-cell
   ir-departures-table --> ir-actions-cell
+  ir-departures-table --> ir-custom-button
   ir-departures-table --> ir-empty-state
   ir-departures-table --> ir-pagination
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px

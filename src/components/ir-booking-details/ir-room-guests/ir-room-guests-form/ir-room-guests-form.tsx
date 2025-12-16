@@ -285,7 +285,7 @@ export class IrRoomGuestsForm {
                       <div class={'room-guest__info-container flex-grow-1'}>
                         <wa-select
                           class="room-guest__id-info"
-                          defaultValue={this.idTypes[0]?.CODE_NAME}
+                          defaultValue={guest.id_info?.type?.code ?? this.idTypes[0]?.CODE_NAME}
                           value={guest.id_info?.type?.code}
                           onchange={e => {
                             this.updateGuestInfo(idx, {

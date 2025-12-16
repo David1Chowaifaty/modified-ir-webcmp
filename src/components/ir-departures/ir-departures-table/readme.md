@@ -29,6 +29,7 @@
 - [ir-dates-cell](../../table-cells/booking/ir-dates-cell)
 - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
 - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-empty-state](../../ir-empty-state)
 - [ir-pagination](../../ir-pagination)
 
@@ -42,6 +43,7 @@ graph TD;
   ir-departures-table --> ir-dates-cell
   ir-departures-table --> ir-balance-cell
   ir-departures-table --> ir-actions-cell
+  ir-departures-table --> ir-custom-button
   ir-departures-table --> ir-empty-state
   ir-departures-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
