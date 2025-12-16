@@ -35,7 +35,7 @@ export class IrInvoiceForm {
    * The booking object for which the invoice is being generated.
    * Should contain room, guest, and pricing information.
    */
-  @Prop() booking: Booking;
+  @Prop({ mutable: true }) booking: Booking;
 
   /**
    * Specifies what the invoice is for.
@@ -266,10 +266,16 @@ export class IrInvoiceForm {
   private async init() {
     try {
       this.isLoading = true;
-      let invoiceInfo = this.invoiceInfo;
-      if (!this.invoiceInfo) {
-        invoiceInfo = await this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr });
-      }
+      // let invoiceInfo = this.invoiceInfo;
+      // if (!this.invoiceInfo) {
+      const [booking, invoiceInfo] = await Promise.all([
+        this.bookingService.getExposedBooking(this.booking.booking_nbr, 'en', true),
+        this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr }),
+      ]);
+
+      this.booking = { ...booking };
+      // }
+
       this.setupInvoicables(invoiceInfo);
 
       if (this.booking) {
