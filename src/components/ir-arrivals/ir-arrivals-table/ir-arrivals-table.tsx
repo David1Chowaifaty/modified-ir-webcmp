@@ -39,9 +39,13 @@ export class IrArrivalsTable {
       return false;
     }
 
-    const normalize = (value?: string) => value?.trim().toLowerCase() ?? '';
+    const normalizeGuest = (guest: typeof bookingGuest) => {
+      const firstName = guest.first_name?.replace(/\s+/g, '').toLowerCase() || '';
+      const lastName = guest.last_name?.replace(/\s+/g, '').toLowerCase() || '';
+      return `${firstName}${lastName}`;
+    };
 
-    return normalize(roomGuest.first_name) === normalize(bookingGuest.first_name) && normalize(roomGuest.last_name) === normalize(bookingGuest.last_name);
+    return normalizeGuest(bookingGuest) === normalizeGuest(roomGuest);
   }
   private async handleActionsClicked(e: CustomEvent<{ action: IrActionButton }>) {
     e.stopImmediatePropagation();
