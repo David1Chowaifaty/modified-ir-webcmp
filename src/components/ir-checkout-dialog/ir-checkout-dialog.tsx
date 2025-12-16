@@ -1,4 +1,4 @@
-import { Booking } from '@/models/booking.dto';
+import { Booking, IUnit, Room } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
@@ -26,6 +26,7 @@ export class IrCheckoutDialog {
   @State() isLoading: 'checkout' | 'skipCheckout' | 'checkout&invoice' | 'page' = 'page';
   @State() buttons: Set<'checkout' | 'checkout_without_invoice' | 'invoice_checkout'> = new Set();
   @State() invoiceInfo: BookingInvoiceInfo;
+  @State() room: Room;
 
   @Event({ composed: true, bubbles: true }) checkoutDialogClosed: EventEmitter<CheckoutDialogCloseEvent>;
 
@@ -63,6 +64,7 @@ export class IrCheckoutDialog {
       this.isLoading = 'page';
       this.invoiceInfo = await this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr });
       this.setupButtons();
+      this.room = this.booking.rooms.find(r => r.identifier === this.identifier);
     } catch (error) {
     } finally {
       this.isLoading = null;
@@ -102,7 +104,7 @@ export class IrCheckoutDialog {
             <ir-spinner></ir-spinner>
           </div>
         ) : (
-          <p style={{ width: 'calc(31rem - var(--spacing))' }}>Are you sure you want to Check Out this unit?</p>
+          <p style={{ width: 'calc(31rem - var(--spacing))' }}>Are you sure you want to check out unit {(this.room?.unit as IUnit)?.name}?</p>
         )}
         <div slot="footer" class="ir-dialog__footer">
           {/* {!this.isLoading && ( */}
