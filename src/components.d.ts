@@ -773,6 +773,7 @@ export namespace Components {
         "value": string;
     }
     interface IrCommon {
+        "disableResourceInjection": boolean;
         "extraResources": string;
     }
     interface IrCopyButton {
@@ -7831,6 +7832,7 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrCommon {
+        "disableResourceInjection"?: boolean;
         "extraResources"?: string;
     }
     interface IrCopyButton {
