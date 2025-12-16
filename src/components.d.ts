@@ -5555,7 +5555,7 @@ declare global {
     interface HTMLIrInvoiceFormElementEventMap {
         "invoiceOpen": void;
         "invoiceClose": void;
-        "invoiceCreated": IssueInvoiceProps;
+        "invoiceCreated": BookingInvoiceInfo;
         "previewProformaInvoice": IssueInvoiceProps;
         "loadingChange": boolean;
     }
@@ -8970,7 +8970,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when an invoice is created/confirmed.  The event `detail` contains: - `booking`: the booking associated with the invoice - `recipientId`: the selected billing recipient - `for`: whether the invoice is for `"room"` or `"booking"` - `roomIdentifier`: the room identifier when invoicing a specific room - `mode`: the current invoice mode
          */
-        "onInvoiceCreated"?: (event: IrInvoiceFormCustomEvent<IssueInvoiceProps>) => void;
+        "onInvoiceCreated"?: (event: IrInvoiceFormCustomEvent<BookingInvoiceInfo>) => void;
         /**
           * Emitted when the invoice drawer is opened.  Fired when `openDrawer()` is called and the component transitions into the open state.
          */

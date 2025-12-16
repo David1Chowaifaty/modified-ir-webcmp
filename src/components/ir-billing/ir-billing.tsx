@@ -2,7 +2,7 @@ import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Fragment, Listen, Prop, State, h } from '@stencil/core';
 import { BookingInvoiceInfo, Invoice } from '../ir-invoice/types';
 import { BookingService } from '@/services/booking-service/booking.service';
-import { formatAmount } from '@/utils/utils';
+import { downloadFile, formatAmount } from '@/utils/utils';
 import moment from 'moment';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 
@@ -30,7 +30,7 @@ export class IrBilling {
   async handleInvoiceCreation(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.invoiceInfo = await this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr });
+    this.invoiceInfo = { ...e.detail };
   }
   private async init() {
     try {
@@ -72,13 +72,20 @@ export class IrBilling {
     });
   }
 
-  private async printInvoice(invoice: Invoice) {
+  private async printInvoice(invoice: Invoice, autoDownload = false) {
     try {
       const { My_Result } = await this.bookingService.printInvoice({
         invoice_nbr: invoice.nbr,
         mode: invoice.credit_note ? 'creditnote' : 'invoice',
       });
-      window.open(My_Result.url);
+      if (!My_Result) {
+        return;
+      }
+      if (autoDownload) {
+        downloadFile(My_Result);
+        return;
+      }
+      window.open(My_Result);
     } catch (error) {
       console.error(error);
     }
@@ -152,6 +159,9 @@ export class IrBilling {
                               onwa-select={async e => {
                                 switch ((e.detail as any).item.value) {
                                   case 'print':
+                                    this.printInvoice(invoice, true);
+                                    break;
+                                  case 'view-print':
                                     this.printInvoice(invoice);
                                     break;
                                   case 'void':
@@ -163,8 +173,8 @@ export class IrBilling {
                               <h3>Issued by: {invoice.credit_note ? invoice.credit_note.user : invoice.user}</h3>
                               <wa-divider></wa-divider>
                               {/* <h3>Actions</h3> */}
-                              <wa-dropdown-item value="print">
-                                Print to pdf
+                              <wa-dropdown-item value="view-print">
+                                Open pdf
                                 {isRequestPending('/Print_Invoice') && <wa-spinner slot="details"></wa-spinner>}
                               </wa-dropdown-item>
                               {isValid && !invoice.credit_note && (
@@ -201,18 +211,19 @@ export class IrBilling {
                         </p>
                         <p class="billing__card-type">{isValid ? '' : invoice.nbr}</p>
                       </div>
-
-                      <wa-tooltip for={`mobile-pdf-${invoice.system_id}`}>Download pdf</wa-tooltip>
-                      <ir-custom-button
-                        onClickHandler={() => this.printInvoice(invoice)}
-                        loading={isRequestPending('/Print_Invoice')}
-                        id={`mobile-pdf-${invoice.system_id}`}
-                        variant="neutral"
-                        appearance="plain"
-                        class="billing__card-download-btn"
-                      >
-                        <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
-                      </ir-custom-button>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <wa-tooltip for={`mobile-download-pdf-${invoice.system_id}`}>Open pdf</wa-tooltip>
+                        <ir-custom-button
+                          onClickHandler={() => this.printInvoice(invoice)}
+                          loading={isRequestPending('/Print_Invoice')}
+                          id={`mobile-download-pdf-${invoice.system_id}`}
+                          variant="neutral"
+                          appearance="plain"
+                          class="billing__card-download-btn"
+                        >
+                          <wa-icon name="file-pdf" style={{ fontSize: '1rem' }}></wa-icon>
+                        </ir-custom-button>
+                      </div>
                     </div>
 
                     <div class="billing__card-details">

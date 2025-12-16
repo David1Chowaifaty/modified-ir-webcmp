@@ -177,7 +177,7 @@ export class IrArrivalsTable {
               {!needsCheckInBookings.length && !inHouseBookings.length && (
                 <tr>
                   <td colSpan={6} class="empty-row">
-                    No arrivals found.
+                    <ir-empty-state></ir-empty-state>
                   </td>
                 </tr>
               )}

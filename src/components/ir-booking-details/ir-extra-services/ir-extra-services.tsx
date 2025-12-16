@@ -20,11 +20,7 @@ export class IrExtraServices {
           <ir-custom-button slot="header-actions" id="extra_service_btn" size="small" appearance="plain" variant="neutral">
             <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
           </ir-custom-button>
-          {(this.booking.extra_services ?? [])?.length === 0 && (
-            <div class="text-center p-1">
-              <p class="text-muted">No extra service recorded yet</p>
-            </div>
-          )}
+          {(this.booking.extra_services ?? [])?.length === 0 && <ir-empty-state></ir-empty-state>}
           {this.booking.extra_services?.map((service, index) => (
             <Fragment>
               <ir-extra-service

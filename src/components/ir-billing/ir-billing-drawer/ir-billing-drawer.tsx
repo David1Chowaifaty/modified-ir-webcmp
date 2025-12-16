@@ -47,6 +47,7 @@ export class IrBillingDrawer {
           '--ir-drawer-padding-top': 'var(--spacing)',
           '--ir-drawer-padding-bottom': 'var(--spacing)',
         }}
+        class="billing__drawer"
         onDrawerHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();

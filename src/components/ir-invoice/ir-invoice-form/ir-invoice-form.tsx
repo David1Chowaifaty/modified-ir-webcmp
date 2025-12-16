@@ -4,7 +4,7 @@ import { buildSplitIndex } from '@/utils/booking';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { BookingInvoiceInfo, InvoiceableItem, ViewMode } from '../types';
+import { BookingInvoiceInfo, InvoiceableItem, InvoiceableItemReasonCode, InvoiceableItemType, ViewMode } from '../types';
 import { IEntries } from '@/models/IBooking';
 import { IssueInvoiceProps } from '@/services/booking-service/types';
 @Component({
@@ -92,7 +92,7 @@ export class IrInvoiceForm {
    * - `roomIdentifier`: the room identifier when invoicing a specific room
    * - `mode`: the current invoice mode
    */
-  @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<IssueInvoiceProps>;
+  @Event({ cancelable: true, composed: true, bubbles: true }) invoiceCreated: EventEmitter<BookingInvoiceInfo>;
 
   @Event() previewProformaInvoice: EventEmitter<IssueInvoiceProps>;
 
@@ -341,6 +341,9 @@ export class IrInvoiceForm {
         is_proforma: isProforma,
         invoice,
       });
+      const invoiceInfo = await this.bookingService.getBookingInvoiceInfo({
+        booking_nbr: this.booking.booking_nbr,
+      });
       if (this.autoPrint) {
         try {
           // window.print();
@@ -349,13 +352,19 @@ export class IrInvoiceForm {
           console.error('Auto print failed:', error);
         }
       }
-      this.invoiceCreated.emit({ invoice });
+      await this.openLastInvoice(invoiceInfo);
+      this.invoiceCreated.emit(invoiceInfo);
       this.invoiceClose.emit();
     } catch (error) {
       console.error(error);
     } finally {
       this.loadingChange.emit(false);
     }
+  }
+  private async openLastInvoice(invoiceInfo: BookingInvoiceInfo) {
+    const lastInvoice = invoiceInfo.invoices[invoiceInfo.invoices.length - 1];
+    const { My_Result } = await this.bookingService.printInvoice({ mode: lastInvoice?.credit_note ? 'creditnote' : 'invoice', invoice_nbr: lastInvoice.nbr });
+    window.open(My_Result);
   }
 
   private getMinDate() {
