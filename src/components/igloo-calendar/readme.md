@@ -57,8 +57,6 @@
 - [igl-bulk-operations](igl-bulk-operations)
 - [ir-room-guests](../ir-booking-details/ir-room-guests)
 - [igl-reallocation-dialog](igl-reallocation-dialog)
-- [ir-dialog](../ui/ir-dialog)
-- [ir-custom-button](../ui/ir-custom-button)
 - [ir-modal](../ui/ir-modal)
 - [ir-checkout-dialog](../ir-checkout-dialog)
 - [ir-invoice](../ir-invoice)
@@ -82,8 +80,6 @@ graph TD;
   igloo-calendar --> igl-bulk-operations
   igloo-calendar --> ir-room-guests
   igloo-calendar --> igl-reallocation-dialog
-  igloo-calendar --> ir-dialog
-  igloo-calendar --> ir-custom-button
   igloo-calendar --> ir-modal
   igloo-calendar --> ir-checkout-dialog
   igloo-calendar --> ir-invoice
