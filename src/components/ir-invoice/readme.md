@@ -63,6 +63,7 @@ Resolves once the drawer state is updated.
 
 ### Used by
 
+ - [igloo-calendar](../igloo-calendar)
  - [ir-billing](../ir-billing)
  - [ir-departures](../ir-departures)
  - [ir-room](../ir-booking-details/ir-room)
@@ -103,6 +104,7 @@ graph TD;
   ir-print-room --> ir-printing-label
   ir-printing-pickup --> ir-printing-label
   ir-printing-extra-service --> ir-printing-label
+  igloo-calendar --> ir-invoice
   ir-billing --> ir-invoice
   ir-departures --> ir-invoice
   ir-room --> ir-invoice

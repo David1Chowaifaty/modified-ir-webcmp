@@ -51,6 +51,7 @@
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
+ - [igloo-calendar](../../igloo-calendar)
  - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
@@ -94,6 +95,7 @@ graph TD;
   igl-cal-header --> ir-custom-button
   igl-rate-plan --> ir-custom-button
   igl-reallocation-dialog --> ir-custom-button
+  igloo-calendar --> ir-custom-button
   ir-actions-cell --> ir-custom-button
   ir-applicable-policies --> ir-custom-button
   ir-balance-cell --> ir-custom-button

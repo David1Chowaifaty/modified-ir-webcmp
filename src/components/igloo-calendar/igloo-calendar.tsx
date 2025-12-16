@@ -176,6 +176,9 @@ export class IglooCalendar {
     if (!['checkin', 'reallocate', 'checkout'].includes(this.dialogData.reason)) {
       this.calendarModalEl?.openModal();
     }
+    if (this.dialogData.reason === 'checkin') {
+      this.openCalendarSidebar.emit({ type: 'room-guests', payload: this.dialogData.sidebarPayload });
+    }
   }
   @Listen('showRoomNightsDialog')
   handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>) {
@@ -1480,7 +1483,7 @@ export class IglooCalendar {
           roomName={this.calendarSidebarState?.payload?.roomName}
           totalGuests={this.calendarSidebarState?.payload?.totalGuests}
           sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
-          checkIn={this.calendarSidebarState?.payload?.checkin}
+          checkIn={true}
           onCloseModal={() => (this.calendarSidebarState = null)}
         ></ir-room-guests>
 
@@ -1489,7 +1492,7 @@ export class IglooCalendar {
           onDialogClose={() => this.handleModalCancel()}
           data={this.dialogData?.reason === 'reallocate' ? this.dialogData : undefined}
         ></igl-reallocation-dialog>
-        <ir-dialog
+        {/* <ir-dialog
           onIrDialogAfterHide={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
@@ -1508,7 +1511,7 @@ export class IglooCalendar {
               Confirm
             </ir-custom-button>
           </div>
-        </ir-dialog>
+        </ir-dialog> */}
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
           modalTitle={'lol'}
