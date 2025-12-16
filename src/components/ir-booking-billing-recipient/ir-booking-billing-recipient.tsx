@@ -48,22 +48,22 @@ export class IrBookingBillingRecipient {
   }
 
   private filterRoomGuests() {
-    const normalize = (value?: string) => value?.toLocaleLowerCase().trim() || '';
+    const joinKey = '|';
+    const normalize = (value?: string) => value?.split(' ')?.join(joinKey)?.toLocaleLowerCase().trim() || '';
 
     const rooms: Booking['rooms'] = [];
     const seenNames = new Set<string>();
 
     const mainGuest = this.booking?.guest;
     if (mainGuest) {
-      const mainKey = `${normalize(mainGuest.first_name)}|${normalize(mainGuest.last_name)}`;
+      const mainKey = `${normalize(mainGuest.first_name)}${mainGuest.last_name ? joinKey : ''}${normalize(mainGuest.last_name)}`;
       seenNames.add(mainKey);
     }
-
     for (const room of this.booking.rooms || []) {
       const guest = room?.guest;
       if (!guest) continue;
 
-      const key = `${normalize(guest.first_name)}|${normalize(guest.last_name)}`;
+      const key = `${normalize(guest.first_name)}${guest.last_name ? joinKey : ''}${normalize(guest.last_name)}`;
 
       // Skip exact duplicate first + last names
       if (seenNames.has(key)) continue;

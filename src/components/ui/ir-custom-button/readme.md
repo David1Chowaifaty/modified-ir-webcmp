@@ -47,6 +47,7 @@
  - [igl-book-property](../../igloo-calendar/igl-book-property)
  - [igl-book-property-footer](../../igloo-calendar/igl-book-property/igl-book-property-footer)
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
@@ -89,6 +90,7 @@ graph TD;
   igl-book-property --> ir-custom-button
   igl-book-property-footer --> ir-custom-button
   igl-book-property-header --> ir-custom-button
+  igl-booking-event-hover --> ir-custom-button
   igl-cal-header --> ir-custom-button
   igl-rate-plan --> ir-custom-button
   igl-reallocation-dialog --> ir-custom-button

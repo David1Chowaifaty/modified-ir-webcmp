@@ -41,7 +41,7 @@
 - [ir-dropdown-item](../../ui/ir-dropdown-item)
 - [ir-date-view](../../ir-date-view)
 - [ir-label](../../ui/ir-label)
-- [ir-button](../../ui/ir-button)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [igl-block-dates-view](../igl-block-dates-view)
 
 ### Graph
@@ -52,10 +52,9 @@ graph TD;
   igl-booking-event-hover --> ir-dropdown-item
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
-  igl-booking-event-hover --> ir-button
+  igl-booking-event-hover --> ir-custom-button
   igl-booking-event-hover --> igl-block-dates-view
   ir-dropdown --> ir-icons
-  ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
   igl-booking-event --> igl-booking-event-hover
   style igl-booking-event-hover fill:#f9f,stroke:#333,stroke-width:4px

@@ -294,7 +294,7 @@ graph TD;
   igl-booking-event-hover --> ir-dropdown-item
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
-  igl-booking-event-hover --> ir-button
+  igl-booking-event-hover --> ir-custom-button
   igl-booking-event-hover --> igl-block-dates-view
   ir-dropdown --> ir-icons
   igl-cal-footer --> ir-new-badge
