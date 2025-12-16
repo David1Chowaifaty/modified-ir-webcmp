@@ -200,14 +200,14 @@ export class IrBookingHeader {
               </ir-custom-button>
             )}
 
-            {this.hasReceipt && (
+            {/* {this.hasReceipt && (
               <Fragment>
                 <wa-tooltip for="invoice">Print invoice</wa-tooltip>
                 <ir-custom-button id="invoice" variant="neutral" size="small" appearance="plain">
                   <wa-icon name="file-invoice" label="invoice" style={{ fontSize: '1.65rem' }}></wa-icon>
                 </ir-custom-button>
               </Fragment>
-            )}
+            )} */}
             {this.hasPrint && (
               <Fragment>
                 <wa-tooltip for="print">Print booking</wa-tooltip>
