@@ -1,5 +1,6 @@
 import { RoomGuestsPayload } from '@/components/ir-booking-details/types';
 import { SelectOption } from '@/utils/utils';
+import { Booking } from './booking.dto';
 
 export interface IRoomService {
   calendar_legends: CalendarLegend[];
@@ -87,6 +88,7 @@ type CheckinCheckoutEventPayload =
       roomIdentifier: string;
       roomUnit: string;
       roomName: string;
+      booking: Booking;
     };
 
 type ReallocateEventPayload = {

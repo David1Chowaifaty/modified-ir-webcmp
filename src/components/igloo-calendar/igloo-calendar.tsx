@@ -20,6 +20,8 @@ import { BatchingQueue } from '@/utils/Queue';
 import { HKSkipParams, HouseKeepingService } from '@/services/housekeeping.service';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { SetRoomCalendarExtraParams } from '@/services/property.service';
+import { CheckoutDialogCloseEvent } from '../ir-checkout-dialog/ir-checkout-dialog';
+import { CheckoutRoomEvent } from '../ir-departures/ir-departures-table/ir-departures-table';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -78,6 +80,7 @@ export class IglooCalendar {
   @State() calDates: { from: string; to: string };
   @State() isAuthenticated = false;
   @State() calendarSidebarState: CalendarSidebarState;
+  @State() invoiceState: CheckoutRoomEvent = null;
 
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
@@ -170,7 +173,7 @@ export class IglooCalendar {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.dialogData = event.detail;
-    if (this.dialogData.reason !== 'reallocate') {
+    if (!['checkin', 'reallocate', 'checkout'].includes(this.dialogData.reason)) {
       this.calendarModalEl?.openModal();
     }
   }
@@ -290,7 +293,11 @@ export class IglooCalendar {
   private renderModalBody() {
     switch (this.dialogData?.reason) {
       case 'checkin': {
-        return `Are you sure you want to Check In this unit?`;
+        const unitName = this.dialogData.roomName;
+        if (unitName) {
+          return `Are you sure you want to check in unit ${unitName}?`;
+        }
+        return `Are you sure you want to check in this unit?`;
       }
       case 'checkout': {
         return 'Are you sure you want to Check Out this unit?';
@@ -1317,6 +1324,26 @@ export class IglooCalendar {
     // 4) Default: closed
     return false;
   }
+  private handleInvoiceClose(event: CustomEvent<void>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.invoiceState = null;
+  }
+  private handleCheckoutDialogClosed(event: CustomEvent<CheckoutDialogCloseEvent>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    if (this.dialogData?.reason !== 'checkout') {
+      return;
+    }
+    const { reason } = event.detail;
+    if (reason === 'openInvoice') {
+      this.invoiceState = {
+        booking: this.dialogData.booking,
+        identifier: this.dialogData.roomIdentifier,
+      };
+    }
+    this.dialogData = null;
+  }
   render() {
     // if (!this.isAuthenticated) {
     //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
@@ -1462,9 +1489,29 @@ export class IglooCalendar {
           onDialogClose={() => this.handleModalCancel()}
           data={this.dialogData?.reason === 'reallocate' ? this.dialogData : undefined}
         ></igl-reallocation-dialog>
+        <ir-dialog
+          onIrDialogAfterHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.handleModalCancel();
+          }}
+          style={{ textAlign: 'start' }}
+          label="Alert"
+          open={this.dialogData?.reason === 'checkin'}
+        >
+          <p>{this.renderModalBody()}</p>
+          <div slot="footer" class="ir-dialog__footer">
+            <ir-custom-button data-dialog="close" size="medium" variant="neutral" appearance="filled">
+              Cancel
+            </ir-custom-button>
+            <ir-custom-button onClickHandler={() => this.handleModalConfirm()} size="medium" variant="brand" appearance="accent">
+              Confirm
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
-          modalTitle={''}
+          modalTitle={'lol'}
           rightBtnActive={this.dialogData?.reason === 'reallocate' ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Confirm}
@@ -1472,6 +1519,20 @@ export class IglooCalendar {
           onConfirmModal={this.handleModalConfirm.bind(this)}
           onCancelModal={this.handleModalCancel.bind(this)}
         ></ir-modal>
+        <ir-checkout-dialog
+          style={{ textAlign: 'start' }}
+          booking={this.dialogData?.reason === 'checkout' ? this.dialogData?.booking : null}
+          identifier={this.dialogData?.reason === 'checkout' ? this.dialogData?.roomIdentifier : null}
+          open={this.dialogData?.reason === 'checkout'}
+          onCheckoutDialogClosed={event => this.handleCheckoutDialogClosed(event as CustomEvent<CheckoutDialogCloseEvent>)}
+        ></ir-checkout-dialog>
+        <ir-invoice
+          style={{ textAlign: 'start' }}
+          onInvoiceClose={event => this.handleInvoiceClose(event as CustomEvent<void>)}
+          booking={this.invoiceState?.booking}
+          roomIdentifier={this.invoiceState?.identifier}
+          open={this.invoiceState !== null}
+        ></ir-invoice>
       </Host>
     );
   }
