@@ -4,7 +4,7 @@ import { buildSplitIndex } from '@/utils/booking';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { BookingInvoiceInfo, InvoiceableItem, InvoiceableItemReasonCode, InvoiceableItemType, ViewMode } from '../types';
+import { BookingInvoiceInfo, InvoiceableItem, ViewMode } from '../types';
 import { IEntries } from '@/models/IBooking';
 import { IssueInvoiceProps } from '@/services/booking-service/types';
 @Component({
