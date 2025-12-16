@@ -21,12 +21,14 @@
 ### Depends on
 
 - [ir-custom-button](../../ui/ir-custom-button)
+- [ir-empty-state](../../ir-empty-state)
 - [ir-extra-service](ir-extra-service)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-extra-services --> ir-custom-button
+  ir-extra-services --> ir-empty-state
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-custom-button
   ir-extra-service --> ir-date-view

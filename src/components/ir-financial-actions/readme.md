@@ -117,7 +117,9 @@ graph TD;
   ir-booking-extra-note --> ir-custom-button
   ir-pickup-view --> ir-custom-button
   ir-pickup-view --> ir-label
+  ir-pickup-view --> ir-empty-state
   ir-extra-services --> ir-custom-button
+  ir-extra-services --> ir-empty-state
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-custom-button
   ir-extra-service --> ir-date-view
@@ -133,6 +135,7 @@ graph TD;
   ir-applicable-policies --> ir-custom-button
   ir-applicable-policies --> ir-icons
   ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-empty-state
   ir-payments-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
   ir-room-guests --> ir-drawer

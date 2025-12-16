@@ -56,6 +56,7 @@ graph TD;
   ir-applicable-policies --> ir-custom-button
   ir-applicable-policies --> ir-icons
   ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-empty-state
   ir-payments-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
   ir-booking-details --> ir-payment-details

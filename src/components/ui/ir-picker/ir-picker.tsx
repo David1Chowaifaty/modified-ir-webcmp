@@ -533,7 +533,10 @@ export class IrPicker {
   };
   render() {
     const hasResults = this.filteredItems.length > 0;
-    const showEmptyState = !this.loading && !hasResults;
+    const isAsyncMode = this.mode === 'select-async';
+    const hasChildren = this.slottedPickerItems.length > 0;
+    // In async mode avoid showing the empty state until loading finished and no results rendered.
+    const showEmptyState = !this.loading && !hasResults && (!isAsyncMode || !hasChildren);
     const emptyDescriptionId = showEmptyState ? this.emptyStateId : undefined;
 
     return (

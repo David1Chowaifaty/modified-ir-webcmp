@@ -22,12 +22,14 @@
 
 - [ir-custom-button](../../ui/ir-custom-button)
 - [ir-label](../../ui/ir-label)
+- [ir-empty-state](../../ir-empty-state)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-pickup-view --> ir-custom-button
   ir-pickup-view --> ir-label
+  ir-pickup-view --> ir-empty-state
   ir-booking-details --> ir-pickup-view
   style ir-pickup-view fill:#f9f,stroke:#333,stroke-width:4px
 ```

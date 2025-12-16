@@ -30,6 +30,7 @@
 - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
 - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
 - [ir-custom-button](../../ui/ir-custom-button)
+- [ir-empty-state](../../ir-empty-state)
 - [ir-pagination](../../ir-pagination)
 
 ### Graph
@@ -43,6 +44,7 @@ graph TD;
   ir-arrivals-table --> ir-balance-cell
   ir-arrivals-table --> ir-actions-cell
   ir-arrivals-table --> ir-custom-button
+  ir-arrivals-table --> ir-empty-state
   ir-arrivals-table --> ir-pagination
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-cell --> ir-custom-button
