@@ -188,6 +188,13 @@ export class IrArrivals {
     event.stopPropagation();
     this.roomGuestState = event.detail;
   }
+
+  @Listen('updateRoomGuests')
+  handleResetBooking(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.getBookings();
+  }
   // @Listen("resetBookingEvt")
   // handleResetBookings(e:CustomEvent){
   //   e.stopImmediatePropagation();
@@ -203,7 +210,7 @@ export class IrArrivals {
         <ir-toast></ir-toast>
         <ir-interceptor handledEndpoints={['/Get_Rooms_To_Check_in']}></ir-interceptor>
         <div class="ir-page__container">
-          <h3 class="page-title">Arrivals</h3>
+          <h3 class="page-title">Check-ins</h3>
           {/* <ir-arrivals-filters></ir-arrivals-filters> */}
           <ir-arrivals-table
             onCheckInRoom={event => this.handleCheckingRoom(event as CustomEvent<RoomGuestsPayload>)}

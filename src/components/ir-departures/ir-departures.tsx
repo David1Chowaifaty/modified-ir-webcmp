@@ -182,7 +182,7 @@ export class IrDepartures {
         <ir-toast></ir-toast>
         <ir-interceptor handledEndpoints={['/Get_Rooms_To_Check_Out']}></ir-interceptor>
         <div class={'ir-page__container'}>
-          <h3 class="page-title">Departures</h3>
+          <h3 class="page-title">Check-outs</h3>
           {/* <ir-departures-filter></ir-departures-filter> */}
           <ir-departures-table
             onCheckoutRoom={event => this.handleCheckoutRoom(event as CustomEvent<CheckoutRoomEvent>)}
