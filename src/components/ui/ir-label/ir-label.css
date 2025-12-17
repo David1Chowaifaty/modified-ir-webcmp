@@ -29,6 +29,7 @@
 }
 .label_placeholder {
   color: #cacfe7;
+  color: var(--wa-color-neutral-70);
   padding: 0 !important;
   margin: 0 !important;
 }

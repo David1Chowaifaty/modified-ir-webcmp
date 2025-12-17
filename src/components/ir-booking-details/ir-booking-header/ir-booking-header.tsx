@@ -4,8 +4,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State } from '@stencil/core';
 import { BookingDetailsDialogEvents, OpenDialogEvent, OpenSidebarEvent } from '../types';
-import { BookingService } from '@/services/booking.service';
-import WaBadge from '@awesome.me/webawesome/dist/components/badge/badge';
+import { BookingService } from '@/services/booking-service/booking.service';
 import calendar_data from '@/stores/calendar-data';
 
 @Component({
@@ -36,17 +35,12 @@ export class IrBookingHeader {
   //   '003': 'bg-ir-red',
   //   '004': 'bg-ir-red',
   // };
-  private badgeVariant: Record<string, WaBadge['variant']> = {
-    '001': 'warning',
-    '002': 'success',
-    '003': 'danger',
-    '004': 'danger',
-  };
+
   private dialogRef: HTMLIrDialogElement;
 
   private bookingService = new BookingService();
   private alertMessage = `ALERT! Modifying an OTA booking will create a discrepancy between igloorooms and the source. Future guest modifications on the OTA may require manual adjustments of the booking.`;
-  modalEl: HTMLIrModalElement;
+  private modalEl: HTMLIrDialogElement;
 
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -77,6 +71,7 @@ export class IrBookingHeader {
         position: 'top-right',
       });
       this.bookingStatus = null;
+      this.modalEl.closeModal();
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
@@ -98,12 +93,63 @@ export class IrBookingHeader {
 
   render() {
     const lastManipulation = this.booking.ota_manipulations ? this.booking.ota_manipulations[this.booking.ota_manipulations.length - 1] : null;
-    const showPms = (calendar_data.property?.linked_pms ?? [])?.findIndex(lp => lp?.is_active && lp?.bookings_integration_mode?.code === '001') !== -1;
+    const showPms = calendar_data.property?.linked_pms?.findIndex(lp => lp?.is_active && lp?.bookings_integration_mode?.code === '001') !== -1;
     return (
       <div class="fluid-container px-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0">
-            <p class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>
+            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <p style={{ color: 'black' }} class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>
+              {/* <wa-select
+                onchange={e => {
+                  this.bookingStatus = (e.target as any).value;
+                }}
+                style={{ width: '140px' }}
+                size="small"
+                placeholder="Change status..."
+                value={this.bookingStatus ?? ''}
+              >
+                <wa-option value="">Change status...</wa-option>
+                {this.booking.allowed_actions.map(option => (
+                  <wa-option value={option.code}>{option.description}</wa-option>
+                ))}
+              </wa-select> */}
+              <wa-dropdown
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
+                onwa-select={e => {
+                  this.bookingStatus = (e.detail as any).item.value;
+                  this.modalEl.openModal();
+                }}
+              >
+                <ir-custom-button
+                  slot="trigger"
+                  // onClickHandler={() => {
+                  //   if (!this.booking.is_direct) {
+                  //     this.modalEl.openModal();
+                  //     return;
+                  //   }
+                  //   this.updateStatus();
+                  // }}
+                  withCaret
+                  // loading={isRequestPending('/Change_Exposed_Booking_Status')}
+                  appearance={'outlined'}
+                  size="small"
+                  variant="brand"
+                >
+                  <ir-booking-status-tag slot="start" status={this.booking.status} isRequestToCancel={this.booking.is_requested_to_cancel}></ir-booking-status-tag>
+                  <span>Update status</span>
+                </ir-custom-button>
+                {this.booking.allowed_actions.map(option => (
+                  <wa-dropdown-item variant={['CANC_RA', 'NOSHOW_RA'].includes(option.code) ? 'danger' : 'default'} value={option.code}>
+                    {option.description}
+                  </wa-dropdown-item>
+                ))}
+              </wa-dropdown>
+            </div>
+
             <p class="m-0 p-0">{!this.booking.is_direct && <span class="mr-1 m-0">{this.booking.channel_booking_nbr}</span>}</p>
           </div>
 
@@ -112,9 +158,6 @@ export class IrBookingHeader {
               {/* <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
                 {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
               </span> */}
-              <wa-badge variant={this.badgeVariant[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}>
-                {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
-              </wa-badge>
               {lastManipulation && (
                 <ir-popover
                   trigger="hover"
@@ -142,35 +185,6 @@ export class IrBookingHeader {
                   class="sm-padding-right m-0 "
                   selectedValue={this.bookingStatus}
                 ></ir-select> */}
-                <wa-select
-                  onchange={e => {
-                    this.bookingStatus = (e.target as any).value;
-                  }}
-                  style={{ width: '120px' }}
-                  size="small"
-                  placeholder="Select..."
-                  value={this.bookingStatus ?? ''}
-                >
-                  <wa-option value="">Select...</wa-option>
-                  {this.booking.allowed_actions.map(option => (
-                    <wa-option value={option.code}>{option.description}</wa-option>
-                  ))}
-                </wa-select>
-                <ir-custom-button
-                  onClickHandler={() => {
-                    if (!this.booking.is_direct) {
-                      this.modalEl.openModal();
-                      return;
-                    }
-                    this.updateStatus();
-                  }}
-                  loading={isRequestPending('/Change_Exposed_Booking_Status')}
-                  appearance={'accent'}
-                  size="small"
-                  variant="brand"
-                >
-                  Update
-                </ir-custom-button>
               </div>
             )}
             <ir-custom-button
@@ -202,26 +216,25 @@ export class IrBookingHeader {
 
             {/* {this.hasReceipt && (
               <Fragment>
-                <wa-tooltip for="invoice">Print invoice</wa-tooltip>
-                <ir-custom-button id="invoice" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="file-invoice" label="invoice" style={{ fontSize: '1.65rem' }}></wa-icon>
+                <ir-custom-button id="invoice" variant="brand" size="small" appearance="outlined">
+                  Billing
                 </ir-custom-button>
               </Fragment>
             )} */}
             {this.hasPrint && (
               <Fragment>
                 <wa-tooltip for="print">Print booking</wa-tooltip>
-                <ir-custom-button id="print" variant="neutral" size="small" appearance="plain">
-                  <wa-icon label="Print" name="print" style={{ fontSize: '1.65rem' }}></wa-icon>
+                <ir-custom-button id="print" variant="brand" size="small" appearance="outlined">
+                  <wa-icon label="Print" name="print" style={{ fontSize: '1.2rem' }}></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
 
             {this.hasEmail && (
               <Fragment>
-                <wa-tooltip for="email">Email this booking</wa-tooltip>
-                <ir-custom-button id="email" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                <wa-tooltip for="email">Email this booking to guest</wa-tooltip>
+                <ir-custom-button id="email" variant="brand" size="small" appearance="outlined">
+                  <wa-icon name="envelope" style={{ fontSize: '1.2rem' }} label="Email this booking"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -229,7 +242,7 @@ export class IrBookingHeader {
               <Fragment>
                 <wa-tooltip for="book-delete">Delete this booking</wa-tooltip>
                 <ir-custom-button id="book-delete" variant="danger" size="small" appearance="plain">
-                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                  <wa-icon name="envelope" style={{ fontSize: '1.2rem' }} label="Delete this booking"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -237,7 +250,7 @@ export class IrBookingHeader {
               <Fragment>
                 <wa-tooltip for="menu">Go back</wa-tooltip>
                 <ir-custom-button id="menu" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="list" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+                  <wa-icon name="list" style={{ fontSize: '1.2rem' }} label="Go back"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -253,7 +266,7 @@ export class IrBookingHeader {
                 size="small"
                 appearance="plain"
               >
-                <wa-icon name="xmark" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+                <wa-icon name="xmark" style={{ fontSize: '1.2rem' }} label="Go back"></wa-icon>
               </ir-custom-button>
             )}
           </div>
@@ -269,15 +282,39 @@ export class IrBookingHeader {
           {this.renderDialogBody()}
         </ir-dialog>
 
-        <ir-modal
+        <ir-dialog
           ref={el => (this.modalEl = el)}
-          modalTitle={''}
-          leftBtnText={locales?.entries?.Lcz_Cancel}
-          rightBtnText={locales?.entries?.Lcz_Confirm}
-          modalBody={locales.entries.Lcz_OTA_Modification_Alter}
-          isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
-          onConfirmModal={this.updateStatus.bind(this)}
-        ></ir-modal>
+          label="Alert"
+          lightDismiss={false}
+          onIrDialogHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+          }}
+          onIrDialogAfterHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.bookingStatus = null;
+          }}
+        >
+          <p>{this.booking.is_direct ? 'Are you sure you want to update this booking status?' : locales.entries.Lcz_OTA_Modification_Alter}</p>
+          <div class="ir-dialog__footer" slot="footer">
+            <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
+              {locales?.entries?.Lcz_Cancel}
+            </ir-custom-button>
+            <ir-custom-button
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.updateStatus();
+              }}
+              size="medium"
+              variant="brand"
+              loading={isRequestPending('/Change_Exposed_Booking_Status')}
+            >
+              {locales?.entries?.Lcz_Confirm}
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
       </div>
     );
   }

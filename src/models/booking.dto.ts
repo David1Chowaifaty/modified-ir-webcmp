@@ -302,9 +302,9 @@ export const ExtraServiceSchema = z.object({
   cost: z.coerce.number().nullable(),
   currency_id: z.number().min(1),
   description: z.string().min(1),
-  end_date: z.string().nullable(),
-  price: z.coerce.number(),
-  start_date: z.string().nullable(),
+  end_date: z.string().nullable().optional().default(null),
+  start_date: z.string().nonempty(),
+  price: z.coerce.number().min(0.01),
   system_id: z.number().optional(),
 });
 
@@ -344,6 +344,7 @@ export interface IFinancial {
   gross_total_with_extras: number;
 }
 export interface IPayment {
+  system_id?: number;
   id: number | null;
   date: string;
   amount: number;
@@ -504,6 +505,7 @@ export interface Property {
   adult_child_constraints: Adultchildconstraints;
   affiliates: any[];
   agents: Agent[];
+  linked_pms: LinkedPms[] | null;
   allowed_booking_sources: Allowedbookingsource[];
   allowed_cards: Allowedcard[];
   allowed_payment_methods: AllowedPaymentMethod[];
@@ -544,7 +546,7 @@ export interface Property {
   privacy_policy: string;
   promotions: Promotion[];
   registered_name: string;
-  roomtypes: any[];
+  roomtypes: any[] | null;
   social_media: Socialmedia[];
   sources: Paymentmode[];
   space_theme: Spacetheme;
@@ -554,6 +556,21 @@ export interface Property {
   taxation_strategy: Paymentmode;
   taxes: Tax[];
   time_constraints: Timeconstraints;
+  company: Company | null;
+}
+export interface Company {
+  address: string;
+  city: string;
+  country: Country;
+  credit_note_prefix: string;
+  credit_note_start_nbr: number;
+  invoice_footer_notes: string;
+  invoice_prefix: string;
+  invoice_start_nbr: number;
+  name: string;
+  phone: string;
+  postal: string;
+  tax_nbr: string;
 }
 
 interface Timeconstraints {
@@ -869,6 +886,7 @@ export interface Room {
   gross_total: number;
   guarantee: number;
   gross_guarantee: number;
+  system_id: number;
 }
 interface OtaMeta {
   bed_preferences: string | null;

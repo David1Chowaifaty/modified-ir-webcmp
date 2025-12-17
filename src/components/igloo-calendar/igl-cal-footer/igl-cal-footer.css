@@ -4,6 +4,7 @@
   bottom: 0;
   width: max-content;
   z-index: 3;
+  color: var(--wa-color-text-quiet);
 }
 
 .footerCell {
@@ -15,10 +16,9 @@
   bottom: 0;
   width: 58px;
   height: 40px;
-  /* color: #b8b6b7; */
-  background: #fff;
+  background: var(--wa-color-surface-default);
   vertical-align: top;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--wa-color-surface-border);
 }
 
 .bottomLeftCell {
@@ -27,7 +27,6 @@
   width: 170px;
   text-align: left;
   padding-left: 15px;
-  color: #000000;
 }
 
 .footerCell i {
@@ -36,10 +35,11 @@
 
 .legendBtn {
   color: #41bff3;
+  color: var(--wa-color-text-link);
   cursor: pointer;
 }
 .legendBtn:hover {
-  color: #1e29ca;
+  color: color-mix(in oklab, var(--wa-color-text-link), var(--wa-color-mix-hover));
 }
 
 .isOnline i {
@@ -73,7 +73,7 @@
 }
 
 .currentDay {
-  background-color: #e3f3fa;
+  background-color: var(--wa-color-brand-fill-quiet);
 }
 
 .dayCapacityPercent {
@@ -89,5 +89,5 @@
 
 .weekend {
   font-weight: bold;
-  color: black;
+  color: var(--wa-color-text-normal);
 }

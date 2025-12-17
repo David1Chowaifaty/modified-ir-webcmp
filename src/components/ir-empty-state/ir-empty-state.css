@@ -1,0 +1,24 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-direction: column;
+  box-sizing: border-box;
+  color: var(--wa-color-neutral-60);
+}
+:host {
+  box-sizing: border-box !important;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: inherit !important;
+  padding: 0;
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}

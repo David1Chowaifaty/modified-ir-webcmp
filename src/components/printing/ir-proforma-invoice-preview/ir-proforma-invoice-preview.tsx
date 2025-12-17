@@ -1,0 +1,296 @@
+import { Booking } from '@/models/booking.dto';
+import { BookingInvoiceInfo } from '../../ir-invoice/types';
+import { Component, Fragment, Host, Prop, State, Watch, h } from '@stencil/core';
+import { IssueInvoiceProps } from '@/services/booking-service/types';
+import moment from 'moment';
+import { calculateDaysBetweenDates } from '@/utils/booking';
+import { formatAmount } from '@/utils/utils';
+
+type InvoicePayload = IssueInvoiceProps['invoice'];
+
+export interface NightlyRate {
+  date: string;
+  amount: number;
+}
+
+@Component({
+  tag: 'ir-proforma-invoice-preview',
+  styleUrl: 'ir-proforma-invoice-preview.css',
+  shadow: true,
+})
+export class IrProformaInvoicePreview {
+  /**
+   * Booking context used to display property, guest, and folio details.
+   */
+  @Prop() booking: Booking;
+
+  /**
+   * Invoice payload emitted by `ir-invoice-form`.
+   * Totals will fall back to booking data when omitted.
+   */
+  @Prop() invoice?: InvoicePayload;
+
+  /**
+   * Property associated with the booking.
+   */
+  @Prop() property: Booking['property'];
+
+  /**
+   * Optional metadata fetched via `getBookingInvoiceInfo`.
+   * Used to display reference numbers (invoice/credit note/etc.).
+   */
+  @Prop() invoiceInfo?: BookingInvoiceInfo;
+
+  /**
+   * Locale used for date formatting.
+   */
+  @Prop() locale: string = 'en';
+
+  /**
+   * Optional footer text shown at the end of the preview.
+   */
+  @Prop() footerNote?: string;
+
+  @State() invocableKeys: Set<string | number>;
+
+  componentWillLoad() {
+    this.invocableKeys = new Set(this.invoice?.items?.map(i => i.key));
+  }
+
+  @Watch('invoice')
+  handleInvoiceChange() {
+    this.invocableKeys = new Set(this.invoice?.items?.map(i => i.key));
+  }
+
+  private get bookingNumber() {
+    if (!this.booking.is_direct) {
+      return `${this.booking.booking_nbr} | ${this.booking.channel_booking_nbr}`;
+    }
+    return this.booking.booking_nbr;
+  }
+
+  private get CompanyLocation() {
+    const { company } = this.property;
+    const { postal, city, country } = company;
+    if (!postal && !city && !country) return null;
+    const location = [];
+    if (postal) {
+      location.push(postal);
+    }
+    if (city) {
+      location.push(city);
+    }
+    if (country) {
+      if (postal || city) {
+        location.push(`,${country.name}`);
+      } else {
+        location.push(company.name);
+      }
+    }
+    if (location.length === 0) {
+      return null;
+    }
+    return <p class="invoice-company__location">{location.join(' ')}</p>;
+  }
+  private get guestPhoneNumber() {
+    const { country_phone_prefix, mobile_without_prefix } = this.booking.guest;
+    // if (!is_direct) {
+    //     return mobile;
+    // }
+    if (!country_phone_prefix) {
+      return mobile_without_prefix;
+    }
+    return `+${country_phone_prefix?.replace('+', '')}-${mobile_without_prefix}`;
+  }
+  private formatDisplayDate(value?: string) {
+    if (!value) {
+      return null;
+    }
+    const parsedDate = moment(value, ['YYYY-MM-DD', moment.ISO_8601], true);
+    if (!parsedDate.isValid()) {
+      return null;
+    }
+    return parsedDate.format('MMMM DD, YYYY');
+  }
+
+  private get issueDate() {
+    return this.formatDisplayDate(this.invoice?.Date) ?? '—';
+  }
+
+  private renderPropertyCompanyHeader() {
+    const { company } = this.property;
+    if (!company) {
+      return null;
+    }
+    return (
+      <div class="invoice-company" aria-label="Issuing company details">
+        {company.name && <p class="invoice-company__name">{company.name}</p>}
+        {company.address && <p class="invoice-company__address">{company.address}</p>}
+        {this.CompanyLocation}
+        {company.phone && (
+          <ir-printing-label class="proforma-invoice__company-details" label={'Phone:'} content={`${company.country?.phone_prefix ?? ''} ${company.phone}`.trim()} />
+        )}
+        {company.tax_nbr && <ir-printing-label class="proforma-invoice__company-details" label={'Tax ID:'} content={company.tax_nbr} />}
+      </div>
+    );
+  }
+  private renderPropertyInfo() {
+    const propertyLocation = [this.property?.city?.name ?? null, this.property?.country?.name ?? null].filter(f => f !== null).join(', ');
+    const propertyLogo = this.property?.space_theme?.logo;
+    return (
+      <section class="property-overview" aria-label="Property overview">
+        <div class="property-overview__text">
+          <p class="property-overview__name">{this.property.name}</p>
+          <p class="property-overview__location">{propertyLocation}</p>
+        </div>
+        {propertyLogo && <img src={propertyLogo} alt={`${this.property.name} logo`} class="property-logo" />}
+      </section>
+    );
+  }
+  private formatBookingDates(date: string) {
+    return moment(date, 'YYYY-MM-DD').format('DD-MMM-YYYY');
+  }
+  private renderBillToSection() {
+    const { guest, company_name, company_tax_nbr } = this.booking;
+    const { target, billed_to_name } = this.invoice;
+    if (target?.code === '002') {
+      return (
+        <div class="bill-to" aria-label="Bill to company">
+          {company_name && <p class="bill-to__name">{company_name}</p>}
+          {company_tax_nbr && <p class="bill-to__id">{company_tax_nbr}</p>}
+        </div>
+      );
+    }
+    return (
+      <div class="bill-to" aria-label="Bill to guest">
+        {billed_to_name && <p>{billed_to_name}</p>}
+        <p class="bill-to__name">
+          {' '}
+          {billed_to_name && <b>for</b>} {[guest.first_name ?? '', guest.last_name ?? ''].join(' ').trim()}
+        </p>
+        {guest.email && <p class="bill-to__contact">{guest.email}</p>}
+        {this.guestPhoneNumber && <p class="bill-to__contact">{this.guestPhoneNumber}</p>}
+      </div>
+    );
+  }
+  private renderCancellationPenalty() {
+    const cancellationPenalty = this.booking.financial.payments?.find(p => p.payment_type?.code === '013');
+    if (!cancellationPenalty) {
+      return null;
+    }
+    const sysId = cancellationPenalty.system_id;
+    if (!this.invocableKeys.has(sysId)) {
+      return null;
+    }
+
+    return (
+      <section class="proforma-payment__section">
+        <div class="ir-proforma-invoice__service">
+          <div class={'ir-proforma-invoice__cancellation-info'}>
+            <p>Cancellation penalty</p>
+            <p class={'ir-proforma-invoice__cancellation-date'}>( {this.formatDisplayDate(cancellationPenalty.date)} )</p>
+          </div>
+          <span class="ir-proforma-invoice__checkbox-price">{formatAmount(this.booking.currency.symbol, cancellationPenalty.amount)}</span>
+        </div>
+      </section>
+    );
+  }
+  render() {
+    if (!this.booking || !this.invoice || !this.property) {
+      return;
+    }
+    const billToContent = this.renderBillToSection();
+    const companyDetails = this.renderPropertyCompanyHeader();
+    const propertyOverview = this.renderPropertyInfo();
+    const totalNights = calculateDaysBetweenDates(this.booking.from_date, this.booking.to_date);
+    const invocableRoom = this.booking.rooms.filter(room => this.invocableKeys.has(room.system_id));
+    const existInvocableRoom = invocableRoom.length > 0;
+    const existInvocableExtraService = this.booking.extra_services?.some(service => this.invocableKeys.has(service.system_id));
+    const existInvocablePickup = this.invocableKeys?.has(this.booking.pickup_info?.['system_id']);
+    return (
+      <Host>
+        <article class="invoice" aria-label="Pro-forma invoice">
+          <header class="invoice__header">
+            <h3 class="invoice__title">Pro-forma Invoice</h3>
+            <section class="invoice__layout" aria-label="Invoice summary">
+              <div class="invoice__column invoice__column--details">
+                <div class="invoice__details">
+                  <ir-printing-label label="Date of issue:" content={this.issueDate}></ir-printing-label>
+                  <ir-printing-label label="Booking no:" content={this.bookingNumber}></ir-printing-label>
+                </div>
+                {billToContent && (
+                  <section class="bill-to-section" aria-label="Bill to">
+                    <h4 class="section-heading">Bill To</h4>
+                    {billToContent}
+                  </section>
+                )}
+              </div>
+              <div class="invoice__column invoice__column--property">
+                {companyDetails && (
+                  <section class="issuer-section" aria-label="Issuer">
+                    {companyDetails}
+                  </section>
+                )}
+                {propertyOverview}
+              </div>
+            </section>
+          </header>
+          <main>
+            {existInvocableRoom && (
+              <section style={{ marginTop: '2.5rem' }}>
+                <div class="proforma__accommodation-container">
+                  <p class="proforma__accommodation-title">ACCOMMODATION</p>
+                  <p class="booking-dates">{this.formatBookingDates(this.booking?.from_date)}</p>
+                  <p class="booking-dates">{this.formatBookingDates(this.booking?.to_date)}</p>
+                  <p class="number-of-nights">
+                    {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+                  </p>
+                  <p class="vat-exclusion">
+                    <i>{this.property?.tax_statement}</i>
+                  </p>
+                </div>
+                <div>
+                  {invocableRoom.map((room, idx) => {
+                    return (
+                      <Fragment>
+                        <ir-print-room
+                          room={room}
+                          idx={idx}
+                          booking={this.booking}
+                          key={room.identifier}
+                          currency={this.booking.currency.symbol}
+                          property={this.property as any}
+                        ></ir-print-room>
+                      </Fragment>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+            {existInvocablePickup && <ir-printing-pickup pickup={this.booking.pickup_info}></ir-printing-pickup>}
+            {existInvocableExtraService && (
+              <ir-printing-extra-service
+                invocableKeys={this.invocableKeys}
+                extraServices={this.booking.extra_services}
+                currency={this.booking.currency}
+              ></ir-printing-extra-service>
+            )}
+            {this.renderCancellationPenalty()}
+            <section class="proforma-payment__section">
+              <ir-printing-label label="Balance:" content={formatAmount(this.booking.currency.symbol, this.booking.financial.due_amount)}></ir-printing-label>
+              <ir-printing-label
+                label="Collected (payments - refunds):"
+                content={formatAmount(this.booking.currency.symbol, this.booking.financial.collected + this.booking.financial.refunds)}
+              ></ir-printing-label>
+            </section>
+          </main>
+          {this.footerNote && (
+            <footer class="invoice__footer">
+              <p class="invoice__footer-note">{this.footerNote}</p>
+            </footer>
+          )}
+        </article>
+      </Host>
+    );
+  }
+}

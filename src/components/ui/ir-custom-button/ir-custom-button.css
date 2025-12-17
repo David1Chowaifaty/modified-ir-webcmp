@@ -4,8 +4,17 @@
 .ir__custom-button {
   width: 100%;
 }
-.ir__custom-button.icon-btn::part(base) {
+.ir__custom-button.--icon::part(base) {
   height: auto;
   width: auto;
+  padding: 0;
+}
+.ir__custom-button::part(base) {
+  height: var(--ir-c-btn-height, var(--wa-form-control-height));
+  padding: var(--ir-c-btn-padding, 0 var(--wa-form-control-padding-inline));
+  font-size: var(--ir-c-btn-font-size, auto);
+}
+.ir__custom-button.--link::part(base) {
+  height: fit-content;
   padding: 0;
 }

@@ -6,6 +6,8 @@
 :host *::before,
 :host *::after {
   box-sizing: inherit !important;
+  padding: 0;
+  margin: 0;
 }
 
 [hidden] {

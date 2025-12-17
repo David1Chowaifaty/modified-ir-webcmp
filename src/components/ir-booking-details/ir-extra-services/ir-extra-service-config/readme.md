@@ -10,15 +10,15 @@
 | Property  | Attribute | Description | Type                                                                                                                                                                     | Default     |
 | --------- | --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `booking` | --        |             | `{ currency: Currency; from_date: string; to_date: string; booking_nbr: string; }`                                                                                       | `undefined` |
-| `service` | --        |             | `{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }` | `undefined` |
+| `open`    | `open`    |             | `boolean`                                                                                                                                                                | `undefined` |
+| `service` | --        |             | `{ system_id?: number; cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }` | `undefined` |
 
 
 ## Events
 
-| Event             | Description | Type                |
-| ----------------- | ----------- | ------------------- |
-| `closeModal`      |             | `CustomEvent<null>` |
-| `resetBookingEvt` |             | `CustomEvent<null>` |
+| Event        | Description | Type                |
+| ------------ | ----------- | ------------------- |
+| `closeModal` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
@@ -29,20 +29,20 @@
 
 ### Depends on
 
-- [ir-title](../../../ir-title)
-- [ir-date-picker](../../../ui/ir-date-picker)
-- [ir-button](../../../ui/ir-button)
-- [ir-price-input](../../../ui/ir-price-input)
+- [ir-drawer](../../../ir-drawer)
+- [ir-extra-service-config-form](ir-extra-service-config-form)
+- [ir-custom-button](../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-extra-service-config --> ir-title
-  ir-extra-service-config --> ir-date-picker
-  ir-extra-service-config --> ir-button
-  ir-extra-service-config --> ir-price-input
-  ir-title --> ir-icon
-  ir-button --> ir-icons
+  ir-extra-service-config --> ir-drawer
+  ir-extra-service-config --> ir-extra-service-config-form
+  ir-extra-service-config --> ir-custom-button
+  ir-extra-service-config-form --> ir-validator
+  ir-extra-service-config-form --> ir-custom-date-picker
+  ir-extra-service-config-form --> ir-input
+  ir-custom-date-picker --> ir-input
   ir-booking-details --> ir-extra-service-config
   style ir-extra-service-config fill:#f9f,stroke:#333,stroke-width:4px
 ```

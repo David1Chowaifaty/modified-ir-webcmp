@@ -61,11 +61,7 @@ export class IrPaymentsFolio {
   }
 
   private renderEmptyState() {
-    return (
-      <div class="text-center p-1">
-        <p class="text-muted">No payments recorded yet</p>
-      </div>
-    );
+    return <ir-empty-state></ir-empty-state>;
   }
 
   render() {

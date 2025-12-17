@@ -90,14 +90,14 @@ export class IglRatePlan {
     });
   }
   // Render the rate amount
-  private renderRate(): string {
+  private get rate(): string {
     const { visibleInventory } = this;
     if (!visibleInventory) return '';
     if (visibleInventory.is_amount_modified) {
       return visibleInventory.rp_amount.toString();
     }
     const { selected_variation, view_mode } = visibleInventory;
-    const amount = view_mode === '001' ? selected_variation?.discounted_amount : selected_variation?.amount_per_night_gross;
+    const amount = view_mode === '001' ? selected_variation?.discounted_gross_amount : selected_variation?.amount_per_night_gross;
     return amount?.toString() || '';
   }
 
@@ -163,14 +163,10 @@ export class IglRatePlan {
     // }
     return (
       <Host data-testid={`rp-${this.ratePlan.id}`}>
-        <div
-          class={`d-flex mt-1  p-0 ${
-            isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'
-          }`}
-        >
-          <div data-testid={'rp_name'} class="rateplan-name-container m-0 p-0  d-flex align-items-center" style={{ gap: '0.5rem' }}>
+        <div class={`rate-plan ${isAvailableToBook ? 'rate-plan--available' : 'rate-plan--unavailable'}`}>
+          <div data-testid={'rp_name'} class="rateplan-name-container">
             {bookingType === 'BAR_BOOKING' ? (
-              <p class="m-0 p-0">
+              <p>
                 {/* <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span> */}
                 <span>
                   {ratePlan.name.split('/')[1]} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
@@ -181,31 +177,40 @@ export class IglRatePlan {
                 {ratePlan.short_name} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
               </span>
             )}
-            {isAvailableToBook && <ir-tooltip message={this.getTooltipMessages()}></ir-tooltip>}
+            {isAvailableToBook && (
+              <Fragment>
+                <wa-tooltip for={`rateplan-${this.ratePlan.id}`}>
+                  <span innerHTML={this.getTooltipMessages()}></span>
+                </wa-tooltip>
+                <wa-icon name="circle-info" id={`rateplan-${this.ratePlan.id}`}></wa-icon>
+              </Fragment>
+            )}
           </div>
 
           {isAvailableToBook ? (
-            <div class="d-md-flex m-md-0  justify-content-md-end align-items-md-center flex-fill rateplan-container">
-              <div class="flex-fill max-w-300 flex-grow-1">
-                <fieldset class="position-relative flex-grow-1 w-100">
-                  <select
-                    disabled={disableForm}
-                    data-testid="adult-child-offering"
-                    class="form-control input-sm flex-grow-1 w-100"
-                    id={uuidv4()}
-                    onChange={evt => this.handleDataChange('adult_child_offering', evt)}
-                  >
-                    {formattedVariations?.map(variation => (
-                      <option value={variation} selected={this.formatVariation(selectedVariation) === variation}>
-                        {variation}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-              </div>
-              <div class="m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1">
-                <div class="d-flex m-0 p-0 rate-total-night-view mt-0 flex-grow-1">
-                  <ir-price-input
+            <div class="rateplan-container">
+              <wa-select
+                size="small"
+                disabled={disableForm}
+                data-testid="adult-child-offering"
+                onchange={evt => this.handleDataChange('adult_child_offering', evt)}
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
+                value={this.formatVariation(selectedVariation)}
+                defaultValue={this.formatVariation(selectedVariation)}
+              >
+                {formattedVariations?.map(variation => (
+                  <wa-option value={variation} selected={this.formatVariation(selectedVariation) === variation}>
+                    {variation}
+                  </wa-option>
+                ))}
+              </wa-select>
+
+              <div class="rateplan-config">
+                <div class="rate-total-night-view">
+                  {/* <ir-price-input
                     testId={'amount_input'}
                     disabled={disableForm}
                     onTextChange={e =>
@@ -216,55 +221,81 @@ export class IglRatePlan {
                     }
                     aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
                     aria-describedby={`${this.ratePlan.short_name}'s rate`}
-                    class="ir-br-input-none price-amount w-100 flex-grow-1"
+                    class="ir-br-input-none price-amount rateplan-price-input"
                     currency={currency.symbol}
                     value={this.renderRate()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
-                  ></ir-price-input>
-                  <fieldset class="position-relative m-0 total-nights-container p-0">
-                    <select
-                      data-testid={'nigh_stay_select'}
-                      disabled={disableForm}
-                      class="form-control input-sm m-0 nightBorder rounded-0 py-0"
-                      id={uuidv4()}
-                      onChange={evt =>
-                        this.updateRateplanSelection({
-                          view_mode: (evt.target as HTMLSelectElement).value as any,
-                        })
-                      }
-                    >
-                      {ratePricingMode.map(data => (
-                        <option value={data.CODE_NAME} selected={visibleInventory?.view_mode === data.CODE_NAME}>
-                          {data.CODE_VALUE_EN}
-                        </option>
-                      ))}
-                    </select>
-                  </fieldset>
+                  ></ir-price-input> */}
+                  <ir-input
+                    disabled={disableForm}
+                    class="fd-rateplan__price-input"
+                    onText-change={e =>
+                      this.updateRateplanSelection({
+                        is_amount_modified: true,
+                        rp_amount: Number(e.detail),
+                      })
+                    }
+                    id={`rate-input-${this.ratePlan.id}`}
+                    aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
+                    aria-describedby={`${this.ratePlan.short_name}'s rate`}
+                    value={this.rate}
+                    defaultValue={this.rate}
+                    placeholder={locales.entries.Lcz_Rate || 'Rate'}
+                    mask="price"
+                  >
+                    <span slot="start">{currency.symbol}</span>
+                  </ir-input>
+                  <wa-select
+                    data-testid={'nigh_stay_select'}
+                    disabled={disableForm}
+                    onwa-hide={e => {
+                      e.stopImmediatePropagation();
+                      e.stopPropagation();
+                    }}
+                    size="small"
+                    class="fd-rateplan__nights-select"
+                    id={uuidv4()}
+                    onchange={evt =>
+                      this.updateRateplanSelection({
+                        view_mode: (evt.target as HTMLSelectElement).value as any,
+                      })
+                    }
+                    value={visibleInventory?.view_mode}
+                    defaultValue={visibleInventory?.view_mode}
+                  >
+                    {ratePricingMode.map(data => (
+                      <wa-option value={data.CODE_NAME} selected={visibleInventory?.view_mode === data.CODE_NAME}>
+                        {data.CODE_VALUE_EN}
+                      </wa-option>
+                    ))}
+                  </wa-select>
                 </div>
                 {(bookingType === 'PLUS_BOOKING' || bookingType === 'ADD_ROOM') && (
-                  <div class="flex-fill mt-0 ml-1 m-0 mt-md-0 p-0">
-                    <fieldset class="position-relative">
-                      <select
-                        data-testid={'inventory_select'}
-                        disabled={visibleInventory.visibleInventory === 0}
-                        class="form-control input-sm"
-                        id={uuidv4()}
-                        onChange={evt => this.handleDataChange('totalRooms', evt)}
-                      >
-                        {Array.from({ length: (visibleInventory.visibleInventory || 0) + 1 }, (_, i) => i).map(i => (
-                          <option value={i} selected={visibleInventory.reserved === i}>
-                            {i}
-                          </option>
-                        ))}
-                      </select>
-                    </fieldset>
-                  </div>
+                  <wa-select
+                    data-testid={'inventory_select'}
+                    disabled={visibleInventory.visibleInventory === 0}
+                    class="fd-rateplan__inventory-select"
+                    onchange={evt => this.handleDataChange('totalRooms', evt)}
+                    value={visibleInventory.reserved?.toString()}
+                    defaultValue={visibleInventory.reserved?.toString()}
+                    size="small"
+                    onwa-hide={e => {
+                      e.stopImmediatePropagation();
+                      e.stopPropagation();
+                    }}
+                  >
+                    {Array.from({ length: (visibleInventory.visibleInventory || 0) + 1 }, (_, i) => i).map(i => (
+                      <wa-option value={i?.toString()} selected={visibleInventory.reserved === i}>
+                        {i}
+                      </wa-option>
+                    ))}
+                  </wa-select>
                 )}
               </div>
               {bookingType === 'EDIT_BOOKING' && (
                 <Fragment>
-                  <div class="m-0 p-0 ml-md-1 mt-md-0 d-none d-md-block">
-                    <fieldset class="position-relative">
+                  {/* <div class="edit-booking-radio desktop-only">
+                    <fieldset class="rp-fieldset">
                       <input
                         data-testid={'inventory_radio'}
                         disabled={disableForm}
@@ -277,38 +308,41 @@ export class IglRatePlan {
                         }}
                         checked={visibleInventory.reserved === 1}
                       />
-                    </fieldset>
-                  </div>
-                  <button
+                    </fieldset> 
+                  
+                  </div> */}
+                  <ir-custom-button
+                    variant="brand"
                     data-testid="book_property"
                     disabled={disableForm}
                     type="button"
-                    class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1 d-md-none"
-                    onClick={() => {
+                    class="rateplan__booking-btn"
+                    onClickHandler={() => {
                       resetReserved();
                       this.reserveRoom();
                       this.bookProperty();
                     }}
                   >
                     {visibleInventory.reserved === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select}
-                  </button>
+                  </ir-custom-button>
                 </Fragment>
               )}
 
               {(bookingType === 'BAR_BOOKING' || bookingType === 'SPLIT_BOOKING') && (
-                <button
+                <ir-custom-button
                   data-testid="book"
                   disabled={disableForm || (bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                   type="button"
-                  class="btn btn-primary booking-btn mt-md-0 btn-sm ml-md-1 mt-1"
-                  onClick={() => this.bookProperty()}
+                  class="booking-btn"
+                  variant="brand"
+                  onClickHandler={() => this.bookProperty()}
                 >
                   {locales.entries.Lcz_Book}
-                </button>
+                </ir-custom-button>
               )}
             </div>
           ) : (
-            <p class="text-danger m-0 p-0">{locales.entries['Lcz_NotAvailable'] || 'Not available'}</p>
+            <p class="rate-plan-unavailable-text">{locales.entries['Lcz_NotAvailable'] || 'Not available'}</p>
           )}
         </div>
       </Host>

@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { RoomService } from '@/services/room.service';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { addTwoMonthToDate, computeEndDate, convertDMYToISO, dateToFormattedString, formatLegendColors, getNextDay, isBlockUnit } from '@/utils/utils';
 import io, { Socket } from 'socket.io-client';
 import { EventsService } from '@/services/events.service';
@@ -20,6 +20,8 @@ import { BatchingQueue } from '@/utils/Queue';
 import { HKSkipParams, HouseKeepingService } from '@/services/housekeeping.service';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { SetRoomCalendarExtraParams } from '@/services/property.service';
+import { CheckoutDialogCloseEvent } from '../ir-checkout-dialog/ir-checkout-dialog';
+import { CheckoutRoomEvent } from '../ir-departures/ir-departures-table/ir-departures-table';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -78,6 +80,7 @@ export class IglooCalendar {
   @State() calDates: { from: string; to: string };
   @State() isAuthenticated = false;
   @State() calendarSidebarState: CalendarSidebarState;
+  @State() invoiceState: CheckoutRoomEvent = null;
 
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
@@ -170,8 +173,11 @@ export class IglooCalendar {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.dialogData = event.detail;
-    if (this.dialogData.reason !== 'reallocate') {
+    if (!['checkin', 'reallocate', 'checkout'].includes(this.dialogData.reason)) {
       this.calendarModalEl?.openModal();
+    }
+    if (this.dialogData.reason === 'checkin') {
+      this.openCalendarSidebar.emit({ type: 'room-guests', payload: this.dialogData.sidebarPayload });
     }
   }
   @Listen('showRoomNightsDialog')
@@ -290,7 +296,11 @@ export class IglooCalendar {
   private renderModalBody() {
     switch (this.dialogData?.reason) {
       case 'checkin': {
-        return `Are you sure you want to Check In this unit?`;
+        const unitName = this.dialogData.roomName;
+        if (unitName) {
+          return `Are you sure you want to check in unit ${unitName}?`;
+        }
+        return `Are you sure you want to check in this unit?`;
       }
       case 'checkout': {
         return 'Are you sure you want to Check Out this unit?';
@@ -1297,6 +1307,46 @@ export class IglooCalendar {
   private handleCloseBookingWindow() {
     this.bookingItem = null;
   }
+  private get isSidebarOpen(): boolean {
+    // 1) Always open when editing a booking
+    if (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING') {
+      return false;
+    }
+
+    // 2) Open when room nights dialog is showing in the sidebar
+    if (this.roomNightsData) {
+      return true;
+    }
+
+    // 3) Open for sidebar-based flows (but not room-guests, which uses <ir-room-guests>)
+    if (this.calendarSidebarState) {
+      const type = this.calendarSidebarState.type;
+      return type === 'split' || type === 'bulk-blocks';
+    }
+
+    // 4) Default: closed
+    return false;
+  }
+  private handleInvoiceClose(event: CustomEvent<void>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.invoiceState = null;
+  }
+  private handleCheckoutDialogClosed(event: CustomEvent<CheckoutDialogCloseEvent>): void {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    if (this.dialogData?.reason !== 'checkout') {
+      return;
+    }
+    const { reason } = event.detail;
+    if (reason === 'openInvoice') {
+      this.invoiceState = {
+        booking: this.dialogData.booking,
+        identifier: this.dialogData.roomIdentifier,
+      };
+    }
+    this.dialogData = null;
+  }
   render() {
     // if (!this.isAuthenticated) {
     //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
@@ -1370,7 +1420,7 @@ export class IglooCalendar {
         )}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
-          open={!!this.calendarSidebarState || this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
+          open={this.isSidebarOpen}
           showCloseButton={false}
           sidebarStyles={{
             width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
@@ -1400,42 +1450,32 @@ export class IglooCalendar {
               onCloseModal={() => (this.calendarSidebarState = null)}
             ></igl-split-booking>
           )}
-          {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
-            <ir-booking-details
-              slot="sidebar-body"
-              hasPrint
-              hasReceipt
-              hasCloseButton
-              onCloseSidebar={() => (this.editBookingItem = null)}
-              is_from_front_desk
-              propertyid={this.property_id}
-              hasRoomEdit
-              hasRoomDelete
-              bookingNumber={this.editBookingItem.BOOKING_NUMBER}
-              ticket={this.ticket}
-              language={this.language}
-              hasRoomAdd
-            ></ir-booking-details>
-          )}
-          {this.calendarSidebarState?.type === 'room-guests' && (
-            <ir-room-guests
-              countries={this.countries}
-              language={this.language}
-              identifier={this.calendarSidebarState?.payload?.identifier}
-              bookingNumber={this.calendarSidebarState?.payload.bookingNumber}
-              roomName={this.calendarSidebarState?.payload?.roomName}
-              totalGuests={this.calendarSidebarState?.payload?.totalGuests}
-              sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
-              slot="sidebar-body"
-              checkIn={this.calendarSidebarState?.payload?.checkin}
-              onCloseModal={() => (this.calendarSidebarState = null)}
-            ></ir-room-guests>
-          )}
           {this.calendarSidebarState?.type === 'bulk-blocks' && (
             <igl-bulk-operations slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-operations>
             // <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
           )}
         </ir-sidebar>
+        <ir-booking-details-drawer
+          open={this.editBookingItem?.event_type === 'EDIT_BOOKING'}
+          propertyId={this.property_id}
+          bookingNumber={this.editBookingItem && this.editBookingItem?.event_type === 'EDIT_BOOKING' ? this.editBookingItem.BOOKING_NUMBER : null}
+          ticket={this.ticket}
+          language={this.language}
+          onBookingDetailsDrawerClosed={() => (this.editBookingItem = null)}
+        ></ir-booking-details-drawer>
+        <ir-room-guests
+          open={this.calendarSidebarState?.type === 'room-guests'}
+          countries={this.countries}
+          language={this.language}
+          identifier={this.calendarSidebarState?.payload?.identifier}
+          bookingNumber={this.calendarSidebarState?.payload?.bookingNumber}
+          roomName={this.calendarSidebarState?.payload?.roomName}
+          totalGuests={this.calendarSidebarState?.payload?.totalGuests}
+          sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
+          checkIn={true}
+          onCloseModal={() => (this.calendarSidebarState = null)}
+        ></ir-room-guests>
+
         <igl-reallocation-dialog
           onResetModalState={() => (this.dialogData = null)}
           onDialogClose={() => this.handleModalCancel()}
@@ -1443,7 +1483,7 @@ export class IglooCalendar {
         ></igl-reallocation-dialog>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
-          modalTitle={''}
+          modalTitle={'lol'}
           rightBtnActive={this.dialogData?.reason === 'reallocate' ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Confirm}
@@ -1451,6 +1491,20 @@ export class IglooCalendar {
           onConfirmModal={this.handleModalConfirm.bind(this)}
           onCancelModal={this.handleModalCancel.bind(this)}
         ></ir-modal>
+        <ir-checkout-dialog
+          style={{ textAlign: 'start' }}
+          booking={this.dialogData?.reason === 'checkout' ? this.dialogData?.booking : null}
+          identifier={this.dialogData?.reason === 'checkout' ? this.dialogData?.roomIdentifier : null}
+          open={this.dialogData?.reason === 'checkout'}
+          onCheckoutDialogClosed={event => this.handleCheckoutDialogClosed(event as CustomEvent<CheckoutDialogCloseEvent>)}
+        ></ir-checkout-dialog>
+        <ir-invoice
+          style={{ textAlign: 'start' }}
+          onInvoiceClose={event => this.handleInvoiceClose(event as CustomEvent<void>)}
+          booking={this.invoiceState?.booking}
+          roomIdentifier={this.invoiceState?.identifier}
+          open={this.invoiceState !== null}
+        ></ir-invoice>
       </Host>
     );
   }

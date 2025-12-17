@@ -154,6 +154,7 @@ export class IglReallocationDialog {
                     e.stopImmediatePropagation();
                     e.stopPropagation();
                   }}
+                  size="small"
                   aria-invalid={String(this.showRateplanError)}
                   onchange={e => this.handleRateplanChange((e.target as any).value)}
                 >

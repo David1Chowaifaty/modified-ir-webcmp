@@ -4,10 +4,11 @@ export type NativeButton = WaButton;
 
 @Component({
   tag: 'ir-custom-button',
-  styleUrls: ['ir-custom-button.css', '../../../global/app.css'],
+  styleUrls: ['ir-custom-button.css'],
   shadow: false,
 })
 export class IrCustomButton {
+  @Prop() link: boolean;
   @Prop({ reflect: true }) iconBtn: boolean;
   /** The button's theme variant. Defaults to `neutral` if not within another element with a variant. */
   @Prop() variant: NativeButton['variant'];
@@ -105,12 +106,12 @@ export class IrCustomButton {
           /* core button props */
           type={this.type}
           size={this.size}
-          class={`ir__custom-button ${this.iconBtn ? 'icon-btn' : ''}`}
+          class={`ir__custom-button ${this.iconBtn ? '--icon' : ''} ${this.link ? '--link' : ''}`}
           disabled={this.disabled}
-          appearance={this.appearance}
+          appearance={this.link ? 'plain' : this.appearance}
           loading={this.loading}
           with-caret={this.withCaret}
-          variant={this.variant}
+          variant={this.link ? 'brand' : this.variant}
           pill={this.pill}
           /* link-related props */
           href={this.href}

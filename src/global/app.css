@@ -1,16 +1,52 @@
 /* Web Awesome core styles */
 /* @import url('../assets/webawesome/themes/webawesome.css'); */
 @import url('../assets/webawesome/themes/default.css');
-
+@import url('../components/ui/ir-dialog/ir-dialog.css');
+@import url('../components/ir-drawer/ir-drawer.css');
 /* Place project-wide overrides below. */
 .my-custom-style {
   background: #000;
   color: white;
 }
+/* body {
+  background-color: var(--wa-color-surface-default) !important;
+} */
+html {
+  font-size: 14px !important;
+}
+/* body {
+  background-color: var(---wa-color-surface-default) !important;
+  color: var(--wa-color-text-normal) !important;
+} */
 
-:host {
-  --wa-form-control-required-content-color: var(--wa-color-danger-border-loud);
+.ir-page__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-l, 1.5rem);
   padding: var(--wa-space-l);
+  position: relative;
+}
+
+.ir-price {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--wa-color-text-normal);
+  margin: 0;
+  padding: 0;
+}
+.page-title {
+  font-family: var(--wa-font-family-heading);
+  font-weight: var(--wa-font-weight-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  font-size: var(--wa-font-size-xl);
+}
+
+:root {
+  --wa-form-control-required-content-color: var(--wa-color-danger-border-loud, #f3676c);
 }
 /* td {
   padding: 0 !important;
@@ -23,6 +59,7 @@ wa-card::part(base) {
   box-sizing: border-box;
 }
 wa-input[aria-invalid='true']::part(base),
+wa-textarea[aria-invalid='true']::part(base),
 wa-select[aria-invalid='true']::part(combobox) {
   border-color: var(--wa-color-danger-border-loud);
   outline-color: var(--wa-color-danger-border-loud);
@@ -69,4 +106,36 @@ wa-select[aria-invalid='true']::part(combobox) {
   .label-on-left ::part(hint) {
     grid-column: 2;
   }
+}
+
+.ir-preview-print-container {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media print {
+  body.ir-preview-dialog-print-mode {
+    background: #fff !important;
+  }
+  body.ir-preview-dialog-print-mode > *:not(.ir-preview-print-container) {
+    display: none !important;
+  }
+  body.ir-preview-dialog-print-mode .ir-preview-print-container {
+    opacity: 1;
+    pointer-events: auto;
+    position: static;
+    z-index: auto;
+    width: 100%;
+    min-height: auto;
+    margin: 0 auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+}
+
+@page {
+  margin: 0.5in;
 }

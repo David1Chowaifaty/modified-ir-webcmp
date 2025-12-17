@@ -3,6 +3,7 @@
   position: absolute;
   top: 0;
   height: 100%;
+  color: var(--wa-color-text-quiet);
 }
 .svg-icon {
   height: 20px;
@@ -16,8 +17,10 @@
 }
 .dayTitle.weekend {
   font-weight: bold;
-  color: #1e9ff2;
-  color: black;
+  color: var(--wa-color-text-normal);
+}
+.cellData {
+  background-color: var(--wa-color-surface-default);
 }
 .stickyCell {
   display: -ms-inline-grid;
@@ -33,7 +36,7 @@
 }
 
 .headersContainer {
-  background-color: #ffffff;
+  background-color: var(--wa-color-surface-default);
 }
 
 .headerCell {
@@ -41,26 +44,28 @@
   width: 58px;
   height: 58px;
   vertical-align: top;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: var(--wa-color-surface-default);
+  border-bottom: 1px solid var(--wa-color-surface-border);
 }
 
 .monthsContainer {
   height: 20px;
-  background-color: #ffffff;
+  background-color: var(--wa-color-surface-default);
   margin-bottom: 0.2em;
 }
 
 .monthCell {
   display: inline-grid;
   height: 20px;
-  background-color: #ececec;
-  border-right: 1px solid #c7c7c7;
+  background-color: var(--wa-color-overlay-inline);
+  border-right: 1px solid var(--wa-color-surface-border);
+  color: var(--wa-color-neutral-on-quiet);
   vertical-align: top;
 }
 
 .monthCell:nth-child(odd) {
-  background-color: #dddddd;
+  background: var(--wa-color-neutral-fill-normal);
+  color: var(--wa-color-neutral-on-normal);
 }
 
 .monthTitle {
@@ -78,7 +83,7 @@
   left: 0px;
   z-index: 3;
   width: 170px;
-  background-color: #ffffff;
+  background-color: var(--wa-color-surface-default);
   display: -ms-inline-grid;
   display: -moz-inline-grid;
   display: inline-grid;
@@ -128,7 +133,7 @@
 }
 
 .currentDay {
-  background-color: #e3f3fa;
+  background-color: var(--wa-color-brand-fill-quiet);
 }
 
 .dayCapacityPercent {
@@ -156,17 +161,26 @@
 }
 
 .searchListContainer {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--wa-color-surface-default);
+  border: 1px solid var(--wa-color-surface-border);
   border-bottom: none;
 }
-
+.fd-header__badge-btn {
+  all: unset;
+  cursor: pointer;
+}
+.fd-header__badge-btn:hover .fd-header__badge {
+  background-color: color-mix(in oklab, var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud)), var(--wa-color-mix-hover));
+}
 .searchListItem {
-  background: white;
-  border-bottom: 1px solid #ccc;
+  background: var(--wa-color-surface-default);
+  border-bottom: 1px solid var(--wa-color-surface-border);
   padding-left: 8px;
 }
-
+.header__fd-actions {
+  color: var(--wa-color-text-normal);
+  border-inline-end: 1px solid var(--wa-color-surface-border);
+}
 .badge-light {
   background-color: #999999;
   -webkit-user-select: none;
@@ -175,4 +189,13 @@
 }
 .min-width-full {
   min-width: 100%;
+}
+.header__fd-actions {
+  display: flex;
+  width: 170px;
+  box-sizing: border-box;
+  /* padding: 10px; */
+  gap: 0.875rem;
+  color: var(--wa-color-text-normal);
+  flex-direction: column;
 }

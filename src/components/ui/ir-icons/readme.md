@@ -20,7 +20,6 @@
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [ir-accordion](../ir-accordion)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
- - [ir-booking-listing](../../ir-booking-listing)
  - [ir-button](../ir-button)
  - [ir-channel-general](../../ir-channel/ir-channel-general)
  - [ir-dropdown](../ir-dropdown)
@@ -38,7 +37,6 @@ graph TD;
   igl-booking-event-hover --> ir-icons
   ir-accordion --> ir-icons
   ir-applicable-policies --> ir-icons
-  ir-booking-listing --> ir-icons
   ir-button --> ir-icons
   ir-channel-general --> ir-icons
   ir-dropdown --> ir-icons

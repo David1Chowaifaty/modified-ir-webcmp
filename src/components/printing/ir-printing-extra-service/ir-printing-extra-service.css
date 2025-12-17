@@ -1,0 +1,75 @@
+@import url('../../../assets/webawesome/component/host.css');
+:host {
+  display: block;
+}
+
+/* Section */
+.ir-print-extra-services {
+  padding: 1rem 0;
+  border-top: 1px solid #d1d5db;
+}
+
+/* Title */
+.ir-print-extra-services__title {
+  font-weight: 600;
+  font-size: 1.125rem /* 18px */;
+  line-height: 1.75rem /* 28px */;
+  color: #111827;
+  margin-bottom: 0.625rem;
+}
+
+/* List */
+.ir-print-extra-services__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Item */
+.ir-print-extra-services__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Left side */
+.ir-print-extra-services__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 80%;
+}
+
+/* Description */
+.ir-print-extra-services__description {
+  word-break: break-word;
+}
+
+/* Dates */
+.ir-print-extra-services__dates {
+  font-size: 0.75rem;
+  color: #374151;
+}
+
+.ir-print-extra-services__date-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ir-print-extra-services__date {
+  white-space: nowrap;
+}
+
+.ir-print-extra-services__date-separator {
+  margin: 0 0.25rem;
+}
+.ir-print-extra-services__date::part(content) {
+  font-size: 0.875rem;
+}
+/* Price */
+.ir-print-extra-services__price {
+  font-weight: 700;
+  white-space: nowrap;
+}

@@ -49,6 +49,7 @@ graph TD;
   ir-housekeeping --> ir-select
   ir-housekeeping --> ir-hk-team
   ir-housekeeping --> ir-modal
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

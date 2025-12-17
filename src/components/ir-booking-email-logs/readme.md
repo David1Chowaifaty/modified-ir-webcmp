@@ -32,6 +32,7 @@ graph TD;
   ir-booking-email-logs --> ir-toast
   ir-booking-email-logs --> ir-input-text
   ir-booking-email-logs --> ir-button
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

@@ -1,7 +1,8 @@
 import { Booking, Guest } from '@/models/booking.dto';
-import { TEventType } from '@/models/igl-book-property';
+import { BookingSource, TEventType } from '@/models/igl-book-property';
 import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/models/property';
 import { createStore } from '@stencil/store';
+import moment, { Moment } from 'moment';
 
 export interface IRatePlanSelection {
   reserved: number;
@@ -57,6 +58,23 @@ export interface IBookinAvailabilityParams {
   loyalty?: boolean;
   agent_code?: string;
 }
+
+export interface BookingDraft {
+  dates: {
+    checkIn: Moment;
+    checkOut: Moment;
+  };
+  occupancy: {
+    adults: number;
+    children: number;
+  };
+  source: BookingSource;
+  guest?: any;
+}
+
+export interface BookingSelects {
+  sources: BookingSource[];
+}
 export interface BookingStore {
   tax_statement: { message: string } | null;
   checkout_guest: Guest | null;
@@ -71,9 +89,25 @@ export interface BookingStore {
   resetBooking: boolean;
   isInFreeCancelationZone: boolean;
   fictus_booking_nbr: { nbr: string | null };
+  bookingDraft: BookingDraft;
+  selects: BookingSelects;
 }
 
 const initialState: BookingStore = {
+  bookingDraft: {
+    dates: {
+      checkIn: moment().startOf('day'),
+      checkOut: moment().add(1, 'day'),
+    },
+    occupancy: {
+      adults: null,
+      children: null,
+    },
+    source: null,
+  },
+  selects: {
+    sources: [],
+  },
   checkout_guest: null,
   guest: null,
   tax_statement: null,
@@ -96,8 +130,34 @@ const initialState: BookingStore = {
 };
 
 export let { state: booking_store, onChange: onRoomTypeChange, reset } = createStore<BookingStore>(initialState);
-export function resetBookingStore() {
+export function resetBookingStore(closeModal: boolean) {
+  const { bookingDraft, selects } = booking_store;
   reset();
+  if (!closeModal) {
+    setBookingDraft(bookingDraft);
+    setBookingSelectOptions(selects);
+  }
+}
+
+export function setBookingDraft(params: Partial<BookingDraft>) {
+  booking_store.bookingDraft = {
+    ...booking_store.bookingDraft,
+    ...params,
+    dates: {
+      ...booking_store.bookingDraft.dates,
+      ...params.dates,
+    },
+    occupancy: {
+      ...booking_store.bookingDraft.occupancy,
+      ...params.occupancy,
+    },
+  };
+}
+export function setBookingSelectOptions(params: Partial<BookingSelects>) {
+  booking_store.selects = {
+    ...booking_store.selects,
+    ...params,
+  };
 }
 function checkVariation(variations: Variation[], selected_variation: Variation): Variation {
   if (!variations) {

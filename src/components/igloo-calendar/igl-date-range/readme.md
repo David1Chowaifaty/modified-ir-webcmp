@@ -7,15 +7,16 @@
 
 ## Properties
 
-| Property             | Attribute              | Description | Type                      | Default     |
-| -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
-| `dateLabel`          | `date-label`           |             | `string`                  | `undefined` |
-| `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
-| `disabled`           | `disabled`             |             | `boolean`                 | `false`     |
-| `maxDate`            | `max-date`             |             | `string`                  | `undefined` |
-| `minDate`            | `min-date`             |             | `string`                  | `undefined` |
-| `variant`            | `variant`              |             | `"booking" \| "default"`  | `'default'` |
-| `withDateDifference` | `with-date-difference` |             | `boolean`                 | `true`      |
+| Property             | Attribute              | Description | Type                             | Default     |
+| -------------------- | ---------------------- | ----------- | -------------------------------- | ----------- |
+| `dateLabel`          | `date-label`           |             | `string`                         | `undefined` |
+| `defaultData`        | --                     |             | `{ [key: string]: any; }`        | `undefined` |
+| `disabled`           | `disabled`             |             | `boolean`                        | `false`     |
+| `maxDate`            | `max-date`             |             | `string`                         | `undefined` |
+| `minDate`            | `min-date`             |             | `string`                         | `undefined` |
+| `size`               | `size`                 |             | `"large" \| "medium" \| "small"` | `'small'`   |
+| `variant`            | `variant`              |             | `"booking" \| "default"`         | `'default'` |
+| `withDateDifference` | `with-date-difference` |             | `boolean`                        | `true`      |
 
 
 ## Events
@@ -34,12 +35,13 @@
 
 ### Depends on
 
-- [ir-date-range](../../ui/ir-date-range)
+- [ir-custom-date-picker](../../ir-custom-date-picker)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-book-property-header --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px
 ```

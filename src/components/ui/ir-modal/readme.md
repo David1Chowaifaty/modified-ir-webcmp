@@ -74,14 +74,9 @@ Type: `Promise<void>`
 
  - [igl-cal-body](../../igloo-calendar/igl-cal-body)
  - [igloo-calendar](../../igloo-calendar)
- - [ir-booking-details](../../ir-booking-details)
- - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-channel](../../ir-channel)
- - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../../ir-housekeeping)
- - [ir-payment-details](../../ir-booking-details/ir-payment-details)
- - [ir-room](../../ir-booking-details/ir-room)
  - [ir-user-management-table](../../ir-user-management/ir-user-management-table)
 
 ### Depends on
@@ -95,14 +90,9 @@ graph TD;
   ir-button --> ir-icons
   igl-cal-body --> ir-modal
   igloo-calendar --> ir-modal
-  ir-booking-details --> ir-modal
-  ir-booking-header --> ir-modal
   ir-channel --> ir-modal
-  ir-extra-service --> ir-modal
   ir-hk-tasks --> ir-modal
   ir-housekeeping --> ir-modal
-  ir-payment-details --> ir-modal
-  ir-room --> ir-modal
   ir-user-management-table --> ir-modal
   style ir-modal fill:#f9f,stroke:#333,stroke-width:4px
 ```

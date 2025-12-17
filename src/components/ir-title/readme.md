@@ -28,8 +28,6 @@
 
  - [igl-bulk-operations](../igloo-calendar/igl-bulk-operations)
  - [igl-split-booking](../igloo-calendar/igl-split-booking)
- - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
- - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info](../ir-guest-info)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
@@ -37,9 +35,7 @@
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-housekeeping](../ir-housekeeping)
  - [ir-option-details](../ir-payment-option/ir-option-details)
- - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-reset-password](../ir-reset-password)
- - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../igloo-calendar/ir-room-nights)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
  - [ir-user-form-panel](../ir-user-management/ir-user-form-panel)
@@ -54,8 +50,6 @@ graph TD;
   ir-title --> ir-icon
   igl-bulk-operations --> ir-title
   igl-split-booking --> ir-title
-  ir-booking-extra-note --> ir-title
-  ir-extra-service-config --> ir-title
   ir-guest-info --> ir-title
   ir-hk-archive --> ir-title
   ir-hk-team --> ir-title
@@ -63,9 +57,7 @@ graph TD;
   ir-hk-user --> ir-title
   ir-housekeeping --> ir-title
   ir-option-details --> ir-title
-  ir-pickup --> ir-title
   ir-reset-password --> ir-title
-  ir-room-guests --> ir-title
   ir-room-nights --> ir-title
   ir-unit-status --> ir-title
   ir-user-form-panel --> ir-title

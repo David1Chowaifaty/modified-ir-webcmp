@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+.drawer-form {
+  margin: 0;
+}
+.drawer-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.drawer-footer {
+  display: flex;
+  gap: 0.5rem;
+}
+.loading-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}

@@ -65,9 +65,7 @@ export class IrPickupView {
               </p>
             </div>
           ) : (
-            <div class="text-center p-1">
-              <p class="text-muted">No pickup recorded yet</p>
-            </div>
+            <ir-empty-state></ir-empty-state>
           )}
         </wa-card>
       </Host>

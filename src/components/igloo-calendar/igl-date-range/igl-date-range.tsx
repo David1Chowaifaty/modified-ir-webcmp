@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import { Component, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
@@ -7,9 +7,10 @@ import moment from 'moment';
 @Component({
   tag: 'igl-date-range',
   styleUrl: 'igl-date-range.css',
-  scoped: true,
+  shadow: true,
 })
 export class IglDateRange {
+  @Prop({ reflect: true }) size: 'small' | 'medium' | 'large' = 'small';
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
@@ -24,10 +25,8 @@ export class IglDateRange {
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
-  private fromDate: Date;
-  private toDate: Date;
-  private fromDateStr: string = 'from';
-  private toDateStr: string = 'to';
+  @State() fromDate: Date = moment().toDate();
+  @State() toDate: Date = moment().add(1, 'day').toDate();
 
   componentWillLoad() {
     this.initializeDates();
@@ -41,39 +40,23 @@ export class IglDateRange {
   }
 
   private initializeDates() {
-    let dt = new Date();
-    dt.setHours(0, 0, 0, 0);
-    dt.setDate(dt.getDate() + 1);
     if (this.defaultData) {
       if (this.defaultData.fromDate) {
         this.fromDate = new Date(this.defaultData.fromDate);
         this.fromDate.setHours(0, 0, 0, 0);
-        this.fromDateStr = this.getFormattedDateString(this.fromDate);
       }
       if (this.defaultData.toDate) {
         this.toDate = new Date(this.defaultData.toDate);
         this.toDate.setHours(0, 0, 0, 0);
-        this.toDateStr = this.getFormattedDateString(this.toDate);
       }
     }
     if (this.fromDate && this.toDate) {
       this.calculateTotalNights();
-      // this.handleDateSelectEvent('selectedDateRange', {
-      //   fromDate: this.fromDate.getTime(),
-      //   toDate: this.toDate.getTime(),
-      //   fromDateStr: this.fromDateStr,
-      //   toDateStr: this.toDateStr,
-      //   dateDifference: this.totalNights,
-      // });
     }
-    return [this.fromDateStr, this.toDateStr];
   }
 
   private calculateTotalNights() {
     this.totalNights = calculateDaysBetweenDates(moment(this.fromDate).format('YYYY-MM-DD'), moment(this.toDate).format('YYYY-MM-DD'));
-  }
-  private getFormattedDateString(dt) {
-    return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
   }
 
   private handleDateSelectEvent(key, data: any = '') {
@@ -95,77 +78,70 @@ export class IglDateRange {
 
     this.renderAgain = !this.renderAgain;
   }
+  // private renderDateSummary(showNights: boolean) {
+  //   const fromDateDisplay = moment(this.fromDate).format('MMM DD, YYYY');
+  //   const toDateDisplay = moment(this.toDate).format('MMM DD, YYYY');
+  //   const shouldRenderNights = showNights && this.totalNights > 0;
+
+  //   return (
+  //     <div
+  //       class={{
+  //         'date-range-display': true,
+  //         'date-range-display--disabled': this.disabled,
+  //       }}
+  //     >
+  //       <wa-icon variant="regular" name="calendar"></wa-icon>
+  //       <span class="date-range-date">{fromDateDisplay}</span>
+  //       <wa-icon name="arrow-right"></wa-icon>
+  //       <span class="date-range-date">{toDateDisplay}</span>
+  //       {shouldRenderNights && (
+  //         <span class="date-range-nights">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
+  //       )}
+  //     </div>
+  //   );
+  // }
+  private get dates() {
+    const fromDate = moment(this.fromDate).format('YYYY-MM-DD');
+    const toDate = moment(this.toDate).format('YYYY-MM-DD');
+    return [fromDate, toDate];
+  }
   render() {
-    if (this.variant === 'booking') {
-      return (
-        <div class={`p-0 m-0 date-range-container-cn`}>
-          <ir-date-range
-            maxDate={this.maxDate}
-            class={'date-range-input'}
-            disabled={this.disabled}
-            fromDate={this.fromDate}
-            toDate={this.toDate}
-            minDate={this.minDate}
-            autoApply
-            data-state={this.disabled ? 'disabled' : 'active'}
-            onDateChanged={evt => {
-              this.handleDateChange(evt);
-            }}
-          ></ir-date-range>
-          <div class={`d-flex align-items-center m-0  date-range-container ${this.disabled ? 'disabled' : ''}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 448 512">
-              <path
-                fill="currentColor"
-                d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
-              />
-            </svg>
-            <span>{moment(this.fromDate).format('MMM DD, YYYY')}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 512 512">
-              <path
-                fill="currentColor"
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
-              />
-            </svg>
-            <span>{moment(this.toDate).format('MMM DD, YYYY')}</span>
-            {this.totalNights && <span class="m-0 p-0">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>}
-          </div>
-        </div>
-      );
-    }
+    const showNights = this.variant === 'booking' && this.withDateDifference;
     return (
-      <Host>
-        <div class={`p-0 m-0 date-range-container-cn`}>
-          <ir-date-range
-            maxDate={this.maxDate}
-            class={'date-range-input'}
-            disabled={this.disabled}
-            fromDate={this.fromDate}
-            toDate={this.toDate}
-            minDate={this.minDate}
-            autoApply
-            data-state={this.disabled ? 'disabled' : 'active'}
-            onDateChanged={evt => {
-              this.handleDateChange(evt);
-            }}
-          ></ir-date-range>
-          <div class={`d-flex align-items-center m-0  date-range-container ${this.disabled ? 'disabled' : ''}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 448 512">
-              <path
-                fill="currentColor"
-                d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
-              />
-            </svg>
-            <span>{moment(this.fromDate).format('MMM DD, YYYY')}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 512 512">
-              <path
-                fill="currentColor"
-                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
-              />
-            </svg>
-            <span>{moment(this.toDate).format('MMM DD, YYYY')}</span>
-          </div>
-        </div>
-      </Host>
+      // <Host size={this.size}>
+      //   <div class={`date-range-shell ${this.disabled ? 'disabled' : ''} ${this.variant === 'booking' ? 'picker' : ''}`}>
+      //     <ir-date-range
+      //       maxDate={this.maxDate}
+      //       class={'date-range-input'}
+      //       disabled={this.disabled}
+      //       fromDate={this.fromDate}
+      //       toDate={this.toDate}
+      //       minDate={this.minDate}
+      //       autoApply
+      //       data-state={this.disabled ? 'disabled' : 'active'}
+      //       onDateChanged={evt => {
+      //         this.handleDateChange(evt);
+      //       }}
+      //     ></ir-date-range>
+      //     {this.renderDateSummary(showNights)}
+      //   </div>
+      // </Host>
+      <ir-custom-date-picker
+        disabled={this.disabled}
+        class="custom-picker"
+        minDate={this.minDate}
+        maxDate={this.maxDate}
+        onDateChanged={e => this.handleDateChange(e)}
+        range
+        dates={this.dates}
+      >
+        <wa-icon slot="start" variant="regular" name="calendar"></wa-icon>
+        {showNights && (
+          <span slot="end" class="date-range-nights">
+            {this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}
+          </span>
+        )}
+      </ir-custom-date-picker>
     );
   }
 }

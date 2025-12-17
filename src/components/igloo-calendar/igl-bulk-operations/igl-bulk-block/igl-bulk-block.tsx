@@ -1,4 +1,4 @@
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
 import { Component, Event, EventEmitter, Fragment, h, Prop, State } from '@stencil/core';

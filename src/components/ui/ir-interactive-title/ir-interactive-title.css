@@ -56,8 +56,8 @@
   left: auto;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding-inline: var(--ir-popover-left);
-  background: var(--ir-interactive-hk-bg, white);
-  color: var(--dot-color, black);
+  background: var(--ir-interactive-hk-bg, var(--wa-color-surface-default));
+  color: var(--dot-color, var(--wa-color-text-normal));
 }
 .hk-dot::slotted(*)[name='end'] {
   height: 12px;

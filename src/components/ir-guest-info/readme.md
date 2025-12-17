@@ -28,11 +28,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [ir-booking-details](../ir-booking-details)
- - [ir-booking-listing](../ir-booking-listing)
-
 ### Depends on
 
 - [ir-spinner](../ui/ir-spinner)
@@ -57,16 +52,17 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp
   ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-title --> ir-icon
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
-  ir-booking-details --> ir-guest-info
-  ir-booking-listing --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

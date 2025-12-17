@@ -1,7 +1,7 @@
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Method, Prop, State, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { getPrivateNote } from '@/utils/booking';
 @Component({
   tag: 'ir-booking-extra-note',
@@ -79,6 +79,7 @@ export class IrBookingExtraNote {
         }}
       >
         <wa-textarea
+          size="small"
           placeholder={locales.entries.Lcz_PrivateNote_MaxChar}
           defaultValue={this.note}
           onchange={e => this.setNote((e.target as any).value)}

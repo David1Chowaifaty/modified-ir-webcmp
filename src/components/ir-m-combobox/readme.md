@@ -49,14 +49,12 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [ir-sales-by-channel-filters](../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-test-cmp](../ir-test-cmp)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-cal-header --> ir-m-combobox
   ir-sales-by-channel-filters --> ir-m-combobox
   ir-test-cmp --> ir-m-combobox
   style ir-m-combobox fill:#f9f,stroke:#333,stroke-width:4px

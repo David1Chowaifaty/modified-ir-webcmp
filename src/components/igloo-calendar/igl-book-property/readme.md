@@ -43,7 +43,7 @@
 
 - [igl-block-dates-view](../igl-block-dates-view)
 - [ir-spinner](../../ui/ir-spinner)
-- [ir-icon](../../ui/ir-icon)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [igl-booking-overview-page](igl-booking-overview-page)
 - [igl-booking-form](igl-booking-form)
 - [ir-button](../../ui/ir-button)
@@ -54,7 +54,7 @@
 graph TD;
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
-  igl-book-property --> ir-icon
+  igl-book-property --> ir-custom-button
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
   igl-book-property --> ir-button
@@ -62,27 +62,29 @@ graph TD;
   igl-block-dates-view --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-book-property-header --> ir-autocomplete
-  igl-book-property-header --> ir-select
-  igl-book-property-header --> ir-button
+  igl-book-property-header --> ir-picker
+  igl-book-property-header --> ir-picker-item
+  igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  ir-button --> ir-icons
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan
-  igl-rate-plan --> ir-tooltip
-  igl-rate-plan --> ir-price-input
+  igl-rate-plan --> ir-input
+  igl-rate-plan --> ir-custom-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-application-info --> ir-tooltip
-  igl-property-booked-by --> ir-autocomplete
-  igl-property-booked-by --> ir-tooltip
+  igl-application-info --> ir-input
+  igl-property-booked-by --> ir-picker
+  igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
-  igl-property-booked-by --> ir-phone-input
-  igl-property-booked-by --> ir-select
+  igl-property-booked-by --> ir-mobile-input
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
-  ir-phone-input --> ir-combobox
-  igl-book-property-footer --> ir-button
+  ir-button --> ir-icons
+  igl-book-property-footer --> ir-custom-button
   igl-book-property-container --> igl-book-property
   igloo-calendar --> igl-book-property
   ir-booking-details --> igl-book-property

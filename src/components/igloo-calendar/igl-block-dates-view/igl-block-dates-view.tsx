@@ -1,5 +1,5 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { IEntries } from '@/models/IBooking';
 import locales from '@/stores/locales.store';
 

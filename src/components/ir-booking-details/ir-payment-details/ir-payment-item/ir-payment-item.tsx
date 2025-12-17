@@ -1,9 +1,9 @@
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
 import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
 import moment from 'moment';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-payment-item',
@@ -16,6 +16,7 @@ export class IrPaymentItem {
   @Event() editPayment: EventEmitter<IPayment>;
   @Event() deletePayment: EventEmitter<IPayment>;
   @Event() issueReceipt: EventEmitter<IPayment>;
+  private _id = v4();
 
   render() {
     const isCredit = this.payment.payment_type.operation === 'CR';
@@ -39,11 +40,13 @@ export class IrPaymentItem {
           <p class="payment-item__payment-description">{paymentDescription}</p>
           <div class="payment-item__payment-actions">
             <div class="d-flex align-items-center">
-              <ir-popover trigger="hover" content={`User: ${this.payment.time_stamp.user}`}>
-                <ir-button variant="icon" style={{ 'color': colorVariants.secondary['--icon-button-color'], '--icon-size': '1.1rem' }} icon_name="user"></ir-button>
-                {/* <ir-icons name="user" style={{ '--icon-size': '1rem', 'color': colorVariants.secondary['--icon-button-color'] }}></ir-icons> */}
-              </ir-popover>
+              <wa-tooltip for={this._id}>User: {this.payment.time_stamp.user}</wa-tooltip>
+              <wa-icon name="user" id={this._id}></wa-icon>
               <wa-dropdown
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
                 onwa-select={e => {
                   switch ((e.detail as any).item.value) {
                     case 'edit':

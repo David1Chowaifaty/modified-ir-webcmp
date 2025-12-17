@@ -1,12 +1,16 @@
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Prop, State, Watch } from '@stencil/core';
 import { IrOnlineResource } from '../../common/models';
 import { onlineResources } from '../../common/ir.common.resources';
 
 @Component({
   tag: 'ir-common',
+  styleUrl: '../../global/app.css',
+  shadow: false,
 })
 export class IrCommon {
   @Prop({ reflect: true }) extraResources: string = '';
+  @Prop() disableResourceInjection: boolean;
+
   @State() resources: IrOnlineResource[] = onlineResources;
   componentWillLoad() {
     this.parseRefs();
@@ -23,6 +27,9 @@ export class IrCommon {
   }
 
   private parseRefs() {
+    if (this.disableResourceInjection) {
+      return;
+    }
     if (this.extraResources !== '') this.resources.push(JSON.parse(this.extraResources));
   }
 
@@ -44,6 +51,9 @@ export class IrCommon {
   }
 
   private initializeStyles() {
+    if (this.disableResourceInjection) {
+      return;
+    }
     this.resources.forEach(res => {
       if (res.isCSS) {
         this.appendTag('link', {
@@ -61,10 +71,6 @@ export class IrCommon {
   }
 
   render() {
-    return (
-      <Host>
-        <slot></slot>
-      </Host>
-    );
+    return null;
   }
 }

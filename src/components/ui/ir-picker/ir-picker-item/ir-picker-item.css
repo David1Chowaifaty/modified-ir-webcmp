@@ -1,0 +1,66 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  box-sizing: border-box;
+  display: block;
+}
+:host([hidden]) {
+  display: none !important;
+}
+.picker-item__container {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--wa-color-text-normal);
+  user-select: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-style: inherit;
+  font-variant: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-optical-sizing: inherit;
+  font-size-adjust: inherit;
+  font-kerning: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  padding: 0;
+  padding: 0.5em 1em 0.5em 0.25em !important;
+  line-height: var(--wa-line-height-condensed);
+  transition: fill var(--wa-transition-normal) var(--wa-transition-easing);
+  cursor: pointer;
+  gap: 0.5rem;
+  scroll-margin: 0.25rem;
+}
+.picker-item__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.picker-item__container:hover {
+  background-color: var(--wa-color-neutral-fill-normal);
+  color: var(--wa-color-neutral-on-normal);
+}
+.picker-item__check {
+  opacity: 0;
+}
+
+:host([active]) .picker-item__container {
+  background-color: var(--wa-color-brand-fill-loud);
+  color: var(--wa-color-brand-on-loud);
+  opacity: 1;
+}
+:host([selected]) .picker-item__container {
+  font-weight: 600;
+}
+:host([selected]) .picker-item__check {
+  opacity: 1;
+}
+:host([aria-disabled='true']) .picker-item__container,
+.picker-item__container:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

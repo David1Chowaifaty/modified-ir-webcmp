@@ -1,0 +1,58 @@
+:host {
+  display: block;
+}
+.ir-fullscreen-dialog::part(dialog) {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+}
+
+@media print {
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: auto;
+  }
+
+  /* Disable fullscreen dialog behavior */
+  .ir-fullscreen-dialog::part(dialog) {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  /* Hide dialog chrome */
+  .ir-fullscreen-dialog::part(header) {
+    display: none !important;
+  }
+
+  /* Print ONLY dialog content */
+  body * {
+    visibility: hidden;
+  }
+
+  .ir-fullscreen-dialog,
+  .ir-fullscreen-dialog * {
+    visibility: visible;
+  }
+
+  .ir-fullscreen-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

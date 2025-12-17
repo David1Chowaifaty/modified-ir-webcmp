@@ -31,22 +31,23 @@
 
 ### Depends on
 
-- [ir-autocomplete](../../../../ui/ir-autocomplete)
-- [ir-tooltip](../../../../ui/ir-tooltip)
+- [ir-picker](../../../../ui/ir-picker)
+- [ir-picker-item](../../../../ui/ir-picker/ir-picker-item)
+- [ir-input](../../../../ui/ir-input)
 - [ir-country-picker](../../../../ui/ir-country-picker)
-- [ir-phone-input](../../../../ui/ir-phone-input)
-- [ir-select](../../../../ui/ir-select)
+- [ir-mobile-input](../../../../ui/ir-mobile-input)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-property-booked-by --> ir-autocomplete
-  igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-picker
+  igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
-  igl-property-booked-by --> ir-phone-input
-  igl-property-booked-by --> ir-select
+  igl-property-booked-by --> ir-mobile-input
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
-  ir-phone-input --> ir-combobox
   igl-booking-form --> igl-property-booked-by
   style igl-property-booked-by fill:#f9f,stroke:#333,stroke-width:4px
 ```

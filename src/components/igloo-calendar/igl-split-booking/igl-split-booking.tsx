@@ -1,6 +1,6 @@
 import { Booking, Room } from '@/models/booking.dto';
 import { PropertyRoomType } from '@/models/IBooking';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { resetBookingStore } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
@@ -71,7 +71,7 @@ export class IglSplitBooking {
   }
 
   private async checkBookingAvailability() {
-    resetBookingStore();
+    resetBookingStore(false);
     const from_date = this.selectedDates.from_date.format('YYYY-MM-DD');
     const to_date = this.selectedDates.to_date.format('YYYY-MM-DD');
 

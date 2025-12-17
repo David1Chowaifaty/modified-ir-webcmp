@@ -1,5 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Fragment, Listen } from '@stencil/core';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { IEntries, ICountry } from '@/models/IBooking';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
@@ -9,6 +9,9 @@ import { validateEmail } from '@/utils/utils';
 import booking_store, { BookingStore, modifyBookingStore } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import { AllowedPaymentMethod } from '@/models/booking.dto';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { ExposedGuests } from '@/services/booking-service/types';
+import IMask from 'imask';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -39,20 +42,18 @@ export class IglPropertyBookedBy {
     expiryMonth: '',
     expiryYear: '',
   };
+  @State() guests: ExposedGuests;
 
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
 
   private bookingService: BookingService = new BookingService();
   private arrivalTimeList: IEntries[] = [];
-  private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  private expiryYears: string[] = [];
   private currentMonth: string = '01';
   private country;
   private paymentMethods: AllowedPaymentMethod[] = [];
 
   componentWillLoad() {
     this.assignCountryCode();
-    this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
     this.paymentMethods = calendar_data.property.allowed_payment_methods.filter(p => p.is_active && !p.is_payment_gateway);
@@ -74,11 +75,6 @@ export class IglPropertyBookedBy {
         this.isButtonPressed = true;
         break;
     }
-  }
-
-  private initializeExpiryYears() {
-    const currentYear = new Date().getFullYear();
-    this.expiryYears = Array.from({ length: 12 }, (_, index) => (currentYear + index).toString());
   }
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
@@ -119,6 +115,20 @@ export class IglPropertyBookedBy {
     }
     // console.log(this.bookedByData);
   }
+  private handleCreditCardDataChange(key, value: string) {
+    this.bookedByData[key] = value;
+    this.dataUpdateEvent.emit({
+      key: 'bookedByInfoUpdated',
+      data: { ...this.bookedByData },
+    });
+    if (key === 'countryId') {
+      this.bookedByData = {
+        ...this.bookedByData,
+        isdCode: value,
+      };
+    }
+    // console.log(this.bookedByData);
+  }
   private handleCountryChange(value) {
     this.bookedByData = {
       ...this.bookedByData,
@@ -129,104 +139,32 @@ export class IglPropertyBookedBy {
       key: 'bookedByInfoUpdated',
       data: { ...this.bookedByData },
     });
-    // console.log(this.bookedByData);
-  }
-
-  private handleNumberInput(key, event: InputEvent) {
-    const inputElement = event.target as HTMLInputElement;
-    const inputValue = inputElement.value;
-
-    // Regular expression to match only numeric characters (0-9)
-    const numericRegex = /^[0-9]+$/;
-
-    if (!numericRegex.test(inputValue)) {
-      // If the input is not numeric, prevent it from being entered
-      inputElement.value = inputValue.replace(/[^0-9]/g, '');
-    }
-    if (inputValue === inputElement.value) {
-      this.handleDataChange(key, event);
-    }
-  }
-
-  // async handleEmailInput(key, event: InputEvent) {
-  //   const inputElement = event.target as HTMLInputElement;
-  //   const inputValue = inputElement.value;
-  //   if (z.string().email().safeParse(inputValue).success) {
-  //     this.handleDataChange(key, event);
-  //   }
-  // }
-  private async checkUser() {
-    try {
-      const email = this.bookedByData.email;
-      if (z.string().email().safeParse(email).success) {
-        const res = await this.bookingService.getUserInfo(email);
-        if (res !== null) {
-          this.bookedByData = {
-            ...this.bookedByData,
-            id: res.id,
-            firstName: res.first_name,
-            lastName: res.last_name,
-            contactNumber: res.mobile_without_prefix,
-            countryId: res.country_id,
-            isdCode: res?.country_phone_prefix ?? res.isdCode.toString(),
-          };
-          console.log(this.bookedByData);
-        } else {
-          let prevBookedByData = { ...this.bookedByData };
-          prevBookedByData = { ...prevBookedByData, email };
-          this.bookedByData = { ...prevBookedByData };
-        }
-      } else {
-        let prevBookedByData = { ...this.bookedByData };
-        prevBookedByData = { ...prevBookedByData, email: '' };
-        this.bookedByData = { ...prevBookedByData };
-      }
-      this.dataUpdateEvent.emit({
-        key: 'bookedByInfoUpdated',
-        data: { ...this.bookedByData },
-      });
-    } catch (error) {
-      //   toastr.error(error);
-    }
   }
 
   private updateGuest(props: Partial<BookingStore['checkout_guest']>) {
     modifyBookingStore('checkout_guest', { ...(booking_store.checkout_guest ?? {}), ...props });
   }
 
-  private handleComboboxChange(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    const { key, data } = e.detail;
-    console.log(key, data);
-    if (key === 'blur') {
-      if (z.string().email().safeParse(data).success) {
-        this.bookedByData.email = data;
-        this.checkUser();
-      } else if (this.bookedByData.email !== '' && data == '') {
-        this.bookedByData.email = '';
-      }
-      this.dataUpdateEvent.emit({
-        key: 'bookedByInfoUpdated',
-        data: this.bookedByData,
-      });
+  private handleComboboxSelect(e: CustomEvent) {
+    const guest = this.guests?.find(guest => guest.id?.toString() === e.detail.item.value);
+    if (!guest) {
+      console.warn(`guest not found with id ${e.detail.item.value}`);
+      return;
     }
-    if (key === 'select') {
-      this.bookedByData.email = data.email;
-      this.bookedByData = {
-        ...this.bookedByData,
-        id: data.id,
-        firstName: data.first_name,
-        lastName: data.last_name,
-        contactNumber: data.mobile_without_prefix,
-        countryId: data.country_id,
-        isdCode: data['country_phone_prefix'] ?? data?.country_id,
-      };
-      this.dataUpdateEvent.emit({
-        key: 'bookedByInfoUpdated',
-        data: this.bookedByData,
-      });
-    }
+    this.bookedByData.email = guest.email;
+    this.bookedByData = {
+      ...this.bookedByData,
+      id: guest.id,
+      firstName: guest.first_name,
+      lastName: guest.last_name,
+      contactNumber: guest.mobile_without_prefix,
+      countryId: guest.country_id,
+      isdCode: guest['country_phone_prefix'] ?? guest?.country_id,
+    };
+    this.dataUpdateEvent.emit({
+      key: 'bookedByInfoUpdated',
+      data: this.bookedByData,
+    });
   }
 
   private clearEvent() {
@@ -245,255 +183,197 @@ export class IglPropertyBookedBy {
     });
   }
 
+  private async fetchGuests(email: string) {
+    this.guests = await this.bookingService.fetchExposedGuest(email, this.propertyId);
+    if (this.guests.length === 0) {
+      if (z.string().email().safeParse(email).success) {
+        this.bookedByData = {
+          ...this.bookedByData,
+          email,
+        };
+      }
+    }
+  }
+  private get expiryDate(): string {
+    const { expiryMonth, expiryYear } = this.bookedByData;
+
+    if (!expiryMonth || !expiryYear) {
+      return '';
+    }
+
+    // Normalize year to YY
+    const year = expiryYear.toString().length === 4 ? expiryYear.toString().slice(-2) : expiryYear.toString();
+
+    return `${expiryMonth}/${year}`;
+  }
   render() {
     return (
       <Host>
         <div class="text-left mt-3">
-          <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
-            <label class="p-0 m-0 label-control mr-1 font-weight-bold">{locales.entries.Lcz_BookedBy}</label>
-            <div class="bookedByEmailContainer mt-1 mt-md-0 d-flex align-items-center">
-              {/* <input
-                id={v4()}
-                type="email"
-                class="form-control"
-                placeholder="Email address"
-                name="bookeyByEmail"
-                value={this.bookedByData.email}
-                onInput={event => this.handleEmailInput('email', event)}
-                required
-                onBlur={() => this.checkUser()}
-              /> */}
-              <ir-autocomplete
-                testId={'main_guest_email'}
-                onComboboxValue={this.handleComboboxChange.bind(this)}
-                propertyId={this.propertyId}
-                type="text"
-                value={this.bookedByData.email}
-                required
-                class={'flex-fill'}
-                placeholder={locales.entries.Lcz_FindEmailAddress}
-                onInputCleared={() => this.clearEvent()}
-                danger_border={this.isButtonPressed && this.bookedByData.email !== '' && validateEmail(this.bookedByData.email)}
-              ></ir-autocomplete>
-              <ir-tooltip class={'ml-1'} message="Leave empty if email is unavailable"></ir-tooltip>
+          <div class="d-flex" style={{ alignItems: 'flex-end', gap: '0.5rem' }}>
+            <ir-picker
+              class="bookedByEmailContainer m-0 p-0"
+              label={locales.entries.Lcz_BookedBy}
+              value={this.bookedByData.email}
+              aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.email !== '' && validateEmail(this.bookedByData.email)))}
+              withClear
+              onText-change={event => this.fetchGuests(event.detail)}
+              debounce={300}
+              onCombobox-clear={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.clearEvent();
+              }}
+              loading={isRequestPending('/Fetch_Exposed_Guests')}
+              placeholder={locales.entries.Lcz_FindEmailAddress}
+              mode="select-async"
+              onCombobox-select={this.handleComboboxSelect.bind(this)}
+            >
+              {this.guests?.map(guest => {
+                const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
+                return (
+                  <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
+                    {label}
+                  </ir-picker-item>
+                );
+              })}
+            </ir-picker>
+            <div style={{ paddingBottom: '0.5rem' }}>
+              <wa-tooltip for={`main_guest-search-tooltip`}>Leave empty if email is unavailable</wa-tooltip>
+              <wa-icon name="circle-info" id={`main_guest-search-tooltip`}></wa-icon>
             </div>
           </div>
         </div>
         <div class="bookedDetailsForm text-left mt-2 font-small-3 ">
           <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
-            <div class="p-0 flex-fill ">
-              <div class="form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill ">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_FirstName}</label>
-                <div class="p-0 m-0  controlContainer flex-fill  ">
-                  <input
-                    data-testid="main_guest_first_name"
-                    class={`form-control flex-fill ${this.isButtonPressed && this.bookedByData.firstName === '' && 'border-danger'}`}
-                    type="text"
-                    placeholder={locales.entries.Lcz_FirstName}
-                    id={v4()}
-                    value={this.bookedByData.firstName}
-                    onInput={event => {
-                      this.updateGuest({ first_name: (event.target as HTMLInputElement).value });
-                      this.handleDataChange('firstName', event);
-                    }}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_LastName}</label>
-                <div class="p-0 m-0  controlContainer flex-fill">
-                  <input
-                    data-testid="main_guest_last_name"
-                    class={`form-control ${this.isButtonPressed && this.bookedByData.lastName === '' && 'border-danger'}`}
-                    type="text"
-                    placeholder={locales.entries.Lcz_LastName}
-                    id={v4()}
-                    value={this.bookedByData.lastName}
-                    onInput={event => this.handleDataChange('lastName', event)}
-                  />
-                </div>
-              </div>
-
-              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_Country}</label>
-                {/* <div class="p-0 m-0  controlContainer flex-fill"> */}
-                <ir-country-picker
-                  testId="main_guest_country"
-                  class="flex-grow-1 m-0"
-                  onCountryChange={e => this.handleCountryChange(e.detail.id)}
-                  countries={this.countries}
-                  country={this.countries.find(c => c.id === this.bookedByData.countryId)}
-                ></ir-country-picker>
-                {/* <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
-                    <option value="" selected={this.bookedByData.countryId === ''}>
-                      {locales.entries.Lcz_Select}
-                    </option>
-                    {this.countries.map(countryNode => (
-                      <option value={countryNode.id} selected={this.bookedByData.countryId === countryNode.id}>
-                        {countryNode.name}
-                      </option>
-                    ))}
-                  </select> */}
-                {/* </div> */}
-              </div>
-
-              {/* <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
-                <div class="p-0 m-0  d-flex  controlContainer flex-fill">
-                  <div class=" p-0 m-0">
-                    <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
-                      <option value="" selected={this.bookedByData.isdCode === ''}>
-                        {locales.entries.Lcz_Isd}
-                      </option>
-                      {this.countries.map(country => (
-                        <option value={country.id} selected={this.bookedByData.isdCode === country.id.toString()}>
-                          {country.phone_prefix}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div class="flex-fill p-0 m-0">
-                    <input
-                      class={`form-control
-                     
-                      `}
-                      type="tel"
-                      placeholder={locales.entries.Lcz_ContactNumber}
-                      id={v4()}
-                      value={this.bookedByData.contactNumber}
-                      onInput={event => this.handleNumberInput('contactNumber', event)}
-                    />
-                  </div>
-                </div>
-              </div> */}
-              <div class="form-group p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
-                <div class="p-0 m-0 controlContainer flex-fill">
-                  <ir-phone-input
-                    testId="main_guest_phone"
-                    language={this.language}
-                    // label={locales.entries.Lcz_MobilePhone}
-                    value={this.bookedByData.contactNumber}
-                    phone_prefix={this.bookedByData.isdCode}
-                    default_country={this.bookedByData.countryId}
-                    onTextChange={e => {
-                      this.handleDataChange('isdCode', { target: { value: e.detail.phone_prefix } });
-                      this.handleDataChange('contactNumber', { target: { value: e.detail.mobile } });
-                    }}
-                  ></ir-phone-input>
-                </div>
-              </div>
-              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_YourArrivalTime}</label>
-                <div class="p-0 m-0  controlContainer flex-fill">
-                  <select
-                    data-testid="arrival_time"
-                    class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.selectedArrivalTime.code === '' && 'border-danger'}`}
-                    id={v4()}
-                    onChange={event => this.handleDataChange('selectedArrivalTime', event)}
-                  >
-                    {/* <option value="" selected={this.bookedByData.selectedArrivalTime.code === ''}>
-                      -
-                    </option> */}
-                    {this.arrivalTimeList.map(time => (
-                      <option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime.code === time.CODE_NAME}>
-                        {time.CODE_VALUE_EN}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+            <div class="flex-fill fd-property-booked-by__guest-form ">
+              <ir-input
+                aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.firstName === ''))}
+                onText-change={event => {
+                  this.updateGuest({ first_name: event.detail });
+                  this.handleDataChange('firstName', { target: { value: event.detail } });
+                }}
+                defaultValue={this.bookedByData.firstName}
+                value={this.bookedByData.firstName}
+                label={locales.entries.Lcz_FirstName}
+                placeholder={locales.entries.Lcz_FirstName}
+                required
+              ></ir-input>
+              <ir-input
+                aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.lastName === ''))}
+                onText-change={event => {
+                  this.updateGuest({ last_name: event.detail });
+                  this.handleDataChange('lastName', { target: { value: event.detail } });
+                }}
+                defaultValue={this.bookedByData.lastName}
+                value={this.bookedByData.lastName}
+                label={locales.entries.Lcz_LastName}
+                placeholder={locales.entries.Lcz_LastName}
+                required
+              ></ir-input>
+              <ir-country-picker
+                label={locales.entries.Lcz_Country}
+                variant="modern"
+                testId="main_guest_country"
+                class="flex-grow-1 m-0"
+                onCountryChange={e => this.handleCountryChange(e.detail.id)}
+                countries={this.countries}
+                country={this.countries.find(c => c.id === this.bookedByData.countryId)}
+              ></ir-country-picker>
+              <ir-mobile-input
+                size="small"
+                onMobile-input-change={e => {
+                  this.handleDataChange('contactNumber', { target: { value: e.detail.formattedValue } });
+                }}
+                onMobile-input-country-change={e => this.handleDataChange('isdCode', { target: { value: e.detail.phone_prefix } })}
+                value={this.bookedByData.contactNumber}
+                required
+                countryCode={this.countries.find(c => c.phone_prefix === this.bookedByData.isdCode)?.code}
+                countries={this.countries}
+              ></ir-mobile-input>
+              <wa-select
+                size="small"
+                label={locales.entries.Lcz_YourArrivalTime}
+                data-testid="arrival_time"
+                aria-disabled={String(Boolean(this.isButtonPressed && this.bookedByData.selectedArrivalTime.code === ''))}
+                id={v4()}
+                defaultValue={this.arrivalTimeList[0].CODE_NAME}
+                value={this.bookedByData.selectedArrivalTime.code}
+                onchange={event => this.handleDataChange('selectedArrivalTime', event)}
+              >
+                {this.arrivalTimeList.map(time => (
+                  <wa-option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime.code === time.CODE_NAME}>
+                    {time.CODE_VALUE_EN}
+                  </wa-option>
+                ))}
+              </wa-select>
             </div>
-            <div class="p-0 flex-fill  ml-md-3">
-              <div class="  p-0 d-flex flex-column flex-md-row align-items-md-center ">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_AnyMessageForUs}</label>
-                <div class="p-0 m-0  controlContainer flex-fill ">
-                  <textarea
-                    data-testid="note"
-                    id={v4()}
-                    rows={4}
-                    class="form-control "
-                    name="message"
-                    value={this.bookedByData.message}
-                    onInput={event => this.handleDataChange('message', event)}
-                  ></textarea>
-                </div>
-              </div>
+            <div class="p-0 flex-fill  ml-md-3 d-flex flex-column" style={{ gap: '0.5rem' }}>
+              <wa-textarea
+                onchange={event => this.handleDataChange('message', event)}
+                size="small"
+                value={this.bookedByData.message}
+                defaultValue={this.bookedByData.message}
+                label={locales.entries.Lcz_AnyMessageForUs}
+                rows={4}
+              ></wa-textarea>
               {this.paymentMethods.length > 1 && (
-                <div class="form-group mt-md-1 mt-1 p-0 d-flex flex-column flex-md-row align-items-md-center">
-                  <label class="p-0 m-0 margin3">Payment Method</label>
-                  <div class="p-0 m-0  controlContainer flex-fill">
-                    <ir-select
-                      showFirstOption={false}
-                      selectedValue={booking_store?.selectedPaymentMethod?.code}
-                      data={this.paymentMethods.map(p => ({
-                        text: p.description,
-                        value: p.code,
-                      }))}
-                      onSelectChange={e =>
-                        modifyBookingStore('selectedPaymentMethod', {
-                          code: e.detail,
-                        })
-                      }
-                    ></ir-select>
-                  </div>
-                </div>
+                <wa-select
+                  label={'Payment Method'}
+                  size="small"
+                  value={booking_store?.selectedPaymentMethod?.code}
+                  onchange={e =>
+                    modifyBookingStore('selectedPaymentMethod', {
+                      code: (e.target as HTMLSelectElement).value,
+                    })
+                  }
+                >
+                  {this.paymentMethods.map(p => (
+                    <wa-option value={p.code}>{p.description}</wa-option>
+                  ))}
+                </wa-select>
               )}
               {booking_store.selectedPaymentMethod?.code === '001' && (
                 <Fragment>
-                  <div class="form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_CardNumber}</label>
-                    <div class="p-0 m-0  controlContainer flex-fill">
-                      <input
-                        class="form-control"
-                        type="text"
-                        placeholder=""
-                        pattern="0-9 "
-                        id={v4()}
-                        value={this.bookedByData.cardNumber}
-                        onInput={event => this.handleNumberInput('cardNumber', event)}
-                      />
-                    </div>
-                  </div>
-                  <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_CardHolderName}</label>
-                    <div class="p-0 m-0  controlContainer flex-fill">
-                      <input
-                        class="form-control"
-                        type="text"
-                        placeholder=""
-                        pattern="0-9 "
-                        id={v4()}
-                        value={this.bookedByData.cardHolderName}
-                        onInput={event => this.handleDataChange('cardHolderName', event)}
-                      />
-                    </div>
-                  </div>
-                  <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_ExpiryDate}</label>
-                    <div class="p-0 m-0 row  controlContainer flex-fill">
-                      <div class="p-0 m-0">
-                        <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryMonth', event)}>
-                          {this.expiryMonths.map(month => (
-                            <option value={month} selected={month === this.bookedByData.expiryMonth}>
-                              {month}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div class="p-0 m-0 ml-1">
-                        <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryYear', event)}>
-                          {this.expiryYears.map((year, index) => (
-                            <option value={year} selected={index === this.bookedByData.expiryYear}>
-                              {year}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                  <ir-input
+                    value={this.bookedByData.cardNumber}
+                    defaultValue={this.bookedByData.cardNumber}
+                    onText-change={e => this.handleCreditCardDataChange('cardNumber', e.detail)}
+                    label={locales.entries.Lcz_CardNumber}
+                  ></ir-input>
+                  <ir-input
+                    value={this.bookedByData.cardHolderName}
+                    defaultValue={this.bookedByData.cardHolderName}
+                    onText-change={e => this.handleCreditCardDataChange('cardHolderName', e.detail)}
+                    label={locales.entries.Lcz_CardHolderName}
+                  ></ir-input>
+                  <ir-input
+                    onText-change={e => {
+                      const [month, year] = e.detail.split('/');
+                      this.handleCreditCardDataChange('expiryYear', month ?? '');
+                      this.handleCreditCardDataChange('expiryMonth', year ?? '');
+                    }}
+                    value={this.expiryDate}
+                    mask={{
+                      mask: 'MM/YY',
+                      placeholderChar: '_',
+                      blocks: {
+                        MM: {
+                          mask: IMask.MaskedRange,
+                          from: 1,
+                          to: 12,
+                          maxLength: 2,
+                        },
+                        YY: {
+                          mask: IMask.MaskedRange,
+                          from: new Date().getFullYear() % 100,
+                          to: (new Date().getFullYear() % 100) + 20,
+                          maxLength: 2,
+                        },
+                      },
+                    }}
+                    label={locales.entries.Lcz_ExpiryDate}
+                  ></ir-input>
                 </Fragment>
               )}
               {booking_store.selectedPaymentMethod?.code === '005' && (
@@ -507,20 +387,9 @@ export class IglPropertyBookedBy {
                   </div>
                 </div>
               )}
-              <div class="form-group mt-1 p-0 d-flex flex-row align-items-center">
-                <label class="p-0 m-0" htmlFor={'emailTheGuestId'}>
-                  {locales.entries.Lcz_EmailTheGuest}
-                </label>
-                <div class="p-0 m-0  controlContainer flex-fill checkBoxContainer">
-                  <input
-                    class="form-control"
-                    type="checkbox"
-                    checked={this.bookedByData.emailGuest}
-                    id={'emailTheGuestId'}
-                    onChange={event => this.handleDataChange('emailGuest', event)}
-                  />
-                </div>
-              </div>
+              <wa-checkbox checked={this.bookedByData.emailGuest} onchange={event => this.handleDataChange('emailGuest', event)}>
+                {locales.entries.Lcz_EmailTheGuest}
+              </wa-checkbox>
             </div>
           </div>
         </div>

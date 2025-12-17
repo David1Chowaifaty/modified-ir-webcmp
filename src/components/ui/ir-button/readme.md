@@ -53,27 +53,19 @@ Type: `Promise<void>`
 ### Used by
 
  - [igl-book-property](../../igloo-calendar/igl-book-property)
- - [igl-book-property-footer](../../igloo-calendar/igl-book-property/igl-book-property-footer)
- - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
- - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
- - [igl-cal-header](../../igloo-calendar/igl-cal-header)
- - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [igl-tba-booking-view](../../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-email-logs](../../ir-booking-email-logs)
- - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-guarantee](../../ir-booking-details/ir-payment-details/ir-booking-guarantee)
- - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
  - [ir-channel-editor](../../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../../ir-channel/ir-channel-mapping)
  - [ir-daily-revenue](../../ir-daily-revenue)
  - [ir-daily-revenue-filters](../../ir-daily-revenue/ir-daily-revenue-filters)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
- - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-filters-panel](../ir-filters-panel)
  - [ir-financial-actions](../../ir-financial-actions)
  - [ir-financial-filters](../../ir-financial-actions/ir-financial-filters)
@@ -83,7 +75,6 @@ Type: `Promise<void>`
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
- - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-login](../../ir-login)
  - [ir-modal](../ir-modal)
@@ -92,16 +83,10 @@ Type: `Promise<void>`
  - [ir-notifications](../../ir-notifications)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-otp-modal](../../ir-otp-modal)
- - [ir-pagination](../../ir-pagination)
  - [ir-payment-action](../../ir-booking-details/ir-payment-details/ir-payment-actions/ir-payment-action)
- - [ir-payment-details](../../ir-booking-details/ir-payment-details)
- - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payment-option](../../ir-payment-option)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-revenue-row-details](../../ir-daily-revenue/ir-revenue-table/ir-revenue-row/ir-revenue-row-details)
- - [ir-room](../../ir-booking-details/ir-room)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
  - [ir-sales-by-channel](../../ir-sales-by-channel)
  - [ir-sales-by-channel-table](../../ir-sales-by-channel/ir-sales-by-channel-table)
@@ -125,27 +110,19 @@ Type: `Promise<void>`
 graph TD;
   ir-button --> ir-icons
   igl-book-property --> ir-button
-  igl-book-property-footer --> ir-button
-  igl-book-property-header --> ir-button
-  igl-booking-event-hover --> ir-button
   igl-bulk-block --> ir-button
   igl-bulk-stop-sale --> ir-button
-  igl-cal-header --> ir-button
-  igl-reallocation-dialog --> ir-button
   igl-split-booking --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button
   ir-booking-email-logs --> ir-button
-  ir-booking-extra-note --> ir-button
   ir-booking-guarantee --> ir-button
-  ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
   ir-channel-mapping --> ir-button
   ir-daily-revenue --> ir-button
   ir-daily-revenue-filters --> ir-button
   ir-delete-modal --> ir-button
-  ir-extra-service-config --> ir-button
   ir-filters-panel --> ir-button
   ir-financial-actions --> ir-button
   ir-financial-filters --> ir-button
@@ -155,7 +132,6 @@ graph TD;
   ir-hk-team --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
-  ir-listing-header --> ir-button
   ir-listing-modal --> ir-button
   ir-login --> ir-button
   ir-modal --> ir-button
@@ -164,16 +140,10 @@ graph TD;
   ir-notifications --> ir-button
   ir-option-details --> ir-button
   ir-otp-modal --> ir-button
-  ir-pagination --> ir-button
   ir-payment-action --> ir-button
-  ir-payment-details --> ir-button
-  ir-payment-item --> ir-button
   ir-payment-option --> ir-button
-  ir-pickup --> ir-button
   ir-reset-password --> ir-button
   ir-revenue-row-details --> ir-button
-  ir-room --> ir-button
-  ir-room-guests --> ir-button
   ir-room-nights --> ir-button
   ir-sales-by-channel --> ir-button
   ir-sales-by-channel-table --> ir-button

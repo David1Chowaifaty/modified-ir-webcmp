@@ -1,10 +1,17 @@
+import { AllowedBookingSource } from './../../dist/types/models/property.d';
 import { Arrival, Booking, IBookingPickupInfo, Room, SharedPerson } from './booking.dto';
 export type TPropertyButtonsTypes = 'cancel' | 'save' | 'back' | 'book' | 'bookAndCheckIn' | 'next' | 'check';
-export type TSourceOption = { code: string; description: string; tag: string; id?: string; type?: string };
-export type TSourceOptions = { id: string; value: string; tag: string; type: string };
+export type TSourceOption = { id: string; value: string; tag: string; description: string; string; type: string; code: string };
+export type TSourceOptions = { id: string; value: string; tag: string; description: string; string; type: string; code: string };
 export type TAdultChildConstraints = { adult_max_nbr: number | null; child_max_nbr: number | null; child_max_age: number | null };
 export type TEventType = 'BLOCK_DATES' | 'SPLIT_BOOKING' | 'BAR_BOOKING' | 'ADD_ROOM' | 'EDIT_BOOKING' | 'PLUS_BOOKING';
-
+export type BookingSource = {
+  code: string;
+  description: string;
+  id: string;
+  tag: string;
+  type: string;
+};
 export interface IglBookPropertyPayload {
   ID: string;
   NAME: string;

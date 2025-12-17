@@ -250,18 +250,20 @@ export class IglBookingEventHover {
   }
 
   private handleCustomerCheckIn() {
+    const room = this.bookingEvent.booking.rooms.find(r => r.identifier === this.bookingEvent.IDENTIFIER);
     const { adult_nbr, children_nbr, infant_nbr } = this.bookingEvent.ROOM_INFO.occupancy;
+    const unitName = room ? room.unit.name : this.bookingEvent.ROOM_INFO.unit?.name ?? '';
     this.showDialog.emit({
       reason: 'checkin',
       bookingNumber: this.bookingEvent.BOOKING_NUMBER,
       roomIdentifier: this.bookingEvent.IDENTIFIER,
-      roomName: '',
+      roomName: unitName,
       roomUnit: '',
       sidebarPayload: {
         identifier: this.bookingEvent.IDENTIFIER,
         bookingNumber: this.bookingEvent.BOOKING_NUMBER,
         checkin: false,
-        roomName: this.bookingEvent.ROOM_INFO.unit?.name ?? '',
+        roomName: unitName,
         sharing_persons: this.bookingEvent.ROOM_INFO.sharing_persons,
         totalGuests: adult_nbr + children_nbr + infant_nbr,
       },
@@ -269,7 +271,14 @@ export class IglBookingEventHover {
   }
 
   private handleCustomerCheckOut() {
-    this.showDialog.emit({ reason: 'checkout', bookingNumber: this.bookingEvent.BOOKING_NUMBER, roomIdentifier: this.bookingEvent.IDENTIFIER, roomName: '', roomUnit: '' });
+    this.showDialog.emit({
+      reason: 'checkout',
+      booking: this.bookingEvent.booking,
+      bookingNumber: this.bookingEvent.BOOKING_NUMBER,
+      roomIdentifier: this.bookingEvent.IDENTIFIER,
+      roomName: '',
+      roomUnit: '',
+    });
   }
 
   private handleDeleteEvent() {
@@ -418,6 +427,7 @@ export class IglBookingEventHover {
   private getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
+        {this.renderPointer()}
         <div class={`d-flex p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
           <div class="px-0  font-weight-bold font-medium-1 d-flex align-items-center" style={{ flex: '1 1 0%' }}>
             <img src={this.bookingEvent?.origin?.Icon} alt={this.bookingEvent?.origin?.Label} class={'icon-image'} />
@@ -519,7 +529,7 @@ export class IglBookingEventHover {
         {this.getInternalNote() && <ir-label labelText={`${locales.entries.Lcz_InternalRemark}:`} content={this.getInternalNote()}></ir-label>}
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
-            <ir-button
+            {/* <ir-button
               style={{ '--icon-size': '0.875rem' }}
               onClickHandler={() => this.handleEditBooking()}
               class={'w-100'}
@@ -528,63 +538,43 @@ export class IglBookingEventHover {
               // icon_name="edit"
               btn_styles="h-100"
               size="sm"
-            ></ir-button>
+            ></ir-button> */}
+            <ir-custom-button style={{ width: '100%' }} variant="brand" onClickHandler={() => this.handleEditBooking()}>
+              {locales.entries.Lcz_Edit}
+            </ir-custom-button>
             {this.bookingEvent.is_direct && this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
-              <ir-button
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_AddRoom}
-                // icon_name="square_plus"
-                size="sm"
-                class={'w-100'}
-                btn_styles="h-100"
-                onClickHandler={() => this.handleAddRoom()}
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleAddRoom()}>
+                {locales.entries.Lcz_AddRoom}
+              </ir-custom-button>
             )}
             {this.canSplitBooking() && (
-              <ir-button
-                class={'w-100'}
-                style={{ '--icon-size': '0.875rem' }}
-                text={'Split'}
-                onClickHandler={() => this.handleSplitBooking()}
-                btn_styles="h-100"
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleSplitBooking()}>
+                Split
+              </ir-custom-button>
             )}
             {this.canCheckIn() && (
-              <ir-button
-                class={'w-100'}
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_CheckIn}
-                onClickHandler={() => this.handleCustomerCheckIn()}
-                // icon_name="edit"
-                btn_styles="h-100"
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} onClickHandler={() => this.handleCustomerCheckIn()} variant="brand" appearance="outlined">
+                {locales.entries.Lcz_CheckIn}
+              </ir-custom-button>
             )}
             {this.canCheckOut() && (
-              <ir-button
-                class={'w-100'}
-                btn_styles="h-100"
-                style={{ '--icon-size': '0.875rem' }}
-                text={locales.entries.Lcz_CheckOut}
-                // icon_name="edit"
-                onClickHandler={() => this.handleCustomerCheckOut()}
-                size="sm"
-              ></ir-button>
+              <ir-custom-button style={{ width: '100%' }} variant="brand" appearance="outlined" onClickHandler={() => this.handleCustomerCheckOut()}>
+                {locales.entries.Lcz_CheckOut}
+              </ir-custom-button>
             )}
             {this.hideButtons
               ? null
               : !this.shouldHideUnassignUnit && (
-                  <ir-button
-                    class={'w-100'}
-                    btn_styles="h-100"
-                    style={{ '--icon-size': '0.875rem' }}
-                    size="sm"
-                    text={locales.entries.Lcz_Unassign}
+                  <ir-custom-button
+                    variant="danger"
+                    style={{ width: '100%' }}
+                    appearance="outlined"
                     onClickHandler={_ => {
                       this.handleDeleteEvent();
                     }}
-                  ></ir-button>
+                  >
+                    {locales.entries.Lcz_Unassign}
+                  </ir-custom-button>
                 )}
           </div>
         </div>
@@ -599,30 +589,33 @@ export class IglBookingEventHover {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (
       <div class={`iglPopOver d-flex flex-column newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`} style={{ gap: '0.5rem' }}>
+        {this.renderPointer()}
         {shouldDisplayButtons ? (
           <Fragment>
             {/* <div class={'mb-1'}> */}
-            <ir-button
-              size="sm"
-              btn_block
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
               data-testid="bar_booking_btn"
-              text={locales.entries.Lcz_CreateNewBooking}
               onClickHandler={_ => {
                 this.handleBookingOption('BAR_BOOKING');
               }}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_CreateNewBooking}
+            </ir-custom-button>
             {/* </div> */}
             {/* <div> */}
             {this.hasSplitBooking() && (
               // <div class="mb-1">
-              <ir-button
-                size="sm"
-                btn_block
-                text={locales.entries.Lcz_AssignUnitToExistingBooking}
+              <ir-custom-button
+                variant="brand"
+                appearance="outlined"
                 onClickHandler={_ => {
                   this.handleBookingOption('SPLIT_BOOKING');
                 }}
-              ></ir-button>
+              >
+                {locales.entries.Lcz_AssignUnitToExistingBooking}
+              </ir-custom-button>
               // </div>
             )}
             {/* </div> */}
@@ -631,14 +624,15 @@ export class IglBookingEventHover {
           <p class={'text-danger'}>{locales.entries.Lcz_NoRatePlanDefined}</p>
         )}
         {/* <div> */}
-        <ir-button
-          size="sm"
-          text={locales.entries.Lcz_Blockdates}
-          btn_block
+        <ir-custom-button
+          appearance="outlined"
+          variant="danger"
           onClickHandler={_ => {
             this.handleBookingOption('BLOCK_DATES');
           }}
-        ></ir-button>
+        >
+          {locales.entries.Lcz_Blockdates}
+        </ir-custom-button>
         {/* </div> */}
       </div>
     );
@@ -649,6 +643,7 @@ export class IglBookingEventHover {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
+        {this.renderPointer()}
         <igl-block-dates-view
           isEventHover={true}
           entryHour={this.bookingEvent.ENTRY_HOUR}
@@ -661,56 +656,51 @@ export class IglBookingEventHover {
         ></igl-block-dates-view>
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
-            <ir-button
-              btn_disabled={this.isLoading === 'update'}
-              text={locales.entries.Lcz_Update}
+            <ir-custom-button
+              disabled={this.isLoading === 'update'}
               onClickHandler={_ => {
                 this.handleUpdateBlockedDates();
               }}
-              icon_name="edit"
-              size="sm"
-              btn_styles="h-100"
-              isLoading={this.isLoading === 'update'}
-              style={{ '--icon-size': '0.875rem' }}
-              btn_block
-              class={'w-100'}
-            ></ir-button>
-            <ir-button
-              class={'w-100 h-100 my-0'}
-              btn_block
-              btn_styles="h-100"
-              size="sm"
-              text={locales.entries.Lcz_ConvertSplitBooking}
+              variant="brand"
+              loading={this.isLoading === 'update'}
+              style={{ width: '100%' }}
+            >
+              {locales.entries.Lcz_Update}
+            </ir-custom-button>
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
+              style={{ width: '100%' }}
               onClickHandler={() => {
                 this.handleConvertBlockedDateToBooking();
               }}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_ConvertSplitBooking}
+            </ir-custom-button>
 
-            <ir-button
-              class={'w-100'}
-              btn_styles="h-100"
-              btn_block
-              size="sm"
-              style={{ '--icon-size': '0.875rem' }}
-              icon_name="trash"
-              btn_color="danger"
+            <ir-custom-button
+              variant="danger"
+              style={{ width: '100%' }}
+              appearance="outlined"
               onClickHandler={_ => {
                 this.handleDeleteEvent();
               }}
-              text={locales.entries.Lcz_Delete}
-            ></ir-button>
+            >
+              {locales.entries.Lcz_Delete}
+            </ir-custom-button>
           </div>
         </div>
       </div>
     );
   }
 
+  private renderPointer() {
+    return <div class={`bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}`}></div>;
+  }
+
   render() {
     return (
       <Host>
-        <div class={`pointerContainer ${this.bubbleInfoTop ? 'pointerContainerTop' : ''}`}>
-          <div class={`bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}`}></div>
-        </div>
         {this.isBlockedDateEvent() ? this.getBlockedView() : null}
         {this.isNewBooking() ? this.getNewBookingOptions() : null}
         {!this.isBlockedDateEvent() && !this.isNewBooking() ? this.getInfoElement() : null}

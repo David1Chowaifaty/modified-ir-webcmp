@@ -1,0 +1,33 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  display: block;
+  font-size: 0.93rem;
+}
+:host[display='inline'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+.booked-by-source__logo {
+  width: 1.5625rem;
+}
+.booked-by-cell__description {
+  font-size: 0.875rem;
+}
+.cell-label {
+  font-weight: 700;
+}
+.booked-by-source__private-note {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  background: rgb(244, 213, 82);
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+}
+.booked-by-source__container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

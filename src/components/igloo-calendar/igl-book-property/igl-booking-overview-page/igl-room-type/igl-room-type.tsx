@@ -30,7 +30,7 @@ export class IglRoomType {
 
     return (
       <Host>
-        {isValidBookingType && this.roomType.rateplans?.length > 0 && <div class="font-weight-bold font-medium-1 margin-bottom-8 ">{this.roomType.name}</div>}
+        {isValidBookingType && this.roomType.rateplans?.length > 0 && <h5 class="roomtype__name">{this.roomType.name}</h5>}
         {this.roomType.rateplans?.map(ratePlan => {
           if (!!ratePlan.variations) {
             let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomType.id;

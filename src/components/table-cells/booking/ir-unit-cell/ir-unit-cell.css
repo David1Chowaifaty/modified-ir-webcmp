@@ -1,0 +1,7 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.93rem;
+}

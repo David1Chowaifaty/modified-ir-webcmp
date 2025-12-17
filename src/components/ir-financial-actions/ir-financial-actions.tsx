@@ -4,7 +4,7 @@ import { SidebarOpenEvent } from './types';
 import locales from '@/stores/locales.store';
 import { RoomService } from '@/services/room.service';
 import { PaymentEntries } from '../ir-booking-details/types';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 @Component({
   tag: 'ir-financial-actions',

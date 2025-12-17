@@ -1,98 +1,108 @@
+/* @import url('../../../assets/webawesome/utilities/size.css');
+
 :host {
   display: flex;
-  align-items: center !important;
-  font-size: 14px !important;
-}
-.date-range-input {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex: 1;
-  cursor: pointer;
   width: 100%;
-  user-select: none;
-  font-size: 14px !important;
 }
-.iglRangeNights {
+
+.date-range-shell {
+  position: relative;
+  width: 100%;
+  height: var(--wa-form-control-height);
+  padding: 0 var(--wa-form-control-padding-inline);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: var(--wa-form-control-value-color);
+  font-size: var(--wa-form-control-value-size);
+  font-family: inherit;
+  font-weight: var(--wa-form-control-value-font-weight);
+  line-height: var(--wa-form-control-value-line-height);
+
+  transition: background-color var(--wa-transition-normal), border var(--wa-transition-normal), outline var(--wa-transition-fast);
+  transition-timing-function: var(--wa-transition-easing);
+}
+.date-range-shell.picker {
+  background-color: var(--wa-form-control-background-color);
+  border-color: var(--wa-form-control-border-color);
+  border-style: var(--wa-form-control-border-style);
+  border-width: var(--wa-form-control-border-width);
+  border-radius: var(--wa-form-control-border-radius);
+}
+
+.date-range-shell.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.date-range-display.date-range-display--disabled {
+  cursor: not-allowed;
+}
+.date-range-shell:focus-within {
+  outline: var(--wa-focus-ring);
+  outline-offset: var(--wa-focus-ring-offset);
+}
+
+.date-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.date-range-input[data-state='disabled'] {
+  cursor: not-allowed;
+}
+
+.date-range-shell.picker .date-range-display {
+  background-color: var(--wa-form-control-background-color);
+  padding: 0 var(--wa-form-control-padding-inline);
+}
+.date-range-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
+
+.date-range-icon {
   margin: 0;
   padding: 0;
 }
-.date-view {
-  position: absolute;
-  background: white;
-  pointer-events: none;
-  cursor: pointer;
-  display: block;
-  margin-left: 14px;
-  margin-right: 14px;
-  font-size: 13.65px !important;
+
+.date-range-date {
+  font-weight: 500;
+}
+
+.date-range-nights {
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  :host {
+    width: fit-content;
+  }
+  .date-range-shell {
+    min-width: 290px;
+    width: fit-content;
+  }
+} */
+:host {
   display: flex;
-  align-items: center;
-  inset: 0;
+
+  min-width: 280px;
 }
-.date-view svg {
-  padding: 0 !important;
-  margin: 0;
-  margin-right: 10px;
-}
-.calendarPickerContainer {
-  display: flex !important;
-  position: relative !important;
-  text-align: left;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0;
-  border: 1px solid var(--ir-date-range-border, #379ff2);
-  width: var(--ir-date-range-width, 245px);
-  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-}
-.calendarPickerContainer:focus-within {
-  border-color: #379ff2;
-}
-.calendarPickerContainer[data-state='disabled'] {
-  border: 0px;
-  width: 280px;
-}
-.date-view[data-state='disabled'],
-.date-range-input[data-state='disabled'] {
-  margin: 0;
-  cursor: default;
-}
-.date-range-container-cn {
-  position: relative;
-  width: fit-content;
-}
-.date-range-container-cn:focus-within .date-range-container {
-  border: 1px solid #379ff2;
-}
-.date-range-container {
-  position: relative;
-  gap: 1rem;
-  font-size: 0.975rem;
-  line-height: 1.45;
-  border-radius: 0.21rem;
-  border: 1px solid #cacfe7;
-  color: #3b4781;
-  padding: 0.75rem 1rem;
-  box-sizing: border-box !important;
-  font-weight: 400;
-  background-color: #fff;
-  background-clip: padding-box;
-  height: 2rem;
-  pointer-events: none;
-  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-}
-.date-range-container-cn .date-range-input {
-  position: absolute;
-  width: 100% !important;
-  inset: 0;
-  cursor: pointer;
-}
-.date-range-container.disabled {
-  border: none;
-  padding-left: 0;
-  padding-right: 0;
-}
-.date-range-input[data-state='disabled'] {
-  cursor: default;
+.custom-picker {
+  width: 100%;
 }

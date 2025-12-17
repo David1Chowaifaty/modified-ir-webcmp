@@ -52,12 +52,12 @@ graph TD;
   igl-booking-event-hover --> ir-dropdown-item
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
-  igl-booking-event-hover --> ir-button
+  igl-booking-event-hover --> ir-custom-button
   igl-booking-event-hover --> igl-block-dates-view
   ir-dropdown --> ir-icons
-  ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button
+  ir-button --> ir-icons
   igloo-calendar --> igl-cal-body
   style igl-cal-body fill:#f9f,stroke:#333,stroke-width:4px
 ```

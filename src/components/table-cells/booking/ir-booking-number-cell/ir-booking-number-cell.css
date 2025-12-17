@@ -1,0 +1,23 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.93rem;
+}
+.booking-nbr-cell__channel_nbr {
+  font-size: 0.75rem;
+  padding: 0;
+  margin: 0;
+}
+.booking-nbr-cell__container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.booked-by-source__logo {
+  width: 1.5625rem;
+  background-color: white;
+  /* border-radius: 50%; */
+}

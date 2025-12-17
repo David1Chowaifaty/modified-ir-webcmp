@@ -3,7 +3,7 @@ import { _formatTime } from '../../functions';
 import locales from '@/stores/locales.store';
 import { IPmsLog } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 
 @Component({
   tag: 'ir-pms-logs',

@@ -265,7 +265,7 @@ export class IrInterceptor {
         {this.isLoading && !this.isPageLoadingStopped && (
           <div class="loadingScreenContainer">
             <div class="loaderContainer">
-              <span class="page-loader"></span>
+              <ir-spinner></ir-spinner>
             </div>
           </div>
         )}

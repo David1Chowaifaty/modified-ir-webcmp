@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+.booking-company__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

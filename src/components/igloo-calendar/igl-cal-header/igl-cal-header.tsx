@@ -1,10 +1,9 @@
-import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch, Fragment } from '@stencil/core';
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { dateToFormattedString, isWeekend } from '@/utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { handleUnAssignedDatesChange } from '@/stores/unassigned_dates.store';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 
 @Component({
   tag: 'igl-cal-header',
@@ -198,118 +197,84 @@ export class IglCalHeader {
     return (
       <Host>
         <div class="stickyCell align-items-center topLeftCell preventPageScroll">
-          <div class="row justify-content-around no-gutters">
-            {/* {!this.calendarData.is_vacation_rental && (
-              <div
-                class="caledarBtns"
-                onClick={() => this.handleOptionEvent('showAssigned')}
+          <div class="header__fd-actions">
+            <div class="row justify-content-around no-gutters" style={{ gap: '0' }}>
+              {!this.calendarData.is_vacation_rental && (
+                <Fragment>
+                  <wa-tooltip for="fd-unassigned-dates_btn">{locales.entries.Lcz_UnassignedUnitsTooltip}</wa-tooltip>
+                  <ir-custom-button id="fd-unassigned-dates_btn" variant="neutral" appearance="plain" onClickHandler={() => this.handleOptionEvent('showAssigned')}>
+                    <wa-icon
+                      style={{ fontSize: '1.5rem' }}
+                      name="server"
+                      label={locales.entries.Lcz_UnassignedUnitsTooltip}
+                      aria-label={locales.entries.Lcz_UnassignedUnitsTooltip}
+                    ></wa-icon>
+                  </ir-custom-button>
+                </Fragment>
+              )}
+              <ir-date-picker
+                minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
+                // autoApply
+                // singleDatePicker
+                onDateChanged={evt => {
+                  console.log('evt', evt);
+                  this.handleDateSelect(evt);
+                }}
+                // class="datePickerHidden"
+                class={'date_btn'}
+                title={locales.entries.Lcz_Navigate}
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title={locales.entries.Lcz_UnassignedUnitsTooltip}
               >
+                <ir-custom-button slot="trigger" id="fd-dates-navigation_btn" variant="neutral" appearance="plain" onClickHandler={() => this.handleOptionEvent('calendar')}>
+                  <wa-icon
+                    style={{ fontSize: '1.5rem' }}
+                    name="calendar"
+                    variant="regular"
+                    label={locales.entries.Lcz_Navigate}
+                    aria-label={locales.entries.Lcz_Navigate}
+                  ></wa-icon>
+                </ir-custom-button>
+              </ir-date-picker>
+              <wa-tooltip for="fd-dates-navigation_btn">{locales.entries.Lcz_Navigate}</wa-tooltip>
+              <Fragment>
+                <wa-tooltip for="fd-today-navigation_btn">{locales.entries.Lcz_Today}</wa-tooltip>
+                <ir-custom-button slot="trigger" id="fd-today-navigation_btn" variant="neutral" appearance="plain" onClickHandler={() => this.handleOptionEvent('gotoToday')}>
+                  <wa-icon style={{ fontSize: '1.5rem' }} name="clock" variant="regular" label={locales.entries.Lcz_Today} aria-label={locales.entries.Lcz_Today}></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+              <Fragment>
+                <wa-tooltip for="fd-new-booking_btn">{locales.entries.Lcz_CreateNewBooking}</wa-tooltip>
+                <ir-custom-button
+                  slot="trigger"
+                  id="fd-new-booking_btn"
+                  variant="neutral"
+                  appearance="plain"
+                  onClickHandler={() => this.handleOptionEvent('add', this.getNewBookingModel())}
+                >
+                  <wa-icon style={{ fontSize: '1.5rem' }} name="plus" label={locales.entries.Lcz_CreateNewBooking} aria-label={locales.entries.Lcz_CreateNewBooking}></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+              <Fragment>
+                <wa-tooltip for="fd-stop-open-sale_btn">{locales.entries.Lcz_StopOpenSale}</wa-tooltip>
+                <ir-custom-button
+                  slot="trigger"
+                  id="fd-stop-open-sale_btn"
+                  variant="neutral"
+                  appearance="plain"
+                  onClickHandler={() => this.handleOptionEvent('bulk', this.getNewBookingModel())}
+                >
+                  <wa-icon
+                    variant="regular"
+                    style={{ fontSize: '1.5rem' }}
+                    name="calendar-xmark"
+                    label={locales.entries.Lcz_StopOpenSale}
+                    aria-label={locales.entries.Lcz_StopOpenSale}
+                  ></wa-icon>
+                </ir-custom-button>
+              </Fragment>
 
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon">
-                  <path
-                    fill="#6b6f82"
-                    d="M448 160H320V128H448v32zM48 64C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM448 352v32H192V352H448zM48 288c-26.5 0-48 21.5-48 48v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V336c0-26.5-21.5-48-48-48H48z"
-                  />
-                </svg>
-              </div>
-            )} */}
-            {/* <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Navigate}>
-          
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class={'svg-icon'}>
-                <path
-                  fill="#6b6f82"
-                  d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
-                />
-              </svg>
-
-              </div> */}
-            {/* <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Today}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon">
-              <path
-                  fill="#6b6f82"
-                  d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
-                />
-                </svg>
-                </div> */}
-            {!this.calendarData.is_vacation_rental && (
-              <ir-button
-                variant="icon"
-                icon_name="server"
-                style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title={locales.entries.Lcz_UnassignedUnitsTooltip}
-                onClickHandler={() => this.handleOptionEvent('showAssigned')}
-                btn_styles="caledarBtns"
-                visibleBackgroundOnHover
-              ></ir-button>
-            )}
-            <ir-date-picker
-              minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
-              // autoApply
-              // singleDatePicker
-              onDateChanged={evt => {
-                console.log('evt', evt);
-                this.handleDateSelect(evt);
-              }}
-              // class="datePickerHidden"
-              class={'date_btn'}
-              title={locales.entries.Lcz_Navigate}
-              data-toggle="tooltip"
-              data-placement="bottom"
-            >
-              <ir-button
-                slot="trigger"
-                btn_styles="caledarBtns"
-                variant="icon"
-                icon_name="calendar"
-                style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-                onClickHandler={() => this.handleOptionEvent('calendar')}
-                visibleBackgroundOnHover
-                ref={el => (this.dateRef = el)}
-              ></ir-button>
-            </ir-date-picker>
-
-            <ir-button
-              variant="icon"
-              btn_styles="caledarBtns"
-              class={'pointer'}
-              icon_name="clock"
-              visibleBackgroundOnHover
-              style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title={locales.entries.Lcz_Today}
-              onClickHandler={() => this.handleOptionEvent('gotoToday')}
-            ></ir-button>
-            <ir-button
-              variant="icon"
-              btn_styles="caledarBtns"
-              icon_name="plus"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              data-testid="new_booking_btn"
-              title={locales.entries.Lcz_CreateNewBooking}
-              visibleBackgroundOnHover
-              style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-              onClickHandler={() => this.handleOptionEvent('add', this.getNewBookingModel())}
-            ></ir-button>
-            <ir-button
-              variant="icon"
-              btn_styles="caledarBtns"
-              icon_name="calendar-xmark"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              data-testid="new_bulk_btn"
-              title={locales.entries.Lcz_StopOpenSale}
-              visibleBackgroundOnHover
-              style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-              onClickHandler={() => this.handleOptionEvent('bulk', this.getNewBookingModel())}
-            ></ir-button>
-            {/* <div
+              {/* <div
               class="caledarBtns"
               onClick={() => this.handleOptionEvent('add', this.getNewBookingModel())}
               data-toggle="tooltip"
@@ -324,8 +289,8 @@ export class IglCalHeader {
                 />
               </svg>
             </div> */}
-          </div>
-          <div class="row justify-content-around no-gutters searchContiner">
+            </div>
+            {/* <div class="row justify-content-around no-gutters searchContiner">
             <ir-m-combobox
               placeholder={locales.entries.Lcz_FindUnit}
               options={this.roomsList.map(r => ({
@@ -333,9 +298,25 @@ export class IglCalHeader {
                 value: r.id,
               }))}
               onOptionChange={e => {
+                console.log(e.detail.value);
                 this.handleScrollToRoom(e.detail.value);
               }}
             ></ir-m-combobox>
+          </div> */}
+            <div class="searchContiner">
+              <ir-picker
+                size="small"
+                onCombobox-select={e => {
+                  this.handleScrollToRoom(Number(e.detail.item.value));
+                }}
+              >
+                {this.roomsList.map(room => (
+                  <ir-picker-item label={room.name} value={room.id}>
+                    {room.name}
+                  </ir-picker-item>
+                ))}
+              </ir-picker>
+            </div>
           </div>
         </div>
         <div class="stickyCell headersContainer">
@@ -353,13 +334,25 @@ export class IglCalHeader {
                 data-day={dayInfo.day}
               >
                 {!this.calendarData.is_vacation_rental && (
-                  <div class="preventPageScroll">
-                    <span
+                  <div class="preventPageScroll" onClick={() => this.showToBeAssigned(dayInfo)}>
+                    {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? (
+                      <button class={'fd-header__badge-btn'}>
+                        <wa-badge class="fd-header__badge" variant={'brand'} appearance={'accent'} pill>
+                          {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
+                        </wa-badge>
+                      </button>
+                    ) : (
+                      <wa-badge variant={'neutral'} appearance={'filled'} pill>
+                        {' '}
+                        {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
+                      </wa-badge>
+                    )}
+                    {/* <span
                       class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
-                      onClick={() => this.showToBeAssigned(dayInfo)}
+                      
                     >
                       {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
-                    </span>
+                    </span> */}
                   </div>
                 )}
 

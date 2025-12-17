@@ -1,7 +1,7 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import { Booking, ExtraService, Guest, IPmsLog, Room, SharedPerson } from '@/models/booking.dto';
 import axios from 'axios';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
@@ -12,13 +12,12 @@ import Token from '@/models/Token';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent, PaymentEntries, PrintScreenOptions } from './types';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
-import { IrModalCustomEvent } from '@/components';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { buildSplitIndex, SplitIndex } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-details',
-  styleUrls: ['../../global/app.css', 'ir-booking-details.css'],
+  styleUrls: ['ir-booking-details.css'],
   scoped: true,
 })
 export class IrBookingDetails {
@@ -84,7 +83,7 @@ export class IrBookingDetails {
 
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   // private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
-  private modalRef: HTMLIrModalElement;
+  private modalRef: HTMLIrDialogElement;
   private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
@@ -134,7 +133,8 @@ export class IrBookingDetails {
         this.openPrintingScreen({ mode: 'printing' });
         return;
       case 'invoice':
-        this.openPrintingScreen({ mode: 'invoice' });
+        // this.openPrintingScreen({ mode: 'invoice' });
+        this.sidebarState = 'invoice';
         return;
       case 'book-delete':
         return;
@@ -219,6 +219,7 @@ export class IrBookingDetails {
   @Listen('editExtraService')
   handleEditExtraService(e: CustomEvent) {
     this.selectedService = e.detail;
+    console.log(this.selectedService);
     this.sidebarState = 'extra_service';
   }
   @Listen('openPrintScreen')
@@ -354,9 +355,7 @@ export class IrBookingDetails {
       console.log(error);
     }
   }
-  private async handleModalConfirm(e: IrModalCustomEvent<any>) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  private async handleModalConfirm() {
     switch (this.modalState.type) {
       case 'email':
         await this.bookingService.sendBookingConfirmationEmail(this.booking.booking_nbr, this.language);
@@ -364,70 +363,6 @@ export class IrBookingDetails {
     }
     this.modalState = null;
     this.modalRef.closeModal();
-  }
-  private renderSidebarContent() {
-    const handleClose = () => {
-      this.sidebarState = null;
-    };
-    switch (this.sidebarState) {
-      case 'guest':
-        return (
-          <ir-guest-info
-            isInSideBar
-            headerShown
-            slot="sidebar-body"
-            booking_nbr={this.bookingNumber}
-            email={this.booking?.guest.email}
-            language={this.language}
-            onCloseSideBar={handleClose}
-          ></ir-guest-info>
-        );
-      case 'pickup':
-        return (
-          <ir-pickup
-            bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
-            slot="sidebar-body"
-            defaultPickupData={this.booking.pickup_info}
-            bookingNumber={this.booking.booking_nbr}
-            numberOfPersons={this.booking.occupancy.adult_nbr + this.booking.occupancy.children_nbr}
-            onCloseModal={handleClose}
-          ></ir-pickup>
-        );
-      // case 'extra_note':
-      //   return <ir-booking-extra-note slot="sidebar-body" booking={this.booking} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
-      case 'extra_service':
-        return (
-          <ir-extra-service-config
-            service={this.selectedService}
-            booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
-            slot="sidebar-body"
-            onCloseModal={() => {
-              handleClose();
-              if (this.selectedService) {
-                this.selectedService = null;
-              }
-            }}
-          ></ir-extra-service-config>
-        );
-      case 'room-guest':
-        return (
-          <ir-room-guests
-            countries={this.countries}
-            language={this.language}
-            identifier={this.sidebarPayload?.identifier}
-            bookingNumber={this.booking.booking_nbr}
-            roomName={this.sidebarPayload?.roomName}
-            totalGuests={this.sidebarPayload?.totalGuests}
-            sharedPersons={this.sidebarPayload?.sharing_persons}
-            slot="sidebar-body"
-            checkIn={this.sidebarPayload?.checkin}
-            onCloseModal={handleClose}
-          ></ir-room-guests>
-        );
-
-      default:
-        return null;
-    }
   }
 
   private computeRoomGroups(rooms: Room[]) {
@@ -599,8 +534,8 @@ export class IrBookingDetails {
       <Fragment>
         {!this.is_from_front_desk && (
           <Fragment>
-            <ir-toast></ir-toast>
-            <ir-interceptor></ir-interceptor>
+            <ir-toast style={{ height: '0' }}></ir-toast>
+            <ir-interceptor style={{ height: '0' }}></ir-interceptor>
           </Fragment>
         )}
       </Fragment>,
@@ -610,7 +545,7 @@ export class IrBookingDetails {
         hasDelete={this.hasDelete}
         hasMenu={this.hasMenu}
         hasPrint={this.hasPrint}
-        hasReceipt={this.hasReceipt}
+        hasReceipt={calendar_data.property.is_pms_enabled}
         hasEmail={['001', '002'].includes(this.booking?.status?.code)}
       ></ir-booking-header>,
       <div class="booking-details__booking-info">
@@ -646,38 +581,40 @@ export class IrBookingDetails {
           booking={this.booking}
         ></ir-payment-details>
       </div>,
-      <ir-modal
-        modalBody={this.modalState?.message}
-        leftBtnText={locales.entries.Lcz_Cancel}
-        rightBtnText={locales.entries.Lcz_Confirm}
-        autoClose={false}
-        isLoading={isRequestPending('/Send_Booking_Confirmation_Email')}
-        ref={el => (this.modalRef = el)}
-        onConfirmModal={e => {
-          this.handleModalConfirm(e);
-        }}
-        onCancelModal={() => {
-          this.modalRef.closeModal();
-        }}
-      ></ir-modal>,
-      <ir-sidebar
-        open={this.sidebarState !== null && this.sidebarState !== 'payment-folio'}
-        side={'right'}
-        id="editGuestInfo"
-        style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
-        onIrSidebarToggle={e => {
+      <ir-dialog
+        label="Send Email"
+        onIrDialogHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          this.sidebarState = null;
+          this.modalRef.closeModal();
+          this.modalState = null;
         }}
-        showCloseButton={false}
+        ref={el => (this.modalRef = el)}
       >
-        {this.renderSidebarContent()}
-      </ir-sidebar>,
+        <p>{this.modalState?.message}</p>
+        <div slot="footer" class="ir-dialog__footer">
+          <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
+            {locales.entries.Lcz_Cancel}
+          </ir-custom-button>
+          <ir-custom-button
+            loading={isRequestPending('/Send_Booking_Confirmation_Email')}
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.handleModalConfirm();
+            }}
+            size="medium"
+            variant="brand"
+          >
+            {locales.entries.Lcz_Confirm}
+          </ir-custom-button>
+        </div>
+      </ir-dialog>,
       // <ir-sidebar
-      //   open={this.sidebarState === 'payment-folio'}
-      //   side={'left'}
-      //   id="folioSidebar"
+      //   open={this.sidebarState === 'room-guest'}
+      //   side={'right'}
+      //   id="editGuestInfo"
+      //   style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
       //   onIrSidebarToggle={e => {
       //     e.stopImmediatePropagation();
       //     e.stopPropagation();
@@ -687,6 +624,61 @@ export class IrBookingDetails {
       // >
       //   {this.renderSidebarContent()}
       // </ir-sidebar>,
+      <ir-room-guests
+        open={this.sidebarState === 'room-guest'}
+        countries={this.countries}
+        language={this.language}
+        identifier={this.sidebarPayload?.identifier}
+        bookingNumber={this.booking.booking_nbr}
+        roomName={this.sidebarPayload?.roomName}
+        totalGuests={this.sidebarPayload?.totalGuests}
+        sharedPersons={this.sidebarPayload?.sharing_persons}
+        slot="sidebar-body"
+        checkIn={this.sidebarPayload?.checkin}
+        onCloseModal={() => (this.sidebarState = null)}
+      ></ir-room-guests>,
+      <ir-extra-service-config
+        open={this.sidebarState === 'extra_service'}
+        service={this.selectedService}
+        booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
+        slot="sidebar-body"
+        onCloseModal={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.sidebarState = null;
+          if (this.selectedService) {
+            this.selectedService = null;
+          }
+        }}
+      ></ir-extra-service-config>,
+      <ir-pickup
+        open={this.sidebarState === 'pickup'}
+        bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
+        defaultPickupData={this.booking.pickup_info}
+        bookingNumber={this.booking.booking_nbr}
+        numberOfPersons={this.booking.occupancy.adult_nbr + this.booking.occupancy.children_nbr}
+        onCloseModal={() => {
+          this.sidebarState = null;
+        }}
+      ></ir-pickup>,
+      <ir-billing-drawer
+        open={this.sidebarState === 'invoice'}
+        onBillingClose={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.sidebarState = null;
+        }}
+        booking={this.booking}
+      ></ir-billing-drawer>,
+      <ir-guest-info-drawer
+        onGuestInfoDrawerClosed={() => {
+          this.sidebarState = null;
+        }}
+        booking_nbr={this.bookingNumber}
+        email={this.booking?.guest.email}
+        language={this.language}
+        open={this.sidebarState === 'guest'}
+      ></ir-guest-info-drawer>,
       <ir-payment-folio
         style={{ height: 'auto' }}
         bookingNumber={this.booking.booking_nbr}

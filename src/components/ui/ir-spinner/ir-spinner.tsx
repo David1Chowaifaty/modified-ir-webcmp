@@ -74,6 +74,10 @@ export class IrSpinner {
     this.el.style.setProperty(key, value);
   }
   render() {
-    return <Host></Host>;
+    return (
+      <Host>
+        <wa-spinner style={{ fontSize: '2rem' }}></wa-spinner>
+      </Host>
+    );
   }
 }

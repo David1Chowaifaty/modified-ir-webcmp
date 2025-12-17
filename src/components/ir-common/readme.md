@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property         | Attribute         | Description | Type     | Default |
-| ---------------- | ----------------- | ----------- | -------- | ------- |
-| `extraResources` | `extra-resources` |             | `string` | `''`    |
+| Property                   | Attribute                    | Description | Type      | Default     |
+| -------------------------- | ---------------------------- | ----------- | --------- | ----------- |
+| `disableResourceInjection` | `disable-resource-injection` |             | `boolean` | `undefined` |
+| `extraResources`           | `extra-resources`            |             | `string`  | `''`        |
 
 
 ----------------------------------------------

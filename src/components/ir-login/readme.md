@@ -35,6 +35,7 @@ graph TD;
   ir-login --> ir-input-text
   ir-login --> ir-icons
   ir-login --> ir-button
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

@@ -10,7 +10,6 @@
 | Property                      | Attribute                   | Description | Type                                                                       | Default     |
 | ----------------------------- | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
 | `adultChildConstraints`       | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
-| `adultChildCount`             | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
 | `bookedByInfoData`            | `booked-by-info-data`       |             | `any`                                                                      | `undefined` |
 | `bookingData`                 | `booking-data`              |             | `any`                                                                      | `''`        |
 | `bookingDataDefaultDateRange` | --                          |             | `{ [key: string]: any; }`                                                  | `undefined` |
@@ -20,7 +19,6 @@
 | `minDate`                     | `min-date`                  |             | `string`                                                                   | `undefined` |
 | `propertyId`                  | `property-id`               |             | `number`                                                                   | `undefined` |
 | `showSplitBookingOption`      | `show-split-booking-option` |             | `boolean`                                                                  | `false`     |
-| `sourceOptions`               | --                          |             | `TSourceOptions[]`                                                         | `[]`        |
 | `splitBookingId`              | `split-booking-id`          |             | `any`                                                                      | `''`        |
 | `splitBookings`               | --                          |             | `any[]`                                                                    | `undefined` |
 | `wasBlockedUnit`              | `was-blocked-unit`          |             | `boolean`                                                                  | `undefined` |
@@ -30,12 +28,9 @@
 
 | Event                        | Description | Type                                                                                                 |
 | ---------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `adultChild`                 |             | `CustomEvent<any>`                                                                                   |
-| `animateIrButton`            |             | `CustomEvent<string>`                                                                                |
 | `animateIrSelect`            |             | `CustomEvent<string>`                                                                                |
 | `buttonClicked`              |             | `CustomEvent<{ key: TPropertyButtonsTypes; }>`                                                       |
 | `checkClicked`               |             | `CustomEvent<any>`                                                                                   |
-| `sourceDropDownChange`       |             | `CustomEvent<string>`                                                                                |
 | `spiltBookingSelected`       |             | `CustomEvent<{ key: string; data: unknown; }>`                                                       |
 | `splitBookingDropDownChange` |             | `CustomEvent<any>`                                                                                   |
 | `toast`                      |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
@@ -49,20 +44,20 @@
 
 ### Depends on
 
-- [ir-autocomplete](../../../ui/ir-autocomplete)
-- [ir-select](../../../ui/ir-select)
-- [ir-button](../../../ui/ir-button)
+- [ir-picker](../../../ui/ir-picker)
+- [ir-picker-item](../../../ui/ir-picker/ir-picker-item)
+- [ir-custom-button](../../../ui/ir-custom-button)
 - [igl-date-range](../../igl-date-range)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-book-property-header --> ir-autocomplete
-  igl-book-property-header --> ir-select
-  igl-book-property-header --> ir-button
+  igl-book-property-header --> ir-picker
+  igl-book-property-header --> ir-picker-item
+  igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  ir-button --> ir-icons
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-booking-overview-page --> igl-book-property-header
   style igl-book-property-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

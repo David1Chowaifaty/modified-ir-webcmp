@@ -31,17 +31,16 @@
 ### Depends on
 
 - [ir-payment-item](../ir-payment-item)
+- [ir-empty-state](../../../ir-empty-state)
 - [ir-custom-button](../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-empty-state
   ir-payments-folio --> ir-custom-button
-  ir-payment-item --> ir-popover
-  ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
-  ir-button --> ir-icons
   ir-payment-details --> ir-payments-folio
   style ir-payments-folio fill:#f9f,stroke:#333,stroke-width:4px
 ```

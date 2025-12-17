@@ -38,24 +38,22 @@
 
 - [ir-pms-logs](ir-pms-logs)
 - [ir-events-log](events-log)
-- [ir-popover](../../ui/ir-popover)
 - [ir-custom-button](../../ui/ir-custom-button)
+- [ir-booking-status-tag](../../ui/ir-booking-status-tag)
+- [ir-popover](../../ui/ir-popover)
 - [ir-dialog](../../ui/ir-dialog)
-- [ir-modal](../../ui/ir-modal)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
-  ir-booking-header --> ir-popover
   ir-booking-header --> ir-custom-button
+  ir-booking-header --> ir-booking-status-tag
+  ir-booking-header --> ir-popover
   ir-booking-header --> ir-dialog
-  ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
-  ir-modal --> ir-button
-  ir-button --> ir-icons
   ir-booking-details --> ir-booking-header
   style ir-booking-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,0 +1,7 @@
+.page-title {
+  font-family: var(--wa-font-family-heading);
+  font-weight: var(--wa-font-weight-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  font-size: var(--wa-font-size-xl);
+}

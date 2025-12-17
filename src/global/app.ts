@@ -1,3 +1,4 @@
+import '../assets/webawesome/themes/default.css';
 /**
  * Register only the Web Awesome components we actually use so they get bundled with our library.
  * This avoids forcing consumers to include additional scripts or styles.
@@ -27,6 +28,7 @@ import '@awesome.me/webawesome/dist/components/popover/popover.js';
 import '@awesome.me/webawesome/dist/components/textarea/textarea.js';
 import '@awesome.me/webawesome/dist/components/radio-group/radio-group.js';
 import '@awesome.me/webawesome/dist/components/callout/callout.js';
+import '@awesome.me/webawesome/dist/components/animation/animation.js';
 export default () => {
   /* The side-effect imports above define the custom elements; nothing else to execute at runtime. */
 };

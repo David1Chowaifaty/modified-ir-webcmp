@@ -9,7 +9,7 @@
   padding-right: 4px !important;
 }
 .balance_amount {
-  color: #ff4961;
+  color: var(--wa-color-danger-fill-loud);
   font-size: 0.75rem;
 }
 .user-notes {
@@ -41,17 +41,6 @@
   margin-right: var(--m) !important;
 }
 
-.pointerContainerTop {
-  top: -26px;
-}
-
-.pointerContainer {
-  position: absolute;
-  height: 10px;
-  width: 350px;
-  left: var(--el-left, 50%);
-  transform: translateX(-50%);
-}
 .ota-notes {
   width: 450px;
 }
@@ -59,13 +48,35 @@
 .iglPopOver {
   /* max-width: 350px; */
   position: absolute;
-  background-color: #fff;
+  background-color: var(--wa-color-surface-default);
   padding: 10px;
-  border: 1px solid #656ee7;
+  border: 1px solid var(--wa-color-surface-border);
   border-radius: 6px;
   left: var(--el-left, 50%);
   transform: translateX(-50%) translateY(10px);
   box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
+  /* font-size: var(--wa-font-size-m);
+  line-height: var(--wa-line-height-normal);
+  text-align: start;
+  white-space: normal;
+  background-color: var(--wa-color-surface-default);
+  border-top: none;
+  border-left: none;
+  border-bottom: solid var(--wa-panel-border-width) var(--wa-color-surface-border);
+  border-right: solid var(--wa-panel-border-width) var(--wa-color-surface-border);
+  box-shadow: none; */
+  /* transform-origin: bottom; */
+  /* display: flex;
+  flex-direction: column; */
+  padding: var(--wa-space-l);
+  background-color: var(--wa-color-surface-default);
+  border: 1px solid var(--wa-color-surface-border);
+  border-radius: var(--wa-panel-border-radius);
+  border-style: var(--wa-panel-border-style);
+  box-shadow: var(--wa-shadow-l);
+  color: var(--wa-color-text-normal);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .iglPopOver.infoBubble {
@@ -85,20 +96,50 @@
 
 .bubblePointer {
   position: absolute;
-  width: 0;
-  height: 0;
+  width: 22px;
+  height: 12px;
   left: 50%;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  transform: translate(-50%, 0px);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.bubblePointer::before,
+.bubblePointer::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
 }
 
 .bubblePointTop {
-  border-top: 10px solid #656ee7;
+  bottom: -12px;
+}
+
+.bubblePointTop::before {
+  border-top: 11px solid var(--wa-color-surface-border);
+  top: 0;
+}
+
+.bubblePointTop::after {
+  border-top: 10px solid var(--wa-color-surface-default);
+  top: 1px;
 }
 
 .bubblePointBottom {
-  border-bottom: 10px solid #656ee7;
+  top: -12px;
+}
+
+.bubblePointBottom::before {
+  border-bottom: 11px solid var(--wa-color-surface-border);
+  bottom: 0;
+}
+
+.bubblePointBottom::after {
+  border-bottom: 10px solid var(--wa-color-surface-default);
+  bottom: 1px;
 }
 
 .bubbleInfoAbove {

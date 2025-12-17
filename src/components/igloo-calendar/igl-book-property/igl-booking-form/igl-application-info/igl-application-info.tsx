@@ -3,7 +3,6 @@ import { TPropertyButtonsTypes } from '@/components';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection, modifyBookingStore, RatePlanGuest } from '@/stores/booking.store';
 import locales from '@/stores/locales.store';
-import { v4 } from 'uuid';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
 import VariationService from '@/services/variation.service';
@@ -138,138 +137,163 @@ export class IglApplicationInfo {
       infants: this.guestInfo.infant_nbr,
       variations: this.rateplanSelection.ratePlan.variations,
     });
+
     return (
-      <Host class={'my-2'} data-testid={`room_info_${this.rateplanSelection.ratePlan.id}`}>
-        <div class="booking-header">
+      <Host class="fd-application-info" data-testid={`room_info_${this.rateplanSelection.ratePlan.id}`}>
+        <div class="fd-application-info__header">
           {(this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-            <span class="booking-roomtype-title">{this.rateplanSelection.roomtype.name}</span>
+            <span class="fd-application-info__roomtype-title">{this.rateplanSelection.roomtype.name}</span>
           )}
-          <div class="booking-details-container">
-            <div class="booking-rateplan">
-              <p class="booking-rateplan-name">
-                {this.rateplanSelection.ratePlan.short_name} {this.rateplanSelection.ratePlan.is_non_refundable && <span class={'non-ref-span'}>Non Refundable</span>}
+
+          <div class="fd-application-info__details">
+            <div class="fd-application-info__rateplan">
+              <p class="fd-application-info__rateplan-name">
+                {this.rateplanSelection.ratePlan.short_name}
+                {this.rateplanSelection.ratePlan.is_non_refundable && <span class="fd-application-info__non-refundable">Non Refundable</span>}
               </p>
-              <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
+              <wa-tooltip for={`room_info_tooltip_${this.rateplanSelection.ratePlan.id}`}>
+                <span innerHTML={this.getTooltipMessages()}></span>
+              </wa-tooltip>
+              <wa-icon name="circle-info" id={`room_info_tooltip_${this.rateplanSelection.ratePlan.id}`}></wa-icon>
+              {/* <ir-tooltip class="fd-application-info__tooltip" message={this.getTooltipMessages()}></ir-tooltip> */}
             </div>
-            <p class="booking-variation" innerHTML={formattedVariation}></p>
+
+            <p class="fd-application-info__variation" innerHTML={formattedVariation}></p>
           </div>
-          <p class="booking-price">
-            {formatAmount(this.currency?.symbol, this.getAmount())}/{locales.entries.Lcz_Stay}
+
+          <p class="fd-application-info__price p-0 m-0">
+            <span class="ir-price">{formatAmount(this.currency?.symbol, this.getAmount())}</span>/{locales.entries.Lcz_Stay}
           </p>
         </div>
-        <div class="booking-footer">
-          <div class="booking-rateplan">
-            <p class="booking-rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
-            <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
+
+        <div class="fd-application-info__footer">
+          <div class="fd-application-info__rateplan">
+            <p class="fd-application-info__rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
+            <wa-tooltip for={`room_info_tooltip_mobile_${this.rateplanSelection.ratePlan.id}`}>
+              <span innerHTML={this.getTooltipMessages()}></span>
+            </wa-tooltip>
+            <wa-icon name="circle-info" id={`room_info_tooltip_mobile_${this.rateplanSelection.ratePlan.id}`}></wa-icon>
           </div>
-          <p class="booking-variation" innerHTML={formattedVariation}></p>
+
+          <p class="fd-application-info__variation" innerHTML={formattedVariation}></p>
         </div>
-        <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
-          <div class="mr-md-1 mb-1 mb-md-0 flex-fill guest-info-container">
-            <input
-              id={v4()}
-              type="text"
-              data-testid="guest_first_name"
-              class={`form-control ${this.isButtonPressed && this.guestInfo?.first_name === '' && 'border-danger'}`}
-              placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
-              name="guestFirstName"
-              onInput={event => {
-                const name = (event.target as HTMLInputElement).value;
-                this.updateGuest({ first_name: name });
-                if (booking_store.event_type.type === 'EDIT_BOOKING') {
-                  modifyBookingStore('guest', {
-                    ...booking_store.guest,
-                    name,
-                  });
-                }
-              }}
-              required
-              value={this.guestInfo?.first_name}
-            />
-          </div>
-          <div class="mr-md-1 flex-fill guest-info-container">
-            <input
-              id={v4()}
-              type="text"
-              class={`form-control ${this.isButtonPressed && this.guestInfo?.last_name === '' && 'border-danger'}`}
-              placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
-              name="guestLastName"
-              data-testid="guest_last_name"
-              onInput={event => {
-                const name = (event.target as HTMLInputElement).value;
-                this.updateGuest({ last_name: name });
-                if (booking_store.event_type.type === 'EDIT_BOOKING') {
-                  modifyBookingStore('guest', {
-                    ...booking_store.guest,
-                    name,
-                  });
-                }
-              }}
-              required
-              value={this.guestInfo?.last_name}
-            />
-          </div>
+
+        <div class="fd-application-info__form">
+          <ir-input
+            class="fd-application-info__input"
+            aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.first_name === ''))}
+            value={this.guestInfo?.first_name}
+            defaultValue={this.guestInfo?.first_name}
+            data-testid="guest_first_name"
+            placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
+            onText-change={event => {
+              const name = event.detail;
+              this.updateGuest({ first_name: name });
+              if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                modifyBookingStore('guest', {
+                  ...booking_store.guest,
+                  name,
+                });
+              }
+            }}
+          ></ir-input>
+
+          <ir-input
+            class="fd-application-info__input"
+            type="text"
+            aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.last_name === ''))}
+            value={this.guestInfo?.last_name}
+            defaultValue={this.guestInfo?.last_name}
+            data-testid="guest_last_name"
+            placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
+            onText-change={event => {
+              const name = event.detail;
+              this.updateGuest({ last_name: name });
+              if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                modifyBookingStore('guest', {
+                  ...booking_store.guest,
+                  name,
+                });
+              }
+            }}
+          ></ir-input>
+
           {calendar_data.is_frontdesk_enabled &&
             !isSingleUnit(this.rateplanSelection.roomtype.id) &&
             (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-              <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">
-                <div class="mr-md-1 p-0 flex-fill preference-select-container">
-                  <select data-testid="unit" class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
-                    <option value="" selected={this.guestInfo?.unit === ''}>
-                      {locales.entries.Lcz_Assignunits}
-                    </option>
-                    {filteredRoomList?.map(room => (
-                      <option value={room.id} selected={this.guestInfo?.unit === room.id.toString()}>
-                        {room.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-          {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
-            <div class="mt-1 mt-md-0 mr-md-1 flex-fill">
-              <select
-                data-testid="bed_configuration"
-                class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
-                id={v4()}
-                onChange={event => this.updateGuest({ bed_preference: (event.target as HTMLInputElement).value })}
+              <wa-select
+                with-clear
+                size="small"
+                class="fd-application-info__select"
+                placeholder={locales.entries.Lcz_Assignunits}
+                data-testid="unit"
+                value={this.guestInfo?.unit}
+                defaultValue={this.guestInfo?.unit}
+                onchange={event =>
+                  this.updateGuest({
+                    unit: (event.target as HTMLInputElement).value,
+                  })
+                }
               >
-                <option value="" selected={this.guestInfo?.bed_preference === ''}>
-                  {locales.entries.Lcz_BedConfiguration}
-                </option>
-                {this.bedPreferenceType.map(data => (
-                  <option value={data.CODE_NAME} selected={this.guestInfo?.bed_preference === data.CODE_NAME}>
-                    {data.CODE_VALUE_EN}
-                  </option>
+                {filteredRoomList.map(room => (
+                  <wa-option value={room.id.toString()} selected={this.guestInfo?.unit === room.id.toString()}>
+                    {room.name}
+                  </wa-option>
                 ))}
-              </select>
-            </div>
+              </wa-select>
+            )}
+
+          {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
+            <wa-select
+              with-clear
+              size="small"
+              class="fd-application-info__select"
+              placeholder={locales.entries.Lcz_BedConfiguration}
+              data-testid="bed_configuration"
+              value={this.guestInfo?.bed_preference}
+              defaultValue={this.guestInfo?.bed_preference}
+              aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.bed_preference === ''))}
+              onchange={event =>
+                this.updateGuest({
+                  bed_preference: (event.target as HTMLInputElement).value,
+                })
+              }
+            >
+              {this.bedPreferenceType.map(data => (
+                <wa-option value={data.CODE_NAME} selected={this.guestInfo?.bed_preference === data.CODE_NAME}>
+                  {data.CODE_VALUE_EN}
+                </wa-option>
+              ))}
+            </wa-select>
           )}
-          <p class="rate_amount">
-            {formatAmount(this.currency?.symbol, this.getAmount())}/{locales.entries.Lcz_Stay}
+
+          <p class="fd-application-info__price-inline">
+            <span class="ir-price">{formatAmount(this.currency?.symbol, this.getAmount())}</span>/{locales.entries.Lcz_Stay}
           </p>
         </div>
+
         {this.rateplanSelection.selected_variation.child_nbr > 0 && (
-          <div style={{ gap: '0.5rem', marginTop: '0.5rem' }} class="d-flex  flex-row  p-0 align-items-center aplicationInfoContainer">
-            <p class={'m-0 p-0 text-danger'}>Any of the children below 3 years?</p>
-            <div class="mr-1 flex-fill">
-              <select
-                class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
-                id={v4()}
-                style={{ width: 'max-content' }}
-                onChange={event => this.updateGuest({ infant_nbr: Number((event.target as HTMLInputElement).value) })}
-              >
-                <option value="" selected={Number(this.guestInfo?.infant_nbr) === 0}>
-                  {locales.entries['No'] || 'No'}
-                </option>
-                {Array.from({ length: this.rateplanSelection.selected_variation.child_nbr }, (_, i) => i + 1).map(item => (
-                  <option value={item} selected={this.guestInfo?.infant_nbr === item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div class="fd-application-info__infant">
+            <p class="fd-application-info__infant-label">Any of the children below 3 years?</p>
+            <wa-select
+              size="small"
+              class="fd-application-info__select fd-application-info__select--inline"
+              placeholder={locales.entries['No'] || 'No'}
+              value={this.guestInfo?.infant_nbr?.toString()}
+              defaultValue={this.guestInfo?.infant_nbr?.toString()}
+              onchange={event =>
+                this.updateGuest({
+                  infant_nbr: Number((event.target as HTMLInputElement).value),
+                })
+              }
+              withClear
+            >
+              {Array.from({ length: this.rateplanSelection.selected_variation.child_nbr }, (_, i) => i + 1).map(item => (
+                <wa-option value={item.toString()} selected={this.guestInfo?.infant_nbr === item}>
+                  {item}
+                </wa-option>
+              ))}
+            </wa-select>
           </div>
         )}
       </Host>

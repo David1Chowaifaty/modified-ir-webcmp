@@ -20,67 +20,10 @@
   padding: 0;
   box-shadow: none;
 }
-
 .custom-date-picker__trigger {
-  display: inline-flex;
-  width: 100%;
   cursor: pointer;
-
-  background-color: var(--wa-form-control-background-color);
-  border-radius: var(--wa-form-control-border-radius);
-  border-style: var(--wa-form-control-border-style);
-  border-width: var(--wa-form-control-border-width);
-  border-color: var(--wa-form-control-border-color);
-
-  box-sizing: border-box;
-  height: var(--wa-form-control-height);
-  color: var(--wa-form-control-value-color);
-  font-size: var(--wa-form-control-value-font-size);
-  font-family: inherit;
-  font-weight: var(--wa-form-control-value-font-weight);
-  line-height: var(--wa-form-control-value-line-height);
-  vertical-align: middle;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 1 1 auto;
-
-  box-shadow: var(--box-shadow);
-  padding: 0 var(--wa-form-control-padding-inline);
-
-  transition-timing-function: var(--wa-transition-easing);
 }
-
-.custom-date-picker__trigger:focus-within,
-.custom-date-picker__trigger[data-active='true'] {
-  outline: var(--wa-focus-ring);
-  outline-offset: var(--wa-focus-ring-offset);
-}
-
-.custom-date-picker__trigger--disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.65;
-}
-
 /* Unified invalid state (no conflicts) */
-.custom-date-picker__trigger--invalid {
-  border-color: var(--wa-color-danger-border-loud);
-  border-width: 2px;
-}
-
-.custom-date-picker__trigger--invalid:focus-within,
-.custom-date-picker__trigger--invalid[data-active='true'] {
-  outline-color: var(--wa-color-danger-border-loud);
-}
-.ir-custom-date-picker__form-control-label {
-  display: inline-flex !important;
-  color: var(--wa-form-control-label-color) !important;
-  font-weight: var(--wa-form-control-label-font-weight) !important;
-  line-height: var(--wa-form-control-label-line-height) !important;
-  margin-block-end: 0.5em !important;
-}
 
 .picker-surface {
   background: var(--wa-color-neutral-0, #fff);

@@ -10,7 +10,6 @@
 | Property                 | Attribute                   | Description | Type                                                                       | Default     |
 | ------------------------ | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
 | `adultChildConstraints`  | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
-| `adultChildCount`        | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
 | `bookedByInfoData`       | `booked-by-info-data`       |             | `any`                                                                      | `undefined` |
 | `bookingData`            | `booking-data`              |             | `any`                                                                      | `undefined` |
 | `currency`               | `currency`                  |             | `any`                                                                      | `undefined` |
@@ -23,7 +22,6 @@
 | `ratePricingMode`        | `rate-pricing-mode`         |             | `any`                                                                      | `undefined` |
 | `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>`                                            | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                                                                  | `undefined` |
-| `sourceOptions`          | --                          |             | `TSourceOptions[]`                                                         | `undefined` |
 | `wasBlockedUnit`         | `was-blocked-unit`          |             | `boolean`                                                                  | `undefined` |
 
 
@@ -50,15 +48,15 @@
 graph TD;
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-book-property-header --> ir-autocomplete
-  igl-book-property-header --> ir-select
-  igl-book-property-header --> ir-button
+  igl-book-property-header --> ir-picker
+  igl-book-property-header --> ir-picker-item
+  igl-book-property-header --> ir-custom-button
   igl-book-property-header --> igl-date-range
-  ir-button --> ir-icons
-  igl-date-range --> ir-date-range
+  igl-date-range --> ir-custom-date-picker
+  ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan
-  igl-rate-plan --> ir-tooltip
-  igl-rate-plan --> ir-price-input
+  igl-rate-plan --> ir-input
+  igl-rate-plan --> ir-custom-button
   igl-book-property --> igl-booking-overview-page
   style igl-booking-overview-page fill:#f9f,stroke:#333,stroke-width:4px
 ```

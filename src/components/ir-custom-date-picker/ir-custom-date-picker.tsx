@@ -6,11 +6,19 @@ import { ClickOutside } from '../../decorators/ClickOutside';
 
 @Component({
   tag: 'ir-custom-date-picker',
-  styleUrls: ['ir-custom-date-picker.css', '../../global/app.css'],
+  styleUrls: ['ir-custom-date-picker.css'],
   shadow: false,
 })
 export class IrCustomDatePicker {
   @Element() el: HTMLElement;
+
+  @Prop() withClear: boolean;
+
+  @Prop() placeholder: string;
+
+  @Prop() label: string;
+
+  @Prop() dates: string[];
 
   /**
    * Determines whether the date picker is rendered inline or in a pop-up.
@@ -171,7 +179,7 @@ export class IrCustomDatePicker {
       return;
     }
     if (!this.isSameDates(newVal, oldVal)) {
-      this.datePicker.update({ minDate: this.toValidDate(newVal) });
+      this.datePicker?.update({ minDate: this.toValidDate(newVal) ?? undefined });
     }
   }
 
@@ -181,7 +189,7 @@ export class IrCustomDatePicker {
       return;
     }
     if (!this.isSameDates(newVal, oldVal)) {
-      this.datePicker.update({ maxDate: this.toValidDate(newVal) });
+      this.datePicker?.update({ maxDate: this.toValidDate(newVal) ?? undefined });
     }
   }
 
@@ -261,8 +269,10 @@ export class IrCustomDatePicker {
 
   private toValidDate(value: string | Date | null): Date | null {
     if (!value) return null;
-    const parsedDate = value instanceof Date ? value : new Date(value);
-    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+    if (typeof value === 'string') {
+      return moment(value, 'YYYY-MM-DD').toDate();
+    }
+    return moment(value).toDate();
   }
 
   private updatePickerDate(newDate: string | Date | null) {
@@ -295,17 +305,17 @@ export class IrCustomDatePicker {
     }
 
     const containerTarget = this.container ?? this.calendarContainerRef ?? this.el;
-
+    console.log(this.minDate, this.maxDate);
     this.datePicker = new AirDatepicker(this.pickerRef, {
       container: containerTarget,
       inline: true,
-      selectedDates: this.currentDate ? [this.currentDate] : [],
+      selectedDates: this.dates ? this.dates : this.currentDate ? [this.currentDate] : [],
       multipleDates: this.multipleDates,
       range: this.range,
       dateFormat: this.dateFormat,
       timepicker: this.timepicker,
-      minDate: this.minDate,
-      maxDate: this.maxDate,
+      minDate: this.toValidDate(this.minDate) ?? undefined,
+      maxDate: this.toValidDate(this.maxDate) ?? undefined,
       autoClose: this.autoClose,
       locale: localeEn,
       showOtherMonths: this.showOtherMonths,
@@ -353,41 +363,41 @@ export class IrCustomDatePicker {
   }
 
   private getTriggerLabel(): string {
-    if (!this.currentDate) {
-      return 'Select date';
+    if (this.range) {
+      return this.dates.map(d => moment(d).format('MMM DD, YYYY')).join(' → ');
     }
-
+    if (!this.currentDate) {
+      return null;
+    }
     return this.timepicker ? moment(this.currentDate).format('MMM DD, YYYY, HH:mm') : moment(this.currentDate).format('MMM DD, YYYY');
   }
 
   render() {
-    const triggerClasses = `custom-date-picker__trigger ${this.triggerContainerStyle} ${this.disabled ? 'custom-date-picker__trigger--disabled' : ''} ${
-      this.isPickerInvalid ? 'custom-date-picker__trigger--invalid' : ''
-    }`;
+    const triggerClasses = `custom-date-picker__trigger ${this.triggerContainerStyle} ${this.disabled ? 'custom-date-picker__trigger--disabled' : ''}`;
 
     return (
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
-        <label htmlFor="ir-custom-date-picker__anchor" class="ir-custom-date-picker__form-control-label">
-          Date
-        </label>
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
-          <div
-            id="ir-custom-date-picker__anchor"
-            slot="anchor"
-            class={triggerClasses}
-            onClick={this.handleAnchorClick}
-            onKeyDown={this.handleAnchorKeyDown}
+          <ir-input
+            disabled={this.disabled}
+            placeholder={this.placeholder}
+            withClear={this.withClear}
+            tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
             aria-expanded={!this.customPicker ? String(this.isActive) : undefined}
             aria-disabled={this.disabled ? 'true' : undefined}
-            role={!this.customPicker ? 'button' : undefined}
-            tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
+            onKeyDown={this.handleAnchorKeyDown}
+            aria-invalid={String(this.isPickerInvalid)}
+            class={triggerClasses}
+            onClick={this.handleAnchorClick}
+            readonly
+            slot="anchor"
+            defaultValue={this.getTriggerLabel()}
+            value={this.getTriggerLabel()}
+            label={this.label}
           >
-            <slot name="trigger">
-              <div data-active={String(this.isActive)} class="ir-custom-date-picker__trigger">
-                {this.getTriggerLabel()}
-              </div>
-            </slot>
-          </div>
+            <slot name="start" slot="start"></slot>
+            <slot name="end" slot="end"></slot>
+          </ir-input>
 
           <div class="picker-surface">
             <div class="picker-surface__calendar" ref={el => (this.calendarContainerRef = el)}></div>

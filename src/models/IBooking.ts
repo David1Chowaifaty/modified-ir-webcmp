@@ -94,6 +94,7 @@ export interface ICountry {
   name: string;
   phone_prefix: string;
   flag: string;
+  code?: string;
 }
 export const ZIEntrySchema = z.object({
   CODE_NAME: z.string(),

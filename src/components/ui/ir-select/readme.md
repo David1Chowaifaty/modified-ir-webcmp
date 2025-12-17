@@ -58,25 +58,18 @@
 
 ### Used by
 
- - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
- - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
- - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
- - [ir-booking-listing](../../ir-booking-listing)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
  - [ir-financial-filters](../../ir-financial-actions/ir-financial-filters)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-housekeeping](../../ir-housekeeping)
- - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-monthly-bookings-report-filter](../../ir-monthly-bookings-report/ir-monthly-bookings-report-filter)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pagination](../../ir-pagination)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-sales-by-channel-filters](../../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
@@ -87,25 +80,18 @@
 ### Graph
 ```mermaid
 graph TD;
-  igl-book-property-header --> ir-select
   igl-bulk-block --> ir-select
   igl-bulk-stop-sale --> ir-select
-  igl-property-booked-by --> ir-select
-  igl-reallocation-dialog --> ir-select
   igl-split-booking --> ir-select
-  ir-booking-listing --> ir-select
   ir-delete-modal --> ir-select
   ir-financial-filters --> ir-select
   ir-hk-archive --> ir-select
   ir-hk-unassigned-units --> ir-select
   ir-housekeeping --> ir-select
-  ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-monthly-bookings-report-filter --> ir-select
   ir-option-details --> ir-select
   ir-pagination --> ir-select
-  ir-pickup --> ir-select
-  ir-room-guests --> ir-select
   ir-sales-by-channel-filters --> ir-select
   ir-sales-filters --> ir-select
   ir-tasks-filters --> ir-select

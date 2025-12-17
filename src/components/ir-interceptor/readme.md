@@ -26,10 +26,12 @@
 
  - [igl-book-property-container](../igl-book-property-container)
  - [igloo-calendar](../igloo-calendar)
+ - [ir-arrivals](../ir-arrivals)
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-email-logs](../ir-booking-email-logs)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-daily-revenue](../ir-daily-revenue)
+ - [ir-departures](../ir-departures)
  - [ir-financial-actions](../ir-financial-actions)
  - [ir-guest-info](../ir-guest-info)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
@@ -44,11 +46,13 @@
 
 ### Depends on
 
+- [ir-spinner](../ui/ir-spinner)
 - [ir-otp-modal](../ir-otp-modal)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp
@@ -56,10 +60,12 @@ graph TD;
   ir-button --> ir-icons
   igl-book-property-container --> ir-interceptor
   igloo-calendar --> ir-interceptor
+  ir-arrivals --> ir-interceptor
   ir-booking-details --> ir-interceptor
   ir-booking-email-logs --> ir-interceptor
   ir-booking-listing --> ir-interceptor
   ir-daily-revenue --> ir-interceptor
+  ir-departures --> ir-interceptor
   ir-financial-actions --> ir-interceptor
   ir-guest-info --> ir-interceptor
   ir-hk-tasks --> ir-interceptor

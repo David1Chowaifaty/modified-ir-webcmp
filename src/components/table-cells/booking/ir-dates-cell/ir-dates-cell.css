@@ -1,0 +1,19 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  display: block;
+  font-size: 0.93rem;
+}
+:host[display='inline'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.date-cell__container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.date-cell__label {
+  font-weight: 700;
+}

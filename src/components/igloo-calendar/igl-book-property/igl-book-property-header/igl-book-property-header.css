@@ -1,5 +1,8 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  gap: 1rem;
 }
 
 .sourceContainer {
@@ -7,4 +10,37 @@
 }
 .message-label {
   font-size: 80%;
+}
+.fd-book-property__constraints-container,
+.fd-book-property__header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/*md*/
+@media (min-width: 768px) {
+  .fd-book-property__constraints-container,
+  .fd-book-property__header-container {
+    flex-direction: row;
+    align-items: center;
+  }
+  .fd-book-property__adults-select {
+    width: 100px;
+  }
+  .fd-book-property__children-select {
+    width: 170px;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
 }

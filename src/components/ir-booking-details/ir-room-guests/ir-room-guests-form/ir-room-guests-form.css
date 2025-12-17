@@ -1,0 +1,146 @@
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+  text-align: start !important;
+  padding-bottom: 1rem !important;
+}
+.id-select {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right-width: 0;
+}
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* .guest-grid > * {
+  height: 100%;
+} */
+
+.guests-labels {
+  display: none;
+}
+
+.sharing_persons_label {
+  display: none;
+}
+.loading-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.guest_document input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.guests-labels *,
+.sharing_persons_label {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
+.room-guest__info-container {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+}
+.room-guest__document::part(base):dir(ltr),
+.room-guest__id-info::part(combobox):dir(rtl) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.room-guest__document {
+  flex: 1 1 0%;
+}
+
+.room-guest__id-info::part(combobox):dir(ltr),
+.room-guest__document::part(base):dir(rtl) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.room-guest__id-info::part(combobox):dir(ltr) {
+  border-right-width: 0;
+}
+
+.room-guest__id-info::part(combobox):dir(rtl) {
+  border-left-width: 0;
+}
+
+.room-guest__id-info[open],
+.room-guest__id-info:focus-visible,
+.room-guest__id-info:focus-within {
+  z-index: 2;
+}
+
+.room-guest__section {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  margin-bottom: 1rem;
+  /* width: 100%; */
+}
+.room-guest__section p {
+  margin: 0;
+  padding: 0;
+}
+.guest_label {
+  width: 100px;
+  display: inline-block;
+  position: relative;
+
+  color: var(--wa-form-control-label-color);
+  font-weight: var(--wa-form-control-label-font-weight);
+  line-height: var(--wa-form-control-label-line-height);
+  margin-bottom: 0.5em !important;
+}
+/*sm*/
+@media (min-width: 640px) {
+}
+
+/*md*/
+@media (min-width: 768px) {
+  .sharing_persons_label {
+    display: block;
+  }
+  .guest_country_picker {
+    margin-bottom: 3px;
+  }
+  .room-guest__section {
+    display: block;
+  }
+  .guest-grid {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 120px) /* First name */
+      minmax(0, 120px) /* Last name */
+      minmax(0, 120px) /* DOB */
+      minmax(0, 120px) /* Nationality */
+      minmax(0, 1fr);
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .guest_label,
+  .sharing_persons_heading,
+  .main_guest_heading {
+    display: none;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
+}

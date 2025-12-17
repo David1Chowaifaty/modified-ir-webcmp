@@ -25,7 +25,7 @@
 | `addToBeAssignedEvent`              |             | `CustomEvent<any>`                                                                                                   |
 | `assignRoomEvent`                   |             | `CustomEvent<{ [key: string]: any; }>`                                                                               |
 | `highlightToBeAssignedBookingEvent` |             | `CustomEvent<any>`                                                                                                   |
-| `openCalendarSidebar`               |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days" \| "bulk-blocks" \| "split"; payload: any; }>` |
+| `openCalendarSidebar`               |             | `CustomEvent<{ type: "split" \| "room-guests" \| "booking-details" \| "add-days" \| "bulk-blocks"; payload: any; }>` |
 | `scrollPageToRoom`                  |             | `CustomEvent<any>`                                                                                                   |
 
 

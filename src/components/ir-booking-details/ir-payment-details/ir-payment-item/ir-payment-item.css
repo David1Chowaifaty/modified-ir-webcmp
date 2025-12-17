@@ -103,10 +103,10 @@
   white-space: nowrap;
 }
 .payment-item__payment-amount.is-credit {
-  color: #629a4c;
+  color: var(--wa-color-success-50);
 }
 .payment-item__payment-amount.is-debit {
-  color: #ff4961;
+  color: var(--wa-color-danger-50);
 }
 .payment-item__payment-reference {
   font-size: 12px;
@@ -120,7 +120,7 @@
   }
 
   .payment-item__payment-item:hover {
-    background: #f4f5fa;
+    background: var(--wa-color-neutral-fill-quiet, #f1f2f3);
   }
   .payment-item__payment-item .payment-item__payment-actions {
     display: inline-flex;

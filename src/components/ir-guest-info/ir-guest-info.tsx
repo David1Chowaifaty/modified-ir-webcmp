@@ -1,6 +1,6 @@
 import { Component, State, h, Prop, EventEmitter, Event, Watch, Fragment } from '@stencil/core';
 import { Guest } from '@/models/booking.dto';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { ICountry } from '@/components';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';

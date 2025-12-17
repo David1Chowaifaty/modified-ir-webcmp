@@ -34,21 +34,6 @@
 | `toast`         |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
-## Dependencies
-
-### Used by
-
- - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
- - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
-
-### Graph
-```mermaid
-graph TD;
-  igl-book-property-header --> ir-autocomplete
-  igl-property-booked-by --> ir-autocomplete
-  style ir-autocomplete fill:#f9f,stroke:#333,stroke-width:4px
-```
-
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

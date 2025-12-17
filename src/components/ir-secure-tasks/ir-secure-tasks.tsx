@@ -1,20 +1,32 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-export type SecureScreens = 'hk' | 'tasks' | 'daily-revenue' | 'front' | 'users' | 'email-logs' | 'country-sales' | 'daily-occupancy' | 'booking-listing' | 'channel-sales';
+export type SecureScreens =
+  | 'hk'
+  | 'tasks'
+  | 'daily-revenue'
+  | 'arrivals'
+  | 'departures'
+  | 'front'
+  | 'users'
+  | 'email-logs'
+  | 'country-sales'
+  | 'daily-occupancy'
+  | 'booking-listing'
+  | 'channel-sales';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
   shadow: false,
 })
 export class IrSecureTasks {
-  @Prop() propertyid: number;
+  @Prop({ mutable: true }) propertyid: number;
   @Prop() p: string;
   @Prop() bookingNumber: string;
   @Prop() ticket: string;
 
   @State() isAuthenticated: boolean = false;
-  @State() currentPage: SecureScreens;
+  @State() currentPage: SecureScreens = 'front';
   @State() inputValue: string;
 
   private token = new Token();
@@ -70,6 +82,8 @@ export class IrSecureTasks {
     { name: 'Email logs', value: 'email-logs' },
     { name: 'Booking Listing', value: 'booking-listing' },
     { name: 'Sales by Channel', value: 'channel-sales' },
+    { name: 'Arrivals', value: 'arrivals' },
+    { name: 'Departures', value: 'departures' },
   ];
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
@@ -85,67 +99,61 @@ export class IrSecureTasks {
         </Host>
       );
     return (
-      <Host>
-        <div class="px-1 nav flex-column flex-sm-row d-flex align-items-center justify-content-between">
-          <div class="d-flex  align-items-center">
-            <div class="d-flex align-items-center p-0 m-0" style={{ gap: '0.5rem' }}>
-              <h4 class="m-0 p-0">AName: </h4>
-              <form
-                class="input-group"
-                onSubmit={e => {
-                  e.preventDefault();
-                  if (this.inputValue) {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('aname', this.inputValue);
-                    window.history.pushState({}, '', url);
-                  }
-                  this.logout();
-                }}
-              >
-                <input
-                  type="text"
-                  value={this.inputValue}
-                  onInput={e => (this.inputValue = (e.target as HTMLInputElement).value)}
-                  style={{ maxWidth: '60px' }}
-                  class="form-control"
-                  placeholder="AName"
-                  aria-label="AName"
-                  aria-describedby="button-save"
-                ></input>
-                <div class="input-group-append">
-                  <button class="btn btn-sm btn-outline-secondary" type="submit" id="button-save">
-                    save
-                  </button>
-                </div>
-              </form>
-            </div>
-            <ul class="nav  m-0 p-0">
+      <div class={'ir-page__container p-0'}>
+        <section class="secure-header">
+          <div class="secure-header__top">
+            <form
+              class="secure-header__aname"
+              onSubmit={e => {
+                e.preventDefault();
+                if (this.inputValue) {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set('aname', this.inputValue);
+                  window.history.pushState({}, '', url);
+                }
+                this.logout();
+              }}
+            >
+              <label class="secure-header__label" htmlFor="aname-input">
+                AName
+              </label>
+              <div class="secure-header__aname-input">
+                <ir-input id="aname-input" type="text" value={this.inputValue} onText-change={e => (this.inputValue = e.detail)} placeholder="AName" aria-label="AName"></ir-input>
+                <ir-custom-button variant="brand" type="submit" id="button-save">
+                  Save
+                </ir-custom-button>
+              </div>
+            </form>
+            <ir-custom-button
+              variant="danger"
+              onClick={() => {
+                this.logout();
+              }}
+            >
+              Logout
+            </ir-custom-button>
+          </div>
+          <nav class="secure-header__tabs" aria-label="Secure screens navigation">
+            <ul class="secure-tabs">
               {this.routes.map(route => (
-                <li key={route.name} class=" nav-item">
-                  <a
-                    class={{ 'nav-link': true, 'active': this.currentPage === route.value }}
-                    href="#"
+                <li key={route.name} class="secure-tabs__item">
+                  <button
+                    type="button"
+                    class={{ 'secure-tabs__btn': true, 'active': this.currentPage === route.value }}
+                    aria-current={this.currentPage === route.value ? 'page' : undefined}
                     onClick={() => {
                       this.currentPage = route.value;
                     }}
                   >
                     {route.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
-          </div>
-          <button
-            class="btn btn-sm btn-primary"
-            onClick={() => {
-              this.logout();
-            }}
-          >
-            Logout
-          </button>
-        </div>
+          </nav>
+        </section>
         {this.renderPage()}
-      </Host>
+      </div>
     );
   }
   private logout() {
@@ -159,15 +167,17 @@ export class IrSecureTasks {
 
       case 'front':
         return (
-          <igloo-calendar
-            currencyName="USD"
-            propertyid={this.propertyid}
-            p={this.p}
-            ticket={this.token.getToken()}
-            from_date={this.dates.from_date}
-            to_date={this.dates.to_date}
-            language="en"
-          ></igloo-calendar>
+          <div style={{ flex: '1 1 0%', display: 'block', background: 'red' }}>
+            <igloo-calendar
+              currencyName="USD"
+              propertyid={this.propertyid}
+              p={this.p}
+              ticket={this.token.getToken()}
+              from_date={this.dates.from_date}
+              to_date={this.dates.to_date}
+              language="en"
+            ></igloo-calendar>
+          </div>
         );
       case 'hk':
         return <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>;
@@ -185,7 +195,10 @@ export class IrSecureTasks {
         return <ir-booking-listing p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-booking-listing>;
       case 'channel-sales':
         return <ir-sales-by-channel language="en" propertyid={this.propertyid.toString()} ticket={this.token.getToken()}></ir-sales-by-channel>;
-
+      case 'arrivals':
+        return <ir-arrivals p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-arrivals>;
+      case 'departures':
+        return <ir-departures p={this.p} language="en" propertyid={this.propertyid} ticket={this.token.getToken()}></ir-departures>;
       default:
         return null;
     }

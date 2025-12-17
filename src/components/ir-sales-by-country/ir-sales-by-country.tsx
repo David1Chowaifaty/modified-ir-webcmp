@@ -6,7 +6,7 @@ import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
 import { BaseSalesRecord, CountrySalesFilter, MappedCountries, SalesRecord } from './types';
 import moment from 'moment';
 import { v4 } from 'uuid';
-import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking-service/booking.service';
 import { ICountry } from '@/models/IBooking';
 
 @Component({

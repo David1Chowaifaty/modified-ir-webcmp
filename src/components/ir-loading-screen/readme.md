@@ -17,9 +17,11 @@
 ### Used by
 
  - [igloo-calendar](../igloo-calendar)
+ - [ir-arrivals](../ir-arrivals)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
  - [ir-daily-revenue](../ir-daily-revenue)
+ - [ir-departures](../ir-departures)
  - [ir-financial-actions](../ir-financial-actions)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
@@ -33,9 +35,11 @@
 ```mermaid
 graph TD;
   igloo-calendar --> ir-loading-screen
+  ir-arrivals --> ir-loading-screen
   ir-booking-listing --> ir-loading-screen
   ir-channel --> ir-loading-screen
   ir-daily-revenue --> ir-loading-screen
+  ir-departures --> ir-loading-screen
   ir-financial-actions --> ir-loading-screen
   ir-hk-tasks --> ir-loading-screen
   ir-housekeeping --> ir-loading-screen
