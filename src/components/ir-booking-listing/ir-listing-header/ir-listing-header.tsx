@@ -194,8 +194,9 @@ export class IrListingHeader {
               }}
               value={booking_listing.userSelection.channel}
               size="small"
-              defaultValue={booking_listing?.channels[0]?.value}
+              defaultValue={booking_listing.userSelection.channel}
             >
+              <wa-option value="">All channels</wa-option>
               {booking_listing?.channels.map(b => (
                 <wa-option key={b.value} value={b.value}>
                   {b.name}
