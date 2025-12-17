@@ -6,6 +6,8 @@ import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
 import VariationService from '@/services/variation.service';
+import { GuestCredentials } from '../../types';
+import { z } from 'zod';
 
 @Component({
   tag: 'igl-application-info',
@@ -179,44 +181,47 @@ export class IglApplicationInfo {
         </div>
 
         <div class="fd-application-info__form">
-          <ir-input
-            class="fd-application-info__input"
-            aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.first_name === ''))}
-            value={this.guestInfo?.first_name}
-            defaultValue={this.guestInfo?.first_name}
-            data-testid="guest_first_name"
-            placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
-            onText-change={event => {
-              const name = event.detail;
-              this.updateGuest({ first_name: name });
-              if (booking_store.event_type.type === 'EDIT_BOOKING') {
-                modifyBookingStore('guest', {
-                  ...booking_store.guest,
-                  name,
-                });
-              }
-            }}
-          ></ir-input>
-
-          <ir-input
-            class="fd-application-info__input"
-            type="text"
-            aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.last_name === ''))}
-            value={this.guestInfo?.last_name}
-            defaultValue={this.guestInfo?.last_name}
-            data-testid="guest_last_name"
-            placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
-            onText-change={event => {
-              const name = event.detail;
-              this.updateGuest({ last_name: name });
-              if (booking_store.event_type.type === 'EDIT_BOOKING') {
-                modifyBookingStore('guest', {
-                  ...booking_store.guest,
-                  name,
-                });
-              }
-            }}
-          ></ir-input>
+          <ir-validator value={this.guestInfo?.first_name} schema={GuestCredentials.shape.first_name}>
+            <ir-input
+              class="fd-application-info__input"
+              // aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.first_name === ''))}
+              value={this.guestInfo?.first_name}
+              defaultValue={this.guestInfo?.first_name}
+              data-testid="guest_first_name"
+              placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
+              onText-change={event => {
+                const name = event.detail;
+                this.updateGuest({ first_name: name });
+                if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                  modifyBookingStore('guest', {
+                    ...booking_store.guest,
+                    name,
+                  });
+                }
+              }}
+            ></ir-input>
+          </ir-validator>
+          <ir-validator value={this.guestInfo?.last_name} schema={GuestCredentials.shape.last_name}>
+            <ir-input
+              class="fd-application-info__input"
+              type="text"
+              // aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.last_name === ''))}
+              value={this.guestInfo?.last_name}
+              defaultValue={this.guestInfo?.last_name}
+              data-testid="guest_last_name"
+              placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
+              onText-change={event => {
+                const name = event.detail;
+                this.updateGuest({ last_name: name });
+                if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                  modifyBookingStore('guest', {
+                    ...booking_store.guest,
+                    name,
+                  });
+                }
+              }}
+            ></ir-input>
+          </ir-validator>
 
           {calendar_data.is_frontdesk_enabled &&
             !isSingleUnit(this.rateplanSelection.roomtype.id) &&
@@ -244,27 +249,29 @@ export class IglApplicationInfo {
             )}
 
           {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
-            <wa-select
-              with-clear
-              size="small"
-              class="fd-application-info__select"
-              placeholder={locales.entries.Lcz_BedConfiguration}
-              data-testid="bed_configuration"
-              value={this.guestInfo?.bed_preference}
-              defaultValue={this.guestInfo?.bed_preference}
-              aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.bed_preference === ''))}
-              onchange={event =>
-                this.updateGuest({
-                  bed_preference: (event.target as HTMLInputElement).value,
-                })
-              }
-            >
-              {this.bedPreferenceType.map(data => (
-                <wa-option value={data.CODE_NAME} selected={this.guestInfo?.bed_preference === data.CODE_NAME}>
-                  {data.CODE_VALUE_EN}
-                </wa-option>
-              ))}
-            </wa-select>
+            <ir-validator value={this.guestInfo?.bed_preference} schema={z.string().nonempty()}>
+              <wa-select
+                with-clear
+                size="small"
+                class="fd-application-info__select"
+                placeholder={locales.entries.Lcz_BedConfiguration}
+                data-testid="bed_configuration"
+                value={this.guestInfo?.bed_preference}
+                defaultValue={this.guestInfo?.bed_preference}
+                // aria-invalid={String(Boolean(this.isButtonPressed && this.guestInfo?.bed_preference === ''))}
+                onchange={event =>
+                  this.updateGuest({
+                    bed_preference: (event.target as HTMLInputElement).value,
+                  })
+                }
+              >
+                {this.bedPreferenceType.map(data => (
+                  <wa-option value={data.CODE_NAME} selected={this.guestInfo?.bed_preference === data.CODE_NAME}>
+                    {data.CODE_VALUE_EN}
+                  </wa-option>
+                ))}
+              </wa-select>
+            </ir-validator>
           )}
 
           <p class="fd-application-info__price-inline">

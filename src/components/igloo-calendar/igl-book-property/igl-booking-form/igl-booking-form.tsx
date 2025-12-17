@@ -139,7 +139,13 @@ export class IglBookingForm {
 
   render() {
     return (
-      <div class="d-flex flex-column h-100">
+      <form
+        class="d-flex flex-column h-100"
+        id="new_booking_form"
+        onSubmit={e => {
+          e.preventDefault();
+        }}
+      >
         <div class="d-flex flex-wrap">
           <ir-date-view
             class="mr-1 flex-fill font-weight-bold font-medium-1"
@@ -195,7 +201,7 @@ export class IglBookingForm {
             }}
           ></igl-property-booked-by>
         )}
-      </div>
+      </form>
     );
   }
 }

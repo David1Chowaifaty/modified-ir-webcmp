@@ -12,6 +12,7 @@ import { AllowedPaymentMethod } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ExposedGuests } from '@/services/booking-service/types';
 import IMask from 'imask';
+import { BookingGuestSchema } from '../../types';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -102,7 +103,7 @@ export class IglPropertyBookedBy {
   }
 
   private handleDataChange(key, event) {
-    this.bookedByData[key] = key === 'emailGuest' ? event.target.checked : event.target.value;
+    this.bookedByData = { ...this.bookedByData, [key]: key === 'emailGuest' ? event.target.checked : event.target.value };
     this.dataUpdateEvent.emit({
       key: 'bookedByInfoUpdated',
       data: { ...this.bookedByData },
@@ -207,6 +208,7 @@ export class IglPropertyBookedBy {
     return `${expiryMonth}/${year}`;
   }
   render() {
+    console.log(this.bookedByData);
     return (
       <Host>
         <div class="text-left mt-3">
@@ -247,30 +249,34 @@ export class IglPropertyBookedBy {
         <div class="bookedDetailsForm text-left mt-2 font-small-3 ">
           <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
             <div class="flex-fill fd-property-booked-by__guest-form ">
-              <ir-input
-                aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.firstName === ''))}
-                onText-change={event => {
-                  this.updateGuest({ first_name: event.detail });
-                  this.handleDataChange('firstName', { target: { value: event.detail } });
-                }}
-                defaultValue={this.bookedByData.firstName}
-                value={this.bookedByData.firstName}
-                label={locales.entries.Lcz_FirstName}
-                placeholder={locales.entries.Lcz_FirstName}
-                required
-              ></ir-input>
-              <ir-input
-                aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.lastName === ''))}
-                onText-change={event => {
-                  this.updateGuest({ last_name: event.detail });
-                  this.handleDataChange('lastName', { target: { value: event.detail } });
-                }}
-                defaultValue={this.bookedByData.lastName}
-                value={this.bookedByData.lastName}
-                label={locales.entries.Lcz_LastName}
-                placeholder={locales.entries.Lcz_LastName}
-                required
-              ></ir-input>
+              <ir-validator value={this.bookedByData.firstName} schema={BookingGuestSchema.shape.first_name}>
+                <ir-input
+                  // aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.firstName === ''))}
+                  onText-change={event => {
+                    this.updateGuest({ first_name: event.detail });
+                    this.handleDataChange('firstName', { target: { value: event.detail } });
+                  }}
+                  defaultValue={this.bookedByData.firstName}
+                  value={this.bookedByData.firstName}
+                  label={locales.entries.Lcz_FirstName}
+                  placeholder={locales.entries.Lcz_FirstName}
+                  required
+                ></ir-input>
+              </ir-validator>
+              <ir-validator value={this.bookedByData.lastName} schema={BookingGuestSchema.shape.last_name}>
+                <ir-input
+                  // aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.lastName === ''))}
+                  onText-change={event => {
+                    this.updateGuest({ last_name: event.detail });
+                    this.handleDataChange('lastName', { target: { value: event.detail } });
+                  }}
+                  defaultValue={this.bookedByData.lastName}
+                  value={this.bookedByData.lastName}
+                  label={locales.entries.Lcz_LastName}
+                  placeholder={locales.entries.Lcz_LastName}
+                  required
+                ></ir-input>
+              </ir-validator>
               <ir-country-picker
                 label={locales.entries.Lcz_Country}
                 variant="modern"

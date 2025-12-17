@@ -10,6 +10,7 @@ import booking_store, { setBookingDraft } from '@/stores/booking.store';
 
 import { BookingService } from '@/services/booking-service/booking.service';
 import { Booking } from '@/models/booking.dto';
+import { z } from 'zod';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -40,6 +41,7 @@ export class IglBookPropertyHeader {
   @Event() toast: EventEmitter<IToast>;
   @Event() spiltBookingSelected: EventEmitter<{ key: string; data: unknown }>;
   @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
+  @State() autoValidate: boolean;
 
   private bookingService = new BookingService();
   adultAnimationContainer: any;
@@ -116,7 +118,8 @@ export class IglBookPropertyHeader {
     const { adults, children } = booking_store.bookingDraft.occupancy;
     return (
       <Fragment>
-        <wa-animation iterations={2} name="bounce" easing="ease-in-out" duration={2000} ref={el => (this.adultAnimationContainer = el)}>
+        {/* <wa-animation iterations={2} name="bounce" easing="ease-in-out" duration={2000} ref={el => (this.adultAnimationContainer = el)}> */}
+        <ir-validator value={adults} schema={z.number().min(1)} autovalidate={this.autoValidate}>
           <wa-select
             class="fd-book-property__adults-select"
             onwa-hide={e => {
@@ -140,7 +143,8 @@ export class IglBookPropertyHeader {
               <wa-option value={option?.toString()}>{option}</wa-option>
             ))}
           </wa-select>
-        </wa-animation>
+        </ir-validator>
+        {/* </wa-animation> */}
         {this.adultChildConstraints.child_max_nbr > 0 && (
           <wa-select
             class="fd-book-property__children-select"
@@ -166,9 +170,6 @@ export class IglBookPropertyHeader {
             ))}
           </wa-select>
         )}
-        <ir-custom-button loading={isRequestPending('/Check_Availability')} variant="brand" onClickHandler={() => this.handleButtonClicked()}>
-          {locales.entries.Lcz_Check}
-        </ir-custom-button>
       </Fragment>
     );
   }
@@ -185,6 +186,7 @@ export class IglBookPropertyHeader {
 
   private handleButtonClicked() {
     const { occupancy } = booking_store.bookingDraft;
+
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
       this.toast.emit({
         type: 'error',
@@ -208,25 +210,28 @@ export class IglBookPropertyHeader {
           position: 'top-right',
         });
         return;
-      } else if (occupancy.adults === 0) {
+      } else if (Number(occupancy.adults) === 0) {
         this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
-
-        this.adultAnimationContainer.play = true;
+        // this.adultAnimationContainer.play = true;
+        this.autoValidate = true;
       } else {
         this.buttonClicked.emit({ key: 'check' });
       }
-    } else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
-      this.toast.emit({
-        type: 'error',
-        title: `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace(
-          '%1',
-          moment(new Date(this.bookedByInfoData.from_date || this.defaultDaterange.from_date)).format('ddd, DD MMM YYYY'),
-        ).replace('%2', moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY'))}  `,
-        description: '',
-        position: 'top-right',
-      });
-    } else if (occupancy.adults === 0) {
-      this.adultAnimationContainer.play = true;
+    }
+    // else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
+    //   this.toast.emit({
+    //     type: 'error',
+    //     title: `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace(
+    //       '%1',
+    //       moment(new Date(this.bookedByInfoData.from_date || this.defaultDaterange.from_date)).format('ddd, DD MMM YYYY'),
+    //     ).replace('%2', moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY'))}  `,
+    //     description: '',
+    //     position: 'top-right',
+    //   });
+    // }
+    else if (Number(occupancy.adults) === 0) {
+      // this.adultAnimationContainer.play = true;
+      this.autoValidate = true;
       this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
     } else {
       this.buttonClicked.emit({ key: 'check' });
@@ -247,12 +252,16 @@ export class IglBookPropertyHeader {
   }
   private getMaxDate() {
     if (!this.bookingData?.block_exposed_unit_props) {
+      if (this.isEventType('PLUS_BOOKING')) {
+        return moment().add(60, 'days').format('YYYY-MM-DD');
+      }
       return undefined;
     }
     return this.bookingData?.block_exposed_unit_props.to_date;
   }
 
   render() {
+    console.log(this.bookingData.event_type);
     const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>
@@ -268,6 +277,7 @@ export class IglBookPropertyHeader {
             disabled={(this.isEventType('BAR_BOOKING') && !this.wasBlockedUnit) || this.isEventType('SPLIT_BOOKING')}
             defaultData={this.bookingDataDefaultDateRange}
           ></igl-date-range>
+
           {/* <ir-range-picker
             onDateRangeChanged={e => {
               // e.stopImmediatePropagation();
@@ -289,6 +299,9 @@ export class IglBookPropertyHeader {
             toDate={moment()}
           /> */}
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
+          <ir-custom-button loading={isRequestPending('/Check_Availability')} variant="brand" onClickHandler={() => this.handleButtonClicked()}>
+            {locales.entries.Lcz_Check}
+          </ir-custom-button>
         </div>
         <p class="text-right message-label">{calendar_data.tax_statement}</p>
       </Host>
