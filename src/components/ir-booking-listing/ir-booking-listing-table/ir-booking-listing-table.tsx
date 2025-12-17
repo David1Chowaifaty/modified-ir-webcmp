@@ -6,6 +6,7 @@ import { getPrivateNote } from '@/utils/booking';
 import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
 import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
 import { BookingListingService } from '@/services/booking_listing.service';
+import { isPrivilegedUser } from '@/utils/utils';
 
 @Component({
   tag: 'ir-booking-listing-table',
@@ -72,6 +73,7 @@ export class IrBookingListingTable {
 
     return (
       <tr class="ir-table-row" key={rowKey}>
+        {isPrivilegedUser(booking_listing.userSelection.userTypeCode) && <td>{booking.property.name}</td>}
         <td>
           <ir-booking-number-cell
             origin={booking.origin}
@@ -152,6 +154,7 @@ export class IrBookingListingTable {
           <table class="table data-table">
             <thead>
               <tr>
+                {isPrivilegedUser(booking_listing.userSelection.userTypeCode) && <th class="text-left">Property</th>}
                 <th>
                   <span class={'arrivals-table__departure__cell'}>Booking#</span>
                 </th>
@@ -185,7 +188,7 @@ export class IrBookingListingTable {
             <tbody>
               {booking_listing.bookings.length === 0 && (
                 <tr>
-                  <td colSpan={8} class="empty-row">
+                  <td colSpan={isPrivilegedUser(booking_listing.userSelection.userTypeCode) ? 9 : 8} class="empty-row">
                     No bookings found
                   </td>
                 </tr>
