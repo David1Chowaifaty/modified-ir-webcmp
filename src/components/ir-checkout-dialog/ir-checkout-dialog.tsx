@@ -96,6 +96,7 @@ export class IrCheckoutDialog {
         onIrDialogHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
+          this.buttons.clear();
           this.checkoutDialogClosed.emit({ reason: 'cancel' });
         }}
       >

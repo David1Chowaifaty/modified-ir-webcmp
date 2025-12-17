@@ -1288,12 +1288,12 @@ export class BookingService {
   /*Arrivals*/
   public async getRoomsToCheckIn(props: GetRoomsToCheckInProps): Promise<RoomsToProcessResult> {
     const payload = GetRoomsToCheckInPropsSchema.parse(props);
-    const { data } = await axios.post('/Get_Rooms_To_Check_In', payload);
+    const { data } = await axios.post('https://gateway.igloorooms.com/IRBE/Get_Rooms_To_Check_In', payload);
     return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_In?.total_count };
   }
   public async getRoomsToCheckout(props: GetRoomsToCheckOutProps): Promise<RoomsToProcessResult> {
     const payload = GetRoomsToCheckOutPropsSchema.parse(props);
-    const { data } = await axios.post('/Get_Rooms_To_Check_Out', payload);
+    const { data } = await axios.post('https://gateway.igloorooms.com/IRBE/Get_Rooms_To_Check_Out', payload);
     return { bookings: data.My_Result, total_count: data.My_Params_Get_Rooms_To_Check_Out?.total_count };
   }
   /*Departures */
