@@ -180,7 +180,7 @@ export class IrBilling {
                               <wa-divider></wa-divider>
                               {/* <h3>Actions</h3> */}
                               <wa-dropdown-item value="view-print">
-                                Open pdf
+                                Open PDF
                                 {isRequestPending('/Print_Invoice') && <wa-spinner slot="details"></wa-spinner>}
                               </wa-dropdown-item>
                               {isValid && !invoice.credit_note && (
@@ -218,7 +218,7 @@ export class IrBilling {
                         <p class="billing__card-type">{isValid ? '' : invoice.nbr}</p>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <wa-tooltip for={`mobile-download-pdf-${invoice.system_id}`}>Open pdf</wa-tooltip>
+                        <wa-tooltip for={`mobile-download-pdf-${invoice.system_id}`}>Open PDF</wa-tooltip>
                         <ir-custom-button
                           onClickHandler={() => this.printInvoice(invoice)}
                           loading={isRequestPending('/Print_Invoice')}
