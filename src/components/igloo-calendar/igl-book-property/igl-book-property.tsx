@@ -20,7 +20,6 @@ import booking_store, {
 } from '@/stores/booking.store';
 import moment from 'moment';
 import { BookingGuestSchema, RoomGuestSchema } from './types';
-import { ZodSchema } from 'zod';
 export type IHistoryEntry = {
   dates: { checkIn: Date; checkOut: Date };
   adults: number;
