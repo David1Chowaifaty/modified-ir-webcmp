@@ -214,13 +214,13 @@ export class IrBookingHeader {
               </ir-custom-button>
             )}
 
-            {/* {this.hasReceipt && (
+            {this.hasReceipt && (
               <Fragment>
                 <ir-custom-button id="invoice" variant="brand" size="small" appearance="outlined">
                   Billing
                 </ir-custom-button>
               </Fragment>
-            )} */}
+            )}
             {this.hasPrint && (
               <Fragment>
                 <wa-tooltip for="print">Print booking</wa-tooltip>
