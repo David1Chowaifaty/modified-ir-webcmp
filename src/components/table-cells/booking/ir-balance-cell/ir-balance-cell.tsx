@@ -26,7 +26,7 @@ export class IrBalanceCell {
     return (
       <Host>
         {this.label && <p class="cell-label">{this.label}:</p>}
-        {this.removeBalance && this.isDirect && this.financial.due_amount !== 0 ? null : (
+        {this.removeBalance && this.financial.due_amount !== 0 ? null : (
           <p class="ir-price" style={{ fontWeight: '400' }}>
             {formatAmount(this.currencySymbol, this.removeBalance ? 0 : this.financial.gross_total)}
           </p>

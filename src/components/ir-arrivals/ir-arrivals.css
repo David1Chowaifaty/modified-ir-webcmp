@@ -5,3 +5,7 @@
   text-wrap: balance;
   font-size: var(--wa-font-size-xl);
 }
+:host {
+  height: 100% !important;
+  overflow-y: auto !important;
+}

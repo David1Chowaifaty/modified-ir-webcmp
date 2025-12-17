@@ -4,5 +4,11 @@
   line-height: var(--wa-line-height-condensed);
   text-wrap: balance;
   font-size: var(--wa-font-size-xl);
+
   /* margin-bottom: 1rem; */
+}
+
+:host {
+  height: 100% !important;
+  overflow-y: auto !important;
 }
