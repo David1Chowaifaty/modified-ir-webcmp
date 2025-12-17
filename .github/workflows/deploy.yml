@@ -11,7 +11,7 @@ on:
       - folio2
       - sales-by-channel
       - fd/split-booking
-      - invoice-module
+      # - invoice-module
 
 jobs:
   build-and-deploy:

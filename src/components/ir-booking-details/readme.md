@@ -40,12 +40,9 @@
 
 ### Used by
 
- - [igloo-calendar](../igloo-calendar)
- - [ir-arrivals](../ir-arrivals)
  - [ir-booking](../ir-booking)
- - [ir-booking-listing](../ir-booking-listing)
+ - [ir-booking-details-drawer](ir-booking-details-drawer)
  - [ir-daily-revenue](../ir-daily-revenue)
- - [ir-departures](../ir-departures)
  - [ir-financial-actions](../ir-financial-actions)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
 
@@ -241,12 +238,9 @@ graph TD;
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-mobile-input
   igl-book-property-footer --> ir-custom-button
-  igloo-calendar --> ir-booking-details
-  ir-arrivals --> ir-booking-details
   ir-booking --> ir-booking-details
-  ir-booking-listing --> ir-booking-details
+  ir-booking-details-drawer --> ir-booking-details
   ir-daily-revenue --> ir-booking-details
-  ir-departures --> ir-booking-details
   ir-financial-actions --> ir-booking-details
   ir-hk-archive --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px

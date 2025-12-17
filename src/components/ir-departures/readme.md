@@ -27,8 +27,7 @@
 - [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-departures-table](ir-departures-table)
-- [ir-drawer](../ir-drawer)
-- [ir-booking-details](../ir-booking-details)
+- [ir-booking-details-drawer](../ir-booking-details/ir-booking-details-drawer)
 - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
 - [ir-checkout-dialog](../ir-checkout-dialog)
 - [ir-invoice](../ir-invoice)
@@ -40,8 +39,7 @@ graph TD;
   ir-departures --> ir-toast
   ir-departures --> ir-interceptor
   ir-departures --> ir-departures-table
-  ir-departures --> ir-drawer
-  ir-departures --> ir-booking-details
+  ir-departures --> ir-booking-details-drawer
   ir-departures --> ir-payment-folio
   ir-departures --> ir-checkout-dialog
   ir-departures --> ir-invoice
@@ -68,6 +66,8 @@ graph TD;
   ir-actions-cell --> ir-custom-button
   ir-pagination --> ir-select
   ir-pagination --> ir-custom-button
+  ir-booking-details-drawer --> ir-drawer
+  ir-booking-details-drawer --> ir-booking-details
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast

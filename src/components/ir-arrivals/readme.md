@@ -28,8 +28,7 @@
 - [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-arrivals-table](ir-arrivals-table)
-- [ir-drawer](../ir-drawer)
-- [ir-booking-details](../ir-booking-details)
+- [ir-booking-details-drawer](../ir-booking-details/ir-booking-details-drawer)
 - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
 - [ir-room-guests](../ir-booking-details/ir-room-guests)
 
@@ -40,8 +39,7 @@ graph TD;
   ir-arrivals --> ir-toast
   ir-arrivals --> ir-interceptor
   ir-arrivals --> ir-arrivals-table
-  ir-arrivals --> ir-drawer
-  ir-arrivals --> ir-booking-details
+  ir-arrivals --> ir-booking-details-drawer
   ir-arrivals --> ir-payment-folio
   ir-arrivals --> ir-room-guests
   ir-interceptor --> ir-spinner
@@ -67,6 +65,8 @@ graph TD;
   ir-actions-cell --> ir-custom-button
   ir-pagination --> ir-select
   ir-pagination --> ir-custom-button
+  ir-booking-details-drawer --> ir-drawer
+  ir-booking-details-drawer --> ir-booking-details
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast

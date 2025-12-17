@@ -271,8 +271,8 @@ graph TD;
   igloo-calendar --> ir-sidebar
   igloo-calendar --> ir-room-nights
   igloo-calendar --> igl-split-booking
-  igloo-calendar --> ir-booking-details
   igloo-calendar --> igl-bulk-operations
+  igloo-calendar --> ir-booking-details-drawer
   igloo-calendar --> ir-room-guests
   igloo-calendar --> igl-reallocation-dialog
   igloo-calendar --> ir-modal
@@ -326,6 +326,8 @@ graph TD;
   igl-bulk-block --> ir-radio
   igl-bulk-block --> ir-button
   igl-bulk-block --> ir-date-picker
+  ir-booking-details-drawer --> ir-drawer
+  ir-booking-details-drawer --> ir-booking-details
   igl-reallocation-dialog --> ir-dialog
   igl-reallocation-dialog --> ir-custom-button
   ir-housekeeping --> ir-loading-screen
@@ -433,8 +435,7 @@ graph TD;
   ir-booking-listing --> ir-toast
   ir-booking-listing --> ir-listing-header
   ir-booking-listing --> ir-booking-listing-table
-  ir-booking-listing --> ir-drawer
-  ir-booking-listing --> ir-booking-details
+  ir-booking-listing --> ir-booking-details-drawer
   ir-booking-listing --> ir-guest-info-drawer
   ir-booking-listing --> ir-payment-folio
   ir-listing-header --> igl-book-property-container
@@ -488,8 +489,7 @@ graph TD;
   ir-arrivals --> ir-toast
   ir-arrivals --> ir-interceptor
   ir-arrivals --> ir-arrivals-table
-  ir-arrivals --> ir-drawer
-  ir-arrivals --> ir-booking-details
+  ir-arrivals --> ir-booking-details-drawer
   ir-arrivals --> ir-payment-folio
   ir-arrivals --> ir-room-guests
   ir-arrivals-table --> ir-booking-number-cell
@@ -506,8 +506,7 @@ graph TD;
   ir-departures --> ir-toast
   ir-departures --> ir-interceptor
   ir-departures --> ir-departures-table
-  ir-departures --> ir-drawer
-  ir-departures --> ir-booking-details
+  ir-departures --> ir-booking-details-drawer
   ir-departures --> ir-payment-folio
   ir-departures --> ir-checkout-dialog
   ir-departures --> ir-invoice

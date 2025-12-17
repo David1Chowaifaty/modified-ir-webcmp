@@ -53,8 +53,8 @@
 - [ir-sidebar](../ui/ir-sidebar)
 - [ir-room-nights](ir-room-nights)
 - [igl-split-booking](igl-split-booking)
-- [ir-booking-details](../ir-booking-details)
 - [igl-bulk-operations](igl-bulk-operations)
+- [ir-booking-details-drawer](../ir-booking-details/ir-booking-details-drawer)
 - [ir-room-guests](../ir-booking-details/ir-room-guests)
 - [igl-reallocation-dialog](igl-reallocation-dialog)
 - [ir-modal](../ui/ir-modal)
@@ -76,8 +76,8 @@ graph TD;
   igloo-calendar --> ir-sidebar
   igloo-calendar --> ir-room-nights
   igloo-calendar --> igl-split-booking
-  igloo-calendar --> ir-booking-details
   igloo-calendar --> igl-bulk-operations
+  igloo-calendar --> ir-booking-details-drawer
   igloo-calendar --> ir-room-guests
   igloo-calendar --> igl-reallocation-dialog
   igloo-calendar --> ir-modal
@@ -159,6 +159,21 @@ graph TD;
   igl-split-booking --> ir-button
   igl-split-booking --> ir-radio
   igl-split-booking --> ir-select
+  igl-bulk-operations --> ir-title
+  igl-bulk-operations --> ir-tabs
+  igl-bulk-operations --> igl-bulk-stop-sale
+  igl-bulk-operations --> igl-bulk-block
+  igl-bulk-stop-sale --> ir-select
+  igl-bulk-stop-sale --> ir-weekday-selector
+  igl-bulk-stop-sale --> ir-button
+  igl-bulk-stop-sale --> ir-date-picker
+  ir-weekday-selector --> ir-checkbox
+  igl-bulk-block --> ir-select
+  igl-bulk-block --> ir-radio
+  igl-bulk-block --> ir-button
+  igl-bulk-block --> ir-date-picker
+  ir-booking-details-drawer --> ir-drawer
+  ir-booking-details-drawer --> ir-booking-details
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
@@ -288,19 +303,6 @@ graph TD;
   ir-payment-folio-form --> ir-custom-date-picker
   ir-payment-folio-form --> ir-validator
   ir-payment-folio-form --> ir-input
-  igl-bulk-operations --> ir-title
-  igl-bulk-operations --> ir-tabs
-  igl-bulk-operations --> igl-bulk-stop-sale
-  igl-bulk-operations --> igl-bulk-block
-  igl-bulk-stop-sale --> ir-select
-  igl-bulk-stop-sale --> ir-weekday-selector
-  igl-bulk-stop-sale --> ir-button
-  igl-bulk-stop-sale --> ir-date-picker
-  ir-weekday-selector --> ir-checkbox
-  igl-bulk-block --> ir-select
-  igl-bulk-block --> ir-radio
-  igl-bulk-block --> ir-button
-  igl-bulk-block --> ir-date-picker
   igl-reallocation-dialog --> ir-dialog
   igl-reallocation-dialog --> ir-custom-button
   ir-secure-tasks --> igloo-calendar
