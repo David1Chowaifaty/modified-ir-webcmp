@@ -10,7 +10,7 @@
 | Property        | Attribute | Description                            | Type                                                                                                                                                                       | Default     |
 | --------------- | --------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `currency`      | --        | Booking currency                       | `Currency`                                                                                                                                                                 | `undefined` |
-| `extraServices` | --        | Extra services attached to the booking | `{ cost?: number; system_id?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }[]` | `undefined` |
+| `extraServices` | --        | Extra services attached to the booking | `{ system_id?: number; cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }[]` | `undefined` |
 | `invocableKeys` | --        |                                        | `Set<string \| number>`                                                                                                                                                    | `undefined` |
 
 

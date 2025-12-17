@@ -32,6 +32,7 @@ const paymentMethodSchema = z.object({
 
 const folioBaseSchema = z.object({
   id: z.number().nullable().optional(),
+  system_id: z.number().nullable().optional(),
   date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -179,6 +180,7 @@ export class IrPaymentFolioForm {
         payment_method: payment_method ? (payment_method as Payment['payment_method']) : undefined,
         id: rest.id ?? this.payment?.id ?? -1,
         date: rest.date ?? this.payment?.date ?? this.today,
+        system_id: rest.system_id ?? this.payment?.system_id ?? undefined,
         amount: rest.amount ?? 0,
         currency: calendar_data.currency,
         reference: rest.reference ?? '',

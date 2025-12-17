@@ -11,14 +11,14 @@
 | ---------------- | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `bookingNumber`  | `booking-number`  |             | `string`                                                                                                                                                                 | `undefined` |
 | `currencySymbol` | `currency-symbol` |             | `string`                                                                                                                                                                 | `undefined` |
-| `service`        | --                |             | `{ cost?: number; system_id?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }` | `undefined` |
+| `service`        | --                |             | `{ system_id?: number; cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }` | `undefined` |
 
 
 ## Events
 
 | Event              | Description | Type                                                                                                                                                                                  |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `editExtraService` |             | `CustomEvent<{ cost?: number; system_id?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }>` |
+| `editExtraService` |             | `CustomEvent<{ system_id?: number; cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; }>` |
 | `resetBookingEvt`  |             | `CustomEvent<null>`                                                                                                                                                                   |
 
 
