@@ -26,9 +26,9 @@
 :host {
   background: white;
 }
-.table--container {
+/* .table--container {
   flex: 1 1 0%;
-}
+} */
 .departures-table__actions-cell {
   display: flex;
   min-width: 100px;

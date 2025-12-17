@@ -18,9 +18,9 @@
   position: sticky;
   left: var(--ir-table-sticky-padding,-1rem);
 } */
-.table--container {
+/* .table--container {
   flex: 1 1 0%;
-}
+} */
 .table--container {
   overflow-x: auto;
 }
@@ -48,7 +48,11 @@
   padding-bottom: 0.5rem !important;
   border-bottom: 1px solid var(--wa-color-neutral-90) !important;
   color: var(--wa-color-text-normal);
+  position: sticky;
+  top: 0;
+  z-index: 99;
 }
+
 .data-table .empty-row {
   height: 50vh !important;
   text-align: center;
@@ -107,4 +111,8 @@
   position: sticky !important;
   right: 0;
   background-color: white;
+}
+.table--container,
+.data-table {
+  height: 70vh;
 }

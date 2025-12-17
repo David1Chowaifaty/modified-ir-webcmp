@@ -66,7 +66,7 @@ export class IrBalanceCell {
                     this.payBookingBalance.emit({
                       booking_nbr: this.bookingNumber,
                       payment: {
-                        amount: this.financial.due_amount,
+                        amount: Math.abs(this.financial.due_amount),
                         currency: calendar_data.property.currency,
                         date: moment().format('YYYY-MM-DD'),
                         designation: null,

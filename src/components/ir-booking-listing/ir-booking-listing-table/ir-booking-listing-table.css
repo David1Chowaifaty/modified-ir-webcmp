@@ -13,9 +13,9 @@
 [hidden] {
   display: none !important;
 }
-.table--container {
+/* .table--container {
   flex: 1 1 0%;
-}
+} */
 .arrivals-table__actions-cell {
   display: flex;
   min-width: 100px;
