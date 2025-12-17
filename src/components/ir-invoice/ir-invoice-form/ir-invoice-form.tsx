@@ -679,7 +679,7 @@ export class IrInvoiceForm {
     if (!cancellationPenalty) {
       return null;
     }
-    const sysId = cancellationPenalty.id;
+    const sysId = cancellationPenalty?.system_id;
     if (!this.invoicableKey.has(sysId)) {
       return null;
     }

@@ -178,7 +178,7 @@ export class IrProformaInvoicePreview {
     if (!cancellationPenalty) {
       return null;
     }
-    const sysId = cancellationPenalty.id;
+    const sysId = cancellationPenalty.system_id;
     if (!this.invocableKeys.has(sysId)) {
       return null;
     }

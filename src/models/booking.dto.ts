@@ -344,6 +344,7 @@ export interface IFinancial {
   gross_total_with_extras: number;
 }
 export interface IPayment {
+  system_id?: number;
   id: number | null;
   date: string;
   amount: number;

@@ -242,7 +242,7 @@ export class IrBookingHeader {
               <Fragment>
                 <wa-tooltip for="book-delete">Delete this booking</wa-tooltip>
                 <ir-custom-button id="book-delete" variant="danger" size="small" appearance="plain">
-                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                  <wa-icon name="envelope" style={{ fontSize: '1.2rem' }} label="Delete this booking"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -250,7 +250,7 @@ export class IrBookingHeader {
               <Fragment>
                 <wa-tooltip for="menu">Go back</wa-tooltip>
                 <ir-custom-button id="menu" variant="neutral" size="small" appearance="plain">
-                  <wa-icon name="list" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+                  <wa-icon name="list" style={{ fontSize: '1.2rem' }} label="Go back"></wa-icon>
                 </ir-custom-button>
               </Fragment>
             )}
@@ -266,7 +266,7 @@ export class IrBookingHeader {
                 size="small"
                 appearance="plain"
               >
-                <wa-icon name="xmark" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+                <wa-icon name="xmark" style={{ fontSize: '1.2rem' }} label="Go back"></wa-icon>
               </ir-custom-button>
             )}
           </div>
