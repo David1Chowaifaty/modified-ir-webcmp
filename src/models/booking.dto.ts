@@ -510,7 +510,6 @@ export interface Property {
   allowed_cards: Allowedcard[];
   allowed_payment_methods: AllowedPaymentMethod[];
   amenities: Amenity[];
-  linked_pms: LinkedPms[];
   aname: string;
   area: string;
   baby_cot_offering: Babycotoffering;
