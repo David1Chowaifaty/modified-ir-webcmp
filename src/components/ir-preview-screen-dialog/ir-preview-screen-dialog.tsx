@@ -1,4 +1,5 @@
-import { Component, Element, Event, EventEmitter, Method, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Method, Prop, h } from '@stencil/core';
+import { v4 } from 'uuid';
 
 type PreviewAction = 'print' | 'download';
 
@@ -71,6 +72,8 @@ export class IrPreviewScreenDialog {
    */
   @Event() previewAction: EventEmitter<{ action: PreviewAction; url?: string }>;
   @Event() openChanged: EventEmitter<boolean>;
+
+  private _id = `download_btn_${v4()}`;
   /**
    * Opens the preview dialog.
    */
@@ -241,16 +244,20 @@ export class IrPreviewScreenDialog {
         class="ir-fullscreen-dialog"
       >
         {!this.hideDefaultAction && (
-          <ir-custom-button
-            size="medium"
-            slot="header-actions"
-            variant="neutral"
-            appearance="plain"
-            onClickHandler={this.handleActionButtonClick.bind(this)}
-            disabled={this.shouldDisableActionButton()}
-          >
-            <wa-icon name={this.actionIconByType[this.action]} label={this.getActionLabel()} aria-label={this.getActionLabel()}></wa-icon>
-          </ir-custom-button>
+          <Fragment>
+            <wa-tooltip for={this._id}>Print PDF</wa-tooltip>
+            <ir-custom-button
+              id={this._id}
+              size="medium"
+              slot="header-actions"
+              variant="neutral"
+              appearance="plain"
+              onClickHandler={this.handleActionButtonClick.bind(this)}
+              disabled={this.shouldDisableActionButton()}
+            >
+              <wa-icon name={this.actionIconByType[this.action]} label={this.getActionLabel()} aria-label={this.getActionLabel()}></wa-icon>
+            </ir-custom-button>
+          </Fragment>
         )}
         <slot></slot>
       </ir-dialog>
