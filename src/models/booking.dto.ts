@@ -493,7 +493,7 @@ export interface LinkedPms {
   ari_integration_mode: { code: string; description: string };
   ari_last_call: { is_acknowledged: boolean; is_sent: boolean; sent_date: string; sent_hour: number; sent_minute: number };
   booking_last_call: { is_acknowledged: boolean; is_sent: boolean; sent_date: string; sent_hour: number; sent_minute: number };
-  booking_integration_mode: { code: string; description: string };
+  bookings_integration_mode: { code: string; description: string };
   code: string;
   is_active: boolean;
   description: string;
