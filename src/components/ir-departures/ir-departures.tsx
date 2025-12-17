@@ -190,40 +190,14 @@ export class IrDepartures {
             onRequestPageSizeChange={event => this.handlePaginationPageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
           ></ir-departures-table>
         </div>
-        <ir-drawer
-          onDrawerHide={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            this.bookingNumber = null;
-          }}
-          withoutHeader
+        <ir-booking-details-drawer
           open={!!this.bookingNumber}
-          style={{
-            '--ir-drawer-width': '80rem',
-            '--ir-drawer-background-color': '#F2F3F8',
-            '--ir-drawer-padding-left': '0',
-            '--ir-drawer-padding-right': '0',
-            '--ir-drawer-padding-top': '0',
-            '--ir-drawer-padding-bottom': '0',
-          }}
-        >
-          {this.bookingNumber && (
-            <ir-booking-details
-              hasPrint
-              hasReceipt
-              hasCloseButton
-              onCloseSidebar={() => (this.bookingNumber = null)}
-              is_from_front_desk
-              propertyid={this.propertyid as any}
-              hasRoomEdit
-              hasRoomDelete
-              bookingNumber={this.bookingNumber.toString()}
-              ticket={this.ticket}
-              language={this.language}
-              hasRoomAdd
-            ></ir-booking-details>
-          )}
-        </ir-drawer>
+          propertyId={this.propertyid as any}
+          bookingNumber={this.bookingNumber?.toString()}
+          ticket={this.ticket}
+          language={this.language}
+          onBookingDetailsDrawerClosed={() => (this.bookingNumber = null)}
+        ></ir-booking-details-drawer>
         <ir-payment-folio
           style={{ height: 'auto' }}
           bookingNumber={this.booking?.booking_nbr}

@@ -534,6 +534,34 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    /**
+     * Booking Details Drawer
+     * This component wraps the `ir-booking-details` component inside an `ir-drawer`.
+     * It is responsible for handling drawer visibility and emitting a single
+     * close event when the drawer is dismissed from any source.
+     */
+    interface IrBookingDetailsDrawer {
+        /**
+          * Booking reference number.
+         */
+        "bookingNumber": string;
+        /**
+          * Language code used for localization. Defaults to English (`en`).
+         */
+        "language": string;
+        /**
+          * Controls whether the drawer is open.
+         */
+        "open": boolean;
+        /**
+          * Property ID associated with the booking.
+         */
+        "propertyId": number;
+        /**
+          * Authentication or session ticket.
+         */
+        "ticket": string;
+    }
     interface IrBookingEmailLogs {
         "ticket": string;
     }
@@ -3446,6 +3474,10 @@ export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsElement;
 }
+export interface IrBookingDetailsDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingDetailsDrawerElement;
+}
 export interface IrBookingExtraNoteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingExtraNoteElement;
@@ -4617,6 +4649,29 @@ declare global {
     var HTMLIrBookingDetailsElement: {
         prototype: HTMLIrBookingDetailsElement;
         new (): HTMLIrBookingDetailsElement;
+    };
+    interface HTMLIrBookingDetailsDrawerElementEventMap {
+        "bookingDetailsDrawerClosed": void;
+    }
+    /**
+     * Booking Details Drawer
+     * This component wraps the `ir-booking-details` component inside an `ir-drawer`.
+     * It is responsible for handling drawer visibility and emitting a single
+     * close event when the drawer is dismissed from any source.
+     */
+    interface HTMLIrBookingDetailsDrawerElement extends Components.IrBookingDetailsDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingDetailsDrawerElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsDrawerElement, ev: IrBookingDetailsDrawerCustomEvent<HTMLIrBookingDetailsDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingDetailsDrawerElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsDrawerElement, ev: IrBookingDetailsDrawerCustomEvent<HTMLIrBookingDetailsDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingDetailsDrawerElement: {
+        prototype: HTMLIrBookingDetailsDrawerElement;
+        new (): HTMLIrBookingDetailsDrawerElement;
     };
     interface HTMLIrBookingEmailLogsElement extends Components.IrBookingEmailLogs, HTMLStencilElement {
     }
@@ -6874,6 +6929,7 @@ declare global {
         "ir-booking-company-dialog": HTMLIrBookingCompanyDialogElement;
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
+        "ir-booking-details-drawer": HTMLIrBookingDetailsDrawerElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
@@ -7559,6 +7615,38 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "p"?: string;
         "propertyid"?: number;
+        "ticket"?: string;
+    }
+    /**
+     * Booking Details Drawer
+     * This component wraps the `ir-booking-details` component inside an `ir-drawer`.
+     * It is responsible for handling drawer visibility and emitting a single
+     * close event when the drawer is dismissed from any source.
+     */
+    interface IrBookingDetailsDrawer {
+        /**
+          * Booking reference number.
+         */
+        "bookingNumber"?: string;
+        /**
+          * Language code used for localization. Defaults to English (`en`).
+         */
+        "language"?: string;
+        /**
+          * Emitted when the booking details drawer is closed.
+         */
+        "onBookingDetailsDrawerClosed"?: (event: IrBookingDetailsDrawerCustomEvent<void>) => void;
+        /**
+          * Controls whether the drawer is open.
+         */
+        "open"?: boolean;
+        /**
+          * Property ID associated with the booking.
+         */
+        "propertyId"?: number;
+        /**
+          * Authentication or session ticket.
+         */
         "ticket"?: string;
     }
     interface IrBookingEmailLogs {
@@ -10667,6 +10755,7 @@ declare namespace LocalJSX {
         "ir-booking-company-dialog": IrBookingCompanyDialog;
         "ir-booking-company-form": IrBookingCompanyForm;
         "ir-booking-details": IrBookingDetails;
+        "ir-booking-details-drawer": IrBookingDetailsDrawer;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-guarantee": IrBookingGuarantee;
@@ -10885,6 +10974,13 @@ declare module "@stencil/core" {
             "ir-booking-company-dialog": LocalJSX.IrBookingCompanyDialog & JSXBase.HTMLAttributes<HTMLIrBookingCompanyDialogElement>;
             "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
+            /**
+             * Booking Details Drawer
+             * This component wraps the `ir-booking-details` component inside an `ir-drawer`.
+             * It is responsible for handling drawer visibility and emitting a single
+             * close event when the drawer is dismissed from any source.
+             */
+            "ir-booking-details-drawer": LocalJSX.IrBookingDetailsDrawer & JSXBase.HTMLAttributes<HTMLIrBookingDetailsDrawerElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;

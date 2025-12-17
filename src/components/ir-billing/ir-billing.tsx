@@ -5,6 +5,7 @@ import { BookingService } from '@/services/booking-service/booking.service';
 import { downloadFile, formatAmount } from '@/utils/utils';
 import moment from 'moment';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-billing',
@@ -22,6 +23,7 @@ export class IrBilling {
   @Event() billingClose: EventEmitter<void>;
 
   private bookingService = new BookingService();
+  private _id = `issue_invoice__btn_${v4()}`;
 
   componentWillLoad() {
     this.init();
@@ -99,19 +101,23 @@ export class IrBilling {
         </div>
       );
     }
+    const canIssueInvoice = !moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates');
     return (
       <Fragment>
         <div class="billing__container">
           <section>
             <div class="billing__section-title-row">
               <h4 class="billing__section-title">Issued documents</h4>
+              {!canIssueInvoice && <wa-tooltip for={this._id}>Invoices cannot be issued before guest arrival</wa-tooltip>}
               <ir-custom-button
                 variant="brand"
+                id={this._id}
                 onClickHandler={e => {
                   e.stopImmediatePropagation();
                   e.stopPropagation();
                   this.isOpen = 'invoice';
                 }}
+                disabled={!canIssueInvoice}
               >
                 Issue invoice
               </ir-custom-button>

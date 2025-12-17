@@ -110,7 +110,6 @@ export class IrInvoice {
   private _id = `invoice-form__${v4()}`;
 
   render() {
-    console.log(this.invoice);
     return (
       <Host>
         <ir-drawer

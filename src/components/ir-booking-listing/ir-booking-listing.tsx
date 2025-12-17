@@ -335,40 +335,14 @@ export class IrBookingListing {
             <ir-booking-listing-table></ir-booking-listing-table>
           </section>
         </div>
-        <ir-drawer
-          style={{
-            '--ir-drawer-width': '80rem',
-            '--ir-drawer-background-color': '#F2F3F8',
-            '--ir-drawer-padding-left': '0',
-            '--ir-drawer-padding-top': '0',
-            '--ir-drawer-padding-bottom': '0',
-            '--ir-drawer-padding-right': '0',
-          }}
-          onDrawerHide={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            this.editBookingItem = null;
-          }}
-          withoutHeader
+        <ir-booking-details-drawer
           open={this.editBookingItem?.cause === 'edit'}
-        >
-          {this.editBookingItem?.booking && (
-            <ir-booking-details
-              hasPrint
-              hasReceipt
-              hasCloseButton
-              onCloseSidebar={() => (this.editBookingItem = null)}
-              is_from_front_desk
-              propertyid={this.propertyid as any}
-              hasRoomEdit
-              hasRoomDelete
-              bookingNumber={this.editBookingItem.booking?.booking_nbr.toString()}
-              ticket={this.ticket}
-              language={this.language}
-              hasRoomAdd
-            ></ir-booking-details>
-          )}
-        </ir-drawer>
+          propertyId={this.propertyid as any}
+          bookingNumber={this.editBookingItem?.booking?.booking_nbr.toString()}
+          ticket={this.ticket}
+          language={this.language}
+          onBookingDetailsDrawerClosed={() => (this.editBookingItem = null)}
+        ></ir-booking-details-drawer>
         <ir-guest-info-drawer
           onGuestInfoDrawerClosed={() => {
             this.editBookingItem = null;

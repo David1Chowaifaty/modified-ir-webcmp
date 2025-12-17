@@ -1310,7 +1310,7 @@ export class IglooCalendar {
   private get isSidebarOpen(): boolean {
     // 1) Always open when editing a booking
     if (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING') {
-      return true;
+      return false;
     }
 
     // 2) Open when room nights dialog is showing in the sidebar
@@ -1450,30 +1450,19 @@ export class IglooCalendar {
               onCloseModal={() => (this.calendarSidebarState = null)}
             ></igl-split-booking>
           )}
-          {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
-            <ir-booking-details
-              slot="sidebar-body"
-              hasPrint
-              hasReceipt
-              hasCloseButton
-              onCloseSidebar={() => (this.editBookingItem = null)}
-              is_from_front_desk
-              propertyid={this.property_id}
-              hasRoomEdit
-              hasRoomDelete
-              bookingNumber={this.editBookingItem.BOOKING_NUMBER}
-              ticket={this.ticket}
-              language={this.language}
-              hasRoomAdd
-            ></ir-booking-details>
-          )}
-
           {this.calendarSidebarState?.type === 'bulk-blocks' && (
             <igl-bulk-operations slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-operations>
             // <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
           )}
         </ir-sidebar>
-
+        <ir-booking-details-drawer
+          open={this.editBookingItem?.event_type === 'EDIT_BOOKING'}
+          propertyId={this.property_id}
+          bookingNumber={this.editBookingItem && this.editBookingItem?.event_type === 'EDIT_BOOKING' ? this.editBookingItem.BOOKING_NUMBER : null}
+          ticket={this.ticket}
+          language={this.language}
+          onBookingDetailsDrawerClosed={() => (this.editBookingItem = null)}
+        ></ir-booking-details-drawer>
         <ir-room-guests
           open={this.calendarSidebarState?.type === 'room-guests'}
           countries={this.countries}
@@ -1492,26 +1481,6 @@ export class IglooCalendar {
           onDialogClose={() => this.handleModalCancel()}
           data={this.dialogData?.reason === 'reallocate' ? this.dialogData : undefined}
         ></igl-reallocation-dialog>
-        {/* <ir-dialog
-          onIrDialogAfterHide={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            this.handleModalCancel();
-          }}
-          style={{ textAlign: 'start' }}
-          label="Alert"
-          open={this.dialogData?.reason === 'checkin'}
-        >
-          <p>{this.renderModalBody()}</p>
-          <div slot="footer" class="ir-dialog__footer">
-            <ir-custom-button data-dialog="close" size="medium" variant="neutral" appearance="filled">
-              Cancel
-            </ir-custom-button>
-            <ir-custom-button onClickHandler={() => this.handleModalConfirm()} size="medium" variant="brand" appearance="accent">
-              Confirm
-            </ir-custom-button>
-          </div>
-        </ir-dialog> */}
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
           modalTitle={'lol'}
