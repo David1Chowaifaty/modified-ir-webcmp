@@ -216,8 +216,10 @@ export class IrInput {
     if (nextValue === this.value) {
       return;
     }
-    this.value = nextValue ?? '';
-    this.textChange.emit(this.value);
+    if (!this.mask) {
+      this.value = nextValue ?? '';
+    }
+    this.textChange.emit(nextValue ?? '');
   };
 
   private async initializeMask() {
@@ -394,7 +396,7 @@ export class IrInput {
           inputmode={this.inputmode}
           withLabel={this.withLabel}
           withHint={this.withHint}
-          onchange={this.handleChange}
+          oninput={this.handleChange}
           onwa-clear={this.handleClear}
           onblur={this.handleBlur}
           onfocus={this.handleFocus}

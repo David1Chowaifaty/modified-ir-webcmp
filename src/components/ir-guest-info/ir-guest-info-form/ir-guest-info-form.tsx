@@ -71,7 +71,7 @@ export class IrGuestInfoForm {
       }
 
       this.countries = countries;
-      let _g = { ...guest };
+      let _g = { ...guest, email: guest.email.replace(/\s+(?=@)/g, '').trim() };
       if (_g && !_g.country_phone_prefix) {
         const country = this.countries.find(c => c.id === _g.country_id);
         console.log({ country });
@@ -134,6 +134,7 @@ export class IrGuestInfoForm {
           <ir-input
             id={'firstName'}
             value={this.guest?.first_name}
+            defaultValue={this.guest?.first_name}
             required
             onText-change={e => this.handleInputChange({ first_name: e.detail.trim() })}
             label={locales.entries?.Lcz_FirstName}
@@ -149,6 +150,7 @@ export class IrGuestInfoForm {
           <ir-input
             value={this.guest?.last_name}
             required
+            defaultValue={this.guest?.last_name}
             id="lastName"
             onText-change={e => this.handleInputChange({ last_name: e.detail.trim() })}
             label={locales.entries?.Lcz_LastName}
@@ -164,6 +166,7 @@ export class IrGuestInfoForm {
           <ir-input
             label={locales.entries?.Lcz_Email}
             id="email"
+            defaultValue={this.guest?.email}
             value={this.guest?.email}
             required
             onText-change={e => {
