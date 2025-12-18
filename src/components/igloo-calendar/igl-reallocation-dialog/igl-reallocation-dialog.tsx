@@ -44,9 +44,15 @@ export class IglReallocationDialog {
       return;
     }
 
-    const { pool, toRoomId, from_date, to_date } = this.data;
+    const { pool, toRoomId, from_date, to_date, matchedRatePlan } = this.data;
     try {
-      await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date, this.data.rateplans ? Number(this.selectedRateplan) : undefined);
+      await this.eventsService.reallocateEvent(
+        pool,
+        toRoomId,
+        from_date,
+        to_date,
+        this.data.rateplans ? Number(this.selectedRateplan) : matchedRatePlan ? Number(matchedRatePlan?.value) : undefined,
+      );
     } catch (error) {
       console.log(error);
       this.revertBooking.emit(pool);

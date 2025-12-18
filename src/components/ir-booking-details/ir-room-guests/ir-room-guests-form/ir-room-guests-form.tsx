@@ -236,17 +236,17 @@ export class IrRoomGuestsForm {
                     </div>
                     <div class="room-guest__section">
                       <label class="guest_label">Last name</label>
-                      <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.last_name}>
-                        <ir-input
-                          aria-invalid={String(!!this.error['last_name'] && !isRowValid)}
-                          size="small"
-                          id={`last_name_${idx}`}
-                          placeholder="Last name"
-                          onText-change={e => this.updateGuestInfo(idx, { last_name: e.detail })}
-                          value={guest.last_name}
-                          maxlength={40}
-                        ></ir-input>
-                      </ir-validator>
+                      {/* <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.last_name}> */}
+                      <ir-input
+                        aria-invalid={String(!!this.error['last_name'] && !isRowValid)}
+                        size="small"
+                        id={`last_name_${idx}`}
+                        placeholder="Last name"
+                        onText-change={e => this.updateGuestInfo(idx, { last_name: e.detail })}
+                        value={guest.last_name}
+                        maxlength={40}
+                      ></ir-input>
+                      {/* </ir-validator> */}
                     </div>
                     <div class="room-guest__section">
                       <p class="guest_label">{locales.entries.Lcz_DOB}</p>

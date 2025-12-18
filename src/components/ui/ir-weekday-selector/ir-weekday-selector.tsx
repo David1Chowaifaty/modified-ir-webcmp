@@ -38,7 +38,11 @@ export class IrWeekdaySelector {
     { value: 6, label: 'Sa' },
     { value: 0, label: 'Su' },
   ];
-
+  componentWillLoad() {
+    if (this.weekdays) {
+      this.selectedWeekdays = new Set(this.weekdays);
+    }
+  }
   @Watch('weekdays')
   handleWeekdayChange(newDays: number[], oldDays: number[]) {
     if (newDays.length !== oldDays.length && newDays.length !== this.selectedWeekdays.size) {
@@ -69,13 +73,13 @@ export class IrWeekdaySelector {
     return (
       <Host class="my-1 d-flex align-items-center" style={{ gap: '1.1rem' }}>
         {this._weekdays.map(w => (
-          <ir-checkbox
+          <wa-checkbox
             checked={this.selectedWeekdays.has(w.value)}
-            onCheckChange={e => this.toggleWeekDays({ checked: e.detail, weekDay: w.value })}
-            label={w.label}
-            labelClass="m-0 p-0"
-            class="days-checkbox"
-          ></ir-checkbox>
+            defaultChecked={this.selectedWeekdays.has(w.value)}
+            onchange={e => this.toggleWeekDays({ checked: (e.target as HTMLInputElement).checked, weekDay: w.value })}
+          >
+            {w.label}
+          </wa-checkbox>
         ))}
       </Host>
     );
