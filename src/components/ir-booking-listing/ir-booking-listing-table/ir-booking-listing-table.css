@@ -30,7 +30,12 @@
   flex-direction: column;
   gap: 1rem;
 }
-
+.data-table--pagination {
+  display: none;
+}
+.booking-listing__load-more {
+  margin-top: 1rem;
+}
 @media (min-width: 768px) {
   :host {
     display: flex;
@@ -43,9 +48,11 @@
     background-color: white;
     /* border-bottom: 0; */
   }
-  .table--container {
+  .table--container,
+  .data-table--pagination {
     display: block;
   }
+  .booking-listing__load-more,
   .card--container {
     display: none;
   }

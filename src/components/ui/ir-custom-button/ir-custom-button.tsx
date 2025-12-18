@@ -1,14 +1,18 @@
+import { createSlotManager } from '@/utils/slot';
 import type WaButton from '@awesome.me/webawesome/dist/components/button/button';
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 export type NativeButton = WaButton;
 
 @Component({
   tag: 'ir-custom-button',
   styleUrls: ['ir-custom-button.css'],
-  shadow: false,
+  shadow: true,
 })
 export class IrCustomButton {
+  @Element() el: HTMLIrCustomButtonElement;
+
   @Prop() link: boolean;
+
   @Prop({ reflect: true }) iconBtn: boolean;
   /** The button's theme variant. Defaults to `neutral` if not within another element with a variant. */
   @Prop() variant: NativeButton['variant'];
@@ -82,12 +86,40 @@ export class IrCustomButton {
   /** Used to override the form owner's `target` attribute. */
   @Prop() formTarget: NativeButton['formTarget'];
 
+  @State() private slotStateVersion = 0;
+
   @Event() clickHandler: EventEmitter<MouseEvent>;
 
   private handleButtonClick(e: MouseEvent) {
     this.clickHandler.emit(e);
   }
 
+  private readonly SLOT_NAMES = ['start', 'end'] as const;
+
+  // Create slot manager with state change callback
+  private slotManager = createSlotManager(
+    null as any, // Will be set in componentWillLoad
+    this.SLOT_NAMES,
+    () => {
+      // Trigger re-render when slot state changes
+      this.slotStateVersion++;
+    },
+  );
+  componentWillLoad() {
+    // Initialize slot manager with host element
+    this.slotManager = createSlotManager(this.el, this.SLOT_NAMES, () => {
+      this.slotStateVersion++;
+    });
+    this.slotManager.initialize();
+  }
+
+  componentDidLoad() {
+    this.slotManager.setupListeners();
+  }
+
+  disconnectedCallback() {
+    this.slotManager.destroy();
+  }
   render() {
     if (this.link) {
       return (
@@ -133,10 +165,11 @@ export class IrCustomButton {
           form-method={this.formMethod}
           form-no-validate={this.formNoValidate}
           form-target={this.formTarget}
+          exportparts="base, start, label, end, caret, spinner"
         >
-          <slot slot="start" name="start"></slot>
+          {this.slotManager.hasSlot('start') && <slot slot="start" name="start"></slot>}
           <slot></slot>
-          <slot slot="end" name="end"></slot>
+          {this.slotManager.hasSlot('end') && <slot slot="end" name="end"></slot>}
         </wa-button>
       </Host>
     );

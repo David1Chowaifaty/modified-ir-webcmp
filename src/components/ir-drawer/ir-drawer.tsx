@@ -1,8 +1,10 @@
 import { OverflowAdd, OverflowRelease } from '@/decorators/OverflowLock';
+import { createSlotManager } from '@/utils/slot';
 import WaDrawer from '@awesome.me/webawesome/dist/components/drawer/drawer';
 import { Component, Element, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 
 export type NativeDrawer = WaDrawer;
+
 @Component({
   tag: 'ir-drawer',
   styleUrl: 'ir-drawer.css',
@@ -25,12 +27,24 @@ export class IrDrawer {
   /** When enabled, the drawer will be closed when the user clicks outside of it. */
   @Prop({ reflect: true }) lightDismiss: NativeDrawer['lightDismiss'] = true;
 
-  @State() private slotState = new Map<string, boolean>();
+  @State() private slotStateVersion = 0; // Trigger re-renders when slots change
 
   /** Emitted when the drawer opens. */
   @Event() drawerShow: EventEmitter<void>;
   /**Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. */
   @Event() drawerHide: EventEmitter<{ source: Element }>;
+
+  private readonly SLOT_NAMES = ['label', 'header-actions', 'footer'] as const;
+
+  // Create slot manager with state change callback
+  private slotManager = createSlotManager(
+    null as any, // Will be set in componentWillLoad
+    this.SLOT_NAMES,
+    () => {
+      // Trigger re-render when slot state changes
+      this.slotStateVersion++;
+    },
+  );
 
   private readonly onDrawerShow = (event: CustomEvent<void>) => {
     this.emitDrawerShow(event);
@@ -40,21 +54,22 @@ export class IrDrawer {
     this.emitDrawerHide(event);
   };
 
-  private slotObserver: MutationObserver;
-
-  private readonly SLOT_NAMES = ['label', 'header-actions', 'footer'] as const;
-
   componentWillLoad() {
-    this.updateSlotState();
+    // Initialize slot manager with host element
+    this.slotManager = createSlotManager(this.el, this.SLOT_NAMES, () => {
+      this.slotStateVersion++;
+    });
+    this.slotManager.initialize();
   }
 
   componentDidLoad() {
-    this.setupSlotListeners();
+    this.slotManager.setupListeners();
   }
 
   disconnectedCallback() {
-    this.removeSlotListeners();
+    this.slotManager.destroy();
   }
+
   @OverflowAdd()
   private emitDrawerShow(e: CustomEvent<void>) {
     e.stopImmediatePropagation();
@@ -72,43 +87,6 @@ export class IrDrawer {
     this.drawerHide.emit(e.detail);
   }
 
-  private setupSlotListeners() {
-    // Listen to slotchange events on the host element
-    this.el.addEventListener('slotchange', this.handleSlotChange);
-
-    // Also use MutationObserver as a fallback for browsers that don't fire slotchange reliably
-    this.slotObserver = new MutationObserver(this.handleSlotChange);
-    this.slotObserver.observe(this.el, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['slot'],
-    });
-  }
-
-  private removeSlotListeners() {
-    this.el.removeEventListener('slotchange', this.handleSlotChange);
-    this.slotObserver?.disconnect();
-  }
-
-  private handleSlotChange = () => {
-    this.updateSlotState();
-  };
-
-  private updateSlotState() {
-    const newState = new Map<string, boolean>();
-
-    this.SLOT_NAMES.forEach(name => {
-      newState.set(name, this.hasSlot(name));
-    });
-
-    this.slotState = newState;
-  }
-
-  private hasSlot(name: string): boolean {
-    return !!this.el.querySelector(`[slot="${name}"]`);
-  }
-
   render() {
     return (
       <wa-drawer
@@ -123,10 +101,10 @@ export class IrDrawer {
         lightDismiss={this.lightDismiss}
         exportparts="dialog, header, header-actions, title, close-button, close-button__base, body, footer"
       >
-        {this.slotState.get('header-actions') && <slot name="header-actions" slot="header-actions"></slot>}
-        {this.slotState.get('label') && <slot name="label" slot="label"></slot>}
+        {this.slotManager.hasSlot('header-actions') && <slot name="header-actions" slot="header-actions"></slot>}
+        {this.slotManager.hasSlot('label') && <slot name="label" slot="label"></slot>}
         <slot></slot>
-        {this.slotState.get('footer') && <slot name="footer" slot="footer"></slot>}
+        {this.slotManager.hasSlot('footer') && <slot name="footer" slot="footer"></slot>}
       </wa-drawer>
     );
   }

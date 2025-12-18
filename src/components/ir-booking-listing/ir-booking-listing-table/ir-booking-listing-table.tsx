@@ -16,6 +16,7 @@ import { isPrivilegedUser } from '@/utils/utils';
 export class IrBookingListingTable {
   @State() booking_nbr: string;
   @State() isLoading: boolean;
+  @State() isLoadMoreLoading: boolean = false;
 
   @Event() openBookingDetails: EventEmitter<string>;
   @Event() requestPageChange: EventEmitter<PaginationChangeEvent>;
@@ -67,6 +68,35 @@ export class IrBookingListingTable {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.requestPageSizeChange.emit(event.detail);
+  }
+  private async loadMoreBookings() {
+    if (this.isLoadMoreLoading) {
+      return;
+    }
+    const totalRecords = booking_listing.pagination.totalRecords;
+    const currentCount = booking_listing.bookings.length;
+    if (!totalRecords || currentCount >= totalRecords) {
+      return;
+    }
+    const pageSize = booking_listing.pagination.pageSize || booking_listing.rowCount || 20;
+    const nextStartRow = Math.ceil(currentCount / pageSize) * pageSize;
+    const nextEndRow = Math.min(nextStartRow + pageSize, totalRecords);
+    this.isLoadMoreLoading = true;
+    try {
+      await this.bookingListingsService.getExposedBookings(
+        {
+          ...booking_listing.userSelection,
+          start_row: nextStartRow,
+          end_row: nextEndRow,
+          is_to_export: false,
+        },
+        { append: true },
+      );
+    } catch (error) {
+      console.error('Failed to load more bookings', error);
+    } finally {
+      this.isLoadMoreLoading = false;
+    }
   }
   private renderRow(booking: Booking) {
     const rowKey = `${booking.booking_nbr}`;
@@ -150,6 +180,7 @@ export class IrBookingListingTable {
   }
   render() {
     const pagination = booking_listing.pagination;
+    const canLoadMore = booking_listing.bookings.length > 0 && booking_listing.bookings.length < pagination.totalRecords;
     return (
       <Host>
         <div class="table--container">
@@ -234,6 +265,22 @@ export class IrBookingListingTable {
             onPageChange={event => this.handlePageChange(event as CustomEvent<PaginationChangeEvent>)}
             onPageSizeChange={event => this.handlePageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
           ></ir-pagination>
+        )}
+        {canLoadMore && (
+          <ir-custom-button
+            class="booking-listing__load-more"
+            variant="brand"
+            appearance="outlined"
+            loading={this.isLoadMoreLoading}
+            disabled={this.isLoadMoreLoading}
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.loadMoreBookings();
+            }}
+          >
+            Load more
+          </ir-custom-button>
         )}
         <ir-dialog
           label="Delete"
