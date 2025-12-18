@@ -1,12 +1,11 @@
-import { createSlotManager } from '@/utils/slot';
 import type WaButton from '@awesome.me/webawesome/dist/components/button/button';
-import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export type NativeButton = WaButton;
 
 @Component({
   tag: 'ir-custom-button',
   styleUrls: ['ir-custom-button.css'],
-  shadow: true,
+  shadow: false,
 })
 export class IrCustomButton {
   @Element() el: HTMLIrCustomButtonElement;
@@ -86,40 +85,12 @@ export class IrCustomButton {
   /** Used to override the form owner's `target` attribute. */
   @Prop() formTarget: NativeButton['formTarget'];
 
-  @State() private slotStateVersion = 0;
-
   @Event() clickHandler: EventEmitter<MouseEvent>;
 
   private handleButtonClick(e: MouseEvent) {
     this.clickHandler.emit(e);
   }
 
-  private readonly SLOT_NAMES = ['start', 'end'] as const;
-
-  // Create slot manager with state change callback
-  private slotManager = createSlotManager(
-    null as any, // Will be set in componentWillLoad
-    this.SLOT_NAMES,
-    () => {
-      // Trigger re-render when slot state changes
-      this.slotStateVersion++;
-    },
-  );
-  componentWillLoad() {
-    // Initialize slot manager with host element
-    this.slotManager = createSlotManager(this.el, this.SLOT_NAMES, () => {
-      this.slotStateVersion++;
-    });
-    this.slotManager.initialize();
-  }
-
-  componentDidLoad() {
-    this.slotManager.setupListeners();
-  }
-
-  disconnectedCallback() {
-    this.slotManager.destroy();
-  }
   render() {
     if (this.link) {
       return (
@@ -167,9 +138,9 @@ export class IrCustomButton {
           form-target={this.formTarget}
           exportparts="base, start, label, end, caret, spinner"
         >
-          {this.slotManager.hasSlot('start') && <slot slot="start" name="start"></slot>}
+          <slot slot="start" name="start"></slot>
           <slot></slot>
-          {this.slotManager.hasSlot('end') && <slot slot="end" name="end"></slot>}
+          <slot slot="end" name="end"></slot>
         </wa-button>
       </Host>
     );

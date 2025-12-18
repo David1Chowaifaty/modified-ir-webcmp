@@ -142,6 +142,7 @@ export class IglBookPropertyFooter {
             {showBookAndCheckin &&
               this.renderButton({
                 type: 'submit',
+                form: 'new_booking_form',
                 value: 'bookAndCheckIn',
                 label: locales.entries.Lcz_BookAndChekcIn,
                 isLoading: this.isLoading === 'bookAndCheckIn',

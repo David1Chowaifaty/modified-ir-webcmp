@@ -595,7 +595,7 @@ export class IglBookingEventHover {
             {/* <div class={'mb-1'}> */}
             <ir-custom-button
               variant="brand"
-              appearance="outlined"
+              appearance="accent"
               data-testid="bar_booking_btn"
               onClickHandler={_ => {
                 this.handleBookingOption('BAR_BOOKING');
@@ -608,8 +608,8 @@ export class IglBookingEventHover {
             {this.hasSplitBooking() && (
               // <div class="mb-1">
               <ir-custom-button
-                variant="brand"
-                appearance="outlined"
+                variant="neutral"
+                appearance="accent"
                 onClickHandler={_ => {
                   this.handleBookingOption('SPLIT_BOOKING');
                 }}
@@ -625,7 +625,7 @@ export class IglBookingEventHover {
         )}
         {/* <div> */}
         <ir-custom-button
-          appearance="outlined"
+          appearance="accent"
           variant="danger"
           onClickHandler={_ => {
             this.handleBookingOption('BLOCK_DATES');
