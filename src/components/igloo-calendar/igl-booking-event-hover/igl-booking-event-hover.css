@@ -2,16 +2,21 @@
   display: block;
   position: relative;
   z-index: 100;
+  --ir-booking-event-arrow: 8px;
+  --ir-booking-event-arrow-before: calc(var(--ir-booking-event-arrow) + 1px);
+  --ir-booking-popover-border-color: var(--wa-color-neutral-border-normal);
 }
 
 .btn {
   padding-left: 4px !important;
   padding-right: 4px !important;
 }
+
 .balance_amount {
   color: var(--wa-color-danger-fill-loud);
   font-size: 0.75rem;
 }
+
 .user-notes {
   margin-left: 4px;
   display: -webkit-box;
@@ -22,6 +27,7 @@
   max-width: 100%;
   height: auto;
 }
+
 .booking-event-hover__color-picker-trigger {
   all: unset;
   border: 1px solid #e0e0e0;
@@ -29,6 +35,7 @@
   border-radius: 0.21rem;
   cursor: pointer;
 }
+
 .events_btns {
   display: inline-flex;
   align-items: center;
@@ -50,13 +57,13 @@
   position: absolute;
   background-color: var(--wa-color-surface-default);
   padding: 10px;
-  border: 1px solid var(--wa-color-surface-border);
-  border-radius: 6px;
+  border: 1px solid var(--ir-booking-popover-border-color);
   left: var(--el-left, 50%);
   transform: translateX(-50%) translateY(10px);
   box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
-  /* font-size: var(--wa-font-size-m);
+  font-size: 13.5px;
   line-height: var(--wa-line-height-normal);
+  /* ;
   text-align: start;
   white-space: normal;
   background-color: var(--wa-color-surface-default);
@@ -68,11 +75,10 @@
   /* transform-origin: bottom; */
   /* display: flex;
   flex-direction: column; */
-  padding: var(--wa-space-l);
-  background-color: var(--wa-color-surface-default);
-  border: 1px solid var(--wa-color-surface-border);
+  padding: var(--wa-space-m);
   border-radius: var(--wa-panel-border-radius);
   border-style: var(--wa-panel-border-style);
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   box-shadow: var(--wa-shadow-l);
   color: var(--wa-color-text-normal);
   user-select: none;
@@ -101,31 +107,35 @@
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
-  z-index: 2;
 }
 
 .bubblePointer::before,
 .bubblePointer::after {
+  z-index: 100;
   content: '';
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 11px solid transparent;
-  border-right: 11px solid transparent;
+  border-left: var(--ir-booking-event-arrow) solid transparent;
+  border-right: var(--ir-booking-event-arrow) solid transparent;
 }
 
+.bubblePointer::before {
+  border-left: var(--ir-booking-event-arrow-before) solid transparent;
+  border-right: var(--ir-booking-event-arrow-before) solid transparent;
+}
 .bubblePointTop {
   bottom: -12px;
 }
 
 .bubblePointTop::before {
-  border-top: 11px solid var(--wa-color-surface-border);
+  border-top: var(--ir-booking-event-arrow-before) solid var(--ir-booking-popover-border-color);
   top: 0;
 }
 
 .bubblePointTop::after {
-  border-top: 10px solid var(--wa-color-surface-default);
-  top: 1px;
+  border-top: var(--ir-booking-event-arrow) solid var(--wa-color-surface-default);
+  top: -1px;
 }
 
 .bubblePointBottom {
@@ -133,13 +143,13 @@
 }
 
 .bubblePointBottom::before {
-  border-bottom: 11px solid var(--wa-color-surface-border);
+  border-bottom: var(--ir-booking-event-arrow-before) solid var(--ir-booking-popover-border-color);
   bottom: 0;
 }
 
 .bubblePointBottom::after {
-  border-bottom: 10px solid var(--wa-color-surface-default);
-  bottom: 1px;
+  border-bottom: var(--ir-booking-event-arrow) solid var(--wa-color-surface-default);
+  bottom: -1px;
 }
 
 .bubbleInfoAbove {
@@ -150,7 +160,7 @@
   margin-right: 4px;
 }
 .icon-image {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: auto;
+  width: 25px;
   margin-right: 5px;
 }

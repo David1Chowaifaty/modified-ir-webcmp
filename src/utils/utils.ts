@@ -383,11 +383,11 @@ export function canCheckIn({ from_date, to_date, isCheckedIn }: CheckInParams): 
   if (isCheckedIn) {
     return false;
   }
-  const now = moment();
+  // const now = moment();
   if (
     (moment().isSameOrAfter(new Date(from_date), 'days') && moment().isBefore(new Date(to_date), 'days')) ||
-    (moment().isSame(new Date(to_date), 'days') &&
-      !compareTime(now.toDate(), createDateWithOffsetAndHour(calendarData.checkin_checkout_hours?.offset, calendarData.checkin_checkout_hours?.hour)))
+    moment().isSame(new Date(to_date), 'days')
+    // && !compareTime(now.toDate(), createDateWithOffsetAndHour(calendarData.checkin_checkout_hours?.offset, calendarData.checkin_checkout_hours?.hour))
   ) {
     return true;
   }
