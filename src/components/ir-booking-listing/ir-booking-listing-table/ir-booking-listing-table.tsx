@@ -30,6 +30,8 @@ export class IrBookingListingTable {
     try {
       this.isLoading = true;
       await this.bookingListingsService.removeExposedBooking(this.booking_nbr, true);
+      booking_listing.bookings = [...booking_listing.bookings.filter(b => b.booking_nbr?.toString() !== this.booking_nbr)];
+      this.booking_nbr = null;
     } catch (error) {
     } finally {
       this.isLoading = false;

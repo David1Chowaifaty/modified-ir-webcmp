@@ -23,6 +23,7 @@ export class IrPaymentDetails {
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: IPayment | null = null;
   @State() modalMode: 'delete' | 'save' | null = null;
+  @State() isLoading: boolean = false;
 
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
   @Event({ bubbles: true }) resetExposedCancellationDueAmount: EventEmitter<null>;
@@ -107,18 +108,18 @@ export class IrPaymentDetails {
     });
   };
 
-  private handleEditPayment = (payment: IPayment) => {
+  private handleEditPayment(payment: IPayment) {
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: { payment, mode: 'edit' },
     });
-  };
+  }
 
-  private handleDeletePayment = (payment: IPayment) => {
+  private handleDeletePayment(payment: IPayment) {
     this.modalMode = 'delete';
     this.toBeDeletedItem = payment;
     this.dialogRef.openModal();
-  };
+  }
 
   private async handleIssueReceipt(detail: IPayment) {
     if (detail.receipt_nbr) {
@@ -143,7 +144,8 @@ export class IrPaymentDetails {
 
   private async cancelPayment() {
     try {
-      await this.paymentService.CancelPayment(this.toBeDeletedItem.id);
+      this.isLoading = true;
+      await this.paymentService.CancelPayment(this.toBeDeletedItem.system_id);
       const newPaymentArray = this.booking.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
 
       this.booking = {
@@ -151,11 +153,11 @@ export class IrPaymentDetails {
         financial: { ...this.booking.financial, payments: newPaymentArray },
       };
 
+      this.dialogRef.closeModal();
       this.confirmModal = false;
       this.resetBookingEvt.emit(null);
       this.resetExposedCancellationDueAmount.emit(null);
       this.toBeDeletedItem = null;
-      this.modalMode = null;
     } catch (error) {
       console.error('Error canceling payment:', error);
       this.toast.emit({
@@ -164,6 +166,8 @@ export class IrPaymentDetails {
         description: 'Failed to cancel payment. Please try again.',
         position: 'top-right',
       });
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -295,7 +299,7 @@ export class IrPaymentDetails {
           <ir-custom-button size="medium" data-dialog="close" variant="neutral" appearance="filled">
             {locales.entries.Lcz_Cancel}
           </ir-custom-button>
-          <ir-custom-button size="medium" onClickHandler={e => this.handleConfirmModal(e)} variant={this.modalMode === 'delete' ? 'danger' : 'brand'}>
+          <ir-custom-button loading={this.isLoading} size="medium" onClickHandler={e => this.handleConfirmModal(e)} variant={this.modalMode === 'delete' ? 'danger' : 'brand'}>
             {this.modalMode === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
           </ir-custom-button>
         </div>

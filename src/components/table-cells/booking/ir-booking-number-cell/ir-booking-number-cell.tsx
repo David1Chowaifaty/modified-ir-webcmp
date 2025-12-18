@@ -28,9 +28,12 @@ export class IrBookingNumberCell {
         <img class="booked-by-source__logo" id={`source-logo__${this.bookingNumber}`} src={this.origin.Icon} alt={this.origin.Label} />
         <div class="booking-nbr-cell__container">
           <div style={{ width: 'fit-content' }}>
-            <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
+            {/* <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
               {this.bookingNumber}
-            </ir-custom-button>
+            </ir-custom-button> */}
+            <button class="booking-nbr-cell__button" onClick={() => this.openBookingDetails.emit(this.bookingNumber)}>
+              {this.bookingNumber}
+            </button>
           </div>
           <p class="booking-nbr-cell__channel_nbr">{this.channelBookingNumber ? this.channelBookingNumber : this.origin.Label}</p>
         </div>

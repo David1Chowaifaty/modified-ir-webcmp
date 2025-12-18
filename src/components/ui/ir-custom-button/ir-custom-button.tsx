@@ -99,6 +99,20 @@ export class IrCustomButton {
   };
 
   render() {
+    if (this.link) {
+      return (
+        <button
+          class="ir-button__link"
+          onClick={e => {
+            this.clickHandler.emit(e);
+          }}
+        >
+          <slot slot="start" name="start"></slot>
+          <slot></slot>
+          <slot slot="end" name="end"></slot>
+        </button>
+      );
+    }
     return (
       <Host>
         <wa-button

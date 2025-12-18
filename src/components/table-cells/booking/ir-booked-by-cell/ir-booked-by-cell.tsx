@@ -85,9 +85,9 @@ export class IrBookedByCell {
         {this.label && <p class="cell-label">{this.label}:</p>}
         <div class="booked-by-source__container">
           {this.clickableGuest ? (
-            <ir-custom-button size="medium" onClickHandler={this.handleGuestClick.bind(this)} variant="brand" appearance="plain" link>
+            <button class="booked-by-cell__button" onClick={this.handleGuestClick.bind(this)}>
               {guest}
-            </ir-custom-button>
+            </button>
           ) : (
             <p>{guest}</p>
           )}
