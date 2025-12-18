@@ -6103,6 +6103,7 @@ declare global {
         "combobox-select": IrComboboxSelectEventDetail;
         "text-change": string;
         "combobox-clear": void;
+        "input-picker-blurred": void;
     }
     interface HTMLIrPickerElement extends Components.IrPicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickerElementEventMap>(type: K, listener: (this: HTMLIrPickerElement, ev: IrPickerCustomEvent<HTMLIrPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9710,6 +9711,10 @@ declare namespace LocalJSX {
           * Emitted when a value is selected from the combobox list.
          */
         "onCombobox-select"?: (event: IrPickerCustomEvent<IrComboboxSelectEventDetail>) => void;
+        /**
+          * Emitted when the clear button is clicked and the combobox value is cleared.
+         */
+        "onInput-picker-blurred"?: (event: IrPickerCustomEvent<void>) => void;
         /**
           * Emitted when the text input value changes.
          */

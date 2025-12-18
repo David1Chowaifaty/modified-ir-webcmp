@@ -83,6 +83,9 @@ export class IrPicker {
   /** Emitted when the clear button is clicked and the combobox value is cleared. */
   @Event({ eventName: 'combobox-clear' }) comboboxClear!: EventEmitter<void>;
 
+  /** Emitted when the clear button is clicked and the combobox value is cleared. */
+  @Event({ eventName: 'input-picker-blurred' }) inputPickerBlurred!: EventEmitter<void>;
+
   componentWillLoad() {
     const hostItems = Array.from(this.hostEl?.querySelectorAll('ir-picker-item') ?? []) as PickerItemElement[];
     if (hostItems.length) {
@@ -558,6 +561,7 @@ export class IrPicker {
             appearance={this.appearance}
             label={this.label}
             pill={this.pill}
+            onblur={() => this.inputPickerBlurred.emit()}
             autocomplete="off"
             placeholder={this.placeholder || 'Search'}
             oninput={this.handleInput}

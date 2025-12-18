@@ -44,6 +44,7 @@ export class IglPropertyBookedBy {
     expiryYear: '',
   };
   @State() guests: ExposedGuests;
+  @State() typedEmail: string;
 
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
 
@@ -176,6 +177,7 @@ export class IglPropertyBookedBy {
       firstName: '',
       lastName: '',
       contactNumber: '',
+      email: '',
       isdCode: this.country.toString(),
       countryId: this.country,
     };
@@ -186,18 +188,8 @@ export class IglPropertyBookedBy {
   }
 
   private async fetchGuests(email: string) {
+    this.typedEmail = email;
     this.guests = await this.bookingService.fetchExposedGuest(email, this.propertyId);
-    if (this.guests.length === 0) {
-      if (z.string().email().safeParse(email).success) {
-        this.bookedByData = {
-          ...this.bookedByData,
-          email,
-        };
-      } else {
-        this.clearEvent();
-        this.pickerRef.clearInput();
-      }
-    }
   }
   private get expiryDate(): string {
     const { expiryMonth, expiryYear } = this.bookedByData;
@@ -225,6 +217,25 @@ export class IglPropertyBookedBy {
               withClear
               onText-change={event => this.fetchGuests(event.detail)}
               debounce={300}
+              onInput-picker-blurred={e => {
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                const email = this.typedEmail;
+                if (this.bookedByData.email) {
+                  return;
+                }
+                if (this.guests.length === 0) {
+                  if (z.string().email().safeParse(email).success) {
+                    this.bookedByData = {
+                      ...this.bookedByData,
+                      email,
+                    };
+                  } else {
+                    this.clearEvent();
+                    this.pickerRef.clearInput();
+                  }
+                }
+              }}
               onCombobox-clear={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
