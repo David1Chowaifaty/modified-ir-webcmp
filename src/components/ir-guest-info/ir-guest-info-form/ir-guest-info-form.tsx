@@ -71,7 +71,13 @@ export class IrGuestInfoForm {
       }
 
       this.countries = countries;
-      this.guest = guest ? { ...guest, mobile: guest.mobile_without_prefix } : null;
+      let _g = { ...guest };
+      if (_g && !_g.country_phone_prefix) {
+        const country = this.countries.find(c => c.id === _g.country_id);
+        _g = { ..._g, country_phone_prefix: country?.phone_prefix };
+      }
+
+      this.guest = guest ? { ..._g, mobile: guest.mobile_without_prefix } : null;
     } catch (error) {
       console.error(error);
     } finally {
