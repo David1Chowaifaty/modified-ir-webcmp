@@ -241,6 +241,10 @@ export class IrBookingListingTable {
           onIrDialogHide={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
+          }}
+          onIrDialogAfterHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
             this.booking_nbr = null;
           }}
           lightDismiss={false}
