@@ -316,6 +316,7 @@ export class IglRatePlan {
                     data-testid="book_property"
                     disabled={disableForm}
                     type="button"
+                    appearance={visibleInventory.reserved === 1 ? 'accent' : 'outlined'}
                     class="rateplan__booking-btn"
                     onClickHandler={() => {
                       resetReserved();

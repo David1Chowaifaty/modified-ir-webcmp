@@ -153,18 +153,10 @@
   z-index: 2;
 }
 
-@media only screen and (max-width: 768px) {
+@media (min-width: 768px) {
   .booking-btn {
     width: 100%;
   }
-}
-@media (min-width: 768px) {
-  .rateplan__booking-btn {
-    width: 70px;
-  }
-}
-
-@media only screen and (min-width: 768px) {
   .mobile-only {
     display: none;
   }
@@ -185,9 +177,12 @@
     align-items: center;
     justify-content: space-between;
   }
+  .rateplan__booking-btn {
+    width: 95px;
+  }
 }
 
-@media only screen and (min-width: 991px) {
+@media (min-width: 991px) {
   :host {
     margin: 0;
   }
@@ -212,16 +207,6 @@
     max-width: 150px !important;
   }
 }
-
-@media only screen and (min-width: 1200px) {
-  .rateplan-name-container {
-    width: 40%;
-    margin-top: 0;
-  }
-  /* .rateplan-container {
-    width: 40%;
-  } */
-}
 @media (min-width: 1024px) {
   .fd-rateplan__price-input {
     width: 170px;
@@ -243,4 +228,13 @@
   .rateplan-config {
     width: fit-content;
   }
+}
+@media (min-width: 1200px) {
+  .rateplan-name-container {
+    width: 40%;
+    margin-top: 0;
+  }
+  /* .rateplan-container {
+    width: 40%;
+  } */
 }
