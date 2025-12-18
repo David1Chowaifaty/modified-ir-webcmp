@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import IMask, { FactoryArg, InputMask } from 'imask';
 import { masks } from './countries_masks';
 import { ICountry } from '@/models/IBooking';
@@ -16,6 +16,7 @@ export interface IrMobileInputChangeDetail {
   shadow: true,
 })
 export class IrMobileInput {
+  @Element() el: HTMLIrMobileInputElement;
   private static idCounter = 0;
   private readonly componentId = ++IrMobileInput.idCounter;
   private readonly inputId = `ir-mobile-input-${this.componentId}`;
@@ -58,11 +59,15 @@ export class IrMobileInput {
 
   @State() selectedCountry?: ICountry;
   @State() displayValue: string = '';
+  @State() isInvalid: boolean = false;
 
   componentWillLoad() {
     const resolvedCountry: ICountry | null = this.resolveCountry(this.countryCode) ?? null;
     if (!resolvedCountry) {
       return;
+    }
+    if (this.el.hasAttribute('aria-invalid')) {
+      this.isInvalid = Boolean(JSON.parse(this.el.getAttribute('aria-invalid')));
     }
     this.selectedCountry = resolvedCountry;
     this.countryCode = resolvedCountry?.code;
@@ -118,6 +123,13 @@ export class IrMobileInput {
     }
   }
 
+  @Watch('aria-invalid')
+  handleAriaInvalidChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.isInvalid = Boolean(newValue);
+    }
+  }
+
   private resolveCountry(code?: string) {
     if (!code) return undefined;
     return this.countries.find(country => country.code.toUpperCase() === code.toUpperCase());
@@ -148,7 +160,7 @@ export class IrMobileInput {
 
   private rebuildMask() {
     this.destroyMask();
-    this.initializeMask();
+    // this.initializeMask();
   }
 
   private destroyMask() {
@@ -206,15 +218,17 @@ export class IrMobileInput {
     });
   };
 
-  private handlePlainInput = (event: Event) => {
-    if (this.mask) return;
-    const nextValue = (event.target as HTMLInputElement)?.value ?? '';
-    if (nextValue !== this.value) {
-      this.value = nextValue;
-      this.displayValue = nextValue;
-      this.emitChange();
-    }
-  };
+  // private handlePlainInput = (event: Event) => {
+  //   const { value } = event.target as HTMLInputElement;
+  //   this.mobileInputChange.emit({ formattedValue: value, value, country: this.selectedCountry });
+  //   if (this.mask) return;
+  //   const nextValue = (event.target as HTMLInputElement)?.value ?? '';
+  //   if (nextValue !== this.value) {
+  //     this.value = nextValue;
+  //     this.displayValue = nextValue;
+  //     this.emitChange();
+  //   }
+  // };
 
   render() {
     const describedByIds = [this.description ? this.descriptionId : null, this.error ? this.errorId : null].filter(Boolean).join(' ') || undefined;
@@ -247,7 +261,15 @@ export class IrMobileInput {
             onwa-select={this.handleCountrySelect}
             class="mobile-input__prefix-dropdown"
           >
-            <button slot="trigger" type="button" class="mobile-input__trigger" disabled={this.disabled} aria-haspopup="listbox" aria-label="Change country calling code">
+            <button
+              aria-invalid={String(this.isInvalid && !this.selectedCountry)}
+              slot="trigger"
+              type="button"
+              class="mobile-input__trigger"
+              disabled={this.disabled}
+              aria-haspopup="listbox"
+              aria-label="Change country calling code"
+            >
               <div class="mobile-input__phone-country" style={{ marginRight: '1rem' }}>
                 {this.selectedCountry ? <img src={this.selectedCountry?.flag} alt={this.selectedCountry?.name} class="mobile-input__logo" /> : <span>Select</span>}
                 {/* <span aria-hidden="true">{this.selectedCountry?.phone_prefix}</span> */}
@@ -267,7 +289,7 @@ export class IrMobileInput {
               </wa-dropdown-item>
             ))}
           </wa-dropdown>
-          <input
+          {/* <input
             ref={el => (this.inputRef = el)}
             id={this.inputId}
             class={{
@@ -285,7 +307,25 @@ export class IrMobileInput {
             placeholder={this.placeholder}
             value={this.displayValue}
             onInput={this.handlePlainInput}
-          />
+          /> */}
+          <ir-input
+            aria-invalid={String(this.isInvalid && (this.value ?? '').length < 4)}
+            type="tel"
+            inputMode="tel"
+            autocomplete="off"
+            disabled={this.disabled}
+            placeholder={this.placeholder}
+            defaultValue={this.value}
+            value={this.value}
+            class="phone__input"
+            onText-change={e => {
+              const value = e.detail;
+              this.value = value;
+              this.mobileInputChange.emit({ formattedValue: value, value, country: this.selectedCountry });
+            }}
+          >
+            {this.selectedCountry && <span slot="start">{this.selectedCountry?.phone_prefix}</span>}
+          </ir-input>
         </div>
         {this.error ? (
           <p id={this.errorId} class="mobile-input__error" role="alert">

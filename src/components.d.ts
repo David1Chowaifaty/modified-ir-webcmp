@@ -1410,10 +1410,11 @@ export namespace Components {
         "ticket": string;
     }
     interface IrGuestInfoForm {
-        "autoValidate": boolean;
-        "countries": ICountry[];
-        "guest": Guest;
+        "booking_nbr": string;
+        "email": string;
+        "fromId": string;
         "language": string;
+        "ticket": string;
     }
     interface IrGuestNameCell {
         "name": Guest;
@@ -5401,6 +5402,9 @@ declare global {
         new (): HTMLIrGuestInfoDrawerElement;
     };
     interface HTMLIrGuestInfoFormElementEventMap {
+        "guestInfoDrawerClosed": { source: Element };
+        "resetBookingEvt": null;
+        "toast": IToast;
         "guestChanged": GuestChangedEvent1;
     }
     interface HTMLIrGuestInfoFormElement extends Components.IrGuestInfoForm, HTMLStencilElement {
@@ -8603,11 +8607,15 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrGuestInfoForm {
-        "autoValidate"?: boolean;
-        "countries"?: ICountry[];
-        "guest"?: Guest;
+        "booking_nbr"?: string;
+        "email"?: string;
+        "fromId"?: string;
         "language"?: string;
         "onGuestChanged"?: (event: IrGuestInfoFormCustomEvent<GuestChangedEvent1>) => void;
+        "onGuestInfoDrawerClosed"?: (event: IrGuestInfoFormCustomEvent<{ source: Element }>) => void;
+        "onResetBookingEvt"?: (event: IrGuestInfoFormCustomEvent<null>) => void;
+        "onToast"?: (event: IrGuestInfoFormCustomEvent<IToast>) => void;
+        "ticket"?: string;
     }
     interface IrGuestNameCell {
         "name"?: Guest;

@@ -149,3 +149,20 @@
 .mobile-input__country-prefix {
   color: var(--wa-color-neutral-500);
 }
+.mobile-input__trigger[aria-invalid='true'] {
+  border-color: var(--wa-color-danger-border-loud);
+  outline-color: var(--wa-color-danger-border-loud);
+  border-width: 2px;
+}
+.phone__input {
+  flex: 1 1 0%;
+  width: 100%;
+}
+.phone__input:dir(ltr)::part(base) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.phone__input:dir(rtl)::part(base) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
