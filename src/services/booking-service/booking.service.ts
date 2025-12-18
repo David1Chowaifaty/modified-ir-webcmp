@@ -1001,9 +1001,12 @@ export class BookingService {
   }
   public async getUserDefaultCountry() {
     try {
-      const { data } = await axios.post(`/Get_Country_By_IP`, {
-        IP: '',
-      });
+      let payload: any = { IP: '' };
+      if (calendar_data?.property?.id) {
+        payload = { ...payload, id: calendar_data.property.id };
+      }
+
+      const { data } = await axios.post(`/Get_Country_By_IP`, payload);
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
