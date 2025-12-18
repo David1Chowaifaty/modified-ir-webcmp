@@ -72,7 +72,6 @@ export class IrGuestInfoForm {
 
       this.countries = countries;
       let _g = { ...guest };
-      console.log(_g);
       if (_g && !_g.country_phone_prefix) {
         const country = this.countries.find(c => c.id === _g.country_id);
         console.log({ country });
@@ -109,7 +108,6 @@ export class IrGuestInfoForm {
   }
 
   render() {
-    console.log(this.guest, this.countries?.find(c => c.phone_prefix?.toString() === this.guest?.country_phone_prefix?.toString())?.code);
     if (this.isLoading) {
       return (
         <div class={'drawer__loader-container'}>
