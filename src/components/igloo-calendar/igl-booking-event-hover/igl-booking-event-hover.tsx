@@ -379,7 +379,7 @@ export class IglBookingEventHover {
     const channel_notes: IOtaNotes[] = [...this.bookingEvent.ota_notes];
     const separator = '<br>- ';
     if (channel_notes.length > maxVisible) {
-      channel_notes[maxVisible - 1] = { statement: `${channel_notes[maxVisible - 1].statement} <span style="color: #1e9ff2;">more...</span>` };
+      channel_notes[maxVisible - 1] = { statement: `${channel_notes[maxVisible - 1].statement} <span>more...</span>` };
     }
     return channel_notes
       .slice(0, maxVisible)
