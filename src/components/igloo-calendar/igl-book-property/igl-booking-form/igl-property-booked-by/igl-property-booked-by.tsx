@@ -52,6 +52,7 @@ export class IglPropertyBookedBy {
   private currentMonth: string = '01';
   private country;
   private paymentMethods: AllowedPaymentMethod[] = [];
+  private pickerRef: HTMLIrPickerElement;
 
   componentWillLoad() {
     this.assignCountryCode();
@@ -79,10 +80,10 @@ export class IglPropertyBookedBy {
   }
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
-
     const countryId = country['COUNTRY_ID'];
     this.country = countryId;
-    this.bookedByData = { ...this.bookedByData, isdCode: countryId.toString(), countryId };
+    const _c = this.countries.find(c => c.id?.toString() === countryId?.toString());
+    this.bookedByData = { ...this.bookedByData, isdCode: _c.phone_prefix.toString(), countryId };
   }
   private initializeDateData() {
     const dt = new Date();
@@ -192,6 +193,9 @@ export class IglPropertyBookedBy {
           ...this.bookedByData,
           email,
         };
+      } else {
+        this.clearEvent();
+        this.pickerRef.clearInput();
       }
     }
   }
@@ -208,7 +212,6 @@ export class IglPropertyBookedBy {
     return `${expiryMonth}/${year}`;
   }
   render() {
-    console.log(this.bookedByData);
     return (
       <Host>
         <div class="text-left mt-3">
@@ -217,6 +220,7 @@ export class IglPropertyBookedBy {
               class="bookedByEmailContainer m-0 p-0"
               label={locales.entries.Lcz_BookedBy}
               value={this.bookedByData.email}
+              ref={el => (this.pickerRef = el)}
               aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.email !== '' && validateEmail(this.bookedByData.email)))}
               withClear
               onText-change={event => this.fetchGuests(event.detail)}
@@ -247,14 +251,14 @@ export class IglPropertyBookedBy {
           </div>
         </div>
         <div class="bookedDetailsForm text-left mt-2 font-small-3 ">
-          <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
-            <div class="flex-fill fd-property-booked-by__guest-form ">
+          <div class="d-flex flex-column flex-md-row  justify-content-md-between " style={{ gap: '1rem' }}>
+            <div class="fd-property-booked-by__guest-form ">
               <ir-validator value={this.bookedByData.firstName} schema={BookingGuestSchema.shape.first_name}>
                 <ir-input
                   // aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.firstName === ''))}
                   onText-change={event => {
                     this.updateGuest({ first_name: event.detail });
-                    this.handleDataChange('firstName', { target: { value: event.detail } });
+                    this.handleDataChange('firstName', { target: { value: event.detail.trim() } });
                   }}
                   defaultValue={this.bookedByData.firstName}
                   value={this.bookedByData.firstName}
@@ -268,7 +272,7 @@ export class IglPropertyBookedBy {
                   // aria-invalid={String(Boolean(this.isButtonPressed && this.bookedByData.lastName === ''))}
                   onText-change={event => {
                     this.updateGuest({ last_name: event.detail });
-                    this.handleDataChange('lastName', { target: { value: event.detail } });
+                    this.handleDataChange('lastName', { target: { value: event.detail.trim() } });
                   }}
                   defaultValue={this.bookedByData.lastName}
                   value={this.bookedByData.lastName}
@@ -293,7 +297,7 @@ export class IglPropertyBookedBy {
                 }}
                 onMobile-input-country-change={e => this.handleDataChange('isdCode', { target: { value: e.detail.phone_prefix } })}
                 value={this.bookedByData.contactNumber}
-                required
+                // required
                 countryCode={this.countries.find(c => c.phone_prefix === this.bookedByData.isdCode)?.code}
                 countries={this.countries}
               ></ir-mobile-input>
@@ -344,13 +348,13 @@ export class IglPropertyBookedBy {
                   <ir-input
                     value={this.bookedByData.cardNumber}
                     defaultValue={this.bookedByData.cardNumber}
-                    onText-change={e => this.handleCreditCardDataChange('cardNumber', e.detail)}
+                    onText-change={e => this.handleCreditCardDataChange('cardNumber', e.detail.trim())}
                     label={locales.entries.Lcz_CardNumber}
                   ></ir-input>
                   <ir-input
                     value={this.bookedByData.cardHolderName}
                     defaultValue={this.bookedByData.cardHolderName}
-                    onText-change={e => this.handleCreditCardDataChange('cardHolderName', e.detail)}
+                    onText-change={e => this.handleCreditCardDataChange('cardHolderName', e.detail.trim())}
                     label={locales.entries.Lcz_CardHolderName}
                   ></ir-input>
                   <ir-input

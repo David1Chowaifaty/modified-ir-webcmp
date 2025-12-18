@@ -72,9 +72,13 @@ export class IrGuestInfoForm {
 
       this.countries = countries;
       let _g = { ...guest };
+      console.log(_g);
       if (_g && !_g.country_phone_prefix) {
         const country = this.countries.find(c => c.id === _g.country_id);
-        _g = { ..._g, country_phone_prefix: country?.phone_prefix };
+        console.log({ country });
+        if (country) {
+          _g = { ..._g, country_phone_prefix: country?.phone_prefix };
+        }
       }
 
       this.guest = guest ? { ..._g, mobile: guest.mobile_without_prefix } : null;
@@ -105,6 +109,7 @@ export class IrGuestInfoForm {
   }
 
   render() {
+    console.log(this.guest, this.countries?.find(c => c.phone_prefix?.toString() === this.guest?.country_phone_prefix?.toString())?.code);
     if (this.isLoading) {
       return (
         <div class={'drawer__loader-container'}>
@@ -132,7 +137,7 @@ export class IrGuestInfoForm {
             id={'firstName'}
             value={this.guest?.first_name}
             required
-            onText-change={e => this.handleInputChange({ first_name: e.detail })}
+            onText-change={e => this.handleInputChange({ first_name: e.detail.trim() })}
             label={locales.entries?.Lcz_FirstName}
           ></ir-input>
         </ir-validator>
@@ -147,7 +152,7 @@ export class IrGuestInfoForm {
             value={this.guest?.last_name}
             required
             id="lastName"
-            onText-change={e => this.handleInputChange({ last_name: e.detail })}
+            onText-change={e => this.handleInputChange({ last_name: e.detail.trim() })}
             label={locales.entries?.Lcz_LastName}
           ></ir-input>
         </ir-validator>
@@ -164,7 +169,7 @@ export class IrGuestInfoForm {
             value={this.guest?.email}
             required
             onText-change={e => {
-              const email = e.detail.replace(/(?<=^[^@]*)\s+(?=[^@]*@noemail\.com$)/g, '');
+              const email = e.detail.replace(/(?<=^[^@]*)\s+(?=[^@]*@noemail\.com$)/g, '').trim();
               this.handleInputChange({ email });
             }}
           ></ir-input>
@@ -181,7 +186,7 @@ export class IrGuestInfoForm {
             id="altEmail"
             value={this.guest?.alternative_email}
             onText-change={e => {
-              const email = e.detail.replace(/(?<=^[^@]*)\s+(?=[^@]*@noemail\.com$)/g, '');
+              const email = e.detail.replace(/(?<=^[^@]*)\s+(?=[^@]*@noemail\.com$)/g, '').trim();
               this.handleInputChange({ alternative_email: email });
             }}
           ></ir-input>
@@ -213,13 +218,13 @@ export class IrGuestInfoForm {
           <ir-mobile-input
             size="small"
             onMobile-input-change={e => {
-              this.handleInputChange({ mobile: e.detail.formattedValue });
+              this.handleInputChange({ mobile: e.detail.formattedValue.trim() });
             }}
             aria-invalid={'true'}
             onMobile-input-country-change={e => this.handleInputChange({ country_phone_prefix: e.detail.phone_prefix })}
             value={this.guest?.mobile ?? ''}
             required
-            countryCode={this.countries.find(c => c.phone_prefix === this.guest?.country_phone_prefix)?.code}
+            countryCode={this.countries.find(c => c.phone_prefix?.toString() === this.guest?.country_phone_prefix?.toString())?.code}
             countries={this.countries}
           ></ir-mobile-input>
         </ir-validator>

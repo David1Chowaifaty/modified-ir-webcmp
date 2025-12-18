@@ -190,7 +190,7 @@ export class IglApplicationInfo {
               data-testid="guest_first_name"
               placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
               onText-change={event => {
-                const name = event.detail;
+                const name = event.detail.trim();
                 this.updateGuest({ first_name: name });
                 if (booking_store.event_type.type === 'EDIT_BOOKING') {
                   modifyBookingStore('guest', {
@@ -211,7 +211,7 @@ export class IglApplicationInfo {
               data-testid="guest_last_name"
               placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
               onText-change={event => {
-                const name = event.detail;
+                const name = event.detail.trim();
                 this.updateGuest({ last_name: name });
                 if (booking_store.event_type.type === 'EDIT_BOOKING') {
                   modifyBookingStore('guest', {

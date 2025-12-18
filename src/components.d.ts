@@ -2378,6 +2378,7 @@ export namespace Components {
           * The input's visual appearance.
          */
         "appearance": NativeWaInput['appearance'];
+        "clearInput": () => Promise<void>;
         "close": () => Promise<void>;
         /**
           * Delay (in milliseconds) before emitting the `text-change` event. Defaults to 300ms for async mode.

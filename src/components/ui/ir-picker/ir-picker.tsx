@@ -171,6 +171,11 @@ export class IrPicker {
     }
   }
 
+  @Method()
+  async clearInput() {
+    this.applyFilter('');
+  }
+
   private closeCombobox(options: { restoreFocus?: boolean } = {}) {
     this.isOpen = false;
     if (options.restoreFocus) {
