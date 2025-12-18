@@ -251,16 +251,7 @@ export class IrBookingListingTable {
         >
           <span>{locales.entries.Lcz_SureYouWantToDeleteBookingNbr + this.booking_nbr}</span>
           <div slot="footer" class="ir-dialog__footer">
-            <ir-custom-button
-              onClickHandler={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.booking_nbr = null;
-              }}
-              size="medium"
-              variant="neutral"
-              appearance="filled"
-            >
+            <ir-custom-button data-dialog="close" size="medium" variant="neutral" appearance="filled">
               Cancel
             </ir-custom-button>
             <ir-custom-button
