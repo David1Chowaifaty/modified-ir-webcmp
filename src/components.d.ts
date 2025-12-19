@@ -16,6 +16,7 @@ import { CalendarModalEvent, IReallocationPayload, IRoomNightsData, IRoomNightsD
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
+import { DateRangeChangeEvent } from "./components/igloo-calendar/igl-date-range/igl-date-range";
 import { Currency, RatePlan, RoomType } from "./models/property";
 import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Property, Room, SharedPerson } from "./models/booking.dto";
 import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
@@ -24,6 +25,7 @@ import { IPaymentAction } from "./services/payment.service";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+import { BookingEditorMode } from "./components/igloo-calendar/ir-booking-editor/types";
 import { BookingService } from "./services/booking-service/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -62,6 +64,7 @@ import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
+import { Toast } from "./components/ir-toast-provider/ir-toast-provider";
 import { User } from "./models/Users";
 import { AllowedUser } from "./components/ir-user-management/types";
 export { ACPages } from "./components/ac-pages-menu/ac-pages-menu";
@@ -75,6 +78,7 @@ export { CalendarModalEvent, IReallocationPayload, IRoomNightsData, IRoomNightsD
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
+export { DateRangeChangeEvent } from "./components/igloo-calendar/igl-date-range/igl-date-range";
 export { Currency, RatePlan, RoomType } from "./models/property";
 export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Property, Room, SharedPerson } from "./models/booking.dto";
 export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
@@ -83,6 +87,7 @@ export { IPaymentAction } from "./services/payment.service";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+export { BookingEditorMode } from "./components/igloo-calendar/ir-booking-editor/types";
 export { BookingService } from "./services/booking-service/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -121,6 +126,7 @@ export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
+export { Toast } from "./components/ir-toast-provider/ir-toast-provider";
 export { User } from "./models/Users";
 export { AllowedUser } from "./components/ir-user-management/types";
 export namespace Components {
@@ -561,6 +567,32 @@ export namespace Components {
           * Authentication or session ticket.
          */
         "ticket": string;
+    }
+    interface IrBookingEditor {
+        "booking": Booking;
+        "checkIn": string;
+        "checkOut": string;
+        "language": string;
+        "mode": BookingEditorMode;
+        "open": boolean;
+    }
+    interface IrBookingEditorHeader {
+        /**
+          * Booking context used for edit, add-room, and split flows
+         */
+        "booking": Booking;
+        /**
+          * Fixed check-in date (YYYY-MM-DD), if applicable
+         */
+        "checkIn": string;
+        /**
+          * Fixed check-out date (YYYY-MM-DD), if applicable
+         */
+        "checkOut": string;
+        /**
+          * Controls header behavior and date constraints
+         */
+        "mode": BookingEditorMode;
     }
     interface IrBookingEmailLogs {
         "ticket": string;
@@ -3190,6 +3222,10 @@ export namespace Components {
          */
         "position": TPositions;
     }
+    interface IrToastProvider {
+        "hide": (id: string) => Promise<void>;
+        "show": (message: string, options?: { variant?: "primary" | "success" | "warning" | "danger" | "neutral"; duration?: number; closable?: boolean; icon?: string; }) => Promise<string>;
+    }
     interface IrTooltip {
         /**
           * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
@@ -3479,6 +3515,10 @@ export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
 export interface IrBookingDetailsDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsDrawerElement;
+}
+export interface IrBookingEditorHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingEditorHeaderElement;
 }
 export interface IrBookingExtraNoteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4198,6 +4238,7 @@ declare global {
     };
     interface HTMLIglDateRangeElementEventMap {
         "dateSelectEvent": { [key: string]: any };
+        "dateRangeChange": DateRangeChangeEvent;
         "toast": IToast;
     }
     interface HTMLIglDateRangeElement extends Components.IglDateRange, HTMLStencilElement {
@@ -4674,6 +4715,29 @@ declare global {
     var HTMLIrBookingDetailsDrawerElement: {
         prototype: HTMLIrBookingDetailsDrawerElement;
         new (): HTMLIrBookingDetailsDrawerElement;
+    };
+    interface HTMLIrBookingEditorElement extends Components.IrBookingEditor, HTMLStencilElement {
+    }
+    var HTMLIrBookingEditorElement: {
+        prototype: HTMLIrBookingEditorElement;
+        new (): HTMLIrBookingEditorElement;
+    };
+    interface HTMLIrBookingEditorHeaderElementEventMap {
+        "checkAvailability": void;
+    }
+    interface HTMLIrBookingEditorHeaderElement extends Components.IrBookingEditorHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingEditorHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorHeaderElement, ev: IrBookingEditorHeaderCustomEvent<HTMLIrBookingEditorHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingEditorHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorHeaderElement, ev: IrBookingEditorHeaderCustomEvent<HTMLIrBookingEditorHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingEditorHeaderElement: {
+        prototype: HTMLIrBookingEditorHeaderElement;
+        new (): HTMLIrBookingEditorHeaderElement;
     };
     interface HTMLIrBookingEmailLogsElement extends Components.IrBookingEmailLogs, HTMLStencilElement {
     }
@@ -6765,6 +6829,12 @@ declare global {
         prototype: HTMLIrToastElement;
         new (): HTMLIrToastElement;
     };
+    interface HTMLIrToastProviderElement extends Components.IrToastProvider, HTMLStencilElement {
+    }
+    var HTMLIrToastProviderElement: {
+        prototype: HTMLIrToastProviderElement;
+        new (): HTMLIrToastProviderElement;
+    };
     interface HTMLIrTooltipElement extends Components.IrTooltip, HTMLStencilElement {
     }
     var HTMLIrTooltipElement: {
@@ -6936,6 +7006,8 @@ declare global {
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-details-drawer": HTMLIrBookingDetailsDrawerElement;
+        "ir-booking-editor": HTMLIrBookingEditorElement;
+        "ir-booking-editor-header": HTMLIrBookingEditorHeaderElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
@@ -7092,6 +7164,7 @@ declare global {
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
         "ir-toast": HTMLIrToastElement;
+        "ir-toast-provider": HTMLIrToastProviderElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-cell": HTMLIrUnitCellElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
@@ -7313,6 +7386,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "maxDate"?: string;
         "minDate"?: string;
+        "onDateRangeChange"?: (event: IglDateRangeCustomEvent<DateRangeChangeEvent>) => void;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
         "size"?: 'small' | 'medium' | 'large';
@@ -7654,6 +7728,33 @@ declare namespace LocalJSX {
           * Authentication or session ticket.
          */
         "ticket"?: string;
+    }
+    interface IrBookingEditor {
+        "booking"?: Booking;
+        "checkIn"?: string;
+        "checkOut"?: string;
+        "language"?: string;
+        "mode"?: BookingEditorMode;
+        "open"?: boolean;
+    }
+    interface IrBookingEditorHeader {
+        /**
+          * Booking context used for edit, add-room, and split flows
+         */
+        "booking"?: Booking;
+        /**
+          * Fixed check-in date (YYYY-MM-DD), if applicable
+         */
+        "checkIn"?: string;
+        /**
+          * Fixed check-out date (YYYY-MM-DD), if applicable
+         */
+        "checkOut"?: string;
+        /**
+          * Controls header behavior and date constraints
+         */
+        "mode"?: BookingEditorMode;
+        "onCheckAvailability"?: (event: IrBookingEditorHeaderCustomEvent<void>) => void;
     }
     interface IrBookingEmailLogs {
         "ticket"?: string;
@@ -10581,6 +10682,8 @@ declare namespace LocalJSX {
          */
         "position"?: TPositions;
     }
+    interface IrToastProvider {
+    }
     interface IrTooltip {
         /**
           * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
@@ -10770,6 +10873,8 @@ declare namespace LocalJSX {
         "ir-booking-company-form": IrBookingCompanyForm;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-details-drawer": IrBookingDetailsDrawer;
+        "ir-booking-editor": IrBookingEditor;
+        "ir-booking-editor-header": IrBookingEditorHeader;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-guarantee": IrBookingGuarantee;
@@ -10926,6 +11031,7 @@ declare namespace LocalJSX {
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
         "ir-toast": IrToast;
+        "ir-toast-provider": IrToastProvider;
         "ir-tooltip": IrTooltip;
         "ir-unit-cell": IrUnitCell;
         "ir-unit-status": IrUnitStatus;
@@ -10995,6 +11101,8 @@ declare module "@stencil/core" {
              * close event when the drawer is dismissed from any source.
              */
             "ir-booking-details-drawer": LocalJSX.IrBookingDetailsDrawer & JSXBase.HTMLAttributes<HTMLIrBookingDetailsDrawerElement>;
+            "ir-booking-editor": LocalJSX.IrBookingEditor & JSXBase.HTMLAttributes<HTMLIrBookingEditorElement>;
+            "ir-booking-editor-header": LocalJSX.IrBookingEditorHeader & JSXBase.HTMLAttributes<HTMLIrBookingEditorHeaderElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
@@ -11151,6 +11259,7 @@ declare module "@stencil/core" {
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
+            "ir-toast-provider": LocalJSX.IrToastProvider & JSXBase.HTMLAttributes<HTMLIrToastProviderElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-cell": LocalJSX.IrUnitCell & JSXBase.HTMLAttributes<HTMLIrUnitCellElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;

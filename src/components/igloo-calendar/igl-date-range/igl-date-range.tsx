@@ -2,8 +2,8 @@ import { Component, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
-import moment from 'moment';
-
+import moment, { Moment } from 'moment';
+export type DateRangeChangeEvent = { checkIn: Moment; checkOut: Moment };
 @Component({
   tag: 'igl-date-range',
   styleUrl: 'igl-date-range.css',
@@ -22,6 +22,7 @@ export class IglDateRange {
   @State() renderAgain: boolean = false;
 
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
+  @Event({ composed: true, cancelable: true, bubbles: true }) dateRangeChange: EventEmitter<DateRangeChangeEvent>;
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
@@ -75,6 +76,10 @@ export class IglDateRange {
       toDateStr: end.format('DD MMM YYYY'),
       dateDifference: this.totalNights,
     });
+    this.dateRangeChange.emit({
+      checkIn: start,
+      checkOut: end,
+    });
 
     this.renderAgain = !this.renderAgain;
   }
@@ -119,7 +124,7 @@ export class IglDateRange {
       //       minDate={this.minDate}
       //       autoApply
       //       data-state={this.disabled ? 'disabled' : 'active'}
-      //       onDateChanged={evt => {
+      //       onDateRangeChange={evt => {
       //         this.handleDateChange(evt);
       //       }}
       //     ></ir-date-range>

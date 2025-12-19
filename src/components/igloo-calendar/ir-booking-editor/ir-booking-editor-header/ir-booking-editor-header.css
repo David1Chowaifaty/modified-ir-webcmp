@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-m, 1rem);
+}
+.booking-editor-header__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-m, 1rem);
+}
+.booking-editor-header__booking-picker {
+  max-width: 350px;
+}
+@media (min-width: 768px) {
+  .booking-editor-header__container {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .booking-editor-header__adults-select {
+    width: 100px;
+  }
+  .booking-editor-header__children-select {
+    width: 170px;
+  }
+}
