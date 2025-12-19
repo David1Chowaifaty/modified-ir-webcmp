@@ -7,6 +7,7 @@ import moment, { Moment } from 'moment';
 import { BookingInvoiceInfo, InvoiceableItem, ViewMode } from '../types';
 import { IEntries } from '@/models/IBooking';
 import { IssueInvoiceProps } from '@/services/booking-service/types';
+import calendar_data from '@/stores/calendar-data';
 @Component({
   tag: 'ir-invoice-form',
   styleUrl: 'ir-invoice-form.css',
@@ -339,6 +340,7 @@ export class IrInvoiceForm {
       }
       await this.bookingService.issueInvoice({
         is_proforma: isProforma,
+        property_id: calendar_data.property.id,
         invoice,
       });
       const invoiceInfo = await this.bookingService.getBookingInvoiceInfo({
@@ -363,7 +365,11 @@ export class IrInvoiceForm {
   }
   private async openLastInvoice(invoiceInfo: BookingInvoiceInfo) {
     const lastInvoice = invoiceInfo.invoices[invoiceInfo.invoices.length - 1];
-    const { My_Result } = await this.bookingService.printInvoice({ mode: lastInvoice?.credit_note ? 'creditnote' : 'invoice', invoice_nbr: lastInvoice.nbr });
+    const { My_Result } = await this.bookingService.printInvoice({
+      property_id: calendar_data.property.id,
+      mode: lastInvoice?.credit_note ? 'creditnote' : 'invoice',
+      invoice_nbr: lastInvoice.nbr,
+    });
     window.open(My_Result);
   }
 

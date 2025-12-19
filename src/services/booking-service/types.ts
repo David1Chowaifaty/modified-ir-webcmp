@@ -197,6 +197,7 @@ export type GetBookingInvoiceInfoProps = z.infer<typeof GetBookingInvoiceInfoPro
 export const VoidInvoicePropsSchema = z.object({
   invoice_nbr: z.string().optional(),
   reason: z.string().optional(),
+  property_id: z.number(),
 });
 
 export const InvoiceSchema = z.object({
@@ -214,6 +215,7 @@ export type Invoice = z.infer<typeof InvoiceSchema>;
 
 export const IssueInvoicePropsSchema = z.object({
   is_proforma: z.boolean().optional().default(false),
+  property_id: z.number(),
   invoice: InvoiceSchema,
 });
 export type IssueInvoiceProps = z.infer<typeof IssueInvoicePropsSchema>;
@@ -221,6 +223,7 @@ export type VoidInvoiceProps = z.infer<typeof VoidInvoicePropsSchema>;
 
 export const PrintInvoicePropsSchema = z.object({
   invoice_nbr: z.string().optional(),
+  property_id: z.number(),
   mode: z.enum(['invoice', 'creditnote', 'proforma']),
   invoice: InvoiceSchema.optional(),
 });
