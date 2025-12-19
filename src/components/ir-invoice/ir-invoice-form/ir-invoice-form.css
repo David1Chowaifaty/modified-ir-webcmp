@@ -78,6 +78,19 @@
   text-align: right;
   flex: 1 1 0%;
 }
+.ir-invoice__price-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  min-width: fit-content;
+}
+.ir-invoice__reason {
+  color: var(--wa-color-gray-60);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: right;
+}
 .ir-invoice__form-control-label {
   display: inline-flex;
   color: var(--wa-form-control-label-color);
