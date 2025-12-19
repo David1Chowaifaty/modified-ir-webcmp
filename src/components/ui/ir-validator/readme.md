@@ -30,6 +30,9 @@
 
 ### Used by
 
+ - [igl-application-info](../../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
+ - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
  - [ir-extra-service-config-form](../../ir-booking-details/ir-extra-services/ir-extra-service-config/ir-extra-service-config-form)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-payment-folio-form](../../ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio-form)
@@ -39,6 +42,9 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-application-info --> ir-validator
+  igl-book-property-header --> ir-validator
+  igl-property-booked-by --> ir-validator
   ir-extra-service-config-form --> ir-validator
   ir-guest-info-form --> ir-validator
   ir-payment-folio-form --> ir-validator

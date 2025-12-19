@@ -133,9 +133,10 @@ export class IglPropertyBookedBy {
     // console.log(this.bookedByData);
   }
   private handleCountryChange(value) {
+    const country = this.countries?.find(country => country.id === value);
     this.bookedByData = {
       ...this.bookedByData,
-      isdCode: value,
+      isdCode: this.bookedByData?.contactNumber ? this.bookedByData?.isdCode : country?.phone_prefix,
       countryId: value,
     };
     this.dataUpdateEvent.emit({

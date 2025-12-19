@@ -25,6 +25,7 @@
  - [ir-checkout-dialog](../../ir-checkout-dialog)
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
  - [ir-guest-info](../../ir-guest-info)
+ - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-interceptor](../../ir-interceptor)
  - [ir-invoice-form](../../ir-invoice/ir-invoice-form)
  - [ir-otp-modal](../../ir-otp-modal)
@@ -40,6 +41,7 @@ graph TD;
   ir-checkout-dialog --> ir-spinner
   ir-events-log --> ir-spinner
   ir-guest-info --> ir-spinner
+  ir-guest-info-form --> ir-spinner
   ir-interceptor --> ir-spinner
   ir-invoice-form --> ir-spinner
   ir-otp-modal --> ir-spinner

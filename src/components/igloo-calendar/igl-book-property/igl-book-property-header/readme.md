@@ -46,16 +46,18 @@
 
 - [ir-picker](../../../ui/ir-picker)
 - [ir-picker-item](../../../ui/ir-picker/ir-picker-item)
-- [ir-custom-button](../../../ui/ir-custom-button)
+- [ir-validator](../../../ui/ir-validator)
 - [igl-date-range](../../igl-date-range)
+- [ir-custom-button](../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-picker
   igl-book-property-header --> ir-picker-item
-  igl-book-property-header --> ir-custom-button
+  igl-book-property-header --> ir-validator
   igl-book-property-header --> igl-date-range
+  igl-book-property-header --> ir-custom-button
   igl-date-range --> ir-custom-date-picker
   ir-custom-date-picker --> ir-input
   igl-booking-overview-page --> igl-book-property-header

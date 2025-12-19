@@ -202,7 +202,7 @@ export class IrGuestInfoForm {
             onCountryChange={e => {
               const country = e.detail;
               let params: any = { country_id: country.id };
-              if (!this.guest.country_phone_prefix) {
+              if (!this.guest?.mobile) {
                 params = { ...params, country_phone_prefix: country.phone_prefix };
               }
               this.handleInputChange(params);

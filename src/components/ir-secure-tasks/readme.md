@@ -221,10 +221,12 @@ graph TD;
   ir-guest-info-drawer --> ir-drawer
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
+  ir-guest-info-form --> ir-spinner
   ir-guest-info-form --> ir-validator
   ir-guest-info-form --> ir-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
+  ir-mobile-input --> ir-input
   ir-payment-folio --> ir-drawer
   ir-payment-folio --> ir-payment-folio-form
   ir-payment-folio --> ir-custom-button
@@ -243,8 +245,9 @@ graph TD;
   igl-booking-overview-page --> igl-room-type
   igl-book-property-header --> ir-picker
   igl-book-property-header --> ir-picker-item
-  igl-book-property-header --> ir-custom-button
+  igl-book-property-header --> ir-validator
   igl-book-property-header --> igl-date-range
+  igl-book-property-header --> ir-custom-button
   igl-date-range --> ir-custom-date-picker
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-input
@@ -252,9 +255,11 @@ graph TD;
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
+  igl-application-info --> ir-validator
   igl-application-info --> ir-input
   igl-property-booked-by --> ir-picker
   igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-validator
   igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-mobile-input
@@ -321,7 +326,6 @@ graph TD;
   igl-bulk-stop-sale --> ir-weekday-selector
   igl-bulk-stop-sale --> ir-button
   igl-bulk-stop-sale --> ir-date-picker
-  ir-weekday-selector --> ir-checkbox
   igl-bulk-block --> ir-select
   igl-bulk-block --> ir-radio
   igl-bulk-block --> ir-button
@@ -457,8 +461,6 @@ graph TD;
   ir-booking-listing-table --> ir-booking-listing-mobile-card
   ir-booking-listing-table --> ir-pagination
   ir-booking-listing-table --> ir-dialog
-  ir-booking-number-cell --> ir-custom-button
-  ir-booked-by-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-status-activity-cell --> ir-booking-status-tag

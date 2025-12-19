@@ -25,14 +25,9 @@
 
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
 
-### Depends on
-
-- [ir-checkbox](../ir-checkbox)
-
 ### Graph
 ```mermaid
 graph TD;
-  ir-weekday-selector --> ir-checkbox
   igl-bulk-stop-sale --> ir-weekday-selector
   style ir-weekday-selector fill:#f9f,stroke:#333,stroke-width:4px
 ```

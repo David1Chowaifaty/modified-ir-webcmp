@@ -64,8 +64,9 @@ graph TD;
   igl-booking-overview-page --> igl-room-type
   igl-book-property-header --> ir-picker
   igl-book-property-header --> ir-picker-item
-  igl-book-property-header --> ir-custom-button
+  igl-book-property-header --> ir-validator
   igl-book-property-header --> igl-date-range
+  igl-book-property-header --> ir-custom-button
   igl-date-range --> ir-custom-date-picker
   ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan
@@ -74,15 +75,18 @@ graph TD;
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
+  igl-application-info --> ir-validator
   igl-application-info --> ir-input
   igl-property-booked-by --> ir-picker
   igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-validator
   igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-mobile-input
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
+  ir-mobile-input --> ir-input
   ir-button --> ir-icons
   igl-book-property-footer --> ir-custom-button
   igl-book-property-container --> igl-book-property

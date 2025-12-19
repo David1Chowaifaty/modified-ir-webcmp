@@ -27,11 +27,13 @@
 
 ### Depends on
 
+- [ir-validator](../../../../ui/ir-validator)
 - [ir-input](../../../../ui/ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-application-info --> ir-validator
   igl-application-info --> ir-input
   igl-booking-form --> igl-application-info
   style igl-application-info fill:#f9f,stroke:#333,stroke-width:4px

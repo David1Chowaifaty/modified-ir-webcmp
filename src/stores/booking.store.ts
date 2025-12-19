@@ -4,6 +4,24 @@ import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/m
 import { createStore } from '@stencil/store';
 import moment, { Moment } from 'moment';
 
+export interface BookedByInfo {
+  id?: number | string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  countryId: number | string;
+  isdCode: string | number;
+  contactNumber: string;
+  selectedArrivalTime: any;
+  emailGuest: boolean;
+  message: string;
+  cardNumber: string;
+  cardHolderName: string;
+  expiryMonth: string | number;
+  expiryYear: string | number;
+  [key: string]: any;
+}
+
 export interface IRatePlanSelection {
   reserved: number;
   visibleInventory: number;
@@ -79,6 +97,7 @@ export interface BookingStore {
   tax_statement: { message: string } | null;
   checkout_guest: Guest | null;
   selectedPaymentMethod: { code: string };
+  bookedByInfo: BookedByInfo | null;
   roomTypes: RoomType[];
   enableBooking: boolean;
   ratePlanSelections: { [roomTypeId: number]: IRoomTypeSelection };
@@ -109,6 +128,7 @@ const initialState: BookingStore = {
     sources: [],
   },
   checkout_guest: null,
+  bookedByInfo: null,
   guest: null,
   tax_statement: null,
   roomTypes: [],

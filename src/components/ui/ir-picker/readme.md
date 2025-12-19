@@ -24,14 +24,25 @@
 
 ## Events
 
-| Event             | Description                                                                 | Type                                       |
-| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------ |
-| `combobox-clear`  | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
-| `combobox-select` | Emitted when a value is selected from the combobox list.                    | `CustomEvent<IrComboboxSelectEventDetail>` |
-| `text-change`     | Emitted when the text input value changes.                                  | `CustomEvent<string>`                      |
+| Event                  | Description                                                                 | Type                                       |
+| ---------------------- | --------------------------------------------------------------------------- | ------------------------------------------ |
+| `combobox-clear`       | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
+| `combobox-select`      | Emitted when a value is selected from the combobox list.                    | `CustomEvent<IrComboboxSelectEventDetail>` |
+| `input-picker-blurred` | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
+| `text-change`          | Emitted when the text input value changes.                                  | `CustomEvent<string>`                      |
 
 
 ## Methods
+
+### `clearInput() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 ### `close() => Promise<void>`
 

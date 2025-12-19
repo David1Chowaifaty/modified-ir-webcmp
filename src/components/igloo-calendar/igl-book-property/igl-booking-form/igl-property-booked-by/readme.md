@@ -33,6 +33,7 @@
 
 - [ir-picker](../../../../ui/ir-picker)
 - [ir-picker-item](../../../../ui/ir-picker/ir-picker-item)
+- [ir-validator](../../../../ui/ir-validator)
 - [ir-input](../../../../ui/ir-input)
 - [ir-country-picker](../../../../ui/ir-country-picker)
 - [ir-mobile-input](../../../../ui/ir-mobile-input)
@@ -42,12 +43,14 @@
 graph TD;
   igl-property-booked-by --> ir-picker
   igl-property-booked-by --> ir-picker-item
+  igl-property-booked-by --> ir-validator
   igl-property-booked-by --> ir-input
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-mobile-input
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
+  ir-mobile-input --> ir-input
   igl-booking-form --> igl-property-booked-by
   style igl-property-booked-by fill:#f9f,stroke:#333,stroke-width:4px
 ```
