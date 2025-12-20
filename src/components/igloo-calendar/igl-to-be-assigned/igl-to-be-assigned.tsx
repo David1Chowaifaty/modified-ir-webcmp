@@ -24,6 +24,7 @@ export class IglToBeAssigned {
   @State() renderAgain: boolean = false;
   @State() orderedDatesList: any[] = [];
   @State() noScroll = false;
+  @State() selectedDateDisplay: string = '';
 
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Event({ bubbles: true, composed: true })
@@ -67,13 +68,21 @@ export class IglToBeAssigned {
     this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
 
     if (this.orderedDatesList.length) {
-      if (!this.data.hasOwnProperty(this.selectedDate)) {
-        this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      if (this.selectedDate === null) {
+        this.selectedDate = this.orderedDatesList[0];
       }
-      this.showForDate(this.selectedDate, false);
-      this.renderView();
+      if (this.selectedDate && this.data[this.selectedDate]) {
+        this.selectedDateDisplay = this.data[this.selectedDate]?.dateStr || this.selectedDateDisplay;
+        this.showForDate(this.selectedDate, false);
+      } else {
+        this.isLoading = false;
+        this.renderView();
+      }
     } else {
       this.selectedDate = null;
+      this.selectedDateDisplay = '';
+      this.isLoading = false;
+      this.renderView();
     }
   }
   handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
@@ -161,6 +170,9 @@ export class IglToBeAssigned {
 
       if (!this.selectedDate && this.orderedDatesList.length) {
         this.selectedDate = this.orderedDatesList[0];
+        this.selectedDateDisplay = this.data[this.selectedDate]?.dateStr || '';
+      } else if (!this.orderedDatesList.length) {
+        this.selectedDateDisplay = '';
       }
     } catch (error) {
       console.error('Error fetching unassigned dates:', error);
@@ -212,6 +224,7 @@ export class IglToBeAssigned {
       }
       this.isLoading = false;
       this.selectedDate = dateStamp;
+      this.selectedDateDisplay = this.data[dateStamp]?.dateStr || this.selectedDateDisplay;
       this.renderView();
     } catch (error) {
       // toastr.error(error);
@@ -271,6 +284,7 @@ export class IglToBeAssigned {
   }
 
   render() {
+    const selectedDateData = this.selectedDate ? this.data[this.selectedDate] : null;
     return (
       <Host class="tobeAssignedContainer pr-1 text-left">
         <div>
@@ -314,7 +328,7 @@ export class IglToBeAssigned {
                         class={'dropdown-toggle'}
                         //onClick={() => this.showUnassignedDate()}
                       >
-                        <span class="font-weight-bold">{this.data[this.selectedDate].dateStr}</span>
+                        <span class="font-weight-bold">{selectedDateData?.dateStr || this.selectedDateDisplay}</span>
                         <svg class={'caret-icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
                           <path
                             fill="#6b6f82"
@@ -338,8 +352,8 @@ export class IglToBeAssigned {
             </div>
             {!this.isLoading && (
               <div class="scrollabledArea">
-                {this.orderedDatesList.length ? (
-                  Object.keys(this.data[this.selectedDate].categories).length ? (
+                {this.selectedDate ? (
+                  selectedDateData && Object.keys(selectedDateData.categories).length ? (
                     this.getCategoryView()
                   ) : (
                     <div class="mt-1">{locales.entries.Lcz_AllAssignForThisDay}</div>
