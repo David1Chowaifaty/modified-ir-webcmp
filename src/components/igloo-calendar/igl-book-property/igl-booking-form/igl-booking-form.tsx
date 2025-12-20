@@ -142,6 +142,7 @@ export class IglBookingForm {
       <form
         class="d-flex flex-column h-100"
         id="new_booking_form"
+        autoComplete="off"
         onSubmit={e => {
           e.preventDefault();
         }}

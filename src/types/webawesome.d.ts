@@ -47,10 +47,15 @@ type WithHTMLEvents<T> = T & {
   onBlur?: (event: FocusEvent) => void;
 };
 
+type WithInput<T> = T & {
+  name?: string;
+};
+
 declare module '@stencil/core' {
   export namespace JSX {
     interface IntrinsicElements {
       'wa-button': WithHTMLEvents<CustomElements['wa-button']>;
+      'wa-input': WithInput<CustomElements['wa-input']>;
     }
   }
 }
