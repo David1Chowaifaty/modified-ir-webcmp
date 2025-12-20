@@ -277,6 +277,8 @@ export class IglPropertyBookedBy {
                   label={locales.entries.Lcz_FirstName}
                   placeholder={locales.entries.Lcz_FirstName}
                   required
+                  name="last_name_custom"
+                  autocomplete="family-name"
                 ></ir-input>
               </ir-validator>
               <ir-validator value={this.bookedByData.lastName} schema={BookingGuestSchema.shape.last_name}>
@@ -286,6 +288,8 @@ export class IglPropertyBookedBy {
                     this.updateGuest({ last_name: event.detail });
                     this.handleDataChange('lastName', { target: { value: event.detail.trim() } });
                   }}
+                  name="first_name_custom"
+                  autocomplete="given-name"
                   defaultValue={this.bookedByData.lastName}
                   value={this.bookedByData.lastName}
                   label={locales.entries.Lcz_LastName}
