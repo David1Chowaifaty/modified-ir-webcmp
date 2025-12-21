@@ -80,6 +80,23 @@ export interface BookingSelects {
   bedPreferences: ISetupEntries['bedPreferenceType'];
   countries: ICountry[];
 }
+
+export interface BookedByGuest {
+  id: number | null;
+  email: string;
+  firstName: string;
+  lastName: string;
+  countryId: string;
+  phone_prefix: string;
+  mobile: string;
+  selectedArrivalTime: string;
+  emailGuest: boolean;
+  note: string;
+  cardNumber: string;
+  cardHolderName: string;
+  expiryMonth: string;
+  expiryYear: string;
+}
 export interface BookingStore {
   tax_statement: { message: string } | null;
   checkout_guest: Guest | null;
@@ -96,9 +113,28 @@ export interface BookingStore {
   fictus_booking_nbr: { nbr: string | null };
   bookingDraft: BookingDraft;
   selects: BookingSelects;
+  bookedByGuest: BookedByGuest;
+  bookedByGuestManuallyEdited: boolean;
 }
 
 const initialState: BookingStore = {
+  bookedByGuest: {
+    id: -1,
+    email: '',
+    firstName: '',
+    lastName: '',
+    countryId: '',
+    phone_prefix: '',
+    mobile: '',
+    selectedArrivalTime: '',
+    emailGuest: false,
+    note: '',
+    cardNumber: '',
+    cardHolderName: '',
+    expiryMonth: '',
+    expiryYear: '',
+  },
+  bookedByGuestManuallyEdited: false,
   bookingDraft: {
     dates: {
       checkIn: moment().startOf('day'),
@@ -235,7 +271,31 @@ onRoomTypeChange('roomTypes', (newValue: RoomType[]) => {
   booking_store.ratePlanSelections = ratePlanSelections;
   booking_store.resetBooking = false;
 });
-
+export function updateBookedByGuest(params: Partial<BookedByGuest>) {
+  booking_store.bookedByGuest = {
+    ...booking_store.bookedByGuest,
+    ...params,
+  };
+}
+export function updateRoomGuest({
+  guest,
+  ratePlanId,
+  roomTypeId,
+  ratePlanSelection,
+}: {
+  roomTypeId: number;
+  ratePlanId: number;
+  guest: IRatePlanSelection['guest'];
+  ratePlanSelection: IRatePlanSelection;
+}) {
+  booking_store.ratePlanSelections = {
+    ...booking_store.ratePlanSelections,
+    [roomTypeId]: {
+      ...booking_store.ratePlanSelections[roomTypeId],
+      [ratePlanId]: { ...ratePlanSelection, guest: [...guest] },
+    },
+  };
+}
 export function updateInventory(roomTypeId: number) {
   const roomTypeSelection = booking_store.ratePlanSelections[roomTypeId];
   const calculateTotalSelectedRoomsExcludingIndex = (excludedRatePlanId: number) => {
@@ -420,5 +480,8 @@ export function resetReserved(): void {
     return acc;
   }, {} as any);
   booking_store.ratePlanSelections = { ...updatedSelections };
+}
+export function setBookedByGuestManualEditState(isEdited: boolean) {
+  booking_store.bookedByGuestManuallyEdited = isEdited;
 }
 export default booking_store;

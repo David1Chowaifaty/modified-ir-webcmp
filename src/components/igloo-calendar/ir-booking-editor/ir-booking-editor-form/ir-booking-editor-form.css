@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+.booking-editor__guest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.booking-editor__header {
+  width: 100%;
+  align-items: flex-start;
+}
+
+.booking-editor__dates {
+  line-height: 1.2;
+}
+
+.booking-editor__total {
+  min-width: 140px;
+}
+
+.booking-editor__total-label {
+  margin-right: 4px;
+}
+
+.booking-editor__total-amount {
+  white-space: nowrap;
+}

@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop, State, Listen } from '@stencil/core';
 import { TPropertyButtonsTypes } from '@/components';
 import { ICurrency } from '@/models/calendarData';
-import booking_store, { IRatePlanSelection, modifyBookingStore, RatePlanGuest } from '@/stores/booking.store';
+import booking_store, { IRatePlanSelection, modifyBookingStore, RatePlanGuest, updateBookedByGuest, updateRoomGuest } from '@/stores/booking.store';
 import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
@@ -23,10 +23,13 @@ export class IglApplicationInfo {
   @Prop() roomIndex: number;
   @Prop() totalNights: number = 1;
   @Prop() baseData: { unit: { id: string; name: string }; roomtypeId: number };
+  @Prop() autoFillGuest: boolean;
 
   @State() isButtonPressed = false;
 
   private variationService = new VariationService();
+  private shouldSyncBookedByFirstName = !booking_store.bookedByGuest?.firstName;
+  private shouldSyncBookedByLastName = !booking_store.bookedByGuest?.lastName;
 
   componentWillLoad() {
     if (isSingleUnit(this.rateplanSelection.roomtype.id)) {
@@ -43,13 +46,33 @@ export class IglApplicationInfo {
       ...prevGuest[this.roomIndex],
       ...params,
     };
-    booking_store.ratePlanSelections = {
-      ...booking_store.ratePlanSelections,
-      [roomTypeId]: {
-        ...booking_store.ratePlanSelections[roomTypeId],
-        [ratePlanId]: { ...this.rateplanSelection, guest: [...prevGuest] },
-      },
-    };
+    updateRoomGuest({
+      ratePlanSelection: this.rateplanSelection,
+      ratePlanId,
+      roomTypeId,
+      guest: prevGuest,
+    });
+
+    const shouldAutoFill = this.autoFillGuest && !booking_store.bookedByGuestManuallyEdited;
+    if (!shouldAutoFill) {
+      if (booking_store.bookedByGuestManuallyEdited) {
+        this.shouldSyncBookedByFirstName = false;
+        this.shouldSyncBookedByLastName = false;
+      }
+      return;
+    }
+
+    if (typeof params.first_name === 'string' && this.shouldSyncBookedByFirstName) {
+      updateBookedByGuest({
+        firstName: params.first_name,
+      });
+    }
+
+    if (typeof params.last_name === 'string' && this.shouldSyncBookedByLastName) {
+      updateBookedByGuest({
+        lastName: params.last_name,
+      });
+    }
   }
 
   @Listen('buttonClicked', { target: 'body' })

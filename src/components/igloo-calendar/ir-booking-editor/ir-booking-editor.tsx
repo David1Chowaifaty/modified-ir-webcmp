@@ -86,11 +86,10 @@ export class IrBookingEditor {
     const to_date = dates.checkOut.format('YYYY-MM-DD');
     const is_in_agent_mode = source?.type === 'TRAVEL_AGENCY';
     try {
-      //TODO: fix for edit booking
-      // const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.defaultData.RATE_TYPE] : [];
+      const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.room.roomtype?.id] : [];
       const room_type_ids = this.isEventType('BAR_BOOKING') ? this.roomTypeIds.map(r => Number(r)) : [];
 
-      const data = await this.bookingService.getBookingAvailability({
+      await this.bookingService.getBookingAvailability({
         from_date,
         to_date,
         propertyid: calendar_data.property.id,
@@ -103,7 +102,7 @@ export class IrBookingEditor {
         currency: calendar_data.property.currency,
         agent_id: is_in_agent_mode ? source?.tag : null,
         is_in_agent_mode,
-        room_type_ids_to_update: [],
+        room_type_ids_to_update,
       });
       // if (!this.isEventType('EDIT_BOOKING')) {
       //   this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
@@ -117,6 +116,7 @@ export class IrBookingEditor {
       console.error('Error initializing booking availability:', error);
     }
   }
+
   private isEventType(mode: BookingEditorMode): boolean {
     return this.mode === mode;
   }
@@ -218,7 +218,7 @@ export class IrBookingEditor {
             </Fragment>
           )}
 
-          {this.step === 'confirm' && <p>confirm</p>}
+          {this.step === 'confirm' && <ir-booking-editor-form mode={this.mode}></ir-booking-editor-form>}
         </div>
       </Host>
     );

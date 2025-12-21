@@ -135,6 +135,7 @@ export namespace Components {
         "pages": ACPages[];
     }
     interface IglApplicationInfo {
+        "autoFillGuest": boolean;
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType": any[];
         "bookingType": string;
@@ -586,6 +587,10 @@ export namespace Components {
         "open": boolean;
         "propertyid": string;
         "ticket": string;
+    }
+    interface IrBookingEditorForm {
+        "mode": BookingEditorMode;
+        "room": Room;
     }
     interface IrBookingEditorHeader {
         /**
@@ -4725,6 +4730,12 @@ declare global {
         prototype: HTMLIrBookingEditorDrawerElement;
         new (): HTMLIrBookingEditorDrawerElement;
     };
+    interface HTMLIrBookingEditorFormElement extends Components.IrBookingEditorForm, HTMLStencilElement {
+    }
+    var HTMLIrBookingEditorFormElement: {
+        prototype: HTMLIrBookingEditorFormElement;
+        new (): HTMLIrBookingEditorFormElement;
+    };
     interface HTMLIrBookingEditorHeaderElementEventMap {
         "checkAvailability": void;
     }
@@ -7011,6 +7022,7 @@ declare global {
         "ir-booking-details-drawer": HTMLIrBookingDetailsDrawerElement;
         "ir-booking-editor": HTMLIrBookingEditorElement;
         "ir-booking-editor-drawer": HTMLIrBookingEditorDrawerElement;
+        "ir-booking-editor-form": HTMLIrBookingEditorFormElement;
         "ir-booking-editor-header": HTMLIrBookingEditorHeaderElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
@@ -7189,6 +7201,7 @@ declare namespace LocalJSX {
         "pages"?: ACPages[];
     }
     interface IglApplicationInfo {
+        "autoFillGuest"?: boolean;
         "baseData"?: { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
@@ -7750,6 +7763,10 @@ declare namespace LocalJSX {
         "open"?: boolean;
         "propertyid"?: string;
         "ticket"?: string;
+    }
+    interface IrBookingEditorForm {
+        "mode"?: BookingEditorMode;
+        "room"?: Room;
     }
     interface IrBookingEditorHeader {
         /**
@@ -10890,6 +10907,7 @@ declare namespace LocalJSX {
         "ir-booking-details-drawer": IrBookingDetailsDrawer;
         "ir-booking-editor": IrBookingEditor;
         "ir-booking-editor-drawer": IrBookingEditorDrawer;
+        "ir-booking-editor-form": IrBookingEditorForm;
         "ir-booking-editor-header": IrBookingEditorHeader;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
@@ -11119,6 +11137,7 @@ declare module "@stencil/core" {
             "ir-booking-details-drawer": LocalJSX.IrBookingDetailsDrawer & JSXBase.HTMLAttributes<HTMLIrBookingDetailsDrawerElement>;
             "ir-booking-editor": LocalJSX.IrBookingEditor & JSXBase.HTMLAttributes<HTMLIrBookingEditorElement>;
             "ir-booking-editor-drawer": LocalJSX.IrBookingEditorDrawer & JSXBase.HTMLAttributes<HTMLIrBookingEditorDrawerElement>;
+            "ir-booking-editor-form": LocalJSX.IrBookingEditorForm & JSXBase.HTMLAttributes<HTMLIrBookingEditorFormElement>;
             "ir-booking-editor-header": LocalJSX.IrBookingEditorHeader & JSXBase.HTMLAttributes<HTMLIrBookingEditorHeaderElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
