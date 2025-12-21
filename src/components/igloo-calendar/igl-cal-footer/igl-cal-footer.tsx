@@ -44,7 +44,7 @@ export class IglCalFooter {
               </svg>
             )}
             <span>{locales.entries.Lcz_Legend}</span>
-            <span>v1.08</span>
+            <span>v1.09</span>
             <ir-new-badge style={{ marginLeft: '0.25rem' }}></ir-new-badge>
           </button>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
