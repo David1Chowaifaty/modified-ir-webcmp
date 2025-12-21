@@ -314,11 +314,10 @@ export namespace Components {
     interface IglRoomType {
         "bookingType": string;
         "currency": any;
-        "initialRoomIds": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
-        "roomInfoId": number | null;
         "roomType": RoomType;
+        "roomTypeId": number | null;
     }
     interface IglSplitBooking {
         "booking": Booking;
@@ -571,6 +570,7 @@ export namespace Components {
         "booking": Booking;
         "checkIn": string;
         "checkOut": string;
+        "identifier": string;
         "language": string;
         "mode": BookingEditorMode;
         "propertyId": string | number;
@@ -7429,11 +7429,10 @@ declare namespace LocalJSX {
     interface IglRoomType {
         "bookingType"?: string;
         "currency"?: any;
-        "initialRoomIds"?: any;
         "isBookDisabled"?: boolean;
         "ratePricingMode"?: any[];
-        "roomInfoId"?: number | null;
         "roomType"?: RoomType;
+        "roomTypeId"?: number | null;
     }
     interface IglSplitBooking {
         "booking"?: Booking;
@@ -7735,6 +7734,7 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "checkIn"?: string;
         "checkOut"?: string;
+        "identifier"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
         "propertyId"?: string | number;

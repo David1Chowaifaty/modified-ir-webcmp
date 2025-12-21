@@ -11,9 +11,8 @@ export class IglRoomType {
   @Prop() roomType: RoomType;
   @Prop() bookingType = 'PLUS_BOOKING';
   @Prop() ratePricingMode = [];
-  @Prop() roomInfoId: number | null = null;
+  @Prop() roomTypeId: number | null = null;
   @Prop() currency;
-  @Prop() initialRoomIds: any;
   @Prop() isBookDisabled: boolean;
 
   private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING', 'SPLIT_BOOKING'];
@@ -26,7 +25,7 @@ export class IglRoomType {
         {isValidBookingType && this.roomType.rateplans?.length > 0 && <h5 class="roomtype__name">{this.roomType.name}</h5>}
         {this.roomType.rateplans?.map(ratePlan => {
           if (!!ratePlan.variations) {
-            let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomType.id;
+            let shouldBeDisabled = this.roomTypeId === this.roomType.id;
             const visibleInventory = getVisibleInventory(this.roomType.id, ratePlan.id);
             return (
               <igl-rate-plan

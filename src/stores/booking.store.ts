@@ -265,6 +265,9 @@ export function updateInventory(roomTypeId: number) {
     };
   }
 }
+export function hasAtLeastOneRoomSelected(): boolean {
+  return Object.values(booking_store.ratePlanSelections).some(roomTypeSelection => Object.values(roomTypeSelection).some(ratePlan => ratePlan.reserved > 0));
+}
 export function updateRoomParams({ ratePlanId, roomTypeId, params }: { roomTypeId: number; ratePlanId: number; params: Partial<IRatePlanSelection> }) {
   booking_store.ratePlanSelections = {
     ...booking_store.ratePlanSelections,

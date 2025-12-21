@@ -2,6 +2,7 @@ import { Component, Fragment, h, Prop, State, Watch } from '@stencil/core';
 import { BookingEditorMode, BookingStep } from '../types';
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
+import { hasAtLeastOneRoomSelected } from '@/stores/booking.store';
 
 @Component({
   tag: 'ir-booking-editor-drawer',
@@ -91,7 +92,7 @@ export class IrBookingEditorDrawer {
           Cancel
         </ir-custom-button>
 
-        <ir-custom-button onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
+        <ir-custom-button disabled={!hasAtLeastOneRoomSelected()} onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
           Next
         </ir-custom-button>
       </Fragment>

@@ -4,7 +4,7 @@ import { BookingEditorMode, BookingStep } from './types';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
-import booking_store, { setBookingDraft, setBookingSelectOptions } from '@/stores/booking.store';
+import booking_store, { resetBookingStore, setBookingDraft, setBookingSelectOptions } from '@/stores/booking.store';
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
@@ -18,6 +18,7 @@ export class IrBookingEditor {
   @Prop() propertyId: string | number;
   @Prop() language: string = 'en';
   @Prop() roomTypeIds: (string | number)[] = [];
+  @Prop() identifier: string;
   @Prop() booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
   @Prop() checkIn: string;
@@ -28,6 +29,8 @@ export class IrBookingEditor {
 
   private roomService = new RoomService();
   private bookingService = new BookingService();
+
+  private room: Booking['rooms'][0];
 
   componentWillLoad() {
     this.initializeApp();
@@ -49,7 +52,10 @@ export class IrBookingEditor {
       setBookingSelectOptions({
         countries: countriesList,
       });
-      // this.countries = countriesList;
+
+      if (this.isEventType('EDIT_BOOKING') && this.booking && this.identifier) {
+        this.room = this.booking.rooms.find(room => room.identifier === this.identifier);
+      }
 
       // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       // this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
@@ -62,7 +68,9 @@ export class IrBookingEditor {
     }
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() {
+    resetBookingStore(true);
+  }
 
   @Listen('checkAvailability')
   handleCheckAvailability(e: CustomEvent) {
@@ -179,7 +187,6 @@ export class IrBookingEditor {
   }
 
   render() {
-    console.log(booking_store.bookingDraft.dates);
     if (this.isLoading) {
       return (
         <div class={'drawer__loader-container'}>
@@ -187,6 +194,7 @@ export class IrBookingEditor {
         </div>
       );
     }
+
     return (
       <Host>
         <div>
@@ -197,25 +205,13 @@ export class IrBookingEditor {
               <div class={'booking-editor__roomtype-container'}>
                 {booking_store.roomTypes?.map(roomType => (
                   <igl-room-type
-                    // initialRoomIds={this.initialRoomIds}
-                    // isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
-                    // currency={this.currency}
-                    // ratePricingMode={this.ratePricingMode}
-                    // dateDifference={this.dateRangeData.dateDifference}
-                    // bookingType={this.bookingData.event_type}
-                    // roomType={roomType}
-                    // class="mt-2 mb-1 p-0"
-                    // data-testid={`room_type_${roomType.id}`}
-                    // roomInfoId={this.selectedRooms.has(`c_${roomType.id}`) ? roomType.id : null}
                     key={`room-type-${roomType.id}`}
                     id={roomType.id.toString()}
                     roomType={roomType}
                     bookingType={this.mode}
                     ratePricingMode={booking_store.selects?.ratePricingMode}
-                    //  roomInfoId: number | null = null;
+                    roomTypeId={this.room?.roomtype?.id}
                     currency={calendar_data.property.currency}
-                    //  initialRoomIds: any;
-                    //  isBookDisabled: boolean;
                   ></igl-room-type>
                 ))}
               </div>
