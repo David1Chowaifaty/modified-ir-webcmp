@@ -5,14 +5,15 @@ import moment from 'moment';
 import { BookingService } from '@/services/booking-service/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import booking_store, { setBookingDraft } from '@/stores/booking.store';
+import booking_store, { resetAvailability, setBookingDraft } from '@/stores/booking.store';
 import { z } from 'zod';
 import { DateRangeChangeEvent } from '@/components';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-booking-editor-header',
   styleUrl: 'ir-booking-editor-header.css',
-  shadow: true,
+  scoped: true,
 })
 export class IrBookingEditorHeader {
   /** Booking context used for edit, add-room, and split flows */
@@ -51,9 +52,8 @@ export class IrBookingEditorHeader {
   }
 
   private handleSubmit(event: Event): void {
+    event.preventDefault();
     this.stopEvent(event);
-    event.stopPropagation();
-
     try {
       this.adultsSchema.parse(booking_store.bookingDraft?.occupancy?.adults);
       this.checkAvailability.emit();
@@ -64,16 +64,20 @@ export class IrBookingEditorHeader {
 
   private handleDateRangeChange(event: CustomEvent<DateRangeChangeEvent>): void {
     this.stopEvent(event);
+    resetAvailability();
     setBookingDraft({ dates: event.detail });
   }
 
   private handleSourceChange(event: Event): void {
+    this.stopEvent(event);
     const value = (event.target as HTMLSelectElement).value;
     const source = booking_store.selects.sources.find(s => s.id === value);
     setBookingDraft({ source });
   }
 
   private handleAdultsChange(event: Event): void {
+    this.stopEvent(event);
+    resetAvailability();
     const adults = Number((event.target as HTMLSelectElement).value);
     const { children } = booking_store.bookingDraft.occupancy;
 
@@ -83,6 +87,7 @@ export class IrBookingEditorHeader {
   }
 
   private handleChildrenChange(event: Event): void {
+    resetAvailability();
     const children = Number((event.target as HTMLSelectElement).value);
     const { adults } = booking_store.bookingDraft.occupancy;
 
@@ -144,7 +149,7 @@ export class IrBookingEditorHeader {
 
     return (
       <Host>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           {this.mode === 'SPLIT_BOOKING' && (
             <ir-picker
               mode="select-async"
@@ -191,7 +196,7 @@ export class IrBookingEditorHeader {
               onDateRangeChange={this.handleDateRangeChange.bind(this)}
             />
 
-            <ir-validator value={adults} schema={this.adultsSchema} autovalidate>
+            <ir-validator value={adults} schema={this.adultsSchema}>
               <wa-select
                 class="booking-editor-header__adults-select"
                 size="small"
@@ -223,7 +228,7 @@ export class IrBookingEditorHeader {
               </wa-select>
             )}
 
-            <ir-custom-button type="submit" variant="brand">
+            <ir-custom-button loading={isRequestPending('/Check_Availability')} type="submit" variant="brand">
               Check
             </ir-custom-button>
           </div>

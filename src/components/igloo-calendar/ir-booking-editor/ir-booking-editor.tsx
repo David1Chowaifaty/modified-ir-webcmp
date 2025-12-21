@@ -1,7 +1,13 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Fragment, Prop, State, h } from '@stencil/core';
+import { Component, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingEditorMode, BookingStep } from './types';
-import { ToastHelper } from '@/components/ir-toast-provider/ToastHelper';
+import { RoomService } from '@/services/room.service';
+import { BookingService } from '@/services/booking-service/booking.service';
+import locales from '@/stores/locales.store';
+import booking_store, { setBookingDraft, setBookingSelectOptions } from '@/stores/booking.store';
+import { BookingSource } from '@/models/igl-book-property';
+import calendar_data from '@/stores/calendar-data';
+import { ISetupEntries } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-booking-editor',
@@ -9,98 +15,216 @@ import { ToastHelper } from '@/components/ir-toast-provider/ToastHelper';
   scoped: true,
 })
 export class IrBookingEditor {
-  @Prop({ reflect: true }) open: boolean;
+  @Prop() propertyId: string | number;
   @Prop() language: string = 'en';
+  @Prop() roomTypeIds: (string | number)[] = [];
   @Prop() booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
   @Prop() checkIn: string;
   @Prop() checkOut: string;
+  @Prop() step: BookingStep;
 
-  @State() step: BookingStep = 'details';
+  @State() isLoading: boolean = true;
 
-  private goToConfirm = (e?: CustomEvent) => {
-    e?.stopPropagation();
-    this.step = 'confirm';
-  };
+  private roomService = new RoomService();
+  private bookingService = new BookingService();
 
-  private goToDetails = () => {
-    this.step = 'details';
-  };
-
-  private renderDetailsActions() {
-    return (
-      <Fragment>
-        <ir-custom-button data-drawer="close" size="medium" appearance="filled" variant="neutral">
-          Cancel
-        </ir-custom-button>
-
-        <ir-custom-button onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
-          Next
-        </ir-custom-button>
-      </Fragment>
-    );
+  componentWillLoad() {
+    this.initializeApp();
   }
 
-  private renderConfirmActions() {
-    return (
-      <Fragment>
-        <ir-custom-button onClickHandler={this.goToDetails} size="medium" appearance="filled" variant="neutral">
-          Back
-        </ir-custom-button>
+  private async initializeApp() {
+    try {
+      this.isLoading = true;
+      const [languageTexts, countriesList] = await Promise.all([
+        this.roomService.fetchLanguage(this.language),
+        this.bookingService.getCountries(this.language),
+        this.roomService.getExposedProperty({ id: Number(this.propertyId), language: this.language }),
+      ]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
+      await this.fetchSetupEntriesAndInitialize();
+      setBookingSelectOptions({
+        countries: countriesList,
+      });
+      // this.countries = countriesList;
 
-        <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
-          Book
-        </ir-custom-button>
-
-        <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
-          Book and check-in
-        </ir-custom-button>
-      </Fragment>
-    );
-  }
-
-  private renderFooter() {
-    switch (this.step) {
-      case 'details':
-        return this.renderDetailsActions();
-      case 'confirm':
-        return this.renderConfirmActions();
-      default:
-        return null;
+      // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
+      // this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
+      // this.setRoomsData(roomResponse);
+      // this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
+    } catch (error) {
+      console.error('Error initializing app:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
-  private get label() {
-    switch (this.mode) {
-      case 'SPLIT_BOOKING':
-      case 'BAR_BOOKING':
-      case 'ADD_ROOM':
-      case 'EDIT_BOOKING':
-      case 'PLUS_BOOKING':
-        return 'New Booking';
+  disconnectedCallback() {}
+
+  @Listen('checkAvailability')
+  handleCheckAvailability(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.checkBookingAvailability();
+  }
+
+  private async checkBookingAvailability() {
+    // resetBookingStore(false);
+    const { source, occupancy, dates } = booking_store.bookingDraft;
+    const from_date = dates.checkIn.format('YYYY-MM-DD');
+    const to_date = dates.checkOut.format('YYYY-MM-DD');
+    const is_in_agent_mode = source?.type === 'TRAVEL_AGENCY';
+    try {
+      //TODO: fix for edit booking
+      // const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.defaultData.RATE_TYPE] : [];
+      const room_type_ids = this.isEventType('BAR_BOOKING') ? this.roomTypeIds.map(r => Number(r)) : [];
+
+      const data = await this.bookingService.getBookingAvailability({
+        from_date,
+        to_date,
+        propertyid: calendar_data.property.id,
+        adultChildCount: {
+          adult: occupancy.adults,
+          child: occupancy.children,
+        },
+        language: this.language,
+        room_type_ids,
+        currency: calendar_data.property.currency,
+        agent_id: is_in_agent_mode ? source?.tag : null,
+        is_in_agent_mode,
+        room_type_ids_to_update: [],
+      });
+      // if (!this.isEventType('EDIT_BOOKING')) {
+      //   this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
+      //   this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
+      // }
+      // this.defaultData = { ...this.defaultData, roomsInfo: data };
+      // if (this.isEventType('EDIT_BOOKING') && !this.updatedBooking) {
+      //   this.updateBooking();
+      // }
+    } catch (error) {
+      console.error('Error initializing booking availability:', error);
     }
+  }
+  private isEventType(mode: BookingEditorMode): boolean {
+    return this.mode === mode;
+  }
+
+  private async fetchSetupEntriesAndInitialize() {
+    try {
+      const setupEntries = await this.fetchSetupEntries();
+      this.setSourceOptions(calendar_data.property.allowed_booking_sources);
+      this.setOtherProperties(setupEntries);
+    } catch (error) {
+      console.error('Error fetching setup entries:', error);
+    }
+  }
+
+  private setOtherProperties(setupEntries: ISetupEntries) {
+    setBookingSelectOptions({
+      arrivalTime: setupEntries.arrivalTime,
+      bedPreferences: setupEntries.bedPreferenceType,
+      ratePricingMode: setupEntries.ratePricingMode,
+    });
+  }
+
+  private setSourceOptions(bookingSource: BookingSource[]) {
+    const _sourceOptions = this.isEventType('BAR_BOOKING') ? this.getFilteredSourceOptions(bookingSource) : bookingSource;
+    setBookingSelectOptions({
+      sources: _sourceOptions,
+    });
+    let sourceOption: BookingSource;
+    if (this.isEventType('EDIT_BOOKING') && this.booking) {
+      const option = bookingSource.find(option => this.booking.source?.code === option.code);
+      sourceOption = option;
+    } else {
+      sourceOption = _sourceOptions.find(o => o.type !== 'LABEL');
+    }
+    setBookingDraft({
+      source: sourceOption,
+    });
+  }
+
+  private getFilteredSourceOptions(sourceOptions: BookingSource[]): BookingSource[] {
+    const agentIds = new Set<string>();
+    const hasAgentOnlyRoomType =
+      calendar_data.roomsInfo?.some((rt: any) => {
+        const rps = rt?.rateplans ?? [];
+        if (rps.length === 0) return false;
+
+        const isForAgentOnly = rps.every((rp: any) => (rp?.agents?.length ?? 0) > 0);
+        if (isForAgentOnly) {
+          rps.forEach((rp: any) => {
+            (rp?.agents ?? []).forEach((ag: any) => agentIds.add(ag?.id?.toString()));
+          });
+        }
+        return isForAgentOnly;
+      }) ?? false;
+    if (!hasAgentOnlyRoomType) {
+      return sourceOptions;
+    }
+    return sourceOptions.filter((opt: any) => {
+      if (opt?.type === 'LABEL') return true;
+      const candidate = opt?.tag;
+      const matchesId = candidate != null && agentIds.has(candidate);
+      return matchesId;
+    });
+  }
+
+  private async fetchSetupEntries() {
+    return await this.bookingService.fetchSetupEntries();
   }
 
   render() {
+    console.log(booking_store.bookingDraft.dates);
+    if (this.isLoading) {
+      return (
+        <div class={'drawer__loader-container'}>
+          <ir-spinner></ir-spinner>
+        </div>
+      );
+    }
     return (
-      <ir-drawer label={this.label} open={this.open}>
-        {/* Header */}
-        <div>{/* <ir-booking-editor-header booking={this.booking} checkIn={this.checkIn} checkOut={this.checkOut} mode={this.mode} /> */}</div>
-
-        {/* Content */}
+      <Host>
         <div>
-          <button onClick={async () => await ToastHelper.success('Item saved successfully!')}>click</button>
-
-          {this.step === 'details' && <p>details</p>}
+          <ir-interceptor></ir-interceptor>
+          {this.step === 'details' && (
+            <Fragment>
+              <ir-booking-editor-header mode={this.mode}></ir-booking-editor-header>
+              <div class={'booking-editor__roomtype-container'}>
+                {booking_store.roomTypes?.map(roomType => (
+                  <igl-room-type
+                    // initialRoomIds={this.initialRoomIds}
+                    // isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
+                    // currency={this.currency}
+                    // ratePricingMode={this.ratePricingMode}
+                    // dateDifference={this.dateRangeData.dateDifference}
+                    // bookingType={this.bookingData.event_type}
+                    // roomType={roomType}
+                    // class="mt-2 mb-1 p-0"
+                    // data-testid={`room_type_${roomType.id}`}
+                    // roomInfoId={this.selectedRooms.has(`c_${roomType.id}`) ? roomType.id : null}
+                    key={`room-type-${roomType.id}`}
+                    id={roomType.id.toString()}
+                    roomType={roomType}
+                    bookingType={this.mode}
+                    ratePricingMode={booking_store.selects?.ratePricingMode}
+                    //  roomInfoId: number | null = null;
+                    currency={calendar_data.property.currency}
+                    //  initialRoomIds: any;
+                    //  isBookDisabled: boolean;
+                  ></igl-room-type>
+                ))}
+              </div>
+            </Fragment>
+          )}
 
           {this.step === 'confirm' && <p>confirm</p>}
         </div>
-
-        {/* Footer */}
-        <div slot="footer" class="ir__drawer-footer">
-          {this.renderFooter()}
-        </div>
-      </ir-drawer>
+      </Host>
     );
   }
 }

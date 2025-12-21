@@ -77,14 +77,14 @@ export class IglBookingOverviewPage {
                   key={`room-type-${roomType.id}`}
                   currency={this.currency}
                   ratePricingMode={this.ratePricingMode}
-                  dateDifference={this.dateRangeData.dateDifference}
+                  // dateDifference={this.dateRangeData.dateDifference}
                   bookingType={this.bookingData.event_type}
                   roomType={roomType}
                   class="mt-2 mb-1 p-0"
                   data-testid={`room_type_${roomType.id}`}
                   id={roomType.id.toString()}
                   roomInfoId={this.selectedRooms.has(`c_${roomType.id}`) ? roomType.id : null}
-                  onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
+                  // onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
                 ></igl-room-type>
               ))}
             </Fragment>

@@ -25,7 +25,7 @@ import { IPaymentAction } from "./services/payment.service";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-import { BookingEditorMode } from "./components/igloo-calendar/ir-booking-editor/types";
+import { BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
 import { BookingService } from "./services/booking-service/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -87,7 +87,7 @@ export { IPaymentAction } from "./services/payment.service";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-export { BookingEditorMode } from "./components/igloo-calendar/ir-booking-editor/types";
+export { BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
 export { BookingService } from "./services/booking-service/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -314,7 +314,6 @@ export namespace Components {
     interface IglRoomType {
         "bookingType": string;
         "currency": any;
-        "dateDifference": number;
         "initialRoomIds": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
@@ -574,7 +573,19 @@ export namespace Components {
         "checkOut": string;
         "language": string;
         "mode": BookingEditorMode;
+        "propertyId": string | number;
+        "roomTypeIds": (string | number)[];
+        "step": BookingStep;
+    }
+    interface IrBookingEditorDrawer {
+        "booking": Booking;
+        "checkIn": string;
+        "checkOut": string;
+        "language": string;
+        "mode": BookingEditorMode;
         "open": boolean;
+        "propertyid": string;
+        "ticket": string;
     }
     interface IrBookingEditorHeader {
         /**
@@ -3437,10 +3448,6 @@ export interface IglReallocationDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglReallocationDialogElement;
 }
-export interface IglRoomTypeCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLIglRoomTypeElement;
-}
 export interface IglSplitBookingCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglSplitBookingElement;
@@ -4326,18 +4333,7 @@ declare global {
         prototype: HTMLIglReallocationDialogElement;
         new (): HTMLIglReallocationDialogElement;
     };
-    interface HTMLIglRoomTypeElementEventMap {
-        "dataUpdateEvent": { [key: string]: any };
-    }
     interface HTMLIglRoomTypeElement extends Components.IglRoomType, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIglRoomTypeElementEventMap>(type: K, listener: (this: HTMLIglRoomTypeElement, ev: IglRoomTypeCustomEvent<HTMLIglRoomTypeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIglRoomTypeElementEventMap>(type: K, listener: (this: HTMLIglRoomTypeElement, ev: IglRoomTypeCustomEvent<HTMLIglRoomTypeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIglRoomTypeElement: {
         prototype: HTMLIglRoomTypeElement;
@@ -4722,6 +4718,12 @@ declare global {
     var HTMLIrBookingEditorElement: {
         prototype: HTMLIrBookingEditorElement;
         new (): HTMLIrBookingEditorElement;
+    };
+    interface HTMLIrBookingEditorDrawerElement extends Components.IrBookingEditorDrawer, HTMLStencilElement {
+    }
+    var HTMLIrBookingEditorDrawerElement: {
+        prototype: HTMLIrBookingEditorDrawerElement;
+        new (): HTMLIrBookingEditorDrawerElement;
     };
     interface HTMLIrBookingEditorHeaderElementEventMap {
         "checkAvailability": void;
@@ -7008,6 +7010,7 @@ declare global {
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-details-drawer": HTMLIrBookingDetailsDrawerElement;
         "ir-booking-editor": HTMLIrBookingEditorElement;
+        "ir-booking-editor-drawer": HTMLIrBookingEditorDrawerElement;
         "ir-booking-editor-header": HTMLIrBookingEditorHeaderElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
@@ -7426,10 +7429,8 @@ declare namespace LocalJSX {
     interface IglRoomType {
         "bookingType"?: string;
         "currency"?: any;
-        "dateDifference"?: number;
         "initialRoomIds"?: any;
         "isBookDisabled"?: boolean;
-        "onDataUpdateEvent"?: (event: IglRoomTypeCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
         "roomInfoId"?: number | null;
         "roomType"?: RoomType;
@@ -7736,7 +7737,19 @@ declare namespace LocalJSX {
         "checkOut"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
+        "propertyId"?: string | number;
+        "roomTypeIds"?: (string | number)[];
+        "step"?: BookingStep;
+    }
+    interface IrBookingEditorDrawer {
+        "booking"?: Booking;
+        "checkIn"?: string;
+        "checkOut"?: string;
+        "language"?: string;
+        "mode"?: BookingEditorMode;
         "open"?: boolean;
+        "propertyid"?: string;
+        "ticket"?: string;
     }
     interface IrBookingEditorHeader {
         /**
@@ -10876,6 +10889,7 @@ declare namespace LocalJSX {
         "ir-booking-details": IrBookingDetails;
         "ir-booking-details-drawer": IrBookingDetailsDrawer;
         "ir-booking-editor": IrBookingEditor;
+        "ir-booking-editor-drawer": IrBookingEditorDrawer;
         "ir-booking-editor-header": IrBookingEditorHeader;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
@@ -11104,6 +11118,7 @@ declare module "@stencil/core" {
              */
             "ir-booking-details-drawer": LocalJSX.IrBookingDetailsDrawer & JSXBase.HTMLAttributes<HTMLIrBookingDetailsDrawerElement>;
             "ir-booking-editor": LocalJSX.IrBookingEditor & JSXBase.HTMLAttributes<HTMLIrBookingEditorElement>;
+            "ir-booking-editor-drawer": LocalJSX.IrBookingEditorDrawer & JSXBase.HTMLAttributes<HTMLIrBookingEditorDrawerElement>;
             "ir-booking-editor-header": LocalJSX.IrBookingEditorHeader & JSXBase.HTMLAttributes<HTMLIrBookingEditorHeaderElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;

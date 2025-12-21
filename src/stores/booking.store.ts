@@ -1,4 +1,5 @@
 import { Booking, Guest } from '@/models/booking.dto';
+import { ICountry, ISetupEntries } from '@/models/IBooking';
 import { BookingSource, TEventType } from '@/models/igl-book-property';
 import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/models/property';
 import { createStore } from '@stencil/store';
@@ -74,6 +75,10 @@ export interface BookingDraft {
 
 export interface BookingSelects {
   sources: BookingSource[];
+  ratePricingMode: ISetupEntries['ratePricingMode'];
+  arrivalTime: ISetupEntries['arrivalTime'];
+  bedPreferences: ISetupEntries['bedPreferenceType'];
+  countries: ICountry[];
 }
 export interface BookingStore {
   tax_statement: { message: string } | null;
@@ -107,6 +112,10 @@ const initialState: BookingStore = {
   },
   selects: {
     sources: [],
+    ratePricingMode: [],
+    arrivalTime: [],
+    bedPreferences: [],
+    countries: [],
   },
   checkout_guest: null,
   guest: null,
@@ -130,6 +139,7 @@ const initialState: BookingStore = {
 };
 
 export let { state: booking_store, onChange: onRoomTypeChange, reset } = createStore<BookingStore>(initialState);
+
 export function resetBookingStore(closeModal: boolean) {
   const { bookingDraft, selects } = booking_store;
   reset();
@@ -137,6 +147,9 @@ export function resetBookingStore(closeModal: boolean) {
     setBookingDraft(bookingDraft);
     setBookingSelectOptions(selects);
   }
+}
+export function resetAvailability(): void {
+  resetBookingStore(false);
 }
 
 export function setBookingDraft(params: Partial<BookingDraft>) {
