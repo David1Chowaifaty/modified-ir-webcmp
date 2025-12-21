@@ -87,6 +87,7 @@ export class IrBookingEditorHeader {
   }
 
   private handleChildrenChange(event: Event): void {
+    this.stopEvent(event);
     resetAvailability();
     const children = Number((event.target as HTMLSelectElement).value);
     const { adults } = booking_store.bookingDraft.occupancy;
