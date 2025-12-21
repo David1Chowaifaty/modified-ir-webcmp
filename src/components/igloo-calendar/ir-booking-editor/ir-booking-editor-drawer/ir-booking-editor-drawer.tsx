@@ -2,7 +2,8 @@ import { Component, Fragment, h, Prop, State, Watch } from '@stencil/core';
 import { BookingEditorMode, BookingStep } from '../types';
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
-import { hasAtLeastOneRoomSelected } from '@/stores/booking.store';
+import booking_store, { hasAtLeastOneRoomSelected } from '@/stores/booking.store';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-booking-editor-drawer',
@@ -47,6 +48,15 @@ export class IrBookingEditorDrawer {
     }
   }
 
+  private goToConfirm = (e?: CustomEvent) => {
+    e?.stopPropagation();
+    this.step = 'confirm';
+  };
+
+  private goToDetails = () => {
+    this.step = 'details';
+  };
+
   private renderFooter() {
     switch (this.step) {
       case 'details':
@@ -59,31 +69,25 @@ export class IrBookingEditorDrawer {
   }
 
   private renderConfirmActions() {
+    const { checkIn } = booking_store?.bookingDraft?.dates;
+    const hasCheckIn = checkIn ? checkIn?.isSame(moment(), 'date') : false;
     return (
       <Fragment>
         <ir-custom-button onClickHandler={this.goToDetails} size="medium" appearance="filled" variant="neutral">
           Back
         </ir-custom-button>
 
-        <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
+        <ir-custom-button disabled={false} type="submit" size="medium" appearance={hasCheckIn ? 'outlined' : 'accent'} variant="brand">
           Book
         </ir-custom-button>
-
-        <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
-          Book and check-in
-        </ir-custom-button>
+        {hasCheckIn && (
+          <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
+            Book and check-in
+          </ir-custom-button>
+        )}
       </Fragment>
     );
   }
-
-  private goToConfirm = (e?: CustomEvent) => {
-    e?.stopPropagation();
-    this.step = 'confirm';
-  };
-
-  private goToDetails = () => {
-    this.step = 'details';
-  };
 
   private renderDetailsActions() {
     return (
