@@ -403,7 +403,7 @@ export class IrInput {
           onwa-clear={this.handleClear}
           onblur={this.handleBlur}
           onfocus={this.handleFocus}
-          exportparts="base"
+          exportparts="base, hint, label, input, start, end, clear-button, password-toggle-button"
         >
           {this.slotState.get('label') && <slot name="label" slot="label"></slot>}
           {this.slotState.get('start') && <slot name="start" slot="start"></slot>}

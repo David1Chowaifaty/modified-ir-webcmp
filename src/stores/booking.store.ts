@@ -177,10 +177,11 @@ const initialState: BookingStore = {
 export let { state: booking_store, onChange: onRoomTypeChange, reset } = createStore<BookingStore>(initialState);
 
 export function resetBookingStore(closeModal: boolean) {
-  const { bookingDraft, selects } = booking_store;
+  const { bookingDraft, selects, bookedByGuest } = booking_store;
   reset();
   if (!closeModal) {
     setBookingDraft(bookingDraft);
+    updateBookedByGuest(bookedByGuest);
     setBookingSelectOptions(selects);
   }
 }

@@ -592,6 +592,8 @@ export namespace Components {
         "mode": BookingEditorMode;
         "room": Room;
     }
+    interface IrBookingEditorGuestForm {
+    }
     interface IrBookingEditorHeader {
         /**
           * Booking context used for edit, add-room, and split flows
@@ -4736,6 +4738,12 @@ declare global {
         prototype: HTMLIrBookingEditorFormElement;
         new (): HTMLIrBookingEditorFormElement;
     };
+    interface HTMLIrBookingEditorGuestFormElement extends Components.IrBookingEditorGuestForm, HTMLStencilElement {
+    }
+    var HTMLIrBookingEditorGuestFormElement: {
+        prototype: HTMLIrBookingEditorGuestFormElement;
+        new (): HTMLIrBookingEditorGuestFormElement;
+    };
     interface HTMLIrBookingEditorHeaderElementEventMap {
         "checkAvailability": void;
     }
@@ -7023,6 +7031,7 @@ declare global {
         "ir-booking-editor": HTMLIrBookingEditorElement;
         "ir-booking-editor-drawer": HTMLIrBookingEditorDrawerElement;
         "ir-booking-editor-form": HTMLIrBookingEditorFormElement;
+        "ir-booking-editor-guest-form": HTMLIrBookingEditorGuestFormElement;
         "ir-booking-editor-header": HTMLIrBookingEditorHeaderElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
@@ -7767,6 +7776,8 @@ declare namespace LocalJSX {
     interface IrBookingEditorForm {
         "mode"?: BookingEditorMode;
         "room"?: Room;
+    }
+    interface IrBookingEditorGuestForm {
     }
     interface IrBookingEditorHeader {
         /**
@@ -10908,6 +10919,7 @@ declare namespace LocalJSX {
         "ir-booking-editor": IrBookingEditor;
         "ir-booking-editor-drawer": IrBookingEditorDrawer;
         "ir-booking-editor-form": IrBookingEditorForm;
+        "ir-booking-editor-guest-form": IrBookingEditorGuestForm;
         "ir-booking-editor-header": IrBookingEditorHeader;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
@@ -11138,6 +11150,7 @@ declare module "@stencil/core" {
             "ir-booking-editor": LocalJSX.IrBookingEditor & JSXBase.HTMLAttributes<HTMLIrBookingEditorElement>;
             "ir-booking-editor-drawer": LocalJSX.IrBookingEditorDrawer & JSXBase.HTMLAttributes<HTMLIrBookingEditorDrawerElement>;
             "ir-booking-editor-form": LocalJSX.IrBookingEditorForm & JSXBase.HTMLAttributes<HTMLIrBookingEditorFormElement>;
+            "ir-booking-editor-guest-form": LocalJSX.IrBookingEditorGuestForm & JSXBase.HTMLAttributes<HTMLIrBookingEditorGuestFormElement>;
             "ir-booking-editor-header": LocalJSX.IrBookingEditorHeader & JSXBase.HTMLAttributes<HTMLIrBookingEditorHeaderElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;

@@ -4,7 +4,7 @@ import { BookingEditorMode, BookingStep } from './types';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
-import booking_store, { resetBookingStore, setBookingDraft, setBookingSelectOptions } from '@/stores/booking.store';
+import booking_store, { resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
@@ -104,6 +104,9 @@ export class IrBookingEditor {
         is_in_agent_mode,
         room_type_ids_to_update,
       });
+      if (this.mode !== 'EDIT_BOOKING') {
+        await this.assignCountryCode();
+      }
       // if (!this.isEventType('EDIT_BOOKING')) {
       //   this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
       //   this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -119,6 +122,17 @@ export class IrBookingEditor {
 
   private isEventType(mode: BookingEditorMode): boolean {
     return this.mode === mode;
+  }
+
+  private async assignCountryCode() {
+    const country = await this.bookingService.getUserDefaultCountry();
+    const countryId = country['COUNTRY_ID'];
+    const _c = booking_store.selects.countries.find(c => c.id?.toString() === countryId?.toString());
+    // this.bookedByData = { ...this.bookedByData, isdCode: _c.phone_prefix.toString(), countryId };
+    updateBookedByGuest({
+      countryId: countryId,
+      phone_prefix: _c?.phone_prefix,
+    });
   }
 
   private async fetchSetupEntriesAndInitialize() {

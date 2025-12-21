@@ -1,0 +1,28 @@
+:host,
+.booking-editor__guest-name-group,
+.booking-editor__form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.booking-editor__guest-input {
+  width: 100%;
+}
+.booking-editor__form-control {
+  width: 100%;
+}
+/*md*/
+@media (min-width: 768px) {
+  .booking-editor__guest-name-group {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .booking-editor__guest-input.--last-name::part(label) {
+    display: none;
+  }
+  :host {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}

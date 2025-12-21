@@ -77,8 +77,11 @@ export class IrBookingEditorForm {
             });
           }),
         )}
-        <input value={booking_store.bookedByGuest?.firstName}></input>
-        <input value={booking_store.bookedByGuest?.lastName}></input>
+        <section class={'mt-2'}>
+          <h4 class="booking-editor__heading">Booked by</h4>
+          <ir-picker class="mb-1" style={{ maxWidth: '48.5%' }} placeholder="Search customer by email, name or company name"></ir-picker>
+          <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
+        </section>
       </form>
     );
   }

@@ -26,3 +26,12 @@
 .booking-editor__total-amount {
   white-space: nowrap;
 }
+.booking-editor__heading {
+  margin: 0;
+  font-family: var(--wa-font-family-heading);
+  font-weight: var(--wa-font-weight-heading);
+  line-height: var(--wa-line-height-condensed);
+  text-wrap: balance;
+  font-size: var(--wa-font-size-l);
+  margin-bottom: 1.5rem;
+}

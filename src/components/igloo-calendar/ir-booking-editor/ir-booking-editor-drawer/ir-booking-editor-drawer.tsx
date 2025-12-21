@@ -90,13 +90,14 @@ export class IrBookingEditorDrawer {
   }
 
   private renderDetailsActions() {
+    const haveRoomSelected = hasAtLeastOneRoomSelected();
     return (
       <Fragment>
         <ir-custom-button data-drawer="close" size="medium" appearance="filled" variant="neutral">
           Cancel
         </ir-custom-button>
-
-        <ir-custom-button disabled={!hasAtLeastOneRoomSelected()} onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
+        {!haveRoomSelected && <wa-tooltip for="booking_editor__next-button">Please select at least one unit to continue.</wa-tooltip>}
+        <ir-custom-button id="booking_editor__next-button" disabled={!haveRoomSelected} onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
           Next
         </ir-custom-button>
       </Fragment>
