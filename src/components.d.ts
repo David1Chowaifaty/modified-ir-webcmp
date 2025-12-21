@@ -1570,6 +1570,7 @@ export namespace Components {
           * The minimum length of input that will be considered valid.
          */
         "minlength": NativeWaInput1['minlength'];
+        "name": string;
         /**
           * Adds a button to toggle the password's visibility. Only applies to password types.
          */
@@ -8849,6 +8850,7 @@ declare namespace LocalJSX {
           * The minimum length of input that will be considered valid.
          */
         "minlength"?: NativeWaInput1['minlength'];
+        "name"?: string;
         "onInput-blur"?: (event: IrInputCustomEvent<void>) => void;
         "onInputFocus"?: (event: IrInputCustomEvent<void>) => void;
         "onText-change"?: (event: IrInputCustomEvent<string>) => void;

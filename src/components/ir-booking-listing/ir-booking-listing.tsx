@@ -337,7 +337,7 @@ export class IrBookingListing {
         </div>
         <ir-booking-details-drawer
           open={this.editBookingItem?.cause === 'edit'}
-          propertyId={this.propertyid as any}
+          propertyId={this.editBookingItem?.booking?.property?.id}
           bookingNumber={this.editBookingItem?.booking?.booking_nbr.toString()}
           ticket={this.ticket}
           language={this.language}

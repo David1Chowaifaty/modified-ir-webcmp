@@ -6,6 +6,7 @@ import { downloadFile, formatAmount } from '@/utils/utils';
 import moment from 'moment';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { v4 } from 'uuid';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-billing',
@@ -50,6 +51,7 @@ export class IrBilling {
     e.stopPropagation();
     await this.bookingService.voidInvoice({
       invoice_nbr: this.selectedInvoice,
+      property_id: calendar_data.property.id,
       reason: '',
     });
     this.invoiceInfo = await this.bookingService.getBookingInvoiceInfo({ booking_nbr: this.booking.booking_nbr });
@@ -77,6 +79,7 @@ export class IrBilling {
   private async printInvoice(invoice: Invoice, autoDownload = false) {
     try {
       const { My_Result } = await this.bookingService.printInvoice({
+        property_id: calendar_data.property.id,
         invoice_nbr: invoice.nbr,
         mode: invoice.credit_note ? 'creditnote' : 'invoice',
       });

@@ -126,7 +126,7 @@ export class IrPaymentDetails {
       this.openPrintScreen.emit({
         mode: 'receipt',
         payload: {
-          pid: detail.id.toString(),
+          pid: detail.system_id?.toString(),
           rnb: detail.receipt_nbr,
         },
       });
@@ -136,7 +136,7 @@ export class IrPaymentDetails {
     this.openPrintScreen.emit({
       mode: 'receipt',
       payload: {
-        pid: detail.id.toString(),
+        pid: detail.system_id?.toString(),
         rnb: `RC-${_number.My_Result}`,
       },
     });

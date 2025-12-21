@@ -15,6 +15,8 @@ export type NativeWaInput = WaInput;
 })
 export class IrInput {
   @Element() el: HTMLIrInputElement;
+
+  @Prop() name: string;
   /** The value of the input. */
   @Prop({ reflect: true, mutable: true }) value: string = '';
 
@@ -103,7 +105,7 @@ export class IrInput {
    * Specifies what permission the browser has to provide assistance in filling out form field values. Refer to
    * [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.
    */
-  @Prop() autocomplete: NativeWaInput['autocomplete'];
+  @Prop() autocomplete: NativeWaInput['autocomplete'] = 'off';
 
   /** Indicates that the input should receive focus on page load. */
   @Prop() autofocus: NativeWaInput['autofocus'];
@@ -363,6 +365,7 @@ export class IrInput {
       <Host>
         <wa-input
           type={this.type}
+          name={this.name}
           value={displayValue}
           ref={el => (this.inputRef = el)}
           defaultValue={this.defaultValue}
