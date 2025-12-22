@@ -66,12 +66,11 @@ export class IrBookingBillingRecipient {
       const key = `${normalize(guest.first_name)}${guest.last_name ? joinKey : ''}${normalize(guest.last_name)}`;
 
       // Skip exact duplicate first + last names
-      if (seenNames.has(key)) continue;
+      if (seenNames.has(key) || !key) continue;
 
       seenNames.add(key);
       rooms.push(room);
     }
-
     this.rooms = rooms;
   }
 
