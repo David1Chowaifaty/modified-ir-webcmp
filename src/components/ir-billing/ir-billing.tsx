@@ -104,14 +104,14 @@ export class IrBilling {
         </div>
       );
     }
-    const canIssueInvoice = !moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates');
+    // const canIssueInvoice = !moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates');
     return (
       <Fragment>
         <div class="billing__container">
           <section>
             <div class="billing__section-title-row">
               <h4 class="billing__section-title">Issued documents</h4>
-              {!canIssueInvoice && <wa-tooltip for={this._id}>Invoices cannot be issued before guest arrival</wa-tooltip>}
+              {/* {!canIssueInvoice && <wa-tooltip for={this._id}>Invoices cannot be issued before guest arrival</wa-tooltip>} */}
               <ir-custom-button
                 variant="brand"
                 id={this._id}
@@ -120,7 +120,6 @@ export class IrBilling {
                   e.stopPropagation();
                   this.isOpen = 'invoice';
                 }}
-                disabled={!canIssueInvoice}
               >
                 Issue invoice
               </ir-custom-button>

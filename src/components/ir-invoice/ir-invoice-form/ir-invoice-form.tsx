@@ -877,49 +877,53 @@ export class IrInvoiceForm {
             maxDate={this.getMaxDate()}
           ></ir-custom-date-picker>
           <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
-          <div class={'ir-invoice__services'}>
-            <p class="ir-invoice__form-control-label">
-              Choose what to invoice <span style={{ color: 'var(--wa-color-gray-60)', paddingLeft: '0.5rem' }}> (Disabled services are not eligible to be invoiced yet)</span>
-            </p>
+          {!moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') ? (
+            <p>Invoices cannot be issued before guest arrival</p>
+          ) : (
+            <div class={'ir-invoice__services'}>
+              <p class="ir-invoice__form-control-label">
+                Choose what to invoice <span style={{ color: 'var(--wa-color-gray-60)', paddingLeft: '0.5rem' }}> (Disabled services are not eligible to be invoiced yet)</span>
+              </p>
 
-            <div class="ir-invoice__services-container">
-              {this.invoicableKey.size === 0 && <ir-empty-state style={{ marginTop: '3rem' }}></ir-empty-state>}
-              {this.renderRooms()}
-              {this.booking.pickup_info && this.renderPickup()}
-              {this.booking.extra_services?.map(extra_service => {
-                const sysId = extra_service.system_id;
-                if (!this.invoicableKey?.has(sysId)) {
-                  return null;
-                }
-                const isSelected = this.isSelected([sysId]);
-                const isDisabled = this.isDisabled([sysId]);
-                return (
-                  <div key={extra_service.system_id} class="ir-invoice__service">
-                    <wa-checkbox
-                      disabled={isDisabled}
-                      size="small"
-                      onchange={e => {
-                        const value = (e.target as any).checked;
-                        this.handleCheckChange({ checked: value, system_id: sysId });
-                      }}
-                      defaultChecked={isSelected}
-                      class="ir-invoice__checkbox"
-                      checked={isSelected}
-                    >
-                      <div class="ir-invoice__room-checkbox-container">
-                        <div class={'ir-invoice__room-info'}>
-                          <span>{extra_service.description}</span>
-                          {this.getDateView(extra_service.start_date, extra_service.end_date)}
+              <div class="ir-invoice__services-container">
+                {this.invoicableKey.size === 0 && <ir-empty-state style={{ marginTop: '3rem' }}></ir-empty-state>}
+                {this.renderRooms()}
+                {this.booking.pickup_info && this.renderPickup()}
+                {this.booking.extra_services?.map(extra_service => {
+                  const sysId = extra_service.system_id;
+                  if (!this.invoicableKey?.has(sysId)) {
+                    return null;
+                  }
+                  const isSelected = this.isSelected([sysId]);
+                  const isDisabled = this.isDisabled([sysId]);
+                  return (
+                    <div key={extra_service.system_id} class="ir-invoice__service">
+                      <wa-checkbox
+                        disabled={isDisabled}
+                        size="small"
+                        onchange={e => {
+                          const value = (e.target as any).checked;
+                          this.handleCheckChange({ checked: value, system_id: sysId });
+                        }}
+                        defaultChecked={isSelected}
+                        class="ir-invoice__checkbox"
+                        checked={isSelected}
+                      >
+                        <div class="ir-invoice__room-checkbox-container">
+                          <div class={'ir-invoice__room-info'}>
+                            <span>{extra_service.description}</span>
+                            {this.getDateView(extra_service.start_date, extra_service.end_date)}
+                          </div>
+                          {this.renderPriceColumn(extra_service.price, sysId)}
                         </div>
-                        {this.renderPriceColumn(extra_service.price, sysId)}
-                      </div>
-                    </wa-checkbox>
-                  </div>
-                );
-              })}
-              {this.renderCancellationPenalty()}
+                      </wa-checkbox>
+                    </div>
+                  );
+                })}
+                {this.renderCancellationPenalty()}
+              </div>
             </div>
-          </div>
+          )}
         </form>
       </Host>
     );

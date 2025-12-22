@@ -1,9 +1,10 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingInvoiceInfo, ViewMode } from './types';
 import { IssueInvoiceProps } from '@/components';
 import calendar_data from '@/stores/calendar-data';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-invoice',
@@ -108,7 +109,12 @@ export class IrInvoice {
   @State() viewMode: ViewMode = 'invoice';
   @State() isLoading: boolean;
   private _id = `invoice-form__${v4()}`;
-
+  @Watch('booking')
+  handleBookingChange() {
+    if (!moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') && this.viewMode === 'invoice') {
+      this.viewMode = 'proforma';
+    }
+  }
   render() {
     return (
       <Host>
