@@ -1,3 +1,7 @@
 :host {
   display: block;
 }
+.booking-editor__drawer::part(dialog) {
+  /* Prevent double scrollbars by letting only the body area scroll */
+  overflow: hidden;
+}

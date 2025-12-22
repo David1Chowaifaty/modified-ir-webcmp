@@ -110,6 +110,7 @@ export class IrBookingEditorDrawer {
         style={{
           '--ir-drawer-width': '70rem',
         }}
+        class="booking-editor__drawer"
         label={this.label}
         open={this.open}
       >
