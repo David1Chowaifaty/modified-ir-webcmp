@@ -1,11 +1,14 @@
-import booking_store, { calculateTotalRooms, getBookingTotalPrice, IRatePlanSelection } from '@/stores/booking.store';
+import booking_store, { calculateTotalRooms, getBookingTotalPrice, IRatePlanSelection, updateBookedByGuest } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h, Prop, State } from '@stencil/core';
 import { BookingEditorMode } from '../types';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import { Room } from '@/models/booking.dto';
+import { BookingService } from '@/services/booking-service/booking.service';
+import { ExposedGuests } from '@/services/booking-service/types';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-booking-editor-form',
@@ -16,6 +19,37 @@ export class IrBookingEditorForm {
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
   @Prop() room: Room;
 
+  @State() guests: ExposedGuests;
+
+  private bookingService = new BookingService();
+
+  private async fetchGuests(email: string) {
+    try {
+      if (!email) {
+        return;
+      }
+      this.guests = await this.bookingService.fetchExposedGuest(email, calendar_data.property.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  private handleComboboxSelect(e: CustomEvent) {
+    const guest = this.guests?.find(guest => guest.id?.toString() === e.detail.item.value);
+    if (!guest) {
+      console.warn(`guest not found with id ${e.detail.item.value}`);
+      return;
+    }
+    updateBookedByGuest({
+      id: guest.id,
+      email: guest.email,
+      firstName: guest.first_name,
+      lastName: guest.last_name,
+      mobile: guest.mobile_without_prefix,
+      countryId: guest.country_id?.toString(),
+      phone_prefix: guest['country_phone_prefix'],
+    });
+  }
   render() {
     const { dates } = booking_store.bookingDraft;
     let hasBookedByGuestController = false;
@@ -83,7 +117,26 @@ export class IrBookingEditorForm {
         )}
         <section class={'mt-2'}>
           <h4 class="booking-editor__heading">Booked by</h4>
-          <ir-picker class="mb-1" style={{ maxWidth: '48.5%' }} placeholder="Search customer by email, name or company name"></ir-picker>
+          <ir-picker
+            class="mb-1"
+            style={{ maxWidth: '48.5%' }}
+            placeholder="Search customer by email, name or company name"
+            withClear
+            onText-change={event => this.fetchGuests(event.detail)}
+            debounce={500}
+            loading={isRequestPending('/Fetch_Exposed_Guests')}
+            mode="select-async"
+            onCombobox-select={this.handleComboboxSelect.bind(this)}
+          >
+            {this.guests?.map(guest => {
+              const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
+              return (
+                <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
+                  {label}
+                </ir-picker-item>
+              );
+            })}
+          </ir-picker>
           <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
         </section>
       </form>
