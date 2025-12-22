@@ -109,9 +109,16 @@ export class IrInvoice {
   @State() viewMode: ViewMode = 'invoice';
   @State() isLoading: boolean;
   private _id = `invoice-form__${v4()}`;
+  componentWillLoad() {
+    if (this.booking) {
+      if (moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') && this.viewMode === 'invoice') {
+        this.viewMode = 'proforma';
+      }
+    }
+  }
   @Watch('booking')
   handleBookingChange() {
-    if (!moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') && this.viewMode === 'invoice') {
+    if (moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') && this.viewMode === 'invoice') {
       this.viewMode = 'proforma';
     }
   }
@@ -137,6 +144,8 @@ export class IrInvoice {
         >
           <div class="d-flex align-items-center" slot="header-actions">
             <wa-switch
+              defaultChecked={this.viewMode === 'proforma'}
+              checked={this.viewMode === 'proforma'}
               onchange={e => {
                 if ((e.target as any).checked) {
                   this.viewMode = 'proforma';

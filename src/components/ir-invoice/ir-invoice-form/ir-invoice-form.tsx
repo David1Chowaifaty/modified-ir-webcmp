@@ -877,8 +877,8 @@ export class IrInvoiceForm {
             maxDate={this.getMaxDate()}
           ></ir-custom-date-picker>
           <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
-          {!moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') ? (
-            <p>Invoices cannot be issued before guest arrival</p>
+          {this.viewMode === 'invoice' && moment().isBefore(moment(this.booking.from_date, 'YYYY-MM-DD'), 'dates') ? (
+            <ir-empty-state message="Invoices cannot be issued before guest arrival"></ir-empty-state>
           ) : (
             <div class={'ir-invoice__services'}>
               <p class="ir-invoice__form-control-label">
