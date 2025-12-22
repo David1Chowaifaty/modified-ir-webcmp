@@ -104,6 +104,7 @@ export class IrInvoiceForm {
   private bookingService = new BookingService();
   private invoiceTarget: IEntries[];
   private apiDisabledItemKeys: Set<number> = new Set();
+  private alreadyInvoicedItemKeys: Set<number> = new Set();
 
   componentWillLoad() {
     this.init();
@@ -240,7 +241,20 @@ export class IrInvoiceForm {
     const base = baseKeys ?? this.notInvoiceableItemKeys ?? new Set();
     const merged = new Set(base);
     this.apiDisabledItemKeys.forEach(key => merged.add(key));
+    if (this.viewMode === 'invoice') {
+      this.alreadyInvoicedItemKeys.forEach(key => merged.add(key));
+    }
     return merged;
+  }
+
+  /**
+   * Indicates whether an item was already invoiced, used to disable it in invoice mode.
+   */
+  private isAlreadyInvoiced(systemId?: number) {
+    if (this.viewMode !== 'invoice' || typeof systemId !== 'number') {
+      return false;
+    }
+    return this.alreadyInvoicedItemKeys.has(systemId);
   }
   /**
    * Synchronizes the selected keys set with derived arrays and button states.
@@ -340,6 +354,17 @@ export class IrInvoiceForm {
     });
     this.invoicableKey = new Map(mapEntries);
     this.apiDisabledItemKeys = new Set(invoiceableItems.filter(item => !item.is_invoiceable).map(item => this.getSelectableKey(item)));
+    const alreadyInvoicedKeys: number[] = [];
+    invoiceableItems.forEach(item => {
+      if (item.reason?.code !== '001') {
+        return;
+      }
+      alreadyInvoicedKeys.push(item.key);
+      if (typeof item.system_id === 'number' && item.system_id !== item.key) {
+        alreadyInvoicedKeys.push(item.system_id);
+      }
+    });
+    this.alreadyInvoicedItemKeys = new Set(alreadyInvoicedKeys);
     this.applyDefaultSelections(invoiceableItems);
     this.setUpDisabledItems();
   }
@@ -349,7 +374,11 @@ export class IrInvoiceForm {
    */
   private applyDefaultSelections(items: InvoiceableItem[]) {
     const keysToSelect =
-      this.viewMode === 'proforma' ? items.map(item => this.getSelectableKey(item)) : items.filter(item => item.is_invoiceable).map(item => this.getSelectableKey(item));
+      this.viewMode === 'proforma'
+        ? items.map(item => this.getSelectableKey(item))
+        : items
+            .filter(item => item.is_invoiceable && item.reason?.code !== '001')
+            .map(item => this.getSelectableKey(item));
     this.syncSelectedItems(new Set(keysToSelect));
   }
 
@@ -671,7 +700,15 @@ export class IrInvoiceForm {
     if (!disabledKeys.size) {
       return false;
     }
-    return systemIds.some(id => typeof id === 'number' && disabledKeys.has(id));
+    return systemIds.some(id => {
+      if (typeof id !== 'number') {
+        return false;
+      }
+      if (this.isAlreadyInvoiced(id)) {
+        return true;
+      }
+      return disabledKeys.has(id);
+    });
   }
 
   /**

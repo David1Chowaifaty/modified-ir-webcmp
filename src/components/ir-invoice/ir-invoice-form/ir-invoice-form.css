@@ -98,3 +98,6 @@
   line-height: var(--wa-form-control-label-line-height);
   margin-block-end: 0.5em;
 }
+.ir-invoice__reason {
+  color: var(--wa-color-danger-fill-loud);
+}
