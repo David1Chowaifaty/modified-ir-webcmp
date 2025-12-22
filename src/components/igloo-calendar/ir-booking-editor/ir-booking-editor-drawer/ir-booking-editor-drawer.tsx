@@ -17,8 +17,10 @@ export class IrBookingEditorDrawer {
   @Prop() language: string = 'en';
   @Prop() booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
+  @Prop() label: string;
   @Prop() checkIn: string;
   @Prop() checkOut: string;
+  @Prop() unitId: string;
 
   @State() step: BookingStep = 'details';
 
@@ -37,7 +39,10 @@ export class IrBookingEditorDrawer {
     }
   }
 
-  private get label() {
+  private get drawerLabel() {
+    if (this.label) {
+      return this.label;
+    }
     switch (this.mode) {
       case 'SPLIT_BOOKING':
       case 'BAR_BOOKING':
@@ -111,11 +116,12 @@ export class IrBookingEditorDrawer {
           '--ir-drawer-width': '70rem',
         }}
         class="booking-editor__drawer"
-        label={this.label}
+        label={this.drawerLabel}
         open={this.open}
       >
         {this.open && this.ticket && (
           <ir-booking-editor
+            unitId={this.unitId}
             propertyId={this.propertyid}
             step={this.step}
             language={this.language}

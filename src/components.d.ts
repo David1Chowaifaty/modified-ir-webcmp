@@ -583,11 +583,13 @@ export namespace Components {
         "booking": Booking;
         "checkIn": string;
         "checkOut": string;
+        "label": string;
         "language": string;
         "mode": BookingEditorMode;
         "open": boolean;
         "propertyid": string;
         "ticket": string;
+        "unitId": string;
     }
     interface IrBookingEditorForm {
         "mode": BookingEditorMode;
@@ -7784,11 +7786,13 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "checkIn"?: string;
         "checkOut"?: string;
+        "label"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
         "open"?: boolean;
         "propertyid"?: string;
         "ticket"?: string;
+        "unitId"?: string;
     }
     interface IrBookingEditorForm {
         "mode"?: BookingEditorMode;

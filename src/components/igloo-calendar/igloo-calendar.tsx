@@ -1351,6 +1351,7 @@ export class IglooCalendar {
     // if (!this.isAuthenticated) {
     //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
     // }
+    console.log(this.bookingItem);
     return (
       <Host>
         <ir-toast></ir-toast>
@@ -1405,7 +1406,7 @@ export class IglooCalendar {
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
         </div>
-        {this.bookingItem && (
+        {/* {this.bookingItem && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
@@ -1417,7 +1418,7 @@ export class IglooCalendar {
             bookingData={this.bookingItem}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
-        )}
+        )} */}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.isSidebarOpen}
@@ -1505,6 +1506,15 @@ export class IglooCalendar {
           roomIdentifier={this.invoiceState?.identifier}
           open={this.invoiceState !== null}
         ></ir-invoice>
+        <ir-booking-editor-drawer
+          unitId={(this.bookingItem as any)?.PR_ID}
+          mode={this.bookingItem?.event_type as any}
+          label={this.bookingItem?.TITLE}
+          ticket={this.ticket}
+          open={this.bookingItem !== null}
+          language={this.language}
+          propertyid={this.propertyid as any}
+        ></ir-booking-editor-drawer>
       </Host>
     );
   }
