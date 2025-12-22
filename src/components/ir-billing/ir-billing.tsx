@@ -76,12 +76,12 @@ export class IrBilling {
     });
   }
 
-  private async printInvoice(invoice: Invoice, autoDownload = false) {
+  private async printInvoice({ invoice, autoDownload, mode = 'invoice' }: { invoice: Invoice; autoDownload?: boolean; mode?: 'invoice' | 'creditnote' }) {
     try {
       const { My_Result } = await this.bookingService.printInvoice({
         property_id: calendar_data.property.id,
         invoice_nbr: invoice.nbr,
-        mode: invoice.credit_note ? 'creditnote' : 'invoice',
+        mode,
       });
       if (!My_Result) {
         return;
@@ -167,10 +167,10 @@ export class IrBilling {
                               onwa-select={async e => {
                                 switch ((e.detail as any).item.value) {
                                   case 'print':
-                                    this.printInvoice(invoice, true);
+                                    this.printInvoice({ invoice, autoDownload: true, mode: isValid ? 'invoice' : 'creditnote' });
                                     break;
                                   case 'view-print':
-                                    this.printInvoice(invoice);
+                                    this.printInvoice({ invoice, mode: isValid ? 'invoice' : 'creditnote' });
                                     break;
                                   case 'void':
                                     this.selectedInvoice = invoice.nbr;
@@ -222,7 +222,7 @@ export class IrBilling {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                         <wa-tooltip for={`mobile-download-pdf-${invoice.system_id}`}>Open PDF</wa-tooltip>
                         <ir-custom-button
-                          onClickHandler={() => this.printInvoice(invoice)}
+                          onClickHandler={() => this.printInvoice({ invoice, mode: isValid ? 'invoice' : 'creditnote' })}
                           loading={isRequestPending('/Print_Invoice')}
                           id={`mobile-download-pdf-${invoice.system_id}`}
                           variant="neutral"
