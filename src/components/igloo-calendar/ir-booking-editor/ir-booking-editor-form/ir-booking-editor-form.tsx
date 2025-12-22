@@ -2,7 +2,7 @@ import booking_store, { calculateTotalRooms, getBookingTotalPrice, IRatePlanSele
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
-import { Component, h, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { BookingEditorMode } from '../types';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import { Room } from '@/models/booking.dto';
@@ -20,6 +20,7 @@ export class IrBookingEditorForm {
   @Prop() room: Room;
 
   @State() guests: ExposedGuests;
+  @Event() doReservation: EventEmitter<string>;
 
   private bookingService = new BookingService();
 
@@ -62,6 +63,8 @@ export class IrBookingEditorForm {
         autoComplete="off"
         onSubmit={e => {
           e.preventDefault();
+          const submitter = (e as SubmitEvent).submitter as any | null;
+          this.doReservation.emit(submitter?.value);
         }}
       >
         <div class="booking-editor__header">
@@ -93,7 +96,7 @@ export class IrBookingEditorForm {
               }
               return (
                 <igl-application-info
-                  autoFillGuest={totalRooms === 1 && shouldAutoFillGuest}
+                  autoFillGuest={booking_store.bookedByGuest.id !== -1 && shouldAutoFillGuest}
                   totalNights={calculateDaysBetweenDates(dates.checkIn.format('YYYY-MM-DD'), dates.checkOut.format('YYYY-MM-DD'))}
                   bedPreferenceType={booking_store.selects.bedPreferences}
                   currency={calendar_data.property.currency}
@@ -116,27 +119,30 @@ export class IrBookingEditorForm {
           }),
         )}
         <section class={'mt-2'}>
-          <h4 class="booking-editor__heading">Booked by</h4>
-          <ir-picker
-            class="mb-1"
-            style={{ maxWidth: '48.5%' }}
-            placeholder="Search customer by email, name or company name"
-            withClear
-            onText-change={event => this.fetchGuests(event.detail)}
-            debounce={500}
-            loading={isRequestPending('/Fetch_Exposed_Guests')}
-            mode="select-async"
-            onCombobox-select={this.handleComboboxSelect.bind(this)}
-          >
-            {this.guests?.map(guest => {
-              const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
-              return (
-                <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
-                  {label}
-                </ir-picker-item>
-              );
-            })}
-          </ir-picker>
+          <div class="booking-editor__booked-by booking-editor__booked-by-header">
+            <h4 class="booking-editor__heading booking-editor__booked-by-title">Booked by</h4>
+
+            <ir-picker
+              class="booking-editor__booked-by-picker"
+              appearance="filled"
+              placeholder="Search customer by email, name or company name"
+              withClear
+              onText-change={event => this.fetchGuests(event.detail)}
+              debounce={500}
+              loading={isRequestPending('/Fetch_Exposed_Guests')}
+              mode="select-async"
+              onCombobox-select={this.handleComboboxSelect.bind(this)}
+            >
+              {this.guests?.map(guest => {
+                const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
+                return (
+                  <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
+                    {label}
+                  </ir-picker-item>
+                );
+              })}
+            </ir-picker>
+          </div>
           <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
         </section>
       </form>

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 /**
  * Defines the operating mode of the Booking Editor.
  *
@@ -29,3 +31,26 @@
 export type BookingEditorMode = 'SPLIT_BOOKING' | 'BAR_BOOKING' | 'ADD_ROOM' | 'EDIT_BOOKING' | 'PLUS_BOOKING';
 
 export type BookingStep = 'details' | 'confirm';
+
+export const RoomsGuestsSchema = z.array(
+  z
+    .object({
+      first_name: z.string().nonempty(),
+      last_name: z.string().nonempty(),
+      bed_preference: z.string().optional().nullable(),
+      requires_bed_preference: z.boolean().nullable(),
+    })
+    .superRefine((data, ctx) => {
+      if (data.requires_bed_preference && !data.bed_preference) {
+        ctx.addIssue({
+          path: ['bed_preference'],
+          message: 'Bed preference is required',
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }),
+);
+export const BookedByGuestSchema = z.object({
+  firstName: z.string().nonempty(),
+  lastName: z.string().nonempty(),
+});

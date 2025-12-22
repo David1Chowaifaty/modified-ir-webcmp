@@ -1,14 +1,15 @@
 import { Booking } from '@/models/booking.dto';
 import { Component, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
-import { BookingEditorMode, BookingStep } from './types';
+import { BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema } from './types';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
-import booking_store, { resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
+import booking_store, { getReservedRooms, resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
 import moment from 'moment';
+import { IRBookingEditorService } from './ir-booking-editor.service';
 
 @Component({
   tag: 'ir-booking-editor',
@@ -25,11 +26,13 @@ export class IrBookingEditor {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
   @Prop() step: BookingStep;
+  @Prop() unitId: string;
 
   @State() isLoading: boolean = true;
 
   private roomService = new RoomService();
   private bookingService = new BookingService();
+  private bookingEditorService = new IRBookingEditorService(this.mode);
 
   private room: Booking['rooms'][0];
 
@@ -125,6 +128,43 @@ export class IrBookingEditor {
     } catch (error) {
       console.error('Error initializing booking availability:', error);
     }
+  }
+  private async adjustBlockedDatesAfterReservation(serviceParams: any) {
+    // if (!this.wasBlockedUnit) {
+    //   return;
+    // }
+    // const original_from_date = moment(this.defaultData.block_exposed_unit_props.from_date, 'YYYY-MM-DD');
+    // const current_from_date = moment(serviceParams.booking.from_date, 'YYYY-MM-DD');
+    // const original_to_date = moment(this.defaultData.block_exposed_unit_props.to_date, 'YYYY-MM-DD');
+    // const current_to_date = moment(serviceParams.booking.to_date, 'YYYY-MM-DD');
+    // if (current_to_date.isBefore(original_to_date, 'days')) {
+    //   const props = { ...this.defaultData.block_exposed_unit_props, from_date: current_to_date.format('YYYY-MM-DD') };
+    //   await this.bookingService.blockUnit(props);
+    // }
+    // if (current_from_date.isAfter(original_from_date, 'days')) {
+    //   const props = { ...this.defaultData.block_exposed_unit_props, to_date: current_from_date.format('YYYY-MM-DD') };
+    //   await this.bookingService.blockUnit(props);
+    // }
+    // return;
+  }
+  private async doReservation(source: string) {
+    try {
+      const reservedRooms = getReservedRooms();
+      RoomsGuestsSchema.parse(reservedRooms.map(r => ({ ...r.guest, requires_bed_preference: r.ratePlanSelection.roomtype.is_bed_configuration_enabled })));
+      BookedByGuestSchema.parse(booking_store.bookedByGuest);
+      const body = await this.bookingEditorService.prepareBookUserServiceParams({
+        check_in: source === 'book-checkin',
+        booking: this.booking,
+        room: this.room,
+        unitId: this.unitId?.toString(),
+      });
+      // await this.bookingService.doReservation(body);
+      await this.adjustBlockedDatesAfterReservation(body);
+      // this.resetBookingEvt.emit(null);
+    } catch (error) {
+      console.log(error);
+    }
+    // alert('do reservation');
   }
 
   private isEventType(mode: BookingEditorMode): boolean {
@@ -239,7 +279,16 @@ export class IrBookingEditor {
             </Fragment>
           )}
 
-          {this.step === 'confirm' && <ir-booking-editor-form mode={this.mode}></ir-booking-editor-form>}
+          {this.step === 'confirm' && (
+            <ir-booking-editor-form
+              onDoReservation={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.doReservation(e.detail);
+              }}
+              mode={this.mode}
+            ></ir-booking-editor-form>
+          )}
         </div>
       </Host>
     );

@@ -118,6 +118,14 @@ export interface BookingStore {
   bookedByGuestManuallyEdited: boolean;
 }
 
+export interface ReservedRoomSelection {
+  roomTypeId: number;
+  ratePlanId: number;
+  reservationIndex: number;
+  guest: RatePlanGuest | null;
+  ratePlanSelection: IRatePlanSelection;
+}
+
 const initialState: BookingStore = {
   bookedByGuest: {
     id: -1,
@@ -518,3 +526,25 @@ export function setBookedByGuestManualEditState(isEdited: boolean) {
   booking_store.bookedByGuestManuallyEdited = isEdited;
 }
 export default booking_store;
+
+export function getReservedRooms(): ReservedRoomSelection[] {
+  const reservedRooms: ReservedRoomSelection[] = [];
+  Object.entries(booking_store.ratePlanSelections).forEach(([roomTypeId, ratePlans]) => {
+    Object.entries(ratePlans).forEach(([ratePlanId, ratePlanSelection]) => {
+      if (!ratePlanSelection.reserved) {
+        return;
+      }
+      const guests = ratePlanSelection.guest ?? [];
+      for (let reservationIndex = 0; reservationIndex < ratePlanSelection.reserved; reservationIndex++) {
+        reservedRooms.push({
+          roomTypeId: Number(roomTypeId),
+          ratePlanId: Number(ratePlanId),
+          reservationIndex,
+          guest: guests[reservationIndex] ?? null,
+          ratePlanSelection,
+        });
+      }
+    });
+  });
+  return reservedRooms;
+}

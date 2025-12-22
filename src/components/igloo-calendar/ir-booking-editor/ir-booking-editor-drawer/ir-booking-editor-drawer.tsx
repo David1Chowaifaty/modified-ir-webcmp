@@ -17,8 +17,8 @@ export class IrBookingEditorDrawer {
   @Prop() language: string = 'en';
   @Prop() booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
-  @Prop() checkIn: string = '2026-01-06';
-  @Prop() checkOut: string = '2026-01-08';
+  @Prop() checkIn: string;
+  @Prop() checkOut: string;
 
   @State() step: BookingStep = 'details';
 
@@ -77,11 +77,11 @@ export class IrBookingEditorDrawer {
           Back
         </ir-custom-button>
 
-        <ir-custom-button disabled={false} type="submit" size="medium" appearance={hasCheckIn ? 'outlined' : 'accent'} variant="brand">
+        <ir-custom-button value="book" form="new_booking_form" disabled={false} type="submit" size="medium" appearance={hasCheckIn ? 'outlined' : 'accent'} variant="brand">
           Book
         </ir-custom-button>
         {hasCheckIn && (
-          <ir-custom-button type="submit" size="medium" appearance="accent" variant="brand">
+          <ir-custom-button value="book-checkin" form="new_booking_form" type="submit" size="medium" appearance="accent" variant="brand">
             Book and check-in
           </ir-custom-button>
         )}

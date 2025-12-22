@@ -32,6 +32,14 @@
 .booking-editor__total-amount {
   white-space: nowrap;
 }
+
+.booking-editor__booked-by {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .booking-editor__heading {
   margin: 0;
   font-family: var(--wa-font-family-heading);
@@ -39,5 +47,15 @@
   line-height: var(--wa-line-height-condensed);
   text-wrap: balance;
   font-size: var(--wa-font-size-l);
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
+}
+
+@media (min-width: 768px) {
+  .booking-editor__booked-by {
+    flex-direction: row;
+    align-items: center;
+  }
+  .booking-editor__booked-by-picker {
+    max-width: 40rem;
+  }
 }

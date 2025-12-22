@@ -6,6 +6,7 @@ import { Component, Fragment, Host, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { AllowedPaymentMethod } from '@/models/booking.dto';
 import IMask from 'imask';
+import { BookedByGuestSchema } from '../types';
 
 @Component({
   tag: 'ir-booking-editor-guest-form',
@@ -79,27 +80,35 @@ export class IrBookingEditorGuestForm {
             placeholder="Email (leave empty if not available)"
           ></ir-input>
           <div class="booking-editor__guest-name-group" id="booking-editor-guest-name-group">
-            <ir-input
-              id="booking-editor-guest-first-name"
-              class="booking-editor__guest-input --first-name"
-              label="First name"
-              value={bookedByGuest.firstName}
-              defaultValue={bookedByGuest.firstName}
-              placeholder="First name"
-              autocomplete="off"
-              onText-change={e => updateBookedByGuest({ firstName: e.detail })}
-            ></ir-input>
-
-            <ir-input
-              id="booking-editor-guest-last-name"
-              class="booking-editor__guest-input --last-name"
-              label="Last name"
-              onText-change={e => updateBookedByGuest({ lastName: e.detail })}
-              value={bookedByGuest.lastName}
-              defaultValue={bookedByGuest.lastName}
-              placeholder="Last name"
-              autocomplete="off"
-            ></ir-input>
+            <ir-validator value={bookedByGuest.firstName} schema={BookedByGuestSchema.shape.firstName}>
+              <ir-input
+                id="booking-editor-guest-first-name"
+                class="booking-editor__guest-input --first-name"
+                // label="Name"
+                value={bookedByGuest.firstName}
+                defaultValue={bookedByGuest.firstName}
+                placeholder="First name"
+                autocomplete="off"
+                onText-change={e => updateBookedByGuest({ firstName: e.detail })}
+              >
+                <p style={{ margin: '0', marginBottom: '0.5rem' }} slot="label">
+                  <span class="booking-editor__guest-input-label --first-name-pc-label">Name</span>
+                  <span class="booking-editor__guest-input-label --first-name-mobile-label">First name</span>
+                </p>
+              </ir-input>
+            </ir-validator>
+            <ir-validator value={bookedByGuest.lastName} schema={BookedByGuestSchema.shape.lastName}>
+              <ir-input
+                id="booking-editor-guest-last-name"
+                class="booking-editor__guest-input --last-name"
+                label="Last name"
+                onText-change={e => updateBookedByGuest({ lastName: e.detail })}
+                value={bookedByGuest.lastName}
+                defaultValue={bookedByGuest.lastName}
+                placeholder="Last name"
+                autocomplete="off"
+              ></ir-input>
+            </ir-validator>
           </div>
           <ir-input label="Company name" placeholder="Company name"></ir-input>
           <ir-country-picker
@@ -150,6 +159,7 @@ export class IrBookingEditorGuestForm {
             <wa-select
               label={'Payment Method'}
               size="small"
+              defaultValue={booking_store?.selectedPaymentMethod?.code ?? this.paymentMethods[0].code}
               value={booking_store?.selectedPaymentMethod?.code}
               onchange={e =>
                 modifyBookingStore('selectedPaymentMethod', {
