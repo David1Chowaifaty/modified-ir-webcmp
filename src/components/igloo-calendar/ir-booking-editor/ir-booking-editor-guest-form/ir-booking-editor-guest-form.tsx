@@ -191,15 +191,17 @@ export class IrBookingEditorGuestForm {
             </Fragment>
           )}
           {booking_store.selectedPaymentMethod?.code === '005' && (
-            <div class="form-group mt-md-1 mt-1 p-0 d-flex flex-column flex-md-row align-items-md-center">
-              <label class="p-0 m-0 margin3"></label>
-              <div class="p-0 m-0  controlContainer flex-fill">
-                <div
-                  class="property-booked-by__money-transfer-description"
-                  innerHTML={this.paymentMethods.find(p => p.code === '005')?.localizables.find(l => l.language.code.toLowerCase() === 'en')?.description}
-                ></div>
-              </div>
-            </div>
+            <Fragment>
+              <style>
+                {`p{
+              margin:0;
+              padding:0}`}
+              </style>
+              <div
+                class="booking-editor__payment-info-description"
+                innerHTML={this.paymentMethods.find(p => p.code === '005')?.localizables.find(l => l.language.code.toLowerCase() === 'en')?.description}
+              ></div>
+            </Fragment>
           )}
           <wa-checkbox checked={bookedByGuest.emailGuest} onchange={event => updateBookedByGuest({ emailGuest: (event.target as HTMLInputElement).checked })}>
             {locales.entries.Lcz_EmailTheGuest}

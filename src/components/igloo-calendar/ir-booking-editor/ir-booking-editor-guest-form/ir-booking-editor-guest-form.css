@@ -1,18 +1,35 @@
 :host {
   padding-bottom: 3rem;
 }
-:host,
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .booking-editor__guest-name-group,
 .booking-editor__form-control {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
+.booking-editor__guest-name-group {
+  display: grid;
+  gap: 1rem;
+}
+
 .booking-editor__guest-input {
   width: 100%;
 }
+
 .booking-editor__form-control {
   width: 100%;
+}
+
+.booking-editor__payment-info-description {
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
 }
 /*md*/
 @media (min-width: 768px) {
