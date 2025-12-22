@@ -8,7 +8,8 @@
 }
 .booking-editor__header {
   width: 100%;
-  align-items: flex-start;
+  align-items: flex-center;
+  display: flex;
 }
 
 .booking-editor__dates {
@@ -16,7 +17,9 @@
 }
 
 .booking-editor__total {
-  min-width: 140px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .booking-editor__total-label {

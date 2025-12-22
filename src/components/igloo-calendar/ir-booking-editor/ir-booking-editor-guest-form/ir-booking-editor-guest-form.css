@@ -1,3 +1,6 @@
+:host {
+  padding-bottom: 3rem;
+}
 :host,
 .booking-editor__guest-name-group,
 .booking-editor__form-control {

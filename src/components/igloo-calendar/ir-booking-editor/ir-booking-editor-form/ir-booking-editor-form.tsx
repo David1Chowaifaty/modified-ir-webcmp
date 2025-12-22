@@ -30,7 +30,7 @@ export class IrBookingEditorForm {
           e.preventDefault();
         }}
       >
-        <div class="booking-editor__header d-flex flex-wrap">
+        <div class="booking-editor__header">
           <ir-date-view
             class="booking-editor__dates mr-1 flex-fill font-weight-bold font-medium-1"
             from_date={dates.checkIn}
@@ -59,7 +59,7 @@ export class IrBookingEditorForm {
               }
               return (
                 <igl-application-info
-                  autoFillGuest={shouldAutoFillGuest}
+                  autoFillGuest={totalRooms === 1 && shouldAutoFillGuest}
                   totalNights={calculateDaysBetweenDates(dates.checkIn.format('YYYY-MM-DD'), dates.checkOut.format('YYYY-MM-DD'))}
                   bedPreferenceType={booking_store.selects.bedPreferences}
                   currency={calendar_data.property.currency}
