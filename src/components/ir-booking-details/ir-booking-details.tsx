@@ -545,7 +545,7 @@ export class IrBookingDetails {
         hasDelete={this.hasDelete}
         hasMenu={this.hasMenu}
         hasPrint={this.hasPrint}
-        hasReceipt={calendar_data.property.is_pms_enabled}
+        hasReceipt={calendar_data.property.is_frontdesk_enabled}
         hasEmail={['001', '002'].includes(this.booking?.status?.code)}
       ></ir-booking-header>,
       <div class="booking-details__booking-info">
