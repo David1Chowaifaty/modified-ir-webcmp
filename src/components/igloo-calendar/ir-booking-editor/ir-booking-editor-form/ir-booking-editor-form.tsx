@@ -1,4 +1,4 @@
-import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
+import booking_store, { calculateTotalRooms, getBookingTotalPrice, IRatePlanSelection } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
@@ -19,6 +19,8 @@ export class IrBookingEditorForm {
   render() {
     const { dates } = booking_store.bookingDraft;
     let hasBookedByGuestController = false;
+    const totalRooms = calculateTotalRooms();
+    const totalCost = totalRooms > 1 ? getBookingTotalPrice() : 0;
     return (
       <form
         class="booking-editor__guest-form"
@@ -36,10 +38,12 @@ export class IrBookingEditorForm {
             dateOption="DD MMM YYYY"
           ></ir-date-view>
 
-          <div class="booking-editor__total mt-1 mt-md-0 text-right">
-            <span class="booking-editor__total-label">{locales.entries.Lcz_TotalPrice}</span>{' '}
-            <span class="booking-editor__total-amount font-weight-bold font-medium-1">{formatAmount(calendar_data.property.currency.symbol, 0)}</span>
-          </div>
+          {totalRooms > 1 && (
+            <div class="booking-editor__total mt-1 mt-md-0 text-right">
+              <span class="booking-editor__total-label">{locales.entries.Lcz_TotalPrice}</span>{' '}
+              <span class="booking-editor__total-amount font-weight-bold font-medium-1">{formatAmount(calendar_data.property.currency.symbol, totalCost)}</span>
+            </div>
+          )}
         </div>
         {Object.values(booking_store.ratePlanSelections).map(val =>
           Object.values(val).map(ratePlan => {

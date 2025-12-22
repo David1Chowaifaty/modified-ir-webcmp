@@ -17,8 +17,8 @@ export class IrBookingEditorDrawer {
   @Prop() language: string = 'en';
   @Prop() booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
-  @Prop() checkIn: string;
-  @Prop() checkOut: string;
+  @Prop() checkIn: string = '2026-01-06';
+  @Prop() checkOut: string = '2026-01-08';
 
   @State() step: BookingStep = 'details';
 

@@ -8,6 +8,7 @@ import booking_store, { resetBookingStore, setBookingDraft, setBookingSelectOpti
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-booking-editor',
@@ -34,6 +35,12 @@ export class IrBookingEditor {
 
   componentWillLoad() {
     this.initializeApp();
+    setBookingDraft({
+      dates: {
+        checkIn: this.checkIn ? moment(this.checkIn, 'YYYY-MM-DD') : moment(),
+        checkOut: this.checkOut ? moment(this.checkOut, 'YYYY-MM-DD') : moment().add(1, 'day'),
+      },
+    });
   }
 
   private async initializeApp() {
@@ -215,7 +222,7 @@ export class IrBookingEditor {
           <ir-interceptor></ir-interceptor>
           {this.step === 'details' && (
             <Fragment>
-              <ir-booking-editor-header mode={this.mode}></ir-booking-editor-header>
+              <ir-booking-editor-header checkIn={this.checkIn} checkOut={this.checkOut} mode={this.mode}></ir-booking-editor-header>
               <div class={'booking-editor__roomtype-container'}>
                 {booking_store.roomTypes?.map(roomType => (
                   <igl-room-type

@@ -2,6 +2,7 @@ import { Booking, Guest } from '@/models/booking.dto';
 import { ICountry, ISetupEntries } from '@/models/IBooking';
 import { BookingSource, TEventType } from '@/models/igl-book-property';
 import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/models/property';
+import { calculateDaysBetweenDates } from '@/utils/booking';
 import { createStore } from '@stencil/store';
 import moment, { Moment } from 'moment';
 
@@ -453,6 +454,37 @@ export function calculateTotalCost(gross: boolean = false): { totalAmount: numbe
   return { totalAmount, prePaymentAmount };
 }
 
+function x(rateplanSelection, totalNights) {
+  if (rateplanSelection.is_amount_modified) {
+    return rateplanSelection.view_mode === '001' ? rateplanSelection.rp_amount : rateplanSelection.rp_amount * totalNights;
+  }
+  let variation = rateplanSelection.selected_variation;
+  // if (this.guestInfo?.infant_nbr) {
+  //   variation = this.variationService.getVariationBasedOnInfants({
+  //     variations: this.rateplanSelection.ratePlan.variations,
+  //     baseVariation: this.rateplanSelection.selected_variation,
+  //     infants: this.guestInfo?.infant_nbr,
+  //   });
+  // }
+  return variation.discounted_gross_amount;
+}
+export function getBookingTotalPrice(): number {
+  const dateDiff = calculateDaysBetweenDates(booking_store.bookingDraft.dates.checkIn.format('YYYY-MM-DD'), booking_store.bookingDraft.dates.checkOut.format('YYYY-MM-DD'));
+
+  let totalPrice = 0;
+
+  Object.values(booking_store.ratePlanSelections).forEach(roomTypeSelection => {
+    Object.values(roomTypeSelection).forEach(ratePlan => {
+      if (ratePlan.reserved === 0) {
+        return;
+      }
+      const rateAmount = x(ratePlan, dateDiff);
+      totalPrice += rateAmount;
+    });
+  });
+
+  return totalPrice;
+}
 export function validateBooking() {
   return Object.values(booking_store.ratePlanSelections).every(roomTypeSelection =>
     Object.values(roomTypeSelection).every(ratePlan => ratePlan.guestName.every(name => name.trim() !== '')),
