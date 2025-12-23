@@ -90,13 +90,17 @@ export class IrBookingEditorForm {
             }
 
             return [...new Array(rp.reserved)].map((_, i) => {
-              const shouldAutoFillGuest = !hasBookedByGuestController && !booking_store.bookedByGuestManuallyEdited;
+              const shouldAutoFillGuest =
+                ['BAR_BOOKING', 'PLUS_BOOKING'].includes(this.mode) &&
+                booking_store.bookedByGuest.id !== -1 &&
+                !hasBookedByGuestController &&
+                !booking_store.bookedByGuestManuallyEdited;
               if (shouldAutoFillGuest) {
                 hasBookedByGuestController = true;
               }
               return (
                 <igl-application-info
-                  autoFillGuest={booking_store.bookedByGuest.id !== -1 && shouldAutoFillGuest}
+                  autoFillGuest={shouldAutoFillGuest}
                   totalNights={calculateDaysBetweenDates(dates.checkIn.format('YYYY-MM-DD'), dates.checkOut.format('YYYY-MM-DD'))}
                   bedPreferenceType={booking_store.selects.bedPreferences}
                   currency={calendar_data.property.currency}

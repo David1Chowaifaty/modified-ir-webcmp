@@ -1,5 +1,5 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema } from './types';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
@@ -30,6 +30,8 @@ export class IrBookingEditor {
 
   @State() isLoading: boolean = true;
 
+  @Event({ composed: true, bubbles: true }) resetBookingEvt: EventEmitter<void>;
+
   private roomService = new RoomService();
   private bookingService = new BookingService();
   private bookingEditorService = new IRBookingEditorService(this.mode);
@@ -39,10 +41,17 @@ export class IrBookingEditor {
   componentWillLoad() {
     this.initializeApp();
   }
+  @Watch('mode')
+  handleModeChange(newMode: BookingEditorMode, oldMode: BookingEditorMode) {
+    if (newMode !== oldMode) {
+      this.bookingEditorService.setMode(newMode);
+    }
+  }
 
   private async initializeApp() {
     try {
       this.isLoading = true;
+      this.bookingEditorService.setMode(this.mode);
       const [languageTexts, countriesList] = await Promise.all([
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
@@ -197,9 +206,10 @@ export class IrBookingEditor {
         room: this.room,
         unitId: this.unitId?.toString(),
       });
-      // await this.bookingService.doReservation(body);
+      console.log(body);
+      await this.bookingService.doReservation(body);
       await this.adjustBlockedDatesAfterReservation(body);
-      // this.resetBookingEvt.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
     }
@@ -325,6 +335,7 @@ export class IrBookingEditor {
                 e.stopPropagation();
                 this.doReservation(e.detail);
               }}
+              room={this.room}
               mode={this.mode}
             ></ir-booking-editor-form>
           )}

@@ -7,24 +7,43 @@ import { BookingEditorMode } from './types';
 import calendar_data from '@/stores/calendar-data';
 
 export class IRBookingEditorService {
+  /** Current booking editor mode */
   private mode: BookingEditorMode;
+
+  /** Lazy-initialized variation service */
+  private variationService?: VariationService;
 
   constructor(mode: BookingEditorMode) {
     this.mode = mode;
   }
+  public setMode(mode: BookingEditorMode) {
+    this.mode = mode;
+  }
 
+  // ─────────────────────────────────────────────
+  // Utility helpers
+  // ─────────────────────────────────────────────
+
+  /**
+   * Checks whether a string contains underscores.
+   * Used to validate phone numbers.
+   */
   private hasUnderscore(str: string): boolean {
     return /_+/.test(str);
   }
-  private variationService: VariationService;
-
+  /**
+   * Generates daily rate entries for a reserved room.
+   */
   private calculateAmount({ is_amount_modified, selected_variation, view_mode, rp_amount }: IRatePlanSelection) {
     const total_days = selected_variation.nights.length;
     if (is_amount_modified) {
       return view_mode === '002' ? rp_amount : rp_amount / total_days;
     }
   }
-
+  /**
+   * Builds room payloads based on selected rate plans
+   * and booking draft context.
+   */
   private generateDailyRates(rate_plan: IRatePlanSelection, i: number) {
     let variation = rate_plan.selected_variation;
     const amount = rate_plan.is_amount_modified ? this.calculateAmount(rate_plan) : null;
@@ -110,7 +129,11 @@ export class IRBookingEditorService {
   private isEventType(mode: BookingEditorMode): boolean {
     return this.mode === mode;
   }
-  async prepareBookUserServiceParams({ check_in, booking, room, unitId }: { check_in: boolean; booking: Booking; room: Room; unitId: string }) {
+  /**
+   * Prepares payload parameters for the booking user service
+   * based on the current editor mode.
+   */
+  public async prepareBookUserServiceParams({ check_in, booking, room, unitId }: { check_in: boolean; booking: Booking; room: Room; unitId: string }) {
     try {
       // Validate context structure
       const { dates } = booking_store.bookingDraft;
@@ -147,6 +170,8 @@ export class IRBookingEditorService {
           pickup_info,
         };
       };
+
+      console.log(this.mode);
 
       let newBooking = null;
       const sourceOption = booking_store.bookingDraft.source;
