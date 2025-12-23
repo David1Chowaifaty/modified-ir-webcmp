@@ -84,13 +84,18 @@ export class IrBookingEditorGuestForm {
               <ir-input
                 id="booking-editor-guest-first-name"
                 class="booking-editor__guest-input --first-name"
-                label="First name"
+                // label="Name"
                 value={bookedByGuest.firstName}
                 defaultValue={bookedByGuest.firstName}
                 placeholder="First name"
                 autocomplete="off"
                 onText-change={e => updateBookedByGuest({ firstName: e.detail })}
-              ></ir-input>
+              >
+                <p style={{ margin: '0', marginBottom: '0.5rem' }} slot="label">
+                  <span class="booking-editor__guest-input-label --first-name-pc-label">Name</span>
+                  <span class="booking-editor__guest-input-label --first-name-mobile-label">First name</span>
+                </p>
+              </ir-input>
             </ir-validator>
             <ir-validator class="booking-editor__guest-input-validator" value={bookedByGuest.lastName} schema={BookedByGuestSchema.shape.lastName}>
               <ir-input

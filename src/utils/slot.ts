@@ -102,7 +102,7 @@ export class SlotManager {
   }
 
   private checkSlotHasContent(name: string): boolean {
-    return !!this.hostElement.querySelector(`[slot="${name}"]`);
+    return Array.from(this.hostElement.children).some(child => child.getAttribute('slot') === name);
   }
 }
 
