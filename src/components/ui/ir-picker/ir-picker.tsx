@@ -73,6 +73,7 @@ export class IrPicker {
   @State() filteredItems: PickerItemElement[] = [];
   @State() liveRegionMessage = '';
   @State() slottedPickerItems: PickerItemElement[] = [];
+  @State() isValid: string;
 
   /** Emitted when a value is selected from the combobox list. */
   @Event({ eventName: 'combobox-select' }) comboboxSelect!: EventEmitter<IrComboboxSelectEventDetail>;
@@ -165,6 +166,10 @@ export class IrPicker {
     this.scrollActiveOptionIntoView();
   }
 
+  @Watch('aria-invalid')
+  handleAriaInvalid(newValue) {
+    this.isValid = newValue;
+  }
   @Watch('value')
   protected handleValueChange(newValue: string) {
     this.updateSelectedFromValue(newValue);
@@ -553,6 +558,7 @@ export class IrPicker {
           <wa-input
             slot="anchor"
             class="search-bar"
+            aria-invalid={this.isValid}
             withClear={this.withClear}
             size={this.size}
             value={this.query}

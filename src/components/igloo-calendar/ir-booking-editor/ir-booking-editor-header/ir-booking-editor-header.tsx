@@ -37,6 +37,27 @@ export class IrBookingEditorHeader {
   private adultsSchema = z.coerce.number().min(1);
 
   @State() datesSchema: ZodSchema;
+  private BookedByGuestPickerSchema = z
+    .object({
+      firstName: z.string(),
+      lastName: z.string(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.firstName) {
+        ctx.addIssue({
+          path: ['firstName'],
+          code: z.ZodIssueCode.custom,
+          message: locales.entries.Lcz_ChooseBookingNumber,
+        });
+      }
+      if (!data.lastName) {
+        ctx.addIssue({
+          path: ['lastName'],
+          code: z.ZodIssueCode.custom,
+          message: locales.entries.Lcz_ChooseBookingNumber,
+        });
+      }
+    });
 
   // =====================
   // Handlers
@@ -232,7 +253,7 @@ export class IrBookingEditorHeader {
       <Host>
         <form onSubmit={this.handleSubmit.bind(this)}>
           {this.mode === 'SPLIT_BOOKING' && (
-            <ir-validator value={booking_store.bookedByGuest} schema={BookedByGuestSchema}>
+            <ir-validator value={booking_store.bookedByGuest} class="booking-editor-header__booking-picker-validator" showErrorMessage schema={this.BookedByGuestPickerSchema}>
               <ir-picker
                 mode="select-async"
                 class="booking-editor-header__booking-picker"

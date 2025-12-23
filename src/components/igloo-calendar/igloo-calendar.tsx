@@ -1513,12 +1513,23 @@ export class IglooCalendar {
           mode={this.bookingItem?.event_type as any}
           label={this.bookingItem?.TITLE}
           ticket={this.ticket}
-          open={this.bookingItem !== null}
+          open={this.bookingItem !== null && this.bookingItem.event_type !== 'BLOCK_DATES'}
           language={this.language}
           propertyid={this.propertyid as any}
           checkIn={this.bookingItem?.FROM_DATE}
           checkOut={this.bookingItem?.TO_DATE}
         ></ir-booking-editor-drawer>
+        <igl-blocked-date-dialog
+          onBlockedDateDialogClosed={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.bookingItem = null;
+          }}
+          fromDate={this.bookingItem?.FROM_DATE}
+          toDate={this.bookingItem?.TO_DATE}
+          label={(this.bookingItem as any)?.BLOCK_DATES_TITLE?.trim()}
+          open={this.bookingItem?.event_type === 'BLOCK_DATES'}
+        ></igl-blocked-date-dialog>
       </Host>
     );
   }

@@ -8,5 +8,5 @@
   font-size: var(--wa-font-size-smaller);
   line-height: var(--wa-form-control-label-line-height);
   color: var(--wa-color-danger-fill-loud);
-  position: absolute;
+  /* position: absolute; */
 }

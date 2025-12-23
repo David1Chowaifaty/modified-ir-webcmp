@@ -154,6 +154,12 @@ export namespace Components {
         "isEventHover": boolean;
         "toDate": string;
     }
+    interface IglBlockedDateDialog {
+        "fromDate": string;
+        "label": string;
+        "open": boolean;
+        "toDate": string;
+    }
     interface IglBookProperty {
         "adultChildConstraints": TAdultChildConstraints;
         "allowedBookingSources": any;
@@ -3391,6 +3397,10 @@ export interface IglBlockDatesViewCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBlockDatesViewElement;
 }
+export interface IglBlockedDateDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBlockedDateDialogElement;
+}
 export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyElement;
@@ -3999,6 +4009,23 @@ declare global {
     var HTMLIglBlockDatesViewElement: {
         prototype: HTMLIglBlockDatesViewElement;
         new (): HTMLIglBlockDatesViewElement;
+    };
+    interface HTMLIglBlockedDateDialogElementEventMap {
+        "blockedDateDialogClosed": void;
+    }
+    interface HTMLIglBlockedDateDialogElement extends Components.IglBlockedDateDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBlockedDateDialogElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDialogElement, ev: IglBlockedDateDialogCustomEvent<HTMLIglBlockedDateDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBlockedDateDialogElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDialogElement, ev: IglBlockedDateDialogCustomEvent<HTMLIglBlockedDateDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBlockedDateDialogElement: {
+        prototype: HTMLIglBlockedDateDialogElement;
+        new (): HTMLIglBlockedDateDialogElement;
     };
     interface HTMLIglBookPropertyElementEventMap {
         "closeBookingWindow": { [key: string]: any };
@@ -7044,6 +7071,7 @@ declare global {
         "ac-pages-menu": HTMLAcPagesMenuElement;
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
+        "igl-blocked-date-dialog": HTMLIglBlockedDateDialogElement;
         "igl-book-property": HTMLIglBookPropertyElement;
         "igl-book-property-container": HTMLIglBookPropertyContainerElement;
         "igl-book-property-footer": HTMLIglBookPropertyFooterElement;
@@ -7287,6 +7315,13 @@ declare namespace LocalJSX {
         "fromDate"?: string;
         "isEventHover"?: boolean;
         "onDataUpdateEvent"?: (event: IglBlockDatesViewCustomEvent<{ [key: string]: any }>) => void;
+        "toDate"?: string;
+    }
+    interface IglBlockedDateDialog {
+        "fromDate"?: string;
+        "label"?: string;
+        "onBlockedDateDialogClosed"?: (event: IglBlockedDateDialogCustomEvent<void>) => void;
+        "open"?: boolean;
         "toDate"?: string;
     }
     interface IglBookProperty {
@@ -10949,6 +10984,7 @@ declare namespace LocalJSX {
         "ac-pages-menu": AcPagesMenu;
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
+        "igl-blocked-date-dialog": IglBlockedDateDialog;
         "igl-book-property": IglBookProperty;
         "igl-book-property-container": IglBookPropertyContainer;
         "igl-book-property-footer": IglBookPropertyFooter;
@@ -11174,6 +11210,7 @@ declare module "@stencil/core" {
             "ac-pages-menu": LocalJSX.AcPagesMenu & JSXBase.HTMLAttributes<HTMLAcPagesMenuElement>;
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
+            "igl-blocked-date-dialog": LocalJSX.IglBlockedDateDialog & JSXBase.HTMLAttributes<HTMLIglBlockedDateDialogElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
             "igl-book-property-container": LocalJSX.IglBookPropertyContainer & JSXBase.HTMLAttributes<HTMLIglBookPropertyContainerElement>;
             "igl-book-property-footer": LocalJSX.IglBookPropertyFooter & JSXBase.HTMLAttributes<HTMLIglBookPropertyFooterElement>;

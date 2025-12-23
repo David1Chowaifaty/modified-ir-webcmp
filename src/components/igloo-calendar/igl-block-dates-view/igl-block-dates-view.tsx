@@ -17,6 +17,7 @@ export class IglBlockDatesView {
   @Prop() isEventHover: boolean = false;
   @Prop() entryMinute: number;
   @State() renderAgain: boolean = false;
+
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
 
   private blockDatesData: { [key: string]: any } = {
@@ -90,7 +91,6 @@ export class IglBlockDatesView {
   }
 
   render() {
-    console.log({ fromDate: this.fromDate, toDate: this.toDate });
     return (
       <Host>
         <div class={`m-0 p-0 mb-1`}>
