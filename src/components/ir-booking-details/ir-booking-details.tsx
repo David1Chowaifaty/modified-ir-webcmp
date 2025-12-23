@@ -689,7 +689,7 @@ export class IrBookingDetails {
         onCloseModal={() => (this.sidebarState = null)}
       ></ir-payment-folio>,
       <Fragment>
-        {this.bookingItem && (
+        {/* {this.bookingItem && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowed_booking_sources}
             adultChildConstraints={this.calendarData.adult_child_constraints}
@@ -701,7 +701,21 @@ export class IrBookingDetails {
             bookingData={this.bookingItem}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
-        )}
+        )} */}
+        <ir-booking-editor-drawer
+          roomTypeIds={(this.bookingItem as any)?.roomsInfo?.map(r => r.id)}
+          onBookingEditorClosed={this.handleCloseBookingWindow.bind(this)}
+          unitId={(this.bookingItem as any)?.PR_ID}
+          mode={this.bookingItem?.event_type as any}
+          label={this.bookingItem?.TITLE}
+          booking={this.booking}
+          ticket={this.ticket}
+          open={this.bookingItem !== null}
+          language={this.language}
+          propertyid={this.propertyid as any}
+          checkIn={this.bookingItem?.FROM_DATE}
+          checkOut={this.bookingItem?.TO_DATE}
+        ></ir-booking-editor-drawer>
       </Fragment>,
     ];
   }

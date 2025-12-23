@@ -30,6 +30,7 @@ export class IrBookingEditorHeader {
 
   @State() isLoading: boolean;
   @State() bookings: Booking[] = [];
+  @State() isInvalidDate: string;
 
   @Event() checkAvailability: EventEmitter<void>;
 
@@ -55,7 +56,19 @@ export class IrBookingEditorHeader {
     event.preventDefault();
     this.stopEvent(event);
     try {
+      if (this.mode === 'SPLIT_BOOKING' && !booking_store.bookedByGuest.firstName) {
+        console.log(locales.entries.Lcz_ChooseBookingNumber);
+        return;
+      }
+      const { checkIn } = booking_store.bookingDraft.dates;
       this.adultsSchema.parse(booking_store.bookingDraft?.occupancy?.adults);
+      if (['SPLIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && !checkIn.isSameOrBefore(this.booking.to_date)) {
+        this.isInvalidDate = `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace('%1', moment(this.booking.from_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY')).replace(
+          '%2',
+          moment(this.booking.to_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY'),
+        )}  `;
+        return;
+      }
       this.checkAvailability.emit();
     } catch (error) {
       console.error(error);
@@ -107,10 +120,7 @@ export class IrBookingEditorHeader {
   // =====================
 
   private get minDate() {
-    if (this.checkIn) return this.checkIn;
-
     const today = moment();
-
     switch (this.mode) {
       case 'EDIT_BOOKING':
         return today.add(-2, 'weeks').format('YYYY-MM-DD');
@@ -118,21 +128,24 @@ export class IrBookingEditorHeader {
         return this.booking?.from_date;
       case 'SPLIT_BOOKING':
       default:
+        if (this.checkIn) return this.checkIn;
         return today.format('YYYY-MM-DD');
     }
   }
 
   private get maxDate() {
-    if (this.checkOut) return this.checkOut;
-
     const today = moment();
+    const next60Days = today.add(60, 'days').format('YYYY-MM-DD');
 
     switch (this.mode) {
+      case 'PLUS_BOOKING':
+        if (this.checkOut) return this.checkOut;
+        return next60Days;
       case 'ADD_ROOM':
-        return this.booking.to_date;
+      // return this.booking.to_date;
       case 'SPLIT_BOOKING':
       default:
-        return today.add(60, 'days').format('YYYY-MM-DD');
+        return next60Days;
     }
   }
 
@@ -186,18 +199,23 @@ export class IrBookingEditorHeader {
             >
               {sources.map(option => (option.type === 'LABEL' ? <small>{option.description}</small> : <wa-option value={option.id?.toString()}>{option.description}</wa-option>))}
             </wa-select>
-
-            <igl-date-range
-              defaultData={{
-                fromDate: checkIn?.format('YYYY-MM-DD') ?? '',
-                toDate: checkOut?.format('YYYY-MM-DD') ?? '',
-              }}
-              variant="booking"
-              withDateDifference
-              minDate={this.minDate}
-              maxDate={this.maxDate}
-              onDateRangeChange={this.handleDateRangeChange.bind(this)}
-            />
+            <div style={{ position: 'relative' }}>
+              <igl-date-range
+                defaultData={{
+                  fromDate: checkIn?.format('YYYY-MM-DD') ?? '',
+                  toDate: checkOut?.format('YYYY-MM-DD') ?? '',
+                }}
+                aria-invalid={String(!!this.isInvalidDate)}
+                variant="booking"
+                withDateDifference
+                minDate={this.minDate}
+                maxDate={this.maxDate}
+                onDateRangeChange={this.handleDateRangeChange.bind(this)}
+              />
+              {this.isInvalidDate && (
+                <span style={{ position: 'absolute', fontSize: '12px', marginTop: '5px', color: 'var(--wa-color-danger-fill-loud)' }}>{this.isInvalidDate}</span>
+              )}
+            </div>
 
             <ir-validator value={adults} schema={this.adultsSchema}>
               <wa-select

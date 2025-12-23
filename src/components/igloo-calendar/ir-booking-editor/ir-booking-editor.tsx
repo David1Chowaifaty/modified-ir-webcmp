@@ -262,7 +262,7 @@ export class IrBookingEditor {
           <ir-interceptor></ir-interceptor>
           {this.step === 'details' && (
             <Fragment>
-              <ir-booking-editor-header checkIn={this.checkIn} checkOut={this.checkOut} mode={this.mode}></ir-booking-editor-header>
+              <ir-booking-editor-header booking={this.booking} checkIn={this.checkIn} checkOut={this.checkOut} mode={this.mode}></ir-booking-editor-header>
               <div class={'booking-editor__roomtype-container'}>
                 {booking_store.roomTypes?.map(roomType => (
                   <igl-room-type

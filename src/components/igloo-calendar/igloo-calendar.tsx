@@ -1516,6 +1516,8 @@ export class IglooCalendar {
           open={this.bookingItem !== null}
           language={this.language}
           propertyid={this.propertyid as any}
+          checkIn={this.bookingItem?.FROM_DATE}
+          checkOut={this.bookingItem?.TO_DATE}
         ></ir-booking-editor-drawer>
       </Host>
     );

@@ -28,6 +28,7 @@ export class IglDateRange {
   private totalNights: number = 0;
   @State() fromDate: Date = moment().toDate();
   @State() toDate: Date = moment().add(1, 'day').toDate();
+  @State() isInvalid: string;
 
   componentWillLoad() {
     this.initializeDates();
@@ -110,6 +111,10 @@ export class IglDateRange {
     const toDate = moment(this.toDate).format('YYYY-MM-DD');
     return [fromDate, toDate];
   }
+  @Watch('aria-invalid')
+  handleAriaInvalidChange(newValue) {
+    this.isInvalid = newValue;
+  }
   render() {
     const showNights = this.variant === 'booking' && this.withDateDifference;
     return (
@@ -135,6 +140,7 @@ export class IglDateRange {
         disabled={this.disabled}
         class="custom-picker"
         minDate={this.minDate}
+        aria-invalid={this.isInvalid}
         maxDate={this.maxDate}
         onDateChanged={e => this.handleDateChange(e)}
         range
