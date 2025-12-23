@@ -4,7 +4,16 @@ import { BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema 
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
-import booking_store, { BookingDraft, getReservedRooms, resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
+import booking_store, {
+  BookingDraft,
+  getReservedRooms,
+  modifyBookingStore,
+  reserveRooms,
+  resetBookingStore,
+  setBookingDraft,
+  setBookingSelectOptions,
+  updateBookedByGuest,
+} from '@/stores/booking.store';
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
@@ -66,6 +75,9 @@ export class IrBookingEditor {
         countries: countriesList,
       });
       this.initializeDraftFromBooking();
+      if (this.isEventType('EDIT_BOOKING')) {
+        await this.checkBookingAvailability();
+      }
       // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       // this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       // this.setRoomsData(roomResponse);
@@ -101,7 +113,15 @@ export class IrBookingEditor {
     }
 
     if (this.isEventType('EDIT_BOOKING')) {
-      this.room = this.booking.rooms.find(room => room.identifier === this.identifier);
+      const room = this.booking.rooms.find(room => room.identifier === this.identifier);
+      modifyBookingStore('guest', {
+        bed_preference: room.bed_preference?.toString(),
+        infant_nbr: room.occupancy.infant_nbr,
+        first_name: room.guest.first_name ?? '',
+        last_name: room.guest.last_name ?? '',
+        unit: (room.unit as any)?.id?.toString(),
+      });
+      this.room = room;
     }
 
     let draft: Partial<BookingDraft> = {
@@ -137,6 +157,30 @@ export class IrBookingEditor {
 
     setBookingDraft(draft);
   }
+  private updateBooking() {
+    try {
+      const currentRoomType = this.room;
+      const roomtypeId = currentRoomType.roomtype.id;
+      const rateplanId = currentRoomType.rateplan.id;
+      const guest = {
+        bed_preference: currentRoomType.bed_preference?.toString(),
+        infant_nbr: currentRoomType.occupancy.infant_nbr,
+        last_name: currentRoomType.guest.last_name,
+        first_name: currentRoomType.guest.first_name,
+        unit: (currentRoomType.unit as any)?.id?.toString(),
+        roomtype_id: currentRoomType.roomtype.id,
+      };
+      modifyBookingStore('guest', guest);
+      reserveRooms({
+        roomTypeId: roomtypeId,
+        ratePlanId: rateplanId,
+        rooms: 1,
+        guest: [guest],
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
   private async checkBookingAvailability() {
     // resetBookingStore(false);
     const { source, occupancy, dates } = booking_store.bookingDraft;
@@ -170,14 +214,15 @@ export class IrBookingEditor {
       //   this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
       // }
       // this.defaultData = { ...this.defaultData, roomsInfo: data };
-      // if (this.isEventType('EDIT_BOOKING') && !this.updatedBooking) {
-      //   this.updateBooking();
-      // }
+      if (this.isEventType('EDIT_BOOKING')) {
+        this.updateBooking();
+      }
     } catch (error) {
       console.error('Error initializing booking availability:', error);
     }
   }
   private async adjustBlockedDatesAfterReservation(serviceParams: any) {
+    console.log(serviceParams);
     // if (!this.wasBlockedUnit) {
     //   return;
     // }
@@ -206,7 +251,7 @@ export class IrBookingEditor {
         room: this.room,
         unitId: this.unitId?.toString(),
       });
-      console.log(body);
+      console.log({ DoReservationPayload: body });
       await this.bookingService.doReservation(body);
       await this.adjustBlockedDatesAfterReservation(body);
       this.resetBookingEvt.emit(null);
@@ -224,7 +269,6 @@ export class IrBookingEditor {
     const country = await this.bookingService.getUserDefaultCountry();
     const countryId = country['COUNTRY_ID'];
     const _c = booking_store.selects.countries.find(c => c.id?.toString() === countryId?.toString());
-    // this.bookedByData = { ...this.bookedByData, isdCode: _c.phone_prefix.toString(), countryId };
     updateBookedByGuest({
       countryId: countryId,
       phone_prefix: _c?.phone_prefix,
