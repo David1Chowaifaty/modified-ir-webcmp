@@ -26,6 +26,7 @@ export class IrBookingEditorDrawer {
   @Prop() roomIdentifier: string;
 
   @State() step: BookingStep = 'details';
+  @State() isLoading: string;
 
   @Event() bookingEditorClosed: EventEmitter<void>;
 
@@ -103,11 +104,28 @@ export class IrBookingEditorDrawer {
         <ir-custom-button onClickHandler={this.goToDetails} size="medium" appearance="filled" variant="neutral">
           Back
         </ir-custom-button>
-        <ir-custom-button value="book" form="new_booking_form" disabled={false} type="submit" size="medium" appearance={hasCheckIn ? 'outlined' : 'accent'} variant="brand">
+        <ir-custom-button
+          loading={this.isLoading === 'book'}
+          value="book"
+          form="new_booking_form"
+          disabled={false}
+          type="submit"
+          size="medium"
+          appearance={hasCheckIn ? 'outlined' : 'accent'}
+          variant="brand"
+        >
           Book
         </ir-custom-button>
         {hasCheckIn && (
-          <ir-custom-button value="book-checkin" form="new_booking_form" type="submit" size="medium" appearance="accent" variant="brand">
+          <ir-custom-button
+            loading={this.isLoading === 'book-checkin'}
+            value="book-checkin"
+            form="new_booking_form"
+            type="submit"
+            size="medium"
+            appearance="accent"
+            variant="brand"
+          >
             Book and check-in
           </ir-custom-button>
         )}
@@ -133,14 +151,17 @@ export class IrBookingEditorDrawer {
       </Fragment>
     );
   }
+  private closeDrawer() {
+    this.bookingEditorClosed.emit();
+    this.step = 'details';
+  }
   render() {
     return (
       <ir-drawer
         onDrawerHide={event => {
           event.stopImmediatePropagation();
           event.stopPropagation();
-          this.bookingEditorClosed.emit();
-          this.step = 'details';
+          this.closeDrawer();
         }}
         style={{
           '--ir-drawer-width': '70rem',
@@ -151,9 +172,15 @@ export class IrBookingEditorDrawer {
       >
         {this.open && this.ticket && (
           <ir-booking-editor
+            onLoadingChanged={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.isLoading = e.detail.cause;
+            }}
             unitId={this.unitId}
             propertyId={this.propertyid}
             roomTypeIds={this.roomTypeIds}
+            onResetBookingEvt={() => this.closeDrawer()}
             step={this.step}
             language={this.language}
             booking={this.booking}

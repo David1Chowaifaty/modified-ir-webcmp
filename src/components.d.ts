@@ -4747,6 +4747,7 @@ declare global {
     };
     interface HTMLIrBookingEditorElementEventMap {
         "resetBookingEvt": void;
+        "loadingChanged": { cause: string | null };
     }
     interface HTMLIrBookingEditorElement extends Components.IrBookingEditor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingEditorElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorElement, ev: IrBookingEditorCustomEvent<HTMLIrBookingEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7819,6 +7820,7 @@ declare namespace LocalJSX {
         "identifier"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
+        "onLoadingChanged"?: (event: IrBookingEditorCustomEvent<{ cause: string | null }>) => void;
         "onResetBookingEvt"?: (event: IrBookingEditorCustomEvent<void>) => void;
         "propertyId"?: string | number;
         "roomTypeIds"?: (string | number)[];

@@ -40,6 +40,7 @@ export class IrBookingEditor {
   @State() isLoading: boolean = true;
 
   @Event({ composed: true, bubbles: true }) resetBookingEvt: EventEmitter<void>;
+  @Event() loadingChanged: EventEmitter<{ cause: string | null }>;
 
   private roomService = new RoomService();
   private bookingService = new BookingService();
@@ -209,11 +210,6 @@ export class IrBookingEditor {
       if (this.mode !== 'EDIT_BOOKING') {
         await this.assignCountryCode();
       }
-      // if (!this.isEventType('EDIT_BOOKING')) {
-      //   this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
-      //   this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
-      // }
-      // this.defaultData = { ...this.defaultData, roomsInfo: data };
       if (this.isEventType('EDIT_BOOKING')) {
         this.updateBooking();
       }
@@ -242,6 +238,7 @@ export class IrBookingEditor {
   }
   private async doReservation(source: string) {
     try {
+      this.loadingChanged.emit({ cause: source as any });
       const reservedRooms = getReservedRooms();
       RoomsGuestsSchema.parse(reservedRooms.map(r => ({ ...r.guest, requires_bed_preference: r.ratePlanSelection.roomtype.is_bed_configuration_enabled })));
       BookedByGuestSchema.parse(booking_store.bookedByGuest);
@@ -257,6 +254,8 @@ export class IrBookingEditor {
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
+    } finally {
+      this.loadingChanged.emit({ cause: null });
     }
     // alert('do reservation');
   }
