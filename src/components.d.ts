@@ -580,6 +580,7 @@ export namespace Components {
         "unitId": string;
     }
     interface IrBookingEditorDrawer {
+        "blockedUnit": any;
         "booking": Booking;
         "checkIn": string;
         "checkOut": string;
@@ -3534,6 +3535,10 @@ export interface IrBookingDetailsDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsDrawerElement;
 }
+export interface IrBookingEditorDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingEditorDrawerElement;
+}
 export interface IrBookingEditorFormCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingEditorFormElement;
@@ -4733,7 +4738,18 @@ declare global {
         prototype: HTMLIrBookingEditorElement;
         new (): HTMLIrBookingEditorElement;
     };
+    interface HTMLIrBookingEditorDrawerElementEventMap {
+        "bookingEditorClosed": void;
+    }
     interface HTMLIrBookingEditorDrawerElement extends Components.IrBookingEditorDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingEditorDrawerElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorDrawerElement, ev: IrBookingEditorDrawerCustomEvent<HTMLIrBookingEditorDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingEditorDrawerElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorDrawerElement, ev: IrBookingEditorDrawerCustomEvent<HTMLIrBookingEditorDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrBookingEditorDrawerElement: {
         prototype: HTMLIrBookingEditorDrawerElement;
@@ -7783,12 +7799,14 @@ declare namespace LocalJSX {
         "unitId"?: string;
     }
     interface IrBookingEditorDrawer {
+        "blockedUnit"?: any;
         "booking"?: Booking;
         "checkIn"?: string;
         "checkOut"?: string;
         "label"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
+        "onBookingEditorClosed"?: (event: IrBookingEditorDrawerCustomEvent<void>) => void;
         "open"?: boolean;
         "propertyid"?: string;
         "ticket"?: string;

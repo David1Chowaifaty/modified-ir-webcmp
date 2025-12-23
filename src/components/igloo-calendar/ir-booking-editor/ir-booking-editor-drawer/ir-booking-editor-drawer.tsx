@@ -1,4 +1,4 @@
-import { Component, Fragment, h, Prop, State, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, h, Prop, State, Watch } from '@stencil/core';
 import { BookingEditorMode, BookingStep } from '../types';
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
@@ -21,8 +21,11 @@ export class IrBookingEditorDrawer {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
   @Prop() unitId: string;
+  @Prop() blockedUnit;
 
   @State() step: BookingStep = 'details';
+
+  @Event() bookingEditorClosed: EventEmitter<void>;
 
   private token = new Token();
 
@@ -109,9 +112,14 @@ export class IrBookingEditorDrawer {
     );
   }
   render() {
+    console.log(this.drawerLabel);
     return (
       <ir-drawer
-        lightDismiss={false}
+        onDrawerHide={event => {
+          event.stopImmediatePropagation();
+          event.stopPropagation();
+          this.bookingEditorClosed.emit();
+        }}
         style={{
           '--ir-drawer-width': '70rem',
         }}

@@ -115,8 +115,8 @@ export class IrBookingEditorHeader {
       case 'EDIT_BOOKING':
         return today.add(-2, 'weeks').format('YYYY-MM-DD');
       case 'ADD_ROOM':
+        return this.booking?.from_date;
       case 'SPLIT_BOOKING':
-        return this.booking.from_date;
       default:
         return today.format('YYYY-MM-DD');
     }
@@ -129,8 +129,8 @@ export class IrBookingEditorHeader {
 
     switch (this.mode) {
       case 'ADD_ROOM':
-      case 'SPLIT_BOOKING':
         return this.booking.to_date;
+      case 'SPLIT_BOOKING':
       default:
         return today.add(60, 'days').format('YYYY-MM-DD');
     }
@@ -192,6 +192,8 @@ export class IrBookingEditorHeader {
                 fromDate: checkIn?.format('YYYY-MM-DD') ?? '',
                 toDate: checkOut?.format('YYYY-MM-DD') ?? '',
               }}
+              variant="booking"
+              withDateDifference
               minDate={this.minDate}
               maxDate={this.maxDate}
               onDateRangeChange={this.handleDateRangeChange.bind(this)}
