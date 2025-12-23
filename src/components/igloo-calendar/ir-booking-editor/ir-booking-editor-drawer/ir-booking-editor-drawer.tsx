@@ -112,13 +112,13 @@ export class IrBookingEditorDrawer {
     );
   }
   render() {
-    console.log(this.drawerLabel);
     return (
       <ir-drawer
         onDrawerHide={event => {
           event.stopImmediatePropagation();
           event.stopPropagation();
           this.bookingEditorClosed.emit();
+          this.step = 'details';
         }}
         style={{
           '--ir-drawer-width': '70rem',

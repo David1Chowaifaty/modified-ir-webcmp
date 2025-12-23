@@ -8,6 +8,7 @@ import { formatAmount } from '@/utils/utils';
 import VariationService from '@/services/variation.service';
 import { GuestCredentials } from '../../types';
 import { z } from 'zod';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'igl-application-info',
@@ -154,6 +155,7 @@ export class IglApplicationInfo {
           .sort((a, b) => a.name.localeCompare(b.name))
       : filteredResults;
   }
+  private tooltipId = `room_info_tooltip_${v4()}`;
 
   render() {
     const filteredRoomList = this.filterRooms();
@@ -176,10 +178,10 @@ export class IglApplicationInfo {
                 {this.rateplanSelection.ratePlan.short_name}
                 {this.rateplanSelection.ratePlan.is_non_refundable && <span class="fd-application-info__non-refundable">Non Refundable</span>}
               </p>
-              <wa-tooltip for={`room_info_tooltip_${this.rateplanSelection.ratePlan.id}`}>
+              <wa-tooltip for={this.tooltipId}>
                 <span innerHTML={this.getTooltipMessages()}></span>
               </wa-tooltip>
-              <wa-icon name="circle-info" id={`room_info_tooltip_${this.rateplanSelection.ratePlan.id}`}></wa-icon>
+              <wa-icon name="circle-info" id={this.tooltipId}></wa-icon>
               {/* <ir-tooltip class="fd-application-info__tooltip" message={this.getTooltipMessages()}></ir-tooltip> */}
             </div>
 
@@ -194,10 +196,10 @@ export class IglApplicationInfo {
         <div class="fd-application-info__footer">
           <div class="fd-application-info__rateplan">
             <p class="fd-application-info__rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
-            <wa-tooltip for={`room_info_tooltip_mobile_${this.rateplanSelection.ratePlan.id}`}>
+            <wa-tooltip for={`mobile-${this.tooltipId}`}>
               <span innerHTML={this.getTooltipMessages()}></span>
             </wa-tooltip>
-            <wa-icon name="circle-info" id={`room_info_tooltip_mobile_${this.rateplanSelection.ratePlan.id}`}></wa-icon>
+            <wa-icon name="circle-info" id={`mobile-${this.tooltipId}`}></wa-icon>
           </div>
 
           <p class="fd-application-info__variation" innerHTML={formattedVariation}></p>
