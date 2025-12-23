@@ -522,6 +522,7 @@ export class IrBookingDetails {
     );
   }
   render() {
+    console.log(this.bookingItem);
     if (!this.booking) {
       return (
         <div class={'loading-container'}>
@@ -711,6 +712,7 @@ export class IrBookingDetails {
           booking={this.booking}
           ticket={this.ticket}
           open={this.bookingItem !== null}
+          roomIdentifier={(this.bookingItem as any)?.IDENTIFIER}
           language={this.language}
           propertyid={this.propertyid as any}
           checkIn={this.bookingItem?.FROM_DATE}

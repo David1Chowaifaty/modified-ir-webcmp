@@ -101,6 +101,11 @@ export class IrCustomDatePicker {
   @Prop() container?: HTMLElement;
 
   /**
+   * The date picker's hint.
+   */
+  @Prop() hint?: string;
+
+  /**
    * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes.
    * This can be useful if you need the picker to fully re-initialize in response to dynamic changes,
    * but note that it may affect performance if triggered frequently.
@@ -305,7 +310,6 @@ export class IrCustomDatePicker {
     }
 
     const containerTarget = this.container ?? this.calendarContainerRef ?? this.el;
-    console.log(this.minDate, this.maxDate);
     this.datePicker = new AirDatepicker(this.pickerRef, {
       container: containerTarget,
       inline: true,
@@ -387,6 +391,7 @@ export class IrCustomDatePicker {
             aria-disabled={this.disabled ? 'true' : undefined}
             onKeyDown={this.handleAnchorKeyDown}
             aria-invalid={String(this.isPickerInvalid)}
+            hint={this.hint}
             class={triggerClasses}
             onClick={this.handleAnchorClick}
             readonly
@@ -395,6 +400,7 @@ export class IrCustomDatePicker {
             value={this.getTriggerLabel()}
             label={this.label}
           >
+            <slot name="hint" slot="hint"></slot>
             <slot name="start" slot="start"></slot>
             <slot name="end" slot="end"></slot>
           </ir-input>

@@ -23,6 +23,7 @@ export class IrBookingEditorDrawer {
   @Prop() unitId: string;
   @Prop() blockedUnit;
   @Prop() roomTypeIds: (string | number)[] = [];
+  @Prop() roomIdentifier: string;
 
   @State() step: BookingStep = 'details';
 
@@ -159,6 +160,7 @@ export class IrBookingEditorDrawer {
             mode={this.mode}
             checkIn={this.checkIn}
             checkOut={this.checkOut}
+            identifier={this.roomIdentifier}
           ></ir-booking-editor>
         )}
         <div slot="footer" class="ir__drawer-footer">

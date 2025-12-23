@@ -17,6 +17,8 @@ export class IrValidator {
   @Prop() schema!: ZodTypeAny;
   @Prop() value: any;
 
+  @Prop() showErrorMessage: boolean;
+
   /** Enables automatic validation on every value change. */
   @Prop({ reflect: true }) autovalidate?: boolean;
 
@@ -40,6 +42,7 @@ export class IrValidator {
 
   @State() private isValid = true;
   @State() private autoValidateActive = false;
+  @State() private errorMessage: string = '';
 
   private childEl?: ValidatableChild;
   private formEl?: HTMLFormElement | null;
@@ -258,6 +261,12 @@ export class IrValidator {
     const previousValidity = this.isValid;
     this.isValid = nextValidity;
 
+    if (!result.success) {
+      this.errorMessage = result.error.issues[0]?.message ?? '';
+    } else {
+      this.errorMessage = '';
+    }
+
     const shouldDisplay = forceDisplay || (this.autoValidateActive && this.hasInteracted);
     if (shouldDisplay) {
       this.updateAriaValidity(nextValidity);
@@ -340,6 +349,7 @@ export class IrValidator {
     return (
       <Host>
         <slot></slot>
+        {!this.isValid && this.showErrorMessage && <span class="error-message">{this.errorMessage}</span>}
       </Host>
     );
   }

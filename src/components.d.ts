@@ -283,6 +283,7 @@ export namespace Components {
         "dateLabel": string;
         "defaultData": { [key: string]: any };
         "disabled": boolean;
+        "hint": string;
         "maxDate": string;
         "minDate": string;
         "size": 'small' | 'medium' | 'large';
@@ -589,6 +590,7 @@ export namespace Components {
         "mode": BookingEditorMode;
         "open": boolean;
         "propertyid": string;
+        "roomIdentifier": string;
         "roomTypeIds": (string | number)[];
         "ticket": string;
         "unitId": string;
@@ -1016,6 +1018,10 @@ export namespace Components {
           * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
          */
         "forceDestroyOnUpdate": boolean;
+        /**
+          * The date picker's hint.
+         */
+        "hint"?: string;
         /**
           * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
          */
@@ -3335,6 +3341,7 @@ export namespace Components {
           * Zod schema used to validate the child control's value.
          */
         "schema": ZodTypeAny;
+        "showErrorMessage": boolean;
         /**
           * Debounce delay (ms) before running validation for autovalidated changes.
          */
@@ -7446,6 +7453,7 @@ declare namespace LocalJSX {
         "dateLabel"?: string;
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
+        "hint"?: string;
         "maxDate"?: string;
         "minDate"?: string;
         "onDateRangeChange"?: (event: IglDateRangeCustomEvent<DateRangeChangeEvent>) => void;
@@ -7812,6 +7820,7 @@ declare namespace LocalJSX {
         "onBookingEditorClosed"?: (event: IrBookingEditorDrawerCustomEvent<void>) => void;
         "open"?: boolean;
         "propertyid"?: string;
+        "roomIdentifier"?: string;
         "roomTypeIds"?: (string | number)[];
         "ticket"?: string;
         "unitId"?: string;
@@ -8277,6 +8286,10 @@ declare namespace LocalJSX {
           * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
          */
         "forceDestroyOnUpdate"?: boolean;
+        /**
+          * The date picker's hint.
+         */
+        "hint"?: string;
         /**
           * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
          */
@@ -10869,6 +10882,7 @@ declare namespace LocalJSX {
           * Zod schema used to validate the child control's value.
          */
         "schema": ZodTypeAny;
+        "showErrorMessage"?: boolean;
         /**
           * Debounce delay (ms) before running validation for autovalidated changes.
          */

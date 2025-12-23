@@ -18,6 +18,7 @@ export class IglDateRange {
   @Prop() maxDate: string;
   @Prop() withDateDifference: boolean = true;
   @Prop() variant: 'booking' | 'default' = 'default';
+  @Prop() hint: string;
 
   @State() renderAgain: boolean = false;
 
@@ -144,6 +145,7 @@ export class IglDateRange {
         maxDate={this.maxDate}
         onDateChanged={e => this.handleDateChange(e)}
         range
+        hint={this.hint}
         dates={this.dates}
       >
         <wa-icon slot="start" variant="regular" name="calendar"></wa-icon>

@@ -4,7 +4,7 @@ import { BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema 
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
-import booking_store, { getReservedRooms, resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
+import booking_store, { BookingDraft, getReservedRooms, resetBookingStore, setBookingDraft, setBookingSelectOptions, updateBookedByGuest } from '@/stores/booking.store';
 import { BookingSource } from '@/models/igl-book-property';
 import calendar_data from '@/stores/calendar-data';
 import { ISetupEntries } from '@/models/IBooking';
@@ -38,12 +38,6 @@ export class IrBookingEditor {
 
   componentWillLoad() {
     this.initializeApp();
-    setBookingDraft({
-      dates: {
-        checkIn: this.checkIn ? moment(this.checkIn, 'YYYY-MM-DD') : moment(),
-        checkOut: this.checkOut ? moment(this.checkOut, 'YYYY-MM-DD') : moment().add(1, 'day'),
-      },
-    });
   }
 
   private async initializeApp() {
@@ -62,11 +56,7 @@ export class IrBookingEditor {
       setBookingSelectOptions({
         countries: countriesList,
       });
-
-      if (this.isEventType('EDIT_BOOKING') && this.booking && this.identifier) {
-        this.room = this.booking.rooms.find(room => room.identifier === this.identifier);
-      }
-
+      this.initializeDraftFromBooking();
       // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       // this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       // this.setRoomsData(roomResponse);
@@ -88,7 +78,56 @@ export class IrBookingEditor {
     e.stopPropagation();
     this.checkBookingAvailability();
   }
+  /**
+   * Initializes booking draft and guest data
+   * based on the current editor mode.
+   *
+   * Throws if required booking data is missing.
+   */
+  private initializeDraftFromBooking() {
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      if (!this.booking || (!this.identifier && this.isEventType('EDIT_BOOKING'))) {
+        throw new Error('Missing booking or identifier');
+      }
+    }
 
+    if (this.isEventType('EDIT_BOOKING')) {
+      this.room = this.booking.rooms.find(room => room.identifier === this.identifier);
+    }
+
+    let draft: Partial<BookingDraft> = {
+      dates: {
+        checkIn: this.checkIn ? moment(this.checkIn, 'YYYY-MM-DD') : moment(),
+        checkOut: this.checkOut ? moment(this.checkOut, 'YYYY-MM-DD') : moment().add(1, 'day'),
+      },
+    };
+
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      const source = booking_store.selects.sources.find(s => s.code === this.booking.source.code);
+
+      draft = {
+        ...draft,
+        source,
+      };
+
+      if (this.isEventType('EDIT_BOOKING')) {
+        draft = {
+          ...draft,
+          occupancy: {
+            adults: this.booking.occupancy.adult_nbr,
+            children: this.booking.occupancy.children_nbr,
+          },
+        };
+      }
+
+      updateBookedByGuest({
+        firstName: this.booking.guest.first_name,
+        lastName: this.booking.guest.last_name,
+      });
+    }
+
+    setBookingDraft(draft);
+  }
   private async checkBookingAvailability() {
     // resetBookingStore(false);
     const { source, occupancy, dates } = booking_store.bookingDraft;

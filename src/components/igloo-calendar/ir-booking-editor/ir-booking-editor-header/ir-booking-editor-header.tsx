@@ -1,12 +1,12 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { BookingEditorMode } from '../types';
+import { Component, Event, EventEmitter, Fragment, Host, Prop, State, Watch, h } from '@stencil/core';
+import { BookedByGuestSchema, BookingEditorMode } from '../types';
 import { Booking } from '@/models/booking.dto';
 import moment from 'moment';
 import { BookingService } from '@/services/booking-service/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import booking_store, { resetAvailability, setBookingDraft } from '@/stores/booking.store';
-import { z } from 'zod';
+import { z, ZodSchema } from 'zod';
 import { DateRangeChangeEvent } from '@/components';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 
@@ -30,17 +30,92 @@ export class IrBookingEditorHeader {
 
   @State() isLoading: boolean;
   @State() bookings: Booking[] = [];
-  @State() isInvalidDate: string;
 
   @Event() checkAvailability: EventEmitter<void>;
 
   private bookingService = new BookingService();
   private adultsSchema = z.coerce.number().min(1);
 
+  @State() datesSchema: ZodSchema;
+
   // =====================
   // Handlers
   // =====================
+  componentWillLoad() {
+    this.createDatesSchema();
+  }
 
+  @Watch('booking')
+  handleBookingChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.createDatesSchema();
+    }
+  }
+
+  @Watch('mode')
+  handleModeChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.createDatesSchema();
+    }
+  }
+
+  // private createDatesSchema() {
+  //   this.datesSchema = z.object({
+  //     checkIn: z.custom(date => {
+  //       if (!moment.isMoment(date)) {
+  //         return false;
+  //       }
+  //       if (['SPLIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && !date.isSameOrBefore(this.booking.to_date)) {
+  //         return false;
+  //       }
+  //       return true;
+  //     }),
+  //     checkOut: z.custom(data => moment.isMoment(data)),
+  //   });
+  // }
+  private createDatesSchema() {
+    this.datesSchema = z
+      .object({
+        checkIn: z.any(),
+        checkOut: z.any(),
+      })
+      .superRefine((data, ctx) => {
+        // ─────────────────────────────
+        // checkIn validations
+        // ─────────────────────────────
+
+        if (!moment.isMoment(data.checkIn)) {
+          ctx.addIssue({
+            path: ['checkIn'],
+            code: z.ZodIssueCode.custom,
+            message: 'Check-in date is required',
+          });
+        }
+
+        if (moment.isMoment(data.checkIn) && ['SPLIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && !data.checkIn.isSameOrBefore(this.booking.to_date)) {
+          ctx.addIssue({
+            path: ['checkIn'],
+            code: z.ZodIssueCode.custom,
+            message: `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace('%1', moment(this.booking.from_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY')).replace(
+              '%2',
+              moment(this.booking.to_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY'),
+            )}  `,
+          });
+        }
+
+        // ─────────────────────────────
+        // checkOut validations
+        // ─────────────────────────────
+
+        if (!moment.isMoment(data.checkOut)) {
+          ctx.addIssue({
+            path: ['checkOut'],
+            code: z.ZodIssueCode.custom,
+            message: 'Check-out date is required',
+          });
+        }
+      });
+  }
   private async handleBookingSearch(value: string) {
     try {
       this.isLoading = true;
@@ -57,18 +132,10 @@ export class IrBookingEditorHeader {
     this.stopEvent(event);
     try {
       if (this.mode === 'SPLIT_BOOKING' && !booking_store.bookedByGuest.firstName) {
-        console.log(locales.entries.Lcz_ChooseBookingNumber);
-        return;
+        BookedByGuestSchema.parse(booking_store.bookedByGuest);
       }
-      const { checkIn } = booking_store.bookingDraft.dates;
+      this.datesSchema.parse(booking_store.bookingDraft.dates);
       this.adultsSchema.parse(booking_store.bookingDraft?.occupancy?.adults);
-      if (['SPLIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && !checkIn.isSameOrBefore(this.booking.to_date)) {
-        this.isInvalidDate = `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace('%1', moment(this.booking.from_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY')).replace(
-          '%2',
-          moment(this.booking.to_date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY'),
-        )}  `;
-        return;
-      }
       this.checkAvailability.emit();
     } catch (error) {
       console.error(error);
@@ -165,88 +232,91 @@ export class IrBookingEditorHeader {
       <Host>
         <form onSubmit={this.handleSubmit.bind(this)}>
           {this.mode === 'SPLIT_BOOKING' && (
-            <ir-picker
-              mode="select-async"
-              class="booking-editor-header__booking-picker"
-              debounce={300}
-              label={`${locales.entries.Lcz_Tobooking}#`}
-              // defaultValue={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
-              // value={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
-              placeholder={locales.entries.Lcz_BookingNumber}
-              loading={this.isLoading}
-              onText-change={e => this.handleBookingSearch(e.detail)}
-              onCombobox-select={this.stopEvent.bind(this)}
-            >
-              {this.bookings.map(b => {
-                const label = `${b.booking_nbr} ${b.guest.first_name} ${b.guest.last_name}`;
-                return (
-                  <ir-picker-item value={b.booking_nbr?.toString()} label={label}>
-                    {label}
-                  </ir-picker-item>
-                );
-              })}
-            </ir-picker>
+            <ir-validator value={booking_store.bookedByGuest} schema={BookedByGuestSchema}>
+              <ir-picker
+                mode="select-async"
+                class="booking-editor-header__booking-picker"
+                debounce={300}
+                label={`${locales.entries.Lcz_Tobooking}#`}
+                // defaultValue={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
+                // value={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
+                placeholder={locales.entries.Lcz_BookingNumber}
+                loading={this.isLoading}
+                onText-change={e => this.handleBookingSearch(e.detail)}
+                onCombobox-select={this.stopEvent.bind(this)}
+              >
+                {this.bookings.map(b => {
+                  const label = `${b.booking_nbr} ${b.guest.first_name} ${b.guest.last_name}`;
+                  return (
+                    <ir-picker-item value={b.booking_nbr?.toString()} label={label}>
+                      {label}
+                    </ir-picker-item>
+                  );
+                })}
+              </ir-picker>
+            </ir-validator>
           )}
 
           <div class="booking-editor-header__container">
-            <wa-select
-              size="small"
-              placeholder={locales.entries.Lcz_Source}
-              value={booking_store.bookingDraft.source?.id?.toString()}
-              defaultValue={booking_store.bookingDraft.source?.id}
-              onwa-hide={this.stopEvent.bind(this)}
-              onchange={this.handleSourceChange.bind(this)}
-            >
-              {sources.map(option => (option.type === 'LABEL' ? <small>{option.description}</small> : <wa-option value={option.id?.toString()}>{option.description}</wa-option>))}
-            </wa-select>
-            <div style={{ position: 'relative' }}>
+            {!['EDIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && (
+              <wa-select
+                size="small"
+                placeholder={locales.entries.Lcz_Source}
+                value={booking_store.bookingDraft.source?.id?.toString()}
+                defaultValue={booking_store.bookingDraft.source?.id}
+                onwa-hide={this.stopEvent.bind(this)}
+                onchange={this.handleSourceChange.bind(this)}
+              >
+                {sources.map(option => (option.type === 'LABEL' ? <small>{option.description}</small> : <wa-option value={option.id?.toString()}>{option.description}</wa-option>))}
+              </wa-select>
+            )}
+            <ir-validator showErrorMessage value={booking_store.bookingDraft.dates} schema={this.datesSchema} style={{ position: 'relative' }}>
               <igl-date-range
                 defaultData={{
                   fromDate: checkIn?.format('YYYY-MM-DD') ?? '',
                   toDate: checkOut?.format('YYYY-MM-DD') ?? '',
                 }}
-                aria-invalid={String(!!this.isInvalidDate)}
                 variant="booking"
                 withDateDifference
                 minDate={this.minDate}
                 maxDate={this.maxDate}
                 onDateRangeChange={this.handleDateRangeChange.bind(this)}
               />
-              {this.isInvalidDate && (
-                <span style={{ position: 'absolute', fontSize: '12px', marginTop: '5px', color: 'var(--wa-color-danger-fill-loud)' }}>{this.isInvalidDate}</span>
-              )}
-            </div>
-
-            <ir-validator value={adults} schema={this.adultsSchema}>
-              <wa-select
-                class="booking-editor-header__adults-select"
-                size="small"
-                placeholder={locales.entries.Lcz_AdultsCaption}
-                value={adults?.toString()}
-                defaultValue={adults?.toString()}
-                onwa-hide={this.stopEvent.bind(this)}
-                onchange={this.handleAdultsChange.bind(this)}
-              >
-                {Array.from({ length: calendar_data.property.adult_child_constraints.adult_max_nbr }, (_, i) => i + 1).map(option => (
-                  <wa-option value={option.toString()}>{option}</wa-option>
-                ))}
-              </wa-select>
             </ir-validator>
+            {this.mode !== 'EDIT_BOOKING' && (
+              <Fragment>
+                <ir-validator value={adults} schema={this.adultsSchema}>
+                  <wa-select
+                    class="booking-editor-header__adults-select"
+                    size="small"
+                    placeholder={locales.entries.Lcz_AdultsCaption}
+                    value={adults?.toString()}
+                    defaultValue={adults?.toString()}
+                    onwa-hide={this.stopEvent.bind(this)}
+                    onchange={this.handleAdultsChange.bind(this)}
+                  >
+                    {Array.from({ length: calendar_data.property.adult_child_constraints.adult_max_nbr }, (_, i) => i + 1).map(option => (
+                      <wa-option value={option.toString()}>{option}</wa-option>
+                    ))}
+                  </wa-select>
+                </ir-validator>
 
-            {calendar_data.property.adult_child_constraints.child_max_nbr > 0 && (
-              <wa-select
-                class="booking-editor-header__children-select"
-                size="small"
-                placeholder={this.childrenSelectPlaceholder}
-                value={children?.toString()}
-                defaultValue={children?.toString()}
-                onwa-hide={this.stopEvent.bind(this)}
-                onchange={this.handleChildrenChange.bind(this)}
-              >
-                {Array.from({ length: calendar_data.property.adult_child_constraints.child_max_nbr }, (_, i) => i + 1).map(option => (
-                  <wa-option value={option.toString()}>{option}</wa-option>
-                ))}
-              </wa-select>
+                {calendar_data.property.adult_child_constraints.child_max_nbr > 0 && (
+                  <wa-select
+                    class="booking-editor-header__children-select"
+                    size="small"
+                    placeholder={this.childrenSelectPlaceholder}
+                    value={children?.toString()}
+                    defaultValue={children?.toString()}
+                    onwa-hide={this.stopEvent.bind(this)}
+                    onchange={this.handleChildrenChange.bind(this)}
+                  >
+                    {Array.from({ length: calendar_data.property.adult_child_constraints.child_max_nbr }, (_, i) => i + 1).map(option => (
+                      <wa-option value={option.toString()}>{option}</wa-option>
+                    ))}
+                  </wa-select>
+                )}
+              </Fragment>
             )}
 
             <ir-custom-button loading={isRequestPending('/Check_Availability')} type="submit" variant="brand">
