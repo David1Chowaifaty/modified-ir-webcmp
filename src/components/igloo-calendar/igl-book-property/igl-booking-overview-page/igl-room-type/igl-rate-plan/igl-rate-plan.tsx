@@ -21,7 +21,7 @@ export class IglRatePlan {
   @Prop() visibleInventory!: IRatePlanSelection;
 
   @Event() buttonClicked!: EventEmitter<{ [key: string]: any }>;
-
+  @Event() bookingStepChange!: EventEmitter<{ direction: 'next' | 'prev' }>;
   // Determine if the form inputs should be disabled
   private disableForm(): boolean {
     const { bookingType, shouldBeDisabled, ratePlan, visibleInventory } = this;
@@ -70,6 +70,7 @@ export class IglRatePlan {
       resetReserved();
     }
     this.reserveRoom();
+    this.bookingStepChange.emit({ direction: 'next' });
     this.buttonClicked.emit({ key: 'next' });
   }
 

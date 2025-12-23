@@ -589,6 +589,7 @@ export namespace Components {
         "mode": BookingEditorMode;
         "open": boolean;
         "propertyid": string;
+        "roomTypeIds": (string | number)[];
         "ticket": string;
         "unitId": string;
     }
@@ -4318,6 +4319,7 @@ declare global {
     };
     interface HTMLIglRatePlanElementEventMap {
         "buttonClicked": { [key: string]: any };
+        "bookingStepChange": { direction: 'next' | 'prev' };
     }
     interface HTMLIglRatePlanElement extends Components.IglRatePlan, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglRatePlanElementEventMap>(type: K, listener: (this: HTMLIglRatePlanElement, ev: IglRatePlanCustomEvent<HTMLIglRatePlanElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7469,6 +7471,7 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency": { symbol: string };
         "isBookDisabled"?: boolean;
+        "onBookingStepChange"?: (event: IglRatePlanCustomEvent<{ direction: 'next' | 'prev' }>) => void;
         "onButtonClicked"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "ratePlan"?: RatePlan;
         "ratePricingMode"?: Array<{ CODE_NAME: string; CODE_VALUE_EN: string }>;
@@ -7809,6 +7812,7 @@ declare namespace LocalJSX {
         "onBookingEditorClosed"?: (event: IrBookingEditorDrawerCustomEvent<void>) => void;
         "open"?: boolean;
         "propertyid"?: string;
+        "roomTypeIds"?: (string | number)[];
         "ticket"?: string;
         "unitId"?: string;
     }

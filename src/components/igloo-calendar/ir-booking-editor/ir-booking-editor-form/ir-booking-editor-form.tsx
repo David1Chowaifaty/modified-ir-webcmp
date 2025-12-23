@@ -118,33 +118,35 @@ export class IrBookingEditorForm {
             });
           }),
         )}
-        <section class={'mt-2'}>
-          <div class="booking-editor__booked-by booking-editor__booked-by-header">
-            <h4 class="booking-editor__heading booking-editor__booked-by-title">Booked by</h4>
+        {['BAR_BOOKING', 'PLUS_BOOKING'].includes(this.mode) && (
+          <section class={'mt-2'}>
+            <div class="booking-editor__booked-by booking-editor__booked-by-header">
+              <h4 class="booking-editor__heading booking-editor__booked-by-title">Booked by</h4>
 
-            <ir-picker
-              class="booking-editor__booked-by-picker"
-              appearance="filled"
-              placeholder="Search customer by email, name or company name"
-              withClear
-              onText-change={event => this.fetchGuests(event.detail)}
-              debounce={500}
-              loading={isRequestPending('/Fetch_Exposed_Guests')}
-              mode="select-async"
-              onCombobox-select={this.handleComboboxSelect.bind(this)}
-            >
-              {this.guests?.map(guest => {
-                const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
-                return (
-                  <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
-                    {label}
-                  </ir-picker-item>
-                );
-              })}
-            </ir-picker>
-          </div>
-          <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
-        </section>
+              <ir-picker
+                class="booking-editor__booked-by-picker"
+                appearance="filled"
+                placeholder="Search customer by email, name or company name"
+                withClear
+                onText-change={event => this.fetchGuests(event.detail)}
+                debounce={500}
+                loading={isRequestPending('/Fetch_Exposed_Guests')}
+                mode="select-async"
+                onCombobox-select={this.handleComboboxSelect.bind(this)}
+              >
+                {this.guests?.map(guest => {
+                  const label = `${guest.email} - ${guest.first_name} ${guest.last_name}`;
+                  return (
+                    <ir-picker-item label={label} value={guest.id?.toString()} key={guest.id}>
+                      {label}
+                    </ir-picker-item>
+                  );
+                })}
+              </ir-picker>
+            </div>
+            <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
+          </section>
+        )}
       </form>
     );
   }

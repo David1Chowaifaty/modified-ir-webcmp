@@ -1507,6 +1507,7 @@ export class IglooCalendar {
           open={this.invoiceState !== null}
         ></ir-invoice>
         <ir-booking-editor-drawer
+          roomTypeIds={(this.bookingItem as any)?.roomsInfo?.map(r => r.id)}
           onBookingEditorClosed={this.handleCloseBookingWindow.bind(this)}
           unitId={(this.bookingItem as any)?.PR_ID}
           mode={this.bookingItem?.event_type as any}

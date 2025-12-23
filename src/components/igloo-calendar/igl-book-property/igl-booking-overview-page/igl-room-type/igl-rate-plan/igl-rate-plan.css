@@ -208,6 +208,9 @@
   }
 }
 @media (min-width: 1024px) {
+  .booking-btn {
+    width: 100px;
+  }
   .fd-rateplan__price-input {
     width: 170px;
     max-width: 170px;

@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Fragment, h, Prop, State, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State, Watch } from '@stencil/core';
 import { BookingEditorMode, BookingStep } from '../types';
 import { Booking } from '@/models/booking.dto';
 import Token from '@/models/Token';
@@ -22,6 +22,7 @@ export class IrBookingEditorDrawer {
   @Prop() checkOut: string;
   @Prop() unitId: string;
   @Prop() blockedUnit;
+  @Prop() roomTypeIds: (string | number)[] = [];
 
   @State() step: BookingStep = 'details';
 
@@ -39,6 +40,23 @@ export class IrBookingEditorDrawer {
   handleTicketChange() {
     if (this.token) {
       this.token.setToken(this.ticket);
+    }
+  }
+
+  @Listen('bookingStepChange')
+  handleBookingStepChange(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const { direction } = e.detail;
+    switch (direction) {
+      case 'next':
+        this.step = 'confirm';
+        break;
+      case 'prev':
+        this.step = 'details';
+        break;
+      default:
+        console.warn('Direction not supported');
     }
   }
 
@@ -84,7 +102,6 @@ export class IrBookingEditorDrawer {
         <ir-custom-button onClickHandler={this.goToDetails} size="medium" appearance="filled" variant="neutral">
           Back
         </ir-custom-button>
-
         <ir-custom-button value="book" form="new_booking_form" disabled={false} type="submit" size="medium" appearance={hasCheckIn ? 'outlined' : 'accent'} variant="brand">
           Book
         </ir-custom-button>
@@ -104,10 +121,14 @@ export class IrBookingEditorDrawer {
         <ir-custom-button data-drawer="close" size="medium" appearance="filled" variant="neutral">
           Cancel
         </ir-custom-button>
-        {!haveRoomSelected && <wa-tooltip for="booking_editor__next-button">Please select at least one unit to continue.</wa-tooltip>}
-        <ir-custom-button id="booking_editor__next-button" disabled={!haveRoomSelected} onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
-          Next
-        </ir-custom-button>
+        {['EDIT_BOOKING', 'PLUS_BOOKING', 'ADD_ROOM'].includes(this.mode) && (
+          <Fragment>
+            {!haveRoomSelected && <wa-tooltip for="booking_editor__next-button">Please select at least one unit to continue.</wa-tooltip>}
+            <ir-custom-button id="booking_editor__next-button" disabled={!haveRoomSelected} onClickHandler={this.goToConfirm} size="medium" appearance="accent" variant="brand">
+              Next
+            </ir-custom-button>
+          </Fragment>
+        )}
       </Fragment>
     );
   }
@@ -131,6 +152,7 @@ export class IrBookingEditorDrawer {
           <ir-booking-editor
             unitId={this.unitId}
             propertyId={this.propertyid}
+            roomTypeIds={this.roomTypeIds}
             step={this.step}
             language={this.language}
             booking={this.booking}
