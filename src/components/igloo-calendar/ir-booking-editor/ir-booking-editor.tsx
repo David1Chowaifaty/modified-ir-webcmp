@@ -88,7 +88,13 @@ export class IrBookingEditor {
       const [languageTexts, countriesList] = await Promise.all([
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
-        this.roomService.getExposedProperty({ id: Number(this.propertyId), language: this.language }),
+        this.roomService.getExposedProperty({
+          id: Number(this.propertyId),
+          language: this.language,
+          is_backend: true,
+          include_units_hk_status: true,
+          include_sales_rate_plans: true,
+        }),
       ]);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
@@ -309,11 +315,14 @@ export class IrBookingEditor {
 
   private getFilteredSourceOptions(sourceOptions: BookingSource[]): BookingSource[] {
     const agentIds = new Set<string>();
+    if (!Boolean(this.unitId)) {
+      return sourceOptions;
+    }
+    const room = calendar_data.roomsInfo.find(room => room.physicalrooms.find(r => r.id.toString() === this.unitId?.toString()));
     const hasAgentOnlyRoomType =
-      calendar_data.roomsInfo?.some((rt: any) => {
-        const rps = rt?.rateplans ?? [];
+      (() => {
+        const rps = room?.rateplans ?? [];
         if (rps.length === 0) return false;
-
         const isForAgentOnly = rps.every((rp: any) => (rp?.agents?.length ?? 0) > 0);
         if (isForAgentOnly) {
           rps.forEach((rp: any) => {
@@ -321,7 +330,8 @@ export class IrBookingEditor {
           });
         }
         return isForAgentOnly;
-      }) ?? false;
+      })() ?? false;
+
     if (!hasAgentOnlyRoomType) {
       return sourceOptions;
     }

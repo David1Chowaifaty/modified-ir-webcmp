@@ -1351,7 +1351,6 @@ export class IglooCalendar {
     // if (!this.isAuthenticated) {
     //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
     // }
-    console.log(this.bookingItem);
     return (
       <Host>
         <ir-toast></ir-toast>
