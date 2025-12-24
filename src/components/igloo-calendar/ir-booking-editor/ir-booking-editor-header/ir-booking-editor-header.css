@@ -27,3 +27,8 @@
     width: 170px;
   }
 }
+@media (min-width: 1024px) {
+  .booking-editor__date-validator::part(error-message) {
+    position: absolute;
+  }
+}

@@ -13,7 +13,7 @@ export class IRBookingEditorService {
   /** Lazy-initialized variation service */
   private variationService?: VariationService;
 
-  constructor(mode: BookingEditorMode) {
+  constructor(mode?: BookingEditorMode) {
     this.mode = mode;
   }
   public setMode(mode: BookingEditorMode) {
@@ -126,7 +126,10 @@ export class IRBookingEditorService {
     }
     return rooms;
   }
-  private isEventType(mode: BookingEditorMode): boolean {
+  public isEventType(mode: BookingEditorMode | BookingEditorMode[]): boolean {
+    if (Array.isArray(mode)) {
+      return mode.includes(this.mode);
+    }
     return this.mode === mode;
   }
   /**
@@ -147,8 +150,8 @@ export class IRBookingEditorService {
           check_out: toDate,
           identifier,
           notes: '',
-          override_unit: this.isEventType('BAR_BOOKING') ? true : false,
-          unit: this.isEventType('BAR_BOOKING') ? unitId?.toString() ?? null : null,
+          override_unit: this.isEventType(['BAR_BOOKING', 'SPLIT_BOOKING']) ? true : false,
+          unit: this.isEventType(['BAR_BOOKING', 'SPLIT_BOOKING']) ? unitId?.toString() ?? null : null,
           auto_check_in: check_in,
         });
       };
@@ -170,8 +173,6 @@ export class IRBookingEditorService {
           pickup_info,
         };
       };
-
-      console.log(this.mode);
 
       let newBooking = null;
       const sourceOption = booking_store.bookingDraft.source;

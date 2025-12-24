@@ -30,17 +30,18 @@ export class IrBookingEditorHeader {
 
   @State() isLoading: boolean;
   @State() bookings: Booking[] = [];
+  @State() datesSchema: ZodSchema;
 
+  @Event() guestSelected: EventEmitter<Booking>;
   @Event() checkAvailability: EventEmitter<void>;
 
   private bookingService = new BookingService();
   private adultsSchema = z.coerce.number().min(1);
 
-  @State() datesSchema: ZodSchema;
   private BookedByGuestPickerSchema = z
     .object({
       firstName: z.string(),
-      lastName: z.string(),
+      // lastName: z.string(),
     })
     .superRefine((data, ctx) => {
       if (!data.firstName) {
@@ -50,14 +51,15 @@ export class IrBookingEditorHeader {
           message: locales.entries.Lcz_ChooseBookingNumber,
         });
       }
-      if (!data.lastName) {
-        ctx.addIssue({
-          path: ['lastName'],
-          code: z.ZodIssueCode.custom,
-          message: locales.entries.Lcz_ChooseBookingNumber,
-        });
-      }
+      // if (!data.lastName) {
+      //   ctx.addIssue({
+      //     path: ['lastName'],
+      //     code: z.ZodIssueCode.custom,
+      //     message: locales.entries.Lcz_ChooseBookingNumber,
+      //   });
+      // }
     });
+  private pickerRef: HTMLIrPickerElement;
 
   // =====================
   // Handlers
@@ -140,6 +142,10 @@ export class IrBookingEditorHeader {
   private async handleBookingSearch(value: string) {
     try {
       this.isLoading = true;
+      if (!value) {
+        this.pickerRef.clearInput();
+        return;
+      }
       this.bookings = await this.bookingService.fetchExposedBookings(value, calendar_data.property.id, this.checkIn, this.checkOut);
     } catch (error) {
       console.error(error);
@@ -244,6 +250,13 @@ export class IrBookingEditorHeader {
     return `${locales.entries.Lcz_ChildCaption} 0 - ${child_max_age} ${years}`;
   }
 
+  private async selectGuest(e: CustomEvent) {
+    this.stopEvent(e);
+    const booking_nbr = e.detail?.item?.value;
+    const booking = await this.bookingService.getExposedBooking(booking_nbr, 'en', true);
+    this.guestSelected.emit(booking);
+  }
+
   render() {
     const { sources } = booking_store.selects;
     const { adults, children } = booking_store.bookingDraft.occupancy;
@@ -255,16 +268,18 @@ export class IrBookingEditorHeader {
           {this.mode === 'SPLIT_BOOKING' && (
             <ir-validator value={booking_store.bookedByGuest} class="booking-editor-header__booking-picker-validator" showErrorMessage schema={this.BookedByGuestPickerSchema}>
               <ir-picker
+                withClear
                 mode="select-async"
                 class="booking-editor-header__booking-picker"
                 debounce={300}
+                ref={el => (this.pickerRef = el)}
                 label={`${locales.entries.Lcz_Tobooking}#`}
                 // defaultValue={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
                 // value={Object.keys(this.bookedByInfoData).length > 1 ? this.bookedByInfoData.bookingNumber?.toString() : ''}
                 placeholder={locales.entries.Lcz_BookingNumber}
                 loading={this.isLoading}
                 onText-change={e => this.handleBookingSearch(e.detail)}
-                onCombobox-select={this.stopEvent.bind(this)}
+                onCombobox-select={this.selectGuest.bind(this)}
               >
                 {this.bookings.map(b => {
                   const label = `${b.booking_nbr} ${b.guest.first_name} ${b.guest.last_name}`;
@@ -291,7 +306,13 @@ export class IrBookingEditorHeader {
                 {sources.map(option => (option.type === 'LABEL' ? <small>{option.description}</small> : <wa-option value={option.id?.toString()}>{option.description}</wa-option>))}
               </wa-select>
             )}
-            <ir-validator showErrorMessage value={booking_store.bookingDraft.dates} schema={this.datesSchema} style={{ position: 'relative' }}>
+            <ir-validator
+              class="booking-editor__date-validator"
+              showErrorMessage
+              value={booking_store.bookingDraft.dates}
+              schema={this.datesSchema}
+              style={{ position: 'relative' }}
+            >
               <igl-date-range
                 defaultData={{
                   fromDate: checkIn?.format('YYYY-MM-DD') ?? '',

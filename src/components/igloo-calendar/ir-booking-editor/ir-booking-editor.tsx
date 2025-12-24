@@ -30,7 +30,7 @@ export class IrBookingEditor {
   @Prop() language: string = 'en';
   @Prop() roomTypeIds: (string | number)[] = [];
   @Prop() identifier: string;
-  @Prop() booking: Booking;
+  @Prop({ mutable: true }) booking: Booking;
   @Prop() mode: BookingEditorMode = 'PLUS_BOOKING';
   @Prop() checkIn: string;
   @Prop() checkOut: string;
@@ -58,6 +58,15 @@ export class IrBookingEditor {
     }
   }
 
+  @Listen('guestSelected')
+  handleGuestSelected(e: CustomEvent) {
+    this.booking = { ...e.detail };
+    updateBookedByGuest({
+      firstName: this.booking.guest.first_name,
+      lastName: this.booking.guest.last_name,
+    });
+  }
+
   private async initializeApp() {
     try {
       this.isLoading = true;
@@ -76,7 +85,7 @@ export class IrBookingEditor {
         countries: countriesList,
       });
       this.initializeDraftFromBooking();
-      if (this.isEventType('EDIT_BOOKING')) {
+      if (this.bookingEditorService.isEventType('EDIT_BOOKING')) {
         await this.checkBookingAvailability();
       }
       // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
@@ -107,13 +116,13 @@ export class IrBookingEditor {
    * Throws if required booking data is missing.
    */
   private initializeDraftFromBooking() {
-    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
-      if (!this.booking || (!this.identifier && this.isEventType('EDIT_BOOKING'))) {
+    if (this.bookingEditorService.isEventType(['EDIT_BOOKING', 'ADD_ROOM'])) {
+      if (!this.booking || (!this.identifier && this.bookingEditorService.isEventType('EDIT_BOOKING'))) {
         throw new Error('Missing booking or identifier');
       }
     }
 
-    if (this.isEventType('EDIT_BOOKING')) {
+    if (this.bookingEditorService.isEventType('EDIT_BOOKING')) {
       const room = this.booking.rooms.find(room => room.identifier === this.identifier);
       modifyBookingStore('guest', {
         bed_preference: room.bed_preference?.toString(),
@@ -132,7 +141,7 @@ export class IrBookingEditor {
       },
     };
 
-    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+    if (this.bookingEditorService.isEventType(['EDIT_BOOKING', 'ADD_ROOM'])) {
       const source = booking_store.selects.sources.find(s => s.code === this.booking.source.code);
 
       draft = {
@@ -140,7 +149,7 @@ export class IrBookingEditor {
         source,
       };
 
-      if (this.isEventType('EDIT_BOOKING')) {
+      if (this.bookingEditorService.isEventType('EDIT_BOOKING')) {
         draft = {
           ...draft,
           occupancy: {
@@ -189,8 +198,8 @@ export class IrBookingEditor {
     const to_date = dates.checkOut.format('YYYY-MM-DD');
     const is_in_agent_mode = source?.type === 'TRAVEL_AGENCY';
     try {
-      const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.room.roomtype?.id] : [];
-      const room_type_ids = this.isEventType('BAR_BOOKING') ? this.roomTypeIds.map(r => Number(r)) : [];
+      const room_type_ids_to_update = this.bookingEditorService.isEventType('EDIT_BOOKING') ? [this.room.roomtype?.id] : [];
+      const room_type_ids = this.bookingEditorService.isEventType(['BAR_BOOKING', 'SPLIT_BOOKING']) ? this.roomTypeIds.map(r => Number(r)) : [];
 
       await this.bookingService.getBookingAvailability({
         from_date,
@@ -210,7 +219,7 @@ export class IrBookingEditor {
       if (this.mode !== 'EDIT_BOOKING') {
         await this.assignCountryCode();
       }
-      if (this.isEventType('EDIT_BOOKING')) {
+      if (this.bookingEditorService.isEventType('EDIT_BOOKING')) {
         this.updateBooking();
       }
     } catch (error) {
@@ -260,10 +269,6 @@ export class IrBookingEditor {
     // alert('do reservation');
   }
 
-  private isEventType(mode: BookingEditorMode): boolean {
-    return this.mode === mode;
-  }
-
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
     const countryId = country['COUNTRY_ID'];
@@ -293,12 +298,12 @@ export class IrBookingEditor {
   }
 
   private setSourceOptions(bookingSource: BookingSource[]) {
-    const _sourceOptions = this.isEventType('BAR_BOOKING') ? this.getFilteredSourceOptions(bookingSource) : bookingSource;
+    const _sourceOptions = this.bookingEditorService.isEventType('BAR_BOOKING') ? this.getFilteredSourceOptions(bookingSource) : bookingSource;
     setBookingSelectOptions({
       sources: _sourceOptions,
     });
     let sourceOption: BookingSource;
-    if (this.isEventType('EDIT_BOOKING') && this.booking) {
+    if (this.bookingEditorService.isEventType('EDIT_BOOKING') && this.booking) {
       const option = bookingSource.find(option => this.booking.source?.code === option.code);
       sourceOption = option;
     } else {
@@ -347,7 +352,6 @@ export class IrBookingEditor {
         </div>
       );
     }
-
     return (
       <Host>
         <div>

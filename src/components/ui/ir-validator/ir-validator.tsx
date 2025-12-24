@@ -349,7 +349,11 @@ export class IrValidator {
     return (
       <Host>
         <slot></slot>
-        {!this.isValid && this.showErrorMessage && <span class="error-message">{this.errorMessage}</span>}
+        {!this.isValid && this.showErrorMessage && (
+          <span part="error-message" class="error-message">
+            {this.errorMessage}
+          </span>
+        )}
       </Host>
     );
   }

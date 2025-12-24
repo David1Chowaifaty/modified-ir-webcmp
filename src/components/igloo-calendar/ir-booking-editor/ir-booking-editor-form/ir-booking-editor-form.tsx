@@ -1,4 +1,4 @@
-import booking_store, { calculateTotalRooms, getBookingTotalPrice, IRatePlanSelection, updateBookedByGuest } from '@/stores/booking.store';
+import booking_store, { bookedByGuestBaseData, calculateTotalRooms, getBookingTotalPrice, IRatePlanSelection, updateBookedByGuest } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
@@ -23,6 +23,7 @@ export class IrBookingEditorForm {
   @Event() doReservation: EventEmitter<string>;
 
   private bookingService = new BookingService();
+  pickerEl: HTMLIrPickerElement;
 
   private async fetchGuests(email: string) {
     try {
@@ -92,7 +93,7 @@ export class IrBookingEditorForm {
             return [...new Array(rp.reserved)].map((_, i) => {
               const shouldAutoFillGuest =
                 ['BAR_BOOKING', 'PLUS_BOOKING'].includes(this.mode) &&
-                booking_store.bookedByGuest.id !== -1 &&
+                booking_store.bookedByGuest.id === -1 &&
                 !hasBookedByGuestController &&
                 !booking_store.bookedByGuestManuallyEdited;
               if (shouldAutoFillGuest) {
@@ -136,6 +137,7 @@ export class IrBookingEditorForm {
                 debounce={500}
                 loading={isRequestPending('/Fetch_Exposed_Guests')}
                 mode="select-async"
+                ref={el => (this.pickerEl = el)}
                 onCombobox-select={this.handleComboboxSelect.bind(this)}
               >
                 {this.guests?.map(guest => {
@@ -147,6 +149,17 @@ export class IrBookingEditorForm {
                   );
                 })}
               </ir-picker>
+              {booking_store.bookedByGuest.id !== -1 && (
+                <ir-custom-button
+                  onClickHandler={() => {
+                    updateBookedByGuest(bookedByGuestBaseData);
+                    this.pickerEl.clearInput();
+                  }}
+                  variant="brand"
+                >
+                  Clear user
+                </ir-custom-button>
+              )}
             </div>
             <ir-booking-editor-guest-form></ir-booking-editor-guest-form>
           </section>

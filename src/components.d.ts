@@ -4831,6 +4831,7 @@ declare global {
         new (): HTMLIrBookingEditorGuestFormElement;
     };
     interface HTMLIrBookingEditorHeaderElementEventMap {
+        "guestSelected": Booking;
         "checkAvailability": void;
     }
     interface HTMLIrBookingEditorHeaderElement extends Components.IrBookingEditorHeader, HTMLStencilElement {
@@ -7903,6 +7904,7 @@ declare namespace LocalJSX {
          */
         "mode"?: BookingEditorMode;
         "onCheckAvailability"?: (event: IrBookingEditorHeaderCustomEvent<void>) => void;
+        "onGuestSelected"?: (event: IrBookingEditorHeaderCustomEvent<Booking>) => void;
     }
     interface IrBookingEmailLogs {
         "ticket"?: string;

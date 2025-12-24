@@ -125,24 +125,24 @@ export interface ReservedRoomSelection {
   guest: RatePlanGuest | null;
   ratePlanSelection: IRatePlanSelection;
 }
-
+export const bookedByGuestBaseData = {
+  id: -1,
+  email: '',
+  firstName: '',
+  lastName: '',
+  countryId: '',
+  phone_prefix: '',
+  mobile: '',
+  selectedArrivalTime: '',
+  emailGuest: false,
+  note: '',
+  cardNumber: '',
+  cardHolderName: '',
+  expiryMonth: '',
+  expiryYear: '',
+};
 const initialState: BookingStore = {
-  bookedByGuest: {
-    id: -1,
-    email: '',
-    firstName: '',
-    lastName: '',
-    countryId: '',
-    phone_prefix: '',
-    mobile: '',
-    selectedArrivalTime: '',
-    emailGuest: false,
-    note: '',
-    cardNumber: '',
-    cardHolderName: '',
-    expiryMonth: '',
-    expiryYear: '',
-  },
+  bookedByGuest: bookedByGuestBaseData,
   bookedByGuestManuallyEdited: false,
   bookingDraft: {
     dates: {
