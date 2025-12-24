@@ -69,6 +69,7 @@ export class IrBookingEditorHeader {
   // =====================
   componentWillLoad() {
     this.createDatesSchema();
+    this.bookingEditorService.setMode(this.mode);
   }
 
   @Watch('booking')
@@ -82,6 +83,7 @@ export class IrBookingEditorHeader {
   handleModeChange(newValue, oldValue) {
     if (newValue !== oldValue) {
       this.createDatesSchema();
+      this.bookingEditorService.setMode(this.mode);
     }
   }
 

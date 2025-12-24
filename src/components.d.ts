@@ -25,7 +25,7 @@ import { IPaymentAction } from "./services/payment.service";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-import { BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
+import { BlockedDatePayload, BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
 import { BookingService } from "./services/booking-service/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -89,7 +89,7 @@ export { IPaymentAction } from "./services/payment.service";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Payment, PaymentEntries, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-export { BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
+export { BlockedDatePayload, BookingEditorMode, BookingStep } from "./components/igloo-calendar/ir-booking-editor/types";
 export { BookingService } from "./services/booking-service/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload as RoomGuestsPayload1 } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -158,11 +158,27 @@ export namespace Components {
         "isEventHover": boolean;
         "toDate": string;
     }
-    interface IglBlockedDateDialog {
+    interface IglBlockedDateDrawer {
+        /**
+          * Start date of the blocked date range. Expected to be an ISO date string (YYYY-MM-DD).
+         */
         "fromDate": string;
+        /**
+          * Label text displayed at the top of the drawer. Typically used as the drawer title.
+         */
         "label": string;
+        /**
+          * Controls whether the blocked date drawer is open or closed. Reflected to the DOM so it can be styled or toggled externally.
+         */
         "open": boolean;
+        /**
+          * End date of the blocked date range. Expected to be an ISO date string (YYYY-MM-DD).
+         */
         "toDate": string;
+        /**
+          * Identifier of the unit being blocked. Used when sending block requests to the booking service.
+         */
+        "unitId": number;
     }
     interface IglBookProperty {
         "adultChildConstraints": TAdultChildConstraints;
@@ -579,7 +595,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrBookingEditor {
-        "blockedUnit": any;
+        "blockedUnit": BlockedDatePayload;
         "booking": Booking;
         "checkIn": string;
         "checkOut": string;
@@ -592,18 +608,57 @@ export namespace Components {
         "unitId": string;
     }
     interface IrBookingEditorDrawer {
-        "blockedUnit": any;
+        /**
+          * Payload for blocked unit dates.
+         */
+        "blockedUnit": BlockedDatePayload;
+        /**
+          * Booking being created or edited.
+         */
         "booking": Booking;
+        /**
+          * Check-in date (ISO string).
+         */
         "checkIn": string;
+        /**
+          * Check-out date (ISO string).
+         */
         "checkOut": string;
+        /**
+          * Optional drawer title override.
+         */
         "label": string;
+        /**
+          * UI language code (default: `en`).
+         */
         "language": string;
+        /**
+          * Current booking editor mode.
+         */
         "mode": BookingEditorMode;
+        /**
+          * Controls drawer visibility (reflected to DOM).
+         */
         "open": boolean;
+        /**
+          * Property identifier.
+         */
         "propertyid": string;
+        /**
+          * Room identifier used by the editor.
+         */
         "roomIdentifier": string;
+        /**
+          * Allowed room type identifiers.
+         */
         "roomTypeIds": (string | number)[];
+        /**
+          * Auth token used for API requests.
+         */
         "ticket": string;
+        /**
+          * Selected unit identifier.
+         */
         "unitId": string;
     }
     interface IrBookingEditorForm {
@@ -3412,9 +3467,9 @@ export interface IglBlockDatesViewCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBlockDatesViewElement;
 }
-export interface IglBlockedDateDialogCustomEvent<T> extends CustomEvent<T> {
+export interface IglBlockedDateDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLIglBlockedDateDialogElement;
+    target: HTMLIglBlockedDateDrawerElement;
 }
 export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4029,22 +4084,22 @@ declare global {
         prototype: HTMLIglBlockDatesViewElement;
         new (): HTMLIglBlockDatesViewElement;
     };
-    interface HTMLIglBlockedDateDialogElementEventMap {
-        "blockedDateDialogClosed": void;
+    interface HTMLIglBlockedDateDrawerElementEventMap {
+        "blockedDateDrawerClosed": void;
     }
-    interface HTMLIglBlockedDateDialogElement extends Components.IglBlockedDateDialog, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIglBlockedDateDialogElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDialogElement, ev: IglBlockedDateDialogCustomEvent<HTMLIglBlockedDateDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+    interface HTMLIglBlockedDateDrawerElement extends Components.IglBlockedDateDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBlockedDateDrawerElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDrawerElement, ev: IglBlockedDateDrawerCustomEvent<HTMLIglBlockedDateDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIglBlockedDateDialogElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDialogElement, ev: IglBlockedDateDialogCustomEvent<HTMLIglBlockedDateDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBlockedDateDrawerElementEventMap>(type: K, listener: (this: HTMLIglBlockedDateDrawerElement, ev: IglBlockedDateDrawerCustomEvent<HTMLIglBlockedDateDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
-    var HTMLIglBlockedDateDialogElement: {
-        prototype: HTMLIglBlockedDateDialogElement;
-        new (): HTMLIglBlockedDateDialogElement;
+    var HTMLIglBlockedDateDrawerElement: {
+        prototype: HTMLIglBlockedDateDrawerElement;
+        new (): HTMLIglBlockedDateDrawerElement;
     };
     interface HTMLIglBookPropertyElementEventMap {
         "closeBookingWindow": { [key: string]: any };
@@ -4794,6 +4849,7 @@ declare global {
     interface HTMLIrBookingEditorElementEventMap {
         "resetBookingEvt": void;
         "loadingChanged": { cause: string | null };
+        "adjustBlockedUnit": any;
     }
     interface HTMLIrBookingEditorElement extends Components.IrBookingEditor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingEditorElementEventMap>(type: K, listener: (this: HTMLIrBookingEditorElement, ev: IrBookingEditorCustomEvent<HTMLIrBookingEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7108,7 +7164,7 @@ declare global {
         "ac-pages-menu": HTMLAcPagesMenuElement;
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
-        "igl-blocked-date-dialog": HTMLIglBlockedDateDialogElement;
+        "igl-blocked-date-drawer": HTMLIglBlockedDateDrawerElement;
         "igl-book-property": HTMLIglBookPropertyElement;
         "igl-book-property-container": HTMLIglBookPropertyContainerElement;
         "igl-book-property-footer": HTMLIglBookPropertyFooterElement;
@@ -7355,12 +7411,28 @@ declare namespace LocalJSX {
         "onDataUpdateEvent"?: (event: IglBlockDatesViewCustomEvent<{ [key: string]: any }>) => void;
         "toDate"?: string;
     }
-    interface IglBlockedDateDialog {
+    interface IglBlockedDateDrawer {
+        /**
+          * Start date of the blocked date range. Expected to be an ISO date string (YYYY-MM-DD).
+         */
         "fromDate"?: string;
+        /**
+          * Label text displayed at the top of the drawer. Typically used as the drawer title.
+         */
         "label"?: string;
-        "onBlockedDateDialogClosed"?: (event: IglBlockedDateDialogCustomEvent<void>) => void;
+        "onBlockedDateDrawerClosed"?: (event: IglBlockedDateDrawerCustomEvent<void>) => void;
+        /**
+          * Controls whether the blocked date drawer is open or closed. Reflected to the DOM so it can be styled or toggled externally.
+         */
         "open"?: boolean;
+        /**
+          * End date of the blocked date range. Expected to be an ISO date string (YYYY-MM-DD).
+         */
         "toDate"?: string;
+        /**
+          * Identifier of the unit being blocked. Used when sending block requests to the booking service.
+         */
+        "unitId"?: number;
     }
     interface IglBookProperty {
         "adultChildConstraints"?: TAdultChildConstraints;
@@ -7887,13 +7959,14 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrBookingEditor {
-        "blockedUnit"?: any;
+        "blockedUnit"?: BlockedDatePayload;
         "booking"?: Booking;
         "checkIn"?: string;
         "checkOut"?: string;
         "identifier"?: string;
         "language"?: string;
         "mode"?: BookingEditorMode;
+        "onAdjustBlockedUnit"?: (event: IrBookingEditorCustomEvent<any>) => void;
         "onLoadingChanged"?: (event: IrBookingEditorCustomEvent<{ cause: string | null }>) => void;
         "onResetBookingEvt"?: (event: IrBookingEditorCustomEvent<void>) => void;
         "propertyId"?: string | number;
@@ -7902,19 +7975,61 @@ declare namespace LocalJSX {
         "unitId"?: string;
     }
     interface IrBookingEditorDrawer {
-        "blockedUnit"?: any;
+        /**
+          * Payload for blocked unit dates.
+         */
+        "blockedUnit"?: BlockedDatePayload;
+        /**
+          * Booking being created or edited.
+         */
         "booking"?: Booking;
+        /**
+          * Check-in date (ISO string).
+         */
         "checkIn"?: string;
+        /**
+          * Check-out date (ISO string).
+         */
         "checkOut"?: string;
+        /**
+          * Optional drawer title override.
+         */
         "label"?: string;
+        /**
+          * UI language code (default: `en`).
+         */
         "language"?: string;
+        /**
+          * Current booking editor mode.
+         */
         "mode"?: BookingEditorMode;
+        /**
+          * Emitted when the booking editor drawer is closed.
+         */
         "onBookingEditorClosed"?: (event: IrBookingEditorDrawerCustomEvent<void>) => void;
+        /**
+          * Controls drawer visibility (reflected to DOM).
+         */
         "open"?: boolean;
+        /**
+          * Property identifier.
+         */
         "propertyid"?: string;
+        /**
+          * Room identifier used by the editor.
+         */
         "roomIdentifier"?: string;
+        /**
+          * Allowed room type identifiers.
+         */
         "roomTypeIds"?: (string | number)[];
+        /**
+          * Auth token used for API requests.
+         */
         "ticket"?: string;
+        /**
+          * Selected unit identifier.
+         */
         "unitId"?: string;
     }
     interface IrBookingEditorForm {
@@ -11035,7 +11150,7 @@ declare namespace LocalJSX {
         "ac-pages-menu": AcPagesMenu;
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
-        "igl-blocked-date-dialog": IglBlockedDateDialog;
+        "igl-blocked-date-drawer": IglBlockedDateDrawer;
         "igl-book-property": IglBookProperty;
         "igl-book-property-container": IglBookPropertyContainer;
         "igl-book-property-footer": IglBookPropertyFooter;
@@ -11262,7 +11377,7 @@ declare module "@stencil/core" {
             "ac-pages-menu": LocalJSX.AcPagesMenu & JSXBase.HTMLAttributes<HTMLAcPagesMenuElement>;
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
-            "igl-blocked-date-dialog": LocalJSX.IglBlockedDateDialog & JSXBase.HTMLAttributes<HTMLIglBlockedDateDialogElement>;
+            "igl-blocked-date-drawer": LocalJSX.IglBlockedDateDrawer & JSXBase.HTMLAttributes<HTMLIglBlockedDateDrawerElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
             "igl-book-property-container": LocalJSX.IglBookPropertyContainer & JSXBase.HTMLAttributes<HTMLIglBookPropertyContainerElement>;
             "igl-book-property-footer": LocalJSX.IglBookPropertyFooter & JSXBase.HTMLAttributes<HTMLIglBookPropertyFooterElement>;

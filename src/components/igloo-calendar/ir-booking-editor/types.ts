@@ -54,3 +54,13 @@ export const BookedByGuestSchema = z.object({
   firstName: z.string().nonempty(),
   lastName: z.string().nonempty(),
 });
+
+export type BlockedDatePayload = {
+  RELEASE_AFTER_HOURS: string;
+  ENTRY_DATE: string;
+  ENTRY_HOUR: number;
+  ENTRY_MINUTE: number;
+  OPTIONAL_REASON: string;
+  STATUS_CODE: string;
+  OUT_OF_SERVICE: boolean;
+};

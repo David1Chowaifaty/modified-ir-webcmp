@@ -1517,19 +1517,29 @@ export class IglooCalendar {
           language={this.language}
           propertyid={this.propertyid as any}
           checkIn={this.bookingItem?.FROM_DATE}
+          blockedUnit={{
+            ENTRY_DATE: (this.bookingItem as any)?.ENTRY_DATE,
+            ENTRY_HOUR: (this.bookingItem as any)?.ENTRY_HOUR,
+            ENTRY_MINUTE: (this.bookingItem as any)?.ENTRY_MINUTE,
+            OPTIONAL_REASON: (this.bookingItem as any)?.OPTIONAL_REASON,
+            OUT_OF_SERVICE: (this.bookingItem as any)?.OUT_OF_SERVICE,
+            RELEASE_AFTER_HOURS: (this.bookingItem as any)?.RELEASE_AFTER_HOURS,
+            STATUS_CODE: (this.bookingItem as any)?.STATUS_CODE,
+          }}
           checkOut={this.bookingItem?.TO_DATE}
         ></ir-booking-editor-drawer>
-        <igl-blocked-date-dialog
-          onBlockedDateDialogClosed={e => {
+        <igl-blocked-date-drawer
+          onBlockedDateDrawerClosed={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.bookingItem = null;
           }}
+          unitId={(this.bookingItem as any)?.PR_ID}
           fromDate={this.bookingItem?.FROM_DATE}
           toDate={this.bookingItem?.TO_DATE}
           label={(this.bookingItem as any)?.BLOCK_DATES_TITLE?.trim()}
           open={this.bookingItem?.event_type === 'BLOCK_DATES'}
-        ></igl-blocked-date-dialog>
+        ></igl-blocked-date-drawer>
       </Host>
     );
   }

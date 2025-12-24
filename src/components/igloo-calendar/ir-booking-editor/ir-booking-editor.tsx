@@ -1,6 +1,6 @@
 import { Booking } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-import { BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema } from './types';
+import { BlockedDatePayload, BookedByGuestSchema, BookingEditorMode, BookingStep, RoomsGuestsSchema } from './types';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking-service/booking.service';
 import locales from '@/stores/locales.store';
@@ -35,13 +35,14 @@ export class IrBookingEditor {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
   @Prop() step: BookingStep;
-  @Prop() blockedUnit;
+  @Prop() blockedUnit: BlockedDatePayload;
   @Prop() unitId: string;
 
   @State() isLoading: boolean = true;
 
   @Event({ composed: true, bubbles: true }) resetBookingEvt: EventEmitter<void>;
   @Event() loadingChanged: EventEmitter<{ cause: string | null }>;
+  @Event() adjustBlockedUnit: EventEmitter<any>;
 
   private roomService = new RoomService();
   private bookingService = new BookingService();
@@ -235,25 +236,7 @@ export class IrBookingEditor {
       console.error('Error initializing booking availability:', error);
     }
   }
-  private async adjustBlockedDatesAfterReservation(serviceParams: any) {
-    console.log(serviceParams);
-    // if (!this.wasBlockedUnit) {
-    //   return;
-    // }
-    // const original_from_date = moment(this.defaultData.block_exposed_unit_props.from_date, 'YYYY-MM-DD');
-    // const current_from_date = moment(serviceParams.booking.from_date, 'YYYY-MM-DD');
-    // const original_to_date = moment(this.defaultData.block_exposed_unit_props.to_date, 'YYYY-MM-DD');
-    // const current_to_date = moment(serviceParams.booking.to_date, 'YYYY-MM-DD');
-    // if (current_to_date.isBefore(original_to_date, 'days')) {
-    //   const props = { ...this.defaultData.block_exposed_unit_props, from_date: current_to_date.format('YYYY-MM-DD') };
-    //   await this.bookingService.blockUnit(props);
-    // }
-    // if (current_from_date.isAfter(original_from_date, 'days')) {
-    //   const props = { ...this.defaultData.block_exposed_unit_props, to_date: current_from_date.format('YYYY-MM-DD') };
-    //   await this.bookingService.blockUnit(props);
-    // }
-    // return;
-  }
+
   private async doReservation(source: string) {
     try {
       this.loadingChanged.emit({ cause: source as any });
@@ -268,7 +251,8 @@ export class IrBookingEditor {
       });
       console.log({ DoReservationPayload: body });
       await this.bookingService.doReservation(body);
-      await this.adjustBlockedDatesAfterReservation(body);
+      this.adjustBlockedUnit.emit(body);
+
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
