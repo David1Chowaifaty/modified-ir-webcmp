@@ -35,6 +35,8 @@ import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, unknown as GuestChangedEvent, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { NativeWaInput } from "./components/ui/ir-input/ir-input";
 import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
+import { Moment } from "moment/min/moment-with-locales";
+import { IDateModifiers } from "./components/ui/ir-custom-date-range/ir-custom-date-range.types";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { CheckoutRoomEvent } from "./components/ir-departures/ir-departures-table/ir-departures-table";
@@ -55,7 +57,7 @@ import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
-import { Moment } from "moment";
+import { Moment as Moment1 } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
 import { AllowedProperties } from "./services/property.service";
@@ -97,6 +99,8 @@ export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, unknown as GuestChangedEvent, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { NativeWaInput } from "./components/ui/ir-input/ir-input";
 export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
+export { Moment } from "moment/min/moment-with-locales";
+export { IDateModifiers } from "./components/ui/ir-custom-date-range/ir-custom-date-range.types";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { CheckoutRoomEvent } from "./components/ir-departures/ir-departures-table/ir-departures-table";
@@ -117,7 +121,7 @@ export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
-export { Moment } from "moment";
+export { Moment as Moment1 } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
 export { AllowedProperties } from "./services/property.service";
@@ -575,6 +579,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrBookingEditor {
+        "blockedUnit": any;
         "booking": Booking;
         "checkIn": string;
         "checkOut": string;
@@ -1068,6 +1073,16 @@ export namespace Components {
          */
         "triggerContainerStyle": string;
         "withClear": boolean;
+    }
+    interface IrCustomDateRange {
+        "dateModifiers": IDateModifiers;
+        "fromDate": Moment | null;
+        "locale": string;
+        "maxDate": Moment;
+        "maxSpanDays": number;
+        "minDate": Moment;
+        "showPrice": boolean;
+        "toDate": Moment | null;
     }
     interface IrDailyRevenue {
         "language": string;
@@ -2791,7 +2806,7 @@ export namespace Components {
         /**
           * The start date of the range.
          */
-        "fromDate": Moment;
+        "fromDate": Moment1;
         /**
           * The latest date that can be selected.
          */
@@ -2803,7 +2818,7 @@ export namespace Components {
         /**
           * The end date of the range.
          */
-        "toDate": Moment;
+        "toDate": Moment1;
         /**
           * Whether to show the overlay before the date is selected.
          */
@@ -3632,6 +3647,10 @@ export interface IrCustomButtonCustomEvent<T> extends CustomEvent<T> {
 export interface IrCustomDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrCustomDatePickerElement;
+}
+export interface IrCustomDateRangeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrCustomDateRangeElement;
 }
 export interface IrDailyRevenueCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -5189,6 +5208,23 @@ declare global {
         prototype: HTMLIrCustomDatePickerElement;
         new (): HTMLIrCustomDatePickerElement;
     };
+    interface HTMLIrCustomDateRangeElementEventMap {
+        "dateChange": { start: Date | null; end: Date | null };
+    }
+    interface HTMLIrCustomDateRangeElement extends Components.IrCustomDateRange, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrCustomDateRangeElementEventMap>(type: K, listener: (this: HTMLIrCustomDateRangeElement, ev: IrCustomDateRangeCustomEvent<HTMLIrCustomDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrCustomDateRangeElementEventMap>(type: K, listener: (this: HTMLIrCustomDateRangeElement, ev: IrCustomDateRangeCustomEvent<HTMLIrCustomDateRangeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrCustomDateRangeElement: {
+        prototype: HTMLIrCustomDateRangeElement;
+        new (): HTMLIrCustomDateRangeElement;
+    };
     interface HTMLIrDailyRevenueElementEventMap {
         "preventPageLoad": null;
     }
@@ -6444,7 +6480,7 @@ declare global {
         new (): HTMLIrRadioElement;
     };
     interface HTMLIrRangePickerElementEventMap {
-        "dateRangeChanged": { fromDate: Moment; toDate: Moment; wasFocused?: boolean };
+        "dateRangeChanged": { fromDate: Moment1; toDate: Moment1; wasFocused?: boolean };
     }
     interface HTMLIrRangePickerElement extends Components.IrRangePicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRangePickerElementEventMap>(type: K, listener: (this: HTMLIrRangePickerElement, ev: IrRangePickerCustomEvent<HTMLIrRangePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7146,6 +7182,7 @@ declare global {
         "ir-country-picker": HTMLIrCountryPickerElement;
         "ir-custom-button": HTMLIrCustomButtonElement;
         "ir-custom-date-picker": HTMLIrCustomDatePickerElement;
+        "ir-custom-date-range": HTMLIrCustomDateRangeElement;
         "ir-daily-revenue": HTMLIrDailyRevenueElement;
         "ir-daily-revenue-filters": HTMLIrDailyRevenueFiltersElement;
         "ir-date-picker": HTMLIrDatePickerElement;
@@ -7850,6 +7887,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrBookingEditor {
+        "blockedUnit"?: any;
         "booking"?: Booking;
         "checkIn"?: string;
         "checkOut"?: string;
@@ -8390,6 +8428,17 @@ declare namespace LocalJSX {
          */
         "triggerContainerStyle"?: string;
         "withClear"?: boolean;
+    }
+    interface IrCustomDateRange {
+        "dateModifiers"?: IDateModifiers;
+        "fromDate"?: Moment | null;
+        "locale"?: string;
+        "maxDate"?: Moment;
+        "maxSpanDays"?: number;
+        "minDate"?: Moment;
+        "onDateChange"?: (event: IrCustomDateRangeCustomEvent<{ start: Date | null; end: Date | null }>) => void;
+        "showPrice"?: boolean;
+        "toDate"?: Moment | null;
     }
     interface IrDailyRevenue {
         "language"?: string;
@@ -10316,7 +10365,7 @@ declare namespace LocalJSX {
         /**
           * The start date of the range.
          */
-        "fromDate"?: Moment;
+        "fromDate"?: Moment1;
         /**
           * The latest date that can be selected.
          */
@@ -10325,11 +10374,11 @@ declare namespace LocalJSX {
           * The earliest date that can be selected.
          */
         "minDate"?: string | Date;
-        "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment; toDate: Moment; wasFocused?: boolean }>) => void;
+        "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment1; toDate: Moment1; wasFocused?: boolean }>) => void;
         /**
           * The end date of the range.
          */
-        "toDate"?: Moment;
+        "toDate"?: Moment1;
         /**
           * Whether to show the overlay before the date is selected.
          */
@@ -11060,6 +11109,7 @@ declare namespace LocalJSX {
         "ir-country-picker": IrCountryPicker;
         "ir-custom-button": IrCustomButton;
         "ir-custom-date-picker": IrCustomDatePicker;
+        "ir-custom-date-range": IrCustomDateRange;
         "ir-daily-revenue": IrDailyRevenue;
         "ir-daily-revenue-filters": IrDailyRevenueFilters;
         "ir-date-picker": IrDatePicker;
@@ -11292,6 +11342,7 @@ declare module "@stencil/core" {
             "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
             "ir-custom-button": LocalJSX.IrCustomButton & JSXBase.HTMLAttributes<HTMLIrCustomButtonElement>;
             "ir-custom-date-picker": LocalJSX.IrCustomDatePicker & JSXBase.HTMLAttributes<HTMLIrCustomDatePickerElement>;
+            "ir-custom-date-range": LocalJSX.IrCustomDateRange & JSXBase.HTMLAttributes<HTMLIrCustomDateRangeElement>;
             "ir-daily-revenue": LocalJSX.IrDailyRevenue & JSXBase.HTMLAttributes<HTMLIrDailyRevenueElement>;
             "ir-daily-revenue-filters": LocalJSX.IrDailyRevenueFilters & JSXBase.HTMLAttributes<HTMLIrDailyRevenueFiltersElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;

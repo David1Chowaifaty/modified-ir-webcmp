@@ -9,6 +9,7 @@ import booking_store, { resetAvailability, setBookingDraft } from '@/stores/book
 import { z, ZodSchema } from 'zod';
 import { DateRangeChangeEvent } from '@/components';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { IRBookingEditorService } from '../ir-booking-editor.service';
 
 @Component({
   tag: 'ir-booking-editor-header',
@@ -37,6 +38,8 @@ export class IrBookingEditorHeader {
 
   private bookingService = new BookingService();
   private adultsSchema = z.coerce.number().min(1);
+
+  private readonly bookingEditorService = new IRBookingEditorService();
 
   private BookedByGuestPickerSchema = z
     .object({
@@ -115,7 +118,7 @@ export class IrBookingEditorHeader {
           });
         }
 
-        if (moment.isMoment(data.checkIn) && ['SPLIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && !data.checkIn.isSameOrBefore(this.booking.to_date)) {
+        if (moment.isMoment(data.checkIn) && this.bookingEditorService.isEventType(['SPLIT_BOOKING', 'ADD_ROOM']) && !data.checkIn.isSameOrBefore(this.booking.to_date)) {
           ctx.addIssue({
             path: ['checkIn'],
             code: z.ZodIssueCode.custom,
@@ -265,7 +268,7 @@ export class IrBookingEditorHeader {
     return (
       <Host>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          {this.mode === 'SPLIT_BOOKING' && (
+          {this.bookingEditorService.isEventType('SPLIT_BOOKING') && (
             <ir-validator value={booking_store.bookedByGuest} class="booking-editor-header__booking-picker-validator" showErrorMessage schema={this.BookedByGuestPickerSchema}>
               <ir-picker
                 withClear
@@ -294,7 +297,7 @@ export class IrBookingEditorHeader {
           )}
 
           <div class="booking-editor-header__container">
-            {!['EDIT_BOOKING', 'ADD_ROOM'].includes(this.mode) && (
+            {!this.bookingEditorService.isEventType(['EDIT_BOOKING', 'ADD_ROOM', 'SPLIT_BOOKING']) && (
               <wa-select
                 size="small"
                 placeholder={locales.entries.Lcz_Source}
@@ -325,7 +328,7 @@ export class IrBookingEditorHeader {
                 onDateRangeChange={this.handleDateRangeChange.bind(this)}
               />
             </ir-validator>
-            {this.mode !== 'EDIT_BOOKING' && (
+            {!this.bookingEditorService.isEventType('EDIT_BOOKING') && (
               <Fragment>
                 <ir-validator value={adults} schema={this.adultsSchema}>
                   <wa-select

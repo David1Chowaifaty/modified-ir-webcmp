@@ -35,6 +35,7 @@ export class IrBookingEditor {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
   @Prop() step: BookingStep;
+  @Prop() blockedUnit;
   @Prop() unitId: string;
 
   @State() isLoading: boolean = true;
@@ -48,9 +49,17 @@ export class IrBookingEditor {
 
   private room: Booking['rooms'][0];
 
+  private get adjustedCheckout() {
+    if (this.bookingEditorService.isEventType('PLUS_BOOKING') && !this.blockedUnit) {
+      return undefined;
+    }
+    return this.checkOut;
+  }
+
   componentWillLoad() {
     this.initializeApp();
   }
+
   @Watch('mode')
   handleModeChange(newMode: BookingEditorMode, oldMode: BookingEditorMode) {
     if (newMode !== oldMode) {
@@ -64,6 +73,10 @@ export class IrBookingEditor {
     updateBookedByGuest({
       firstName: this.booking.guest.first_name,
       lastName: this.booking.guest.last_name,
+    });
+    const source = booking_store.selects.sources.find(s => s.code === this.booking.source.code);
+    setBookingDraft({
+      source,
     });
   }
 
@@ -88,10 +101,6 @@ export class IrBookingEditor {
       if (this.bookingEditorService.isEventType('EDIT_BOOKING')) {
         await this.checkBookingAvailability();
       }
-      // const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
-      // this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
-      // this.setRoomsData(roomResponse);
-      // this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
     } catch (error) {
       console.error('Error initializing app:', error);
     } finally {
@@ -358,7 +367,7 @@ export class IrBookingEditor {
           <ir-interceptor></ir-interceptor>
           {this.step === 'details' && (
             <Fragment>
-              <ir-booking-editor-header booking={this.booking} checkIn={this.checkIn} checkOut={this.checkOut} mode={this.mode}></ir-booking-editor-header>
+              <ir-booking-editor-header booking={this.booking} checkIn={this.checkIn} checkOut={this.adjustedCheckout} mode={this.mode}></ir-booking-editor-header>
               <div class={'booking-editor__roomtype-container'}>
                 {booking_store.roomTypes?.map(roomType => (
                   <igl-room-type
