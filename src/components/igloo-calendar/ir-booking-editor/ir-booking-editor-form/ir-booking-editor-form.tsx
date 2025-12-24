@@ -131,7 +131,8 @@ export class IrBookingEditorForm {
               <ir-picker
                 class="booking-editor__booked-by-picker"
                 appearance="filled"
-                placeholder="Search customer by email, name or company name"
+                // placeholder="Search customer by email, name or company name"
+                placeholder="Search customer by email or name"
                 withClear
                 onText-change={event => this.fetchGuests(event.detail)}
                 debounce={500}

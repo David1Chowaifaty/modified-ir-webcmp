@@ -110,7 +110,7 @@ export class IrBookingEditorGuestForm {
               ></ir-input>
             </ir-validator>
           </div>
-          <ir-input label="Company name" placeholder="Company name"></ir-input>
+          {/* <ir-input label="Company name" placeholder="Company name"></ir-input> */}
           <ir-country-picker
             label={locales.entries.Lcz_Country}
             variant="modern"
