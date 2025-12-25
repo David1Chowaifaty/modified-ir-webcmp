@@ -44,6 +44,7 @@
 
 ### Used by
 
+ - [igl-blocked-date-drawer](../../igloo-calendar/igl-blocked-date-drawer)
  - [igl-book-property](../../igloo-calendar/igl-book-property)
  - [igl-book-property-footer](../../igloo-calendar/igl-book-property/igl-book-property-footer)
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
@@ -56,14 +57,15 @@
  - [ir-arrivals-table](../../ir-arrivals/ir-arrivals-table)
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
  - [ir-billing](../../ir-billing)
- - [ir-booked-by-cell](../../table-cells/booking/ir-booked-by-cell)
  - [ir-booking-company-dialog](../../ir-booking-company-dialog)
  - [ir-booking-details](../../ir-booking-details)
+ - [ir-booking-editor-drawer](../../igloo-calendar/ir-booking-editor/ir-booking-editor-drawer)
+ - [ir-booking-editor-form](../../igloo-calendar/ir-booking-editor/ir-booking-editor-form)
+ - [ir-booking-editor-header](../../igloo-calendar/ir-booking-editor/ir-booking-editor-header)
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing-mobile-card](../../ir-booking-listing/ir-booking-listing-mobile-card)
  - [ir-booking-listing-table](../../ir-booking-listing/ir-booking-listing-table)
- - [ir-booking-number-cell](../../table-cells/booking/ir-booking-number-cell)
  - [ir-checkout-dialog](../../ir-checkout-dialog)
  - [ir-departures-table](../../ir-departures/ir-departures-table)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
@@ -89,6 +91,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-blocked-date-drawer --> ir-custom-button
   igl-book-property --> ir-custom-button
   igl-book-property-footer --> ir-custom-button
   igl-book-property-header --> ir-custom-button
@@ -101,14 +104,15 @@ graph TD;
   ir-arrivals-table --> ir-custom-button
   ir-balance-cell --> ir-custom-button
   ir-billing --> ir-custom-button
-  ir-booked-by-cell --> ir-custom-button
   ir-booking-company-dialog --> ir-custom-button
   ir-booking-details --> ir-custom-button
+  ir-booking-editor-drawer --> ir-custom-button
+  ir-booking-editor-form --> ir-custom-button
+  ir-booking-editor-header --> ir-custom-button
   ir-booking-extra-note --> ir-custom-button
   ir-booking-header --> ir-custom-button
   ir-booking-listing-mobile-card --> ir-custom-button
   ir-booking-listing-table --> ir-custom-button
-  ir-booking-number-cell --> ir-custom-button
   ir-checkout-dialog --> ir-custom-button
   ir-departures-table --> ir-custom-button
   ir-extra-service --> ir-custom-button

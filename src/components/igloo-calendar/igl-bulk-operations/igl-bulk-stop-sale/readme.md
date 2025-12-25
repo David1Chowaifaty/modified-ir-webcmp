@@ -41,7 +41,6 @@ graph TD;
   igl-bulk-stop-sale --> ir-weekday-selector
   igl-bulk-stop-sale --> ir-button
   igl-bulk-stop-sale --> ir-date-picker
-  ir-weekday-selector --> ir-checkbox
   ir-button --> ir-icons
   igl-bulk-operations --> igl-bulk-stop-sale
   style igl-bulk-stop-sale fill:#f9f,stroke:#333,stroke-width:4px

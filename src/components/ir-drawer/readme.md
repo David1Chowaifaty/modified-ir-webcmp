@@ -28,8 +28,10 @@
 
 ### Used by
 
+ - [igl-blocked-date-drawer](../igloo-calendar/igl-blocked-date-drawer)
  - [ir-billing-drawer](../ir-billing/ir-billing-drawer)
  - [ir-booking-details-drawer](../ir-booking-details/ir-booking-details-drawer)
+ - [ir-booking-editor-drawer](../igloo-calendar/ir-booking-editor/ir-booking-editor-drawer)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info-drawer](../ir-guest-info/ir-guest-info-drawer)
  - [ir-invoice](../ir-invoice)
@@ -40,8 +42,10 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-blocked-date-drawer --> ir-drawer
   ir-billing-drawer --> ir-drawer
   ir-booking-details-drawer --> ir-drawer
+  ir-booking-editor-drawer --> ir-drawer
   ir-extra-service-config --> ir-drawer
   ir-guest-info-drawer --> ir-drawer
   ir-invoice --> ir-drawer

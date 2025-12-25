@@ -40,14 +40,9 @@
  - [ir-booking-listing-table](../../../ir-booking-listing/ir-booking-listing-table)
  - [ir-departures-table](../../../ir-departures/ir-departures-table)
 
-### Depends on
-
-- [ir-custom-button](../../../ui/ir-custom-button)
-
 ### Graph
 ```mermaid
 graph TD;
-  ir-booked-by-cell --> ir-custom-button
   ir-arrivals-table --> ir-booked-by-cell
   ir-booking-listing-mobile-card --> ir-booked-by-cell
   ir-booking-listing-table --> ir-booked-by-cell

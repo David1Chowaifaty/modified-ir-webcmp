@@ -34,7 +34,6 @@
  - [ir-sales-by-channel-filters](../../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-table](../../ir-housekeeping/ir-hk-tasks/ir-tasks-table)
- - [ir-weekday-selector](../ir-weekday-selector)
 
 ### Graph
 ```mermaid
@@ -44,7 +43,6 @@ graph TD;
   ir-sales-by-channel-filters --> ir-checkbox
   ir-sales-filters --> ir-checkbox
   ir-tasks-table --> ir-checkbox
-  ir-weekday-selector --> ir-checkbox
   style ir-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

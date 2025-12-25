@@ -31,6 +31,8 @@
  - [igl-book-property-header](../../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-cal-header](../../../igloo-calendar/igl-cal-header)
  - [igl-property-booked-by](../../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-booking-editor-form](../../../igloo-calendar/ir-booking-editor/ir-booking-editor-form)
+ - [ir-booking-editor-header](../../../igloo-calendar/ir-booking-editor/ir-booking-editor-header)
  - [ir-country-picker](../../ir-country-picker)
 
 ### Graph
@@ -39,6 +41,8 @@ graph TD;
   igl-book-property-header --> ir-picker-item
   igl-cal-header --> ir-picker-item
   igl-property-booked-by --> ir-picker-item
+  ir-booking-editor-form --> ir-picker-item
+  ir-booking-editor-header --> ir-picker-item
   ir-country-picker --> ir-picker-item
   style ir-picker-item fill:#f9f,stroke:#333,stroke-width:4px
 ```

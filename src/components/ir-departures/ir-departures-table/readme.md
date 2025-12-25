@@ -46,8 +46,6 @@ graph TD;
   ir-departures-table --> ir-custom-button
   ir-departures-table --> ir-empty-state
   ir-departures-table --> ir-pagination
-  ir-booking-number-cell --> ir-custom-button
-  ir-booked-by-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-actions-cell --> ir-custom-button

@@ -50,8 +50,9 @@ graph TD;
   igl-booking-overview-page --> igl-room-type
   igl-book-property-header --> ir-picker
   igl-book-property-header --> ir-picker-item
-  igl-book-property-header --> ir-custom-button
+  igl-book-property-header --> ir-validator
   igl-book-property-header --> igl-date-range
+  igl-book-property-header --> ir-custom-button
   igl-date-range --> ir-custom-date-picker
   ir-custom-date-picker --> ir-input
   igl-room-type --> igl-rate-plan

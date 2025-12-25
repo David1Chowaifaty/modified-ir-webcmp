@@ -32,6 +32,7 @@
 ### Used by
 
  - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-booking-editor-guest-form](../../igloo-calendar/ir-booking-editor/ir-booking-editor-guest-form)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-room-guests-form](../../ir-booking-details/ir-room-guests/ir-room-guests-form)
@@ -49,6 +50,7 @@ graph TD;
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   igl-property-booked-by --> ir-country-picker
+  ir-booking-editor-guest-form --> ir-country-picker
   ir-guest-info --> ir-country-picker
   ir-guest-info-form --> ir-country-picker
   ir-room-guests-form --> ir-country-picker

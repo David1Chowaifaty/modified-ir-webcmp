@@ -35,12 +35,19 @@
 ### Used by
 
  - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-booking-editor-guest-form](../../igloo-calendar/ir-booking-editor/ir-booking-editor-guest-form)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
+
+### Depends on
+
+- [ir-input](../ir-input)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-mobile-input --> ir-input
   igl-property-booked-by --> ir-mobile-input
+  ir-booking-editor-guest-form --> ir-mobile-input
   ir-guest-info-form --> ir-mobile-input
   style ir-mobile-input fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -29,6 +29,7 @@
 
 ### Used by
 
+ - [igl-blocked-date-drawer](../igl-blocked-date-drawer)
  - [igl-book-property](../igl-book-property)
  - [igl-booking-event-hover](../igl-booking-event-hover)
 
@@ -40,6 +41,7 @@
 ```mermaid
 graph TD;
   igl-block-dates-view --> ir-date-view
+  igl-blocked-date-drawer --> igl-block-dates-view
   igl-book-property --> igl-block-dates-view
   igl-booking-event-hover --> igl-block-dates-view
   style igl-block-dates-view fill:#f9f,stroke:#333,stroke-width:4px

@@ -11,19 +11,10 @@
 | ----------------- | ------------------ | ----------- | ---------- | ---------------- |
 | `bookingType`     | `booking-type`     |             | `string`   | `'PLUS_BOOKING'` |
 | `currency`        | `currency`         |             | `any`      | `undefined`      |
-| `dateDifference`  | `date-difference`  |             | `number`   | `undefined`      |
-| `initialRoomIds`  | `initial-room-ids` |             | `any`      | `undefined`      |
 | `isBookDisabled`  | `is-book-disabled` |             | `boolean`  | `undefined`      |
 | `ratePricingMode` | --                 |             | `any[]`    | `[]`             |
-| `roomInfoId`      | `room-info-id`     |             | `number`   | `null`           |
 | `roomType`        | --                 |             | `RoomType` | `undefined`      |
-
-
-## Events
-
-| Event             | Description | Type                                   |
-| ----------------- | ----------- | -------------------------------------- |
-| `dataUpdateEvent` |             | `CustomEvent<{ [key: string]: any; }>` |
+| `roomTypeId`      | `room-type-id`     |             | `number`   | `null`           |
 
 
 ## Dependencies
@@ -31,6 +22,7 @@
 ### Used by
 
  - [igl-booking-overview-page](..)
+ - [ir-booking-editor](../../../ir-booking-editor)
 
 ### Depends on
 
@@ -43,6 +35,7 @@ graph TD;
   igl-rate-plan --> ir-input
   igl-rate-plan --> ir-custom-button
   igl-booking-overview-page --> igl-room-type
+  ir-booking-editor --> igl-room-type
   style igl-room-type fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

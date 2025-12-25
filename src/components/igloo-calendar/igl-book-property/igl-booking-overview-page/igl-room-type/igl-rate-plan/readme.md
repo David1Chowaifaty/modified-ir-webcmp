@@ -21,9 +21,10 @@
 
 ## Events
 
-| Event           | Description | Type                                   |
-| --------------- | ----------- | -------------------------------------- |
-| `buttonClicked` |             | `CustomEvent<{ [key: string]: any; }>` |
+| Event               | Description | Type                                            |
+| ------------------- | ----------- | ----------------------------------------------- |
+| `bookingStepChange` |             | `CustomEvent<{ direction: "next" \| "prev"; }>` |
+| `buttonClicked`     |             | `CustomEvent<{ [key: string]: any; }>`          |
 
 
 ## Dependencies

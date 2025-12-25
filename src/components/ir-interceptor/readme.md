@@ -28,6 +28,7 @@
  - [igloo-calendar](../igloo-calendar)
  - [ir-arrivals](../ir-arrivals)
  - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-editor](../igloo-calendar/ir-booking-editor)
  - [ir-booking-email-logs](../ir-booking-email-logs)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-daily-revenue](../ir-daily-revenue)
@@ -62,6 +63,7 @@ graph TD;
   igloo-calendar --> ir-interceptor
   ir-arrivals --> ir-interceptor
   ir-booking-details --> ir-interceptor
+  ir-booking-editor --> ir-interceptor
   ir-booking-email-logs --> ir-interceptor
   ir-booking-listing --> ir-interceptor
   ir-daily-revenue --> ir-interceptor

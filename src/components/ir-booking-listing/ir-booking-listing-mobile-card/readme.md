@@ -51,9 +51,7 @@ graph TD;
   ir-booking-listing-mobile-card --> ir-balance-cell
   ir-booking-listing-mobile-card --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
-  ir-booking-number-cell --> ir-custom-button
   ir-status-activity-cell --> ir-booking-status-tag
-  ir-booked-by-cell --> ir-custom-button
   ir-balance-cell --> ir-custom-button
   ir-booking-listing-table --> ir-booking-listing-mobile-card
   style ir-booking-listing-mobile-card fill:#f9f,stroke:#333,stroke-width:4px

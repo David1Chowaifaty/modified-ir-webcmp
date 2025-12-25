@@ -24,14 +24,25 @@
 
 ## Events
 
-| Event             | Description                                                                 | Type                                       |
-| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------ |
-| `combobox-clear`  | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
-| `combobox-select` | Emitted when a value is selected from the combobox list.                    | `CustomEvent<IrComboboxSelectEventDetail>` |
-| `text-change`     | Emitted when the text input value changes.                                  | `CustomEvent<string>`                      |
+| Event                  | Description                                                                 | Type                                       |
+| ---------------------- | --------------------------------------------------------------------------- | ------------------------------------------ |
+| `combobox-clear`       | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
+| `combobox-select`      | Emitted when a value is selected from the combobox list.                    | `CustomEvent<IrComboboxSelectEventDetail>` |
+| `input-picker-blurred` | Emitted when the clear button is clicked and the combobox value is cleared. | `CustomEvent<void>`                        |
+| `text-change`          | Emitted when the text input value changes.                                  | `CustomEvent<string>`                      |
 
 
 ## Methods
+
+### `clearInput() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 ### `close() => Promise<void>`
 
@@ -61,6 +72,8 @@ Type: `Promise<void>`
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-booking-editor-form](../../igloo-calendar/ir-booking-editor/ir-booking-editor-form)
+ - [ir-booking-editor-header](../../igloo-calendar/ir-booking-editor/ir-booking-editor-header)
  - [ir-country-picker](../ir-country-picker)
 
 ### Graph
@@ -69,6 +82,8 @@ graph TD;
   igl-book-property-header --> ir-picker
   igl-cal-header --> ir-picker
   igl-property-booked-by --> ir-picker
+  ir-booking-editor-form --> ir-picker
+  ir-booking-editor-header --> ir-picker
   ir-country-picker --> ir-picker
   style ir-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```

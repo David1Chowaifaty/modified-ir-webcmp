@@ -11,7 +11,7 @@
 | -------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `appearance`         | `appearance`           | The input's visual appearance.                                                                                                                                                                                                                                                         | `"filled" \| "filled-outlined" \| "outlined"`                                                                       | `undefined` |
 | `autocapitalize`     | `autocapitalize`       | Controls whether and how text input is automatically capitalized as it is entered by the user.                                                                                                                                                                                         | `"characters" \| "none" \| "off" \| "on" \| "sentences" \| "words"`                                                 | `undefined` |
-| `autocomplete`       | `autocomplete`         | Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.                                                         | `string`                                                                                                            | `undefined` |
+| `autocomplete`       | `autocomplete`         | Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.                                                         | `string`                                                                                                            | `'off'`     |
 | `autocorrect`        | `autocorrect`          | Indicates whether the browser's autocorrect feature is on or off.                                                                                                                                                                                                                      | `"off" \| "on"`                                                                                                     | `undefined` |
 | `autofocus`          | `autofocus`            | Indicates that the input should receive focus on page load.                                                                                                                                                                                                                            | `boolean`                                                                                                           | `undefined` |
 | `defaultValue`       | `default-value`        | The default value of the form control. Primarily used for resetting the form control.                                                                                                                                                                                                  | `string`                                                                                                            | `undefined` |
@@ -27,6 +27,7 @@
 | `maxlength`          | `maxlength`            | The maximum length of input that will be considered valid.                                                                                                                                                                                                                             | `number`                                                                                                            | `undefined` |
 | `min`                | `min`                  | The input's minimum value. Only applies to date and number input types.                                                                                                                                                                                                                | `number \| string`                                                                                                  | `undefined` |
 | `minlength`          | `minlength`            | The minimum length of input that will be considered valid.                                                                                                                                                                                                                             | `number`                                                                                                            | `undefined` |
+| `name`               | `name`                 |                                                                                                                                                                                                                                                                                        | `string`                                                                                                            | `undefined` |
 | `passwordToggle`     | `password-toggle`      | Adds a button to toggle the password's visibility. Only applies to password types.                                                                                                                                                                                                     | `boolean`                                                                                                           | `undefined` |
 | `passwordVisible`    | `password-visible`     | Determines whether or not the password is currently visible. Only applies to password input types.                                                                                                                                                                                     | `boolean`                                                                                                           | `undefined` |
 | `pattern`            | `pattern`              | A regular expression pattern to validate input against.                                                                                                                                                                                                                                | `string`                                                                                                            | `undefined` |
@@ -64,11 +65,13 @@
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-arrivals-filters](../../ir-arrivals/ir-arrivals-filters)
  - [ir-booking-company-form](../../ir-booking-company-dialog/ir-booking-company-form)
+ - [ir-booking-editor-guest-form](../../igloo-calendar/ir-booking-editor/ir-booking-editor-guest-form)
  - [ir-custom-date-picker](../../ir-custom-date-picker)
  - [ir-departures-filter](../../ir-departures/ir-departures-filter)
  - [ir-extra-service-config-form](../../ir-booking-details/ir-extra-services/ir-extra-service-config/ir-extra-service-config-form)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
+ - [ir-mobile-input](../ir-mobile-input)
  - [ir-payment-folio-form](../../ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio-form)
  - [ir-pickup-form](../../ir-booking-details/ir-pickup/ir-pickup-form)
  - [ir-room-guests-form](../../ir-booking-details/ir-room-guests/ir-room-guests-form)
@@ -82,11 +85,13 @@ graph TD;
   igl-rate-plan --> ir-input
   ir-arrivals-filters --> ir-input
   ir-booking-company-form --> ir-input
+  ir-booking-editor-guest-form --> ir-input
   ir-custom-date-picker --> ir-input
   ir-departures-filter --> ir-input
   ir-extra-service-config-form --> ir-input
   ir-guest-info-form --> ir-input
   ir-listing-header --> ir-input
+  ir-mobile-input --> ir-input
   ir-payment-folio-form --> ir-input
   ir-pickup-form --> ir-input
   ir-room-guests-form --> ir-input
