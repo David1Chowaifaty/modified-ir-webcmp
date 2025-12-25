@@ -1,40 +1,446 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="ltr" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-    <title>igloorooms Extranet</title>
-    <script
-        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
-    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/jquery.min.js"></script>
-    <script
-        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
-    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/bootstrap.bundle.min.js"></script>
-    <script
-        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/inputmask/jquery.inputmask.js"></script>
-    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.min.js"></script>
-    <script type="module" src="https://wb-cmp.igloorooms.com/backend/dist/ir-webcmp/ir-webcmp.esm.js"></script>
-    <link rel="stylesheet"
-        href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/daterangepicker.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+    <script type="module" src="/build/ir-webcmp.esm.js"></script>
+    <script nomodule src="/build/ir-webcmp.js"></script>
+    <script src="assets/scripts/jquery.min.js"></script>
+    <script src="assets/scripts/daterangepicker/moment.min.js"></script>
+    <script src="assets/scripts/daterangepicker/daterangepicker.js"></script>
+    <script src="assets/scripts/inputmask/jquery.inputmask.js"></script>
+    <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+    <script src="assets/scripts/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+    <script src="scripts/index.js"></script>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+    <style>
+        .ir-nav {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .ir-nav-link,
+        .nav-sublink {
+            all: unset;
+            display: block;
+            box-sizing: border-box;
+            color: var(--wa-color-text-normal);
+            padding: 0.5rem 0;
+
+        }
+
+        .ir-nav-link:hover,
+        .nav-sublink:hover {
+            color: var(--wa-color-text-normal);
+            text-decoration: underline;
+            -webkit-text-decoration: underline;
+            text-decoration-thickness: 0.09375em;
+            text-underline-offset: 0.125em;
+        }
+
+        .ir-nav-link:focus,
+        .nav-sublink:focus {
+            outline: none;
+        }
+
+        .ir-nav-link:focus-visible,
+        .nav-sublink:focus-visible {
+            outline: var(--wa-focus-ring);
+            outline-offset: var(--wa-focus-ring-offset);
+        }
+
+        .nav-group::part(header),
+        .nav-group::part(content) {
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-group::part(content) {
+            padding: 0rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+        }
+
+        /* =====================================================
+   APP HEADER — MOBILE FIRST
+===================================================== */
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--wa-color-surface-default);
+            border-bottom: 1px solid var(--wa-color-surface-border);
+        }
+
+        /* Sections */
+        .app-header__left,
+        .app-header__right {
+            display: flex;
+            align-items: center;
+        }
+
+        .app-header__right {
+            margin-left: auto;
+        }
+
+        /* Center search — MOBILE (normal flow) */
+        .app-header__center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: static;
+            /* guard rail */
+        }
+
+        /* Search input */
+        .header-search {
+            width: 100%;
+
+        }
+
+        /* Visibility helpers */
+        .header-desktop-only,
+        .header-property-switcher {
+            display: none;
+        }
+
+        /* =====================================================
+     LARGE TABLETS (>= 768px)
+     - Absolute centered search
+  ===================================================== */
+
+        @media (min-width: 768px) {
+            .app-header {
+                position: relative;
+                padding: 1rem 1.5rem;
+            }
+
+            .app-header__center {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 420px;
+                pointer-events: auto;
+            }
+
+            .header-search {
+                max-width: 420px;
+            }
+
+            .header-property-switcher {
+                display: inline-flex;
+            }
+        }
+
+        /* =====================================================
+     DESKTOP (>= 1024px)
+  ===================================================== */
+
+        @media (min-width: 1024px) {
+            .header-desktop-only {
+                display: inline-flex;
+            }
+
+            .header-search {
+                max-width: 500px;
+            }
+        }
+
+        /* =====================================================
+     SUPER LARGE SCREENS (>= 1440px)
+  ===================================================== */
+
+        @media (min-width: 1440px) {
+            .app-header {
+                padding-inline: 3rem;
+            }
+
+            .app-header__center {
+                max-width: 500px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <ir-common></ir-common>
-    <ir-booking baseurl="https://gateway.igloorooms.com/IR"></ir-booking>
-    <link rel="stylesheet" href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.css"
-        type="text/css">
+
+    <header class="app-header">
+        <!-- LEFT -->
+        <div class="app-header__left">
+            <ir-custom-button data-drawer="open drawer-opening" size="small" appearance="plain" variant="neutral"
+                class="header-action">
+                <wa-icon name="bars" style="font-size: 1rem;"></wa-icon>
+            </ir-custom-button>
+
+            <!-- Property switcher (hidden on mobile) -->
+            <ir-custom-button data-dialog="open dialog-opening" size="small" appearance="plain"
+                class="header-property-switcher">
+                <span class="header-property-name">Hotel California</span>
+                <wa-icon name="chevron-down"></wa-icon>
+            </ir-custom-button>
+        </div>
+
+        <!-- CENTER SEARCH -->
+        <div class="app-header__center">
+            <ir-input class="header-search" variant="neutral" pill appearance="filled"
+                placeholder="Search guest name, booking">
+                <wa-icon name="magnifying-glass" slot="start"></wa-icon>
+                <span slot="end">⌘K</span>
+            </ir-input>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="app-header__right">
+            <ir-custom-button size="small" appearance="plain" variant="brand">
+                <wa-icon name="plus" style="font-size:1rem"></wa-icon>
+            </ir-custom-button>
+
+            <ir-custom-button size="small" appearance="plain" class="header-desktop-only">
+                <wa-icon name="calendar" style="font-size:1rem"></wa-icon>
+            </ir-custom-button>
+
+            <ir-custom-button size="small" appearance="plain" class="header-desktop-only">
+                <wa-icon name="plane-departure" style="font-size:1rem"></wa-icon>
+            </ir-custom-button>
+
+            <ir-custom-button size="small" appearance="plain" class="header-desktop-only">
+                <wa-icon name="plane-arrival" style="font-size:1rem"></wa-icon>
+            </ir-custom-button>
+
+            <ir-custom-button size="small" appearance="plain">
+                <!-- <wa-badge pill class="header-notification-badge">1</wa-badge> -->
+                <wa-icon name="bell" style="font-size:1rem"></wa-icon>
+            </ir-custom-button>
+
+            <wa-dropdown>
+                <wa-avatar slot="trigger" size="small" style="--size:2rem;margin-left:0.5rem"></wa-avatar>
+
+                <!-- View website -->
+                <wa-dropdown-item>
+                    <wa-icon slot="icon" name="globe"></wa-icon>
+                    View Your Website
+                </wa-dropdown-item>
+
+                <!-- Website URL -->
+                <wa-dropdown-item>
+                    <wa-icon slot="icon" name="arrow-up-right-from-square"></wa-icon>
+                    bookingmystay.com/A35
+                </wa-dropdown-item>
+
+                <!-- Property ID (informational) -->
+                <wa-dropdown-item disabled>
+                    <wa-icon slot="icon" name="hashtag"></wa-icon>
+                    Property ID: 42
+                </wa-dropdown-item>
+
+                <wa-divider></wa-divider>
+
+                <!-- Extranet users -->
+                <wa-dropdown-item>
+                    <wa-icon slot="icon" name="users"></wa-icon>
+                    Extranet Users
+                </wa-dropdown-item>
+
+                <!-- Change password -->
+                <wa-dropdown-item>
+                    <wa-icon slot="icon" name="lock"></wa-icon>
+                    Change Password
+                </wa-dropdown-item>
+
+                <wa-divider></wa-divider>
+
+                <!-- Billing -->
+                <wa-dropdown-item>
+                    <wa-icon slot="icon" name="wallet"></wa-icon>
+                    Billing
+                </wa-dropdown-item>
+
+                <wa-divider></wa-divider>
+
+                <!-- Logout -->
+                <wa-dropdown-item variant="danger">
+                    <wa-icon slot="icon" name="power-off"></wa-icon>
+                    Logout
+                </wa-dropdown-item>
+            </wa-dropdown>
+        </div>
+    </header>
+    <wa-drawer without-header placement="start" id="drawer-opening">
+
+        <!-- Dashboard -->
+        <wa-details open appearance="plain" class="nav-group">
+            <div slot="summary" class="ir-nav-link font-bold">
+                Property
+            </div>
+            <div>
+                <a href="acdashboard.aspx" id="Li_AcDashboard" class="ir-nav-link">
+                    <i class="la la-dashboard"></i>
+                    <span>Dashboard</span>
+                    <span class="badge-new">New</span>
+                </a>
+
+                <!-- Frontdesk -->
+                <a href="frontdesk.aspx" id="Li_FrontDesk" class="ir-nav-link">
+                    <i class="la la-calendar"></i>
+                    <span>Frontdesk</span>
+                </a>
+
+                <!-- Inventory -->
+                <a href="acratesallotment.aspx" id="Li_AcRatesAllotment" class="ir-nav-link">
+                    <i class="la la-list"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <!-- Marketing -->
+                <wa-details appearance="plain" class="nav-group">
+                    <div slot="summary" class="ir-nav-link">
+                        <i class="la la-rocket"></i>
+                        <span>Marketing</span>
+                    </div>
+
+                    <div class="nav-submenu">
+                        <a href="acpromodiscounts.aspx" class="nav-sublink">
+                            Discounts
+                        </a>
+                        <a href="acautomatedemails.aspx" id="Li_AutomatedEmails" class="nav-sublink">
+                            Automated Emails
+                        </a>
+                    </div>
+                </wa-details>
+
+                <!-- Bookings -->
+                <a href="acbookinglist.aspx" class="ir-nav-link">
+                    <i class="la la-suitcase"></i>
+                    <span>Bookings</span>
+                </a>
+
+                <!-- Settings -->
+                <wa-details appearance="plain" class="nav-group">
+                    <div slot="summary" class="ir-nav-link">
+                        <i class="la la-building"></i>
+                        <span>Settings</span>
+                        <span class="badge-new">New</span>
+                    </div>
+
+                    <div class="nav-submenu">
+                        <a href="acgeneral.aspx" class="nav-sublink">General Info</a>
+                        <a href="acamenities.aspx" class="nav-sublink">Facilities & Services</a>
+                        <a href="acdescriptions.aspx" id="Li_AcDesc" class="nav-sublink">
+                            Descriptions
+                        </a>
+                        <a href="acconcan.aspx" class="nav-sublink">Policies</a>
+                        <a href="accommtax.aspx" class="nav-sublink">Money Matters</a>
+                        <a href="acroomcategories.aspx" class="nav-sublink Li_AcRooming anchor_AcRooming">
+                            Rooms & Rate Plans
+                        </a>
+                        <a href="ACHousekeeping.aspx" id="Li_Housekeeping" class="nav-sublink">
+                            Housekeeping & Check-in Setup
+                            <span class="badge-new">New</span>
+                        </a>
+                        <a href="actravelagents.aspx" class="nav-sublink">
+                            Agents and Groups
+                        </a>
+                        <a href="acimagegallery.aspx" class="nav-sublink Li_AcRooming">
+                            Image Gallery
+                        </a>
+                        <a href="acpickups.aspx" class="nav-sublink">Pickup Services</a>
+                        <a href="acintegrations.aspx" class="nav-sublink">Integrations</a>
+                        <a href="acthemingwebsite.aspx" class="nav-sublink">iSPACE</a>
+                        <a href="acigloochannel.aspx" class="nav-sublink">iCHANNEL</a>
+                        <a href="iSwitch.aspx" id="Li_iSwitch" class="nav-sublink">
+                            iSWITCH
+                        </a>
+                    </div>
+                </wa-details>
+
+                <!-- Reports -->
+                <wa-details appearance="plain" class="nav-group">
+                    <div slot="summary" class="ir-nav-link">
+                        <i class="la la-bar-chart"></i>
+                        <span>Reports</span>
+                        <span class="badge-new">New</span>
+                    </div>
+
+                    <div class="nav-submenu">
+                        <a href="ACHousekeepingTasks.aspx" id="Li_HousekeepingTasks" class="nav-sublink">
+                            Housekeeping Tasks
+                        </a>
+                        <a href="acmemberlist.aspx" class="nav-sublink">Guests</a>
+                        <a href="acsalesstatistics.aspx" class="nav-sublink">
+                            Sales Statistics
+                        </a>
+                        <a href="acsalesbychannel.aspx" class="nav-sublink">
+                            Sales by Channel
+                            <span class="badge-new">New</span>
+                        </a>
+                        <a href="acsalesbycountry.aspx" class="nav-sublink">
+                            Sales by Country
+                            <span class="badge-new">New</span>
+                        </a>
+                        <a href="ACDailyOccupancy.aspx" id="Li_DailyOccupancy" class="nav-sublink">
+                            Daily Occupancy
+                        </a>
+                        <a href="acaccountingreport.aspx" class="nav-sublink">
+                            Accounting Report
+                        </a>
+                    </div>
+                </wa-details>
+            </div>
+        </wa-details>
+
+    </wa-drawer>
+    <wa-dialog light-dismiss="true" label="Find Property" id="dialog-opening">
+        <wa-input autofocus="true"></wa-input>
+    </wa-dialog>
+
+    <!-- <igloo-calendar currency-name="USD" propertyid="42" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-        const booking = document.querySelector("ir-booking");
-        booking.propertyid = getQueryParam("pid");
-        booking.bookingNumber = getQueryParam("BN");
-    </script>
+        //backend-cmp-injector
+        //aname - username -password
+        var today = new Date();
+        today.setDate(today.getDate() - 1);
+        var _FROM_DATE = today.toISOString().substring(0, 10)
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0, 10)
+        const calendar = document.querySelector("igloo-calendar");
+        calendar.from_date = _FROM_DATE;
+        calendar.to_date = _TO_DATE;
+        setTimeout(async () => {
+            const ticket = await getToken();
+            calendar.propertyid = getId();
+            calendar.ticket = ticket;
+        }, 300)
+    </script> -->
+    <!-- <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
+    <script>
+        const booking_listing = document.querySelector("ir-booking-listing");
+        if (booking_listing) {
+            (async () => {
+                booking_listing.propertyid = getId();
+                booking_listing.ticket = await getToken()
+            })();
+        } 
+    </script> -->
+
 </body>
 
 </html>

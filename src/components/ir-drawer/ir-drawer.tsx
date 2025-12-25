@@ -90,6 +90,7 @@ export class IrDrawer {
   render() {
     return (
       <wa-drawer
+        id={this.el.id}
         onwa-show={this.onDrawerShow}
         onwa-hide={this.onDrawerHide}
         class="ir__drawer"
