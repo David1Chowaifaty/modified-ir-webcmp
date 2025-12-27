@@ -3,11 +3,12 @@ import { BlockedDatePayload, BookingEditorMode, BookingStep } from '../types';
 import { Booking } from '@/models/booking.dto';
 import { IBlockUnit } from '@/models/IBooking';
 import Token from '@/models/Token';
-import booking_store, { hasAtLeastOneRoomSelected } from '@/stores/booking.store';
+import booking_store, { hasAtLeastOneRoomSelected, resetReserved } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
 import { getReleaseHoursString } from '@/utils/utils';
 import { BookingService } from '@/services/booking-service/booking.service';
+import { IRBookingEditorService } from '../ir-booking-editor.service';
 
 @Component({
   tag: 'ir-booking-editor-drawer',
@@ -63,6 +64,7 @@ export class IrBookingEditorDrawer {
   private token = new Token();
 
   private bookingService = new BookingService();
+  private bookingEditorService = new IRBookingEditorService();
 
   private wasBlockedUnit = false;
   private didAdjustBlockedUnit = false;
@@ -169,6 +171,13 @@ export class IrBookingEditorDrawer {
   };
 
   private goToDetails = () => {
+    if (this.mode === 'BAR_BOOKING') {
+      resetReserved();
+    }
+    if (this.mode === 'EDIT_BOOKING') {
+      resetReserved();
+      this.bookingEditorService.updateBooking(this.bookingEditorService.getRoom(this.booking, this.roomIdentifier));
+    }
     this.step = 'details';
   };
 
