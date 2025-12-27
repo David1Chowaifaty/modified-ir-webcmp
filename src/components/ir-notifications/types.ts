@@ -21,7 +21,9 @@ type BaseNotification = Readonly<{
   id: string;
   title: string;
   message: string;
-  createdAt: number;
+  date: string;
+  hour: number;
+  minute: number;
   read?: boolean;
   dismissible?: boolean;
   autoDismissMs?: number;

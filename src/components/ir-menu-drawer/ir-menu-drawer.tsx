@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Method, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-menu-drawer',
@@ -24,6 +24,11 @@ export class IrMenuDrawer {
       this.open = !this.open;
     }
   };
+
+  @Method()
+  async openDrawer() {
+    this.open = true;
+  }
 
   render() {
     return (

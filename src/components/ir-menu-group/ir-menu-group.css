@@ -22,6 +22,10 @@
   color: var(--wa-color-text-normal);
   background-color: var(--wa-color-neutral-fill-quiet);
 }
+.menu-group__details::part(header):active {
+  color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+  background-color: color-mix(in oklab, var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet)), var(--wa-color-mix-active));
+}
 
 .menu-group__details::part(content) {
   display: flex;

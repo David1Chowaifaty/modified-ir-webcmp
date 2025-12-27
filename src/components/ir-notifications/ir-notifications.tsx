@@ -1,6 +1,7 @@
-import { Component, Host, h, Prop, Element, Watch, State, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, Element, Watch, Event, EventEmitter } from '@stencil/core';
 import { Notification } from './types';
-
+import moment from 'moment';
+import WaAnimation from '@awesome.me/webawesome/dist/components/animation/animation';
 @Component({
   tag: 'ir-notifications',
   styleUrl: 'ir-notifications.css',
@@ -12,25 +13,26 @@ export class IrNotifications {
   // Make notifications reactive;
   @Prop({ mutable: true }) notifications: Notification[] = [];
 
-  @State() isOpen: boolean = false;
-
   @Event() notificationCleared: EventEmitter<Notification>;
 
-  private buttonRef: HTMLIrButtonElement;
+  private buttonRef: HTMLIrCustomButtonElement;
+  private animationRef: WaAnimation;
+  private readonly bellKeyframes: Keyframe[] = [
+    { offset: 0, transform: 'rotate(0deg)' },
+    { offset: 0.15, transform: 'rotate(-15deg)' },
+    { offset: 0.3, transform: 'rotate(13deg)' },
+    { offset: 0.45, transform: 'rotate(-10deg)' },
+    { offset: 0.6, transform: 'rotate(8deg)' },
+    { offset: 0.75, transform: 'rotate(-5deg)' },
+    { offset: 1, transform: 'rotate(0deg)' },
+  ];
 
   componentDidLoad() {
     this.updateNotificationBadge();
-    document.addEventListener('click', this.onDocumentClick, true);
-    document.addEventListener('keydown', this.onDocumentKeydown, true);
   }
 
   componentDidUpdate() {
     this.updateNotificationBadge();
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('click', this.onDocumentClick, true);
-    document.removeEventListener('keydown', this.onDocumentKeydown, true);
   }
 
   @Watch('notifications')
@@ -47,75 +49,72 @@ export class IrNotifications {
   }
 
   private animateNotificationChange() {
-    if (this.buttonRef) {
-      this.buttonRef.classList.add('badge-animate');
-      setTimeout(() => {
-        this.buttonRef.classList.remove('badge-animate');
-      }, 600);
-    }
+    if (this.notifications?.length <= 0) return;
+    this.animationRef.cancel();
+    this.animationRef.play = true;
   }
 
-  private dismissNotification(notification: Notification) {
-    this.notificationCleared.emit(notification);
-    this.notifications = this.notifications.filter(n => n.id !== notification.id);
+  private getRelativeTimeFromParts(date: string, hour: number, minute: number): string {
+    const now = moment();
+    const then = moment(date, 'YYYY-MM-DD').hour(hour).minute(minute).second(0);
+    if (!then.isValid()) return '';
+    const diffSeconds = now.diff(then, 'seconds');
+    if (diffSeconds < 60) return 'just now';
+    const diffMinutes = now.diff(then, 'minutes');
+    if (diffMinutes < 60) {
+      return `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`;
+    }
+    const diffHours = now.diff(then, 'hours');
+    if (diffHours < 24) {
+      return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+    }
+    const diffDays = now.diff(then, 'days');
+    if (diffDays < 7) {
+      return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+    }
+    const diffWeeks = now.diff(then, 'weeks');
+    return `${diffWeeks} week${diffWeeks !== 1 ? 's' : ''} ago`;
   }
 
-  private onDocumentClick = (ev: MouseEvent) => {
-    if (!this.isOpen) return;
-    const target = ev.target as Node | null;
-    if (target && !this.el.contains(target)) {
-      this.isOpen = false;
-    }
-  };
-
-  private onDocumentKeydown = (ev: KeyboardEvent) => {
-    if (!this.isOpen) return;
-    if (ev.key === 'Escape' || ev.key === 'Esc') {
-      this.isOpen = false;
-      (this.buttonRef as any)?.focus?.();
-    }
-  };
+  // private dismissNotification(notification: Notification) {
+  //   this.notificationCleared.emit(notification);
+  //   this.notifications = this.notifications.filter(n => n.id !== notification.id);
+  // }
 
   render() {
     return (
       <Host>
-        <div class={`dropdown notifications-dropdown ${this.isOpen ? 'show' : ''}`}>
-          <ir-button
-            ref={el => (this.buttonRef = el)}
-            variant="icon"
-            icon_name="bell"
-            data-notifications={this.notifications.length.toString()}
-            class="notification-trigger"
-            btn_type="button"
-            data-reference="parent"
-            aria-expanded={String(this.isOpen)}
-            onClickHandler={() => (this.isOpen = !this.isOpen)}
-          ></ir-button>
-
-          <div class={`dropdown-menu dropdown-menu-right `}>
-            {this.notifications.length === 0 ? (
-              <p class="m-0 dropdown-header">All caught up.</p>
-            ) : (
-              this.notifications.map(notification => (
-                <div class={`notification-item dropdown-item ${notification.type}`} key={notification.id}>
-                  <div class="notification-content">
-                    <strong>{notification.title}</strong>
-                    <p>{notification.message}</p>
-                    {notification.link && (
-                      <a href={notification.link.href} target={notification.link.target || '_self'}>
-                        {notification.link.text || 'View more'}
-                      </a>
-                    )}
-                  </div>
-                  {notification.dismissible && (
-                    <ir-button onClickHandler={() => this.dismissNotification(notification)} variant="icon" btn_color="light" icon_name="xmark"></ir-button>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-          {/* </div> */}
+        <div style={{ position: 'relative' }}>
+          <wa-tooltip for="notifications-button">Notifications</wa-tooltip>
+          {this.notifications?.length > 0 && (
+            <wa-badge pill class="header-notification-badge">
+              {this.notifications.length}
+            </wa-badge>
+          )}
+          <wa-animation duration={1200} iterations={1} keyframes={this.bellKeyframes} ref={el => (this.animationRef = el as WaAnimation)}>
+            <ir-custom-button id="notifications-button" size="small" appearance="plain" ref={el => (this.buttonRef = el)}>
+              <wa-icon class="notification__bell-icon" name="bell" style={{ fontSize: '1.2rem' }}></wa-icon>
+            </ir-custom-button>
+          </wa-animation>
         </div>
+        <wa-popover class="notification__popover" for="notifications-button">
+          <p class="notification__popover-title">Notifications</p>
+          {this.notifications?.map(notification => (
+            <div class="notification-item">
+              <div class="notification-item__content">
+                <p class="notification-item__title">{notification.title}</p>
+                <p class="notification-item__time">{this.getRelativeTimeFromParts(notification.date, notification.hour, notification.minute)}</p>
+              </div>
+
+              <span class="notification-item__unread-indicator"></span>
+            </div>
+          ))}
+          {this.notifications?.length === 0 && (
+            <ir-empty-state style={{ width: '250px', height: '150px' }}>
+              <wa-icon slot="icon" name="inbox"></wa-icon>
+            </ir-empty-state>
+          )}
+        </wa-popover>
       </Host>
     );
   }

@@ -2117,6 +2117,7 @@ export namespace Components {
     }
     interface IrMenuDrawer {
         "open": boolean;
+        "openDrawer": () => Promise<void>;
     }
     interface IrMenuGroup {
         "groupName": string;
