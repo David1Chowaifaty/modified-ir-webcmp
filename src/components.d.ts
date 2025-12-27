@@ -2111,6 +2111,22 @@ export namespace Components {
          */
         "value": string;
     }
+    interface IrMenu {
+        "selectedHref"?: string;
+        "setSelectedHref": (href?: string) => Promise<void>;
+    }
+    interface IrMenuDrawer {
+        "open": boolean;
+    }
+    interface IrMenuGroup {
+        "groupName": string;
+        "open": boolean;
+    }
+    interface IrMenuItem {
+        "badge"?: string;
+        "href": string;
+        "selected": boolean;
+    }
     interface IrMobileInput {
         /**
           * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
@@ -3229,6 +3245,8 @@ export namespace Components {
     }
     interface IrTest2Cmp {
     }
+    interface IrTest3Cmp {
+    }
     interface IrTextEditor {
         "error": boolean;
         "maxLength": number;
@@ -3842,6 +3860,10 @@ export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface IrMComboboxItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMComboboxItemElement;
+}
+export interface IrMenuGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMenuGroupElement;
 }
 export interface IrMobileInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -6008,6 +6030,41 @@ declare global {
         prototype: HTMLIrMComboboxItemElement;
         new (): HTMLIrMComboboxItemElement;
     };
+    interface HTMLIrMenuElement extends Components.IrMenu, HTMLStencilElement {
+    }
+    var HTMLIrMenuElement: {
+        prototype: HTMLIrMenuElement;
+        new (): HTMLIrMenuElement;
+    };
+    interface HTMLIrMenuDrawerElement extends Components.IrMenuDrawer, HTMLStencilElement {
+    }
+    var HTMLIrMenuDrawerElement: {
+        prototype: HTMLIrMenuDrawerElement;
+        new (): HTMLIrMenuDrawerElement;
+    };
+    interface HTMLIrMenuGroupElementEventMap {
+        "openChanged": boolean;
+    }
+    interface HTMLIrMenuGroupElement extends Components.IrMenuGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMenuGroupElementEventMap>(type: K, listener: (this: HTMLIrMenuGroupElement, ev: IrMenuGroupCustomEvent<HTMLIrMenuGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMenuGroupElementEventMap>(type: K, listener: (this: HTMLIrMenuGroupElement, ev: IrMenuGroupCustomEvent<HTMLIrMenuGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMenuGroupElement: {
+        prototype: HTMLIrMenuGroupElement;
+        new (): HTMLIrMenuGroupElement;
+    };
+    interface HTMLIrMenuItemElement extends Components.IrMenuItem, HTMLStencilElement {
+    }
+    var HTMLIrMenuItemElement: {
+        prototype: HTMLIrMenuItemElement;
+        new (): HTMLIrMenuItemElement;
+    };
     interface HTMLIrMobileInputElementEventMap {
         "mobile-input-change": IrMobileInputChangeDetail;
         "mobile-input-country-change": ICountry;
@@ -6973,6 +7030,12 @@ declare global {
         prototype: HTMLIrTest2CmpElement;
         new (): HTMLIrTest2CmpElement;
     };
+    interface HTMLIrTest3CmpElement extends Components.IrTest3Cmp, HTMLStencilElement {
+    }
+    var HTMLIrTest3CmpElement: {
+        prototype: HTMLIrTest3CmpElement;
+        new (): HTMLIrTest3CmpElement;
+    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -7290,6 +7353,10 @@ declare global {
         "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-m-combobox-booking-item": HTMLIrMComboboxBookingItemElement;
         "ir-m-combobox-item": HTMLIrMComboboxItemElement;
+        "ir-menu": HTMLIrMenuElement;
+        "ir-menu-drawer": HTMLIrMenuDrawerElement;
+        "ir-menu-group": HTMLIrMenuGroupElement;
+        "ir-menu-item": HTMLIrMenuItemElement;
         "ir-mobile-input": HTMLIrMobileInputElement;
         "ir-modal": HTMLIrModalElement;
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
@@ -7366,6 +7433,7 @@ declare global {
         "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-test2-cmp": HTMLIrTest2CmpElement;
+        "ir-test3-cmp": HTMLIrTest3CmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -9644,6 +9712,22 @@ declare namespace LocalJSX {
          */
         "value": string;
     }
+    interface IrMenu {
+        "selectedHref"?: string;
+    }
+    interface IrMenuDrawer {
+        "open"?: boolean;
+    }
+    interface IrMenuGroup {
+        "groupName"?: string;
+        "onOpenChanged"?: (event: IrMenuGroupCustomEvent<boolean>) => void;
+        "open"?: boolean;
+    }
+    interface IrMenuItem {
+        "badge"?: string;
+        "href"?: string;
+        "selected"?: boolean;
+    }
     interface IrMobileInput {
         /**
           * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
@@ -10893,6 +10977,8 @@ declare namespace LocalJSX {
     }
     interface IrTest2Cmp {
     }
+    interface IrTest3Cmp {
+    }
     interface IrTextEditor {
         "error"?: boolean;
         "maxLength"?: number;
@@ -11276,6 +11362,10 @@ declare namespace LocalJSX {
         "ir-m-combobox": IrMCombobox;
         "ir-m-combobox-booking-item": IrMComboboxBookingItem;
         "ir-m-combobox-item": IrMComboboxItem;
+        "ir-menu": IrMenu;
+        "ir-menu-drawer": IrMenuDrawer;
+        "ir-menu-group": IrMenuGroup;
+        "ir-menu-item": IrMenuItem;
         "ir-mobile-input": IrMobileInput;
         "ir-modal": IrModal;
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
@@ -11352,6 +11442,7 @@ declare namespace LocalJSX {
         "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
         "ir-test2-cmp": IrTest2Cmp;
+        "ir-test3-cmp": IrTest3Cmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -11509,6 +11600,10 @@ declare module "@stencil/core" {
             "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-m-combobox-booking-item": LocalJSX.IrMComboboxBookingItem & JSXBase.HTMLAttributes<HTMLIrMComboboxBookingItemElement>;
             "ir-m-combobox-item": LocalJSX.IrMComboboxItem & JSXBase.HTMLAttributes<HTMLIrMComboboxItemElement>;
+            "ir-menu": LocalJSX.IrMenu & JSXBase.HTMLAttributes<HTMLIrMenuElement>;
+            "ir-menu-drawer": LocalJSX.IrMenuDrawer & JSXBase.HTMLAttributes<HTMLIrMenuDrawerElement>;
+            "ir-menu-group": LocalJSX.IrMenuGroup & JSXBase.HTMLAttributes<HTMLIrMenuGroupElement>;
+            "ir-menu-item": LocalJSX.IrMenuItem & JSXBase.HTMLAttributes<HTMLIrMenuItemElement>;
             "ir-mobile-input": LocalJSX.IrMobileInput & JSXBase.HTMLAttributes<HTMLIrMobileInputElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
@@ -11585,6 +11680,7 @@ declare module "@stencil/core" {
             "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-test2-cmp": LocalJSX.IrTest2Cmp & JSXBase.HTMLAttributes<HTMLIrTest2CmpElement>;
+            "ir-test3-cmp": LocalJSX.IrTest3Cmp & JSXBase.HTMLAttributes<HTMLIrTest3CmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;

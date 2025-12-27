@@ -110,7 +110,7 @@ export class IrBookingEditorGuestForm {
               ></ir-input>
             </ir-validator>
           </div>
-          {/* <ir-input label="Company name" placeholder="Company name"></ir-input> */}
+          <ir-input label="Company name" placeholder="Company name"></ir-input>
           <ir-country-picker
             label={locales.entries.Lcz_Country}
             variant="modern"
@@ -153,7 +153,7 @@ export class IrBookingEditorGuestForm {
             value={bookedByGuest.note}
             defaultValue={bookedByGuest.note}
             label={locales.entries.Lcz_AnyMessageForUs}
-            rows={4}
+            rows={3}
           ></wa-textarea>
           {this.paymentMethods.length > 1 && (
             <wa-select

@@ -357,6 +357,11 @@ export class IrBookingEditorDrawer {
         }}
         style={{
           '--ir-drawer-width': '70rem',
+          '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+          '--ir-drawer-padding-left': 'var(--spacing)',
+          '--ir-drawer-padding-right': 'var(--spacing)',
+          '--ir-drawer-padding-top': 'var(--spacing)',
+          '--ir-drawer-padding-bottom': 'var(--spacing)',
         }}
         class="booking-editor__drawer"
         label={this.drawerLabel}

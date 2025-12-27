@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+.menu__drawer::part(header) {
+  border-bottom: 0;
+}
+.menu__drawer::part(body) {
+  padding: calc(var(--spacing) - 0.5rem);
+}

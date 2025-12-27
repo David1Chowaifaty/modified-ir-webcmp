@@ -238,7 +238,7 @@ export class IrBookingEditorHeader {
 
     switch (this.mode) {
       case 'PLUS_BOOKING':
-        if (this.checkOut) return this.checkOut;
+        // if (this.checkOut) return this.checkOut;
         return next60Days;
       case 'ADD_ROOM':
       // return this.booking.to_date;
