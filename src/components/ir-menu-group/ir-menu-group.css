@@ -2,9 +2,7 @@
   display: block;
 }
 .menu-group__details::part(summary) {
-  font-weight: 600;
   width: 100%;
-  color: var(--wa-color-text-normal) !important;
 }
 .menu-group__details::part(header) {
   transition: color var(--wa-transition-normal, 150ms ease);
@@ -30,4 +28,6 @@
 .menu-group__details::part(content) {
   display: flex;
   flex-direction: column;
+  border-inline-start: 1px solid var(--wa-color-surface-border);
+  margin-inline-start: 1.5rem;
 }

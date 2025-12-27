@@ -1,6 +1,5 @@
 import { Component, h, State } from '@stencil/core';
 import moment from 'moment';
-import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-test3-cmp',
@@ -143,19 +142,21 @@ export class IrTest3Cmp {
           </div>
           <ir-menu>
             <div>
-              <ir-custom-button data-dialog="open dialog-opening" style={{ marginBottom: '1rem' }} size="small" appearance="plain" class="header-property-switcher">
+              <ir-custom-button data-dialog="open dialog-opening" size="small" appearance="plain" class="header-property-switcher">
                 <img class="logo" src="https://gateway.igloorooms.com/irimages/aclogo/AcLogo_229.png?t=1597509988143" />
                 <span class="header-property-name">Hotel California</span>
                 <wa-icon name="chevron-down"></wa-icon>
               </ir-custom-button>
             </div>
+            <wa-divider></wa-divider>
             <p style={{ margin: '0', marginBottom: '0.5rem' }}>General</p>
             <ir-menu-item slot="summary">Property</ir-menu-item>
             <ir-menu-item href="acdashboard.aspx">Dashboard</ir-menu-item>
             <ir-menu-item href="frontdesk.aspx">Frontdesk</ir-menu-item>
             <ir-menu-item href="acratesallotment.aspx">Inventory</ir-menu-item>
             <ir-menu-item href="frontdesk.aspx">Frontdesk</ir-menu-item>
-            <p style={{ margin: '0', marginTop: '1rem', marginBottom: '0.5rem' }}>Property</p>
+            <wa-divider></wa-divider>
+            <p style={{ margin: '0', marginBottom: '0.5rem' }}>Property</p>
             {/* <ir-menu-group open groupName="main"> */}
             <ir-menu-item slot="summary">Property</ir-menu-item>
             <ir-menu-item href="acdashboard.aspx">Dashboard</ir-menu-item>
